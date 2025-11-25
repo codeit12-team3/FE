@@ -6,6 +6,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 function handleGlobalError(error: unknown, meta?: Record<string, unknown>) {
   if (isServer || meta?.ignoreGlobalError) return
@@ -20,8 +21,7 @@ function handleGlobalError(error: unknown, meta?: Record<string, unknown>) {
     message = error.message
   }
 
-  // TODO: Toast 메시지 출력
-  console.log(message)
+  toast.error(message)
 }
 
 const makeQueryClient = () => {
