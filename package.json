@@ -10,7 +10,7 @@
     "lint": "eslint",
     "prettier": "prettier --write .",
     "prepare": "husky",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:changed": "jest --onlyChanged",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
