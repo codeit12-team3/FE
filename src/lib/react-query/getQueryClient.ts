@@ -8,15 +8,22 @@ import {
 import axios, { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
+import { ApiResponse } from '@/types/common'
+
 function handleGlobalError(error: unknown, meta?: Record<string, unknown>) {
   if (isServer || meta?.ignoreGlobalError) return
 
   let message = '알 수 없는 에러가 발생했습니다.'
 
   if (axios.isAxiosError(error)) {
-    // TODO: 서버가 던져주는 타입으로 명시
-    const axiosError = error as AxiosError<{ message: string }>
-    message = axiosError.response?.data?.message || axiosError.message
+    const axiosError = error as AxiosError<ApiResponse>
+    const res = axiosError.response?.data
+
+    if (res && res.success === false) {
+      message = res.data.message
+    } else {
+      message = axiosError.message
+    }
   } else if (error instanceof Error) {
     message = error.message
   }
