@@ -31,7 +31,7 @@ export function Header() {
               </Link>
             </nav>
           </div>
-          <button className="w-12 h-12 rounded-full bg-bg-disabled flex items-center justify-center hover:opacity-80 transition-opacity border border-border ">
+<button className="w-12 h-12 rounded-full bg-bg-disabled flex items-center justify-center hover:opacity-80 transition-opacity border border-border cursor-pointer">
             <User className="size-8" />
           </button>
         </div>
