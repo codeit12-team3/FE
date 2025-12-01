@@ -1,9 +1,9 @@
-import { Button } from '@/components/common/Button'
+import TravelPostList from '@/components/board/boardlist'
 
 export default async function Home() {
   return (
     <div>
-      <Button>asdasdsd</Button>
+      <TravelPostList />
     </div>
   )
 }
