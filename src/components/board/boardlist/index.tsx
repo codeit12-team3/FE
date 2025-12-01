@@ -19,26 +19,23 @@ function FilterSelect({ placeholder }: { placeholder: string }) {
     <div className="relative">
       <select
         className="
-          appearance-none 
-          bg-bg-disabled text-text-input 
-          px-4 py-2 rounded-lg text-sm 
-          border border-border
-          pr-8  /* 오른쪽 화살표 자리 확보 */
+          appearance-none
+          bg-bg-disabled text-text-disabled
+          p-2  rounded-lg text-sm 
+          border border-border pr-8 w-23
         "
       >
         <option>{placeholder}</option>
       </select>
 
-      <svg
-        className="w-4 h-4 text-text-input absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
+      <span
+        className="
+          absolute right-4 top-1/2 -translate-y-1/2 
+          text-text-disabled text-[12px] pointer-events-none
+        "
       >
-        <path d="M6 9l6 6 6-6" />
-      </svg>
+        ▼
+      </span>
     </div>
   )
 }
@@ -107,21 +104,10 @@ export default function TravelPostList(params: TravelSearchParams) {
     <div className="min-h-screen bg-bg-base pt-4">
       <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
         <div className="flex gap-2">
-          <select className="p-2  border border-border rounded-lg text-sm text-text-input bg-white w-23">
-            <option>국가</option>
-          </select>
-
-          <select className="p-2 border border-border rounded-lg text-sm text-text-input bg-white w-23">
-            <option>날짜</option>
-          </select>
-
-          <select className="p-2 border border-border rounded-lg text-sm text-text-input bg-white w-23">
-            <option>나이</option>
-          </select>
-
-          <select className="p-2 border border-border rounded-lg text-sm text-text-input bg-white w-23">
-            <option>성별</option>
-          </select>
+          <FilterSelect placeholder="국가" />
+          <FilterSelect placeholder="날짜" />
+          <FilterSelect placeholder="나이" />
+          <FilterSelect placeholder="성별" />
         </div>
         <div className="flex-1 relative max-w-[456px] ">
           <input
