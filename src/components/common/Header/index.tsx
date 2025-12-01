@@ -2,7 +2,7 @@ import { User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function Header() {
+export default function Header() {
   return (
     <header className="bg-bg-base">
       <div className="max-w-7xl mx-auto px-8">
@@ -31,7 +31,7 @@ export function Header() {
               </Link>
             </nav>
           </div>
-<button className="w-12 h-12 rounded-full bg-bg-disabled flex items-center justify-center hover:opacity-80 transition-opacity border border-border cursor-pointer">
+          <button className="w-12 h-12 rounded-full bg-bg-disabled flex items-center justify-center hover:opacity-80 transition-opacity border border-border cursor-pointer">
             <User className="size-8" />
           </button>
         </div>
