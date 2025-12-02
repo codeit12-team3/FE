@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
     return (
       <div
         className={cn(
-          'flex items-center gap-2.5 w-full h-12 px-4 rounded-xl bg-gray-50 transition-all text-slate-700',
+          'flex items-center gap-2.5 w-full h-12 px-4 rounded-xl bg-bg-input transition-all text-text-base',
           'border border-transparent',
           'focus-within:border-main focus-within:shadow-sm',
           String(invalid) === 'true' && 'border-danger',
@@ -38,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
           aria-invalid={invalid}
           disabled={disabled}
           className={cn(
-            'flex-1 font-medium text-base placeholder:text-slate-500 placeholder:font-medium',
+            'flex-1 font-medium text-base placeholder:text-text-input placeholder:font-medium',
             'bg-transparent border-none outline-none',
           )}
           {...props}
@@ -51,7 +51,7 @@ export const Input = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
             onClick={() => !disabled && setShow((prev) => !prev)}
             aria-label={show ? '비밀번호 숨기기' : '비밀번호 보기'}
           >
-            {show ? <EyeOff className="size-6" /> : <Eye className="size-6" />}
+            {show ? <Eye className="size-6" /> : <EyeOff className="size-6" />}
           </button>
         )}
       </div>
