@@ -14,7 +14,7 @@ export default function FilterSelect({ placeholder }: { placeholder: string }) {
 
       <span
         className="
-          absolute right-4 top-1/2 -translate-y-1/2 
+          absolute right-4 top-1/2 -translate-y-2.5
           text-text-disabled text-[12px] pointer-events-none
         "
       >

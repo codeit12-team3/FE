@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { TravelPost, TravelSearchParams } from '@/types/meeting/travel'
+import { TravelPost, TravelSearchParams } from '@/types/travel/travel'
 
 import FilterBar from '../FilterBar'
 import TravelPostListSection from '../TravelPostListSection'
@@ -40,7 +40,7 @@ export default function TravelPostList(params: TravelSearchParams) {
       title: '제주 2박 3일 동행 구해요',
       region: '제주도',
       period: { startDate: '2025-01-01', endDate: '2025-01-03' },
-      status: 'RECRUITING',
+      status: 'CLOSED',
       currentMembers: 2,
       maxMembers: 4,
       bookmarked: false,

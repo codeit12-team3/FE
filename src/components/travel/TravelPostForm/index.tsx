@@ -1,6 +1,28 @@
 'use client'
 
+import Image from 'next/image'
+import { useRef, useState } from 'react'
+
 export default function TravelPostForm() {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [previews, setPreviews] = useState<string[]>([])
+
+  const openPicker = () => fileInputRef.current?.click()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    const newUrls = [...previews]
+
+    Array.from(files).forEach((file) => {
+      if (newUrls.length >= 3) return
+      newUrls.push(URL.createObjectURL(file))
+    })
+
+    setPreviews(newUrls)
+  }
+
   return (
     <div className="space-y-2.5">
       <div>
@@ -10,7 +32,7 @@ export default function TravelPostForm() {
         <input
           type="text"
           placeholder="모임 이름을 작성해주세요"
-          className="w-full px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+          className="w-full px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] placeholder:text-text-input outline-none"
         />
       </div>
 
@@ -21,26 +43,72 @@ export default function TravelPostForm() {
         <input
           type="text"
           placeholder="태그로 선택해주세요, 최대 5개"
-          className="w-full px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+          className="w-full px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] placeholder:text-text-input outline-none"
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-base mb-2">이미지</label>
-        <input
-          type="text"
-          placeholder="최대 3장, 5MB 제한"
-          className="w-full px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
-        />
+        <label className="block text-sm text-text-base mb-3">
+          이미지 <span className="text-danger">*</span>
+        </label>
+
+        <div className="flex justify-between gap-2">
+          <div
+            onClick={openPicker}
+            className="flex items-center px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm text-text-input cursor-pointer overflow-hidden"
+          >
+            {previews.length === 0 ? (
+              <span className="text-text-input leading-6">
+                최대 3장, 5MB 제한
+              </span>
+            ) : (
+              <div className="flex gap-2">
+                {previews.map((src, idx) => (
+                  <Image
+                    key={idx}
+                    src={src}
+                    alt="preview"
+                    width={40}
+                    height={40}
+                    className="rounded-md object-cover"
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={openPicker}
+            className="px-4 py-2.5 w-25 border border-main text-main rounded-lg text-sm hover:bg-blue-50"
+          >
+            파일 찾기
+          </button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleChange}
+          />
+        </div>
       </div>
 
       <div>
-        <label className="block text-sm text-text-base mb-2">
+        <label className="block text-sm text-text-base mb-3">
           국가 <span className="text-danger">*</span>
         </label>
-        <select className="w-full px-4 py-3 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] ring-0 outline-none">
-          <option>국가를 선택해주세요</option>
-        </select>
+
+        <div className="relative">
+          <select className="w-full px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none">
+            <option>국가를 선택해주세요</option>
+          </select>
+
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-input pointer-events-none">
+            ▼
+          </span>
+        </div>
       </div>
 
       <div>
@@ -52,7 +120,7 @@ export default function TravelPostForm() {
           <input
             type="text"
             placeholder="인원을 입력해주세요"
-            className="w-1/2 px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+            className="w-1/2 px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] placeholder:text-text-input outline-none"
           />
 
           <label className="flex items-center gap-2">
@@ -78,7 +146,7 @@ export default function TravelPostForm() {
         </label>
 
         <div className="flex gap-3 items-center">
-          <select className="flex-1 px-4 py-3 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] ring-0 outline-none">
+          <select className="flex-1 px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none">
             <option>출생년도 선택해주세요</option>
           </select>
 
@@ -101,7 +169,7 @@ export default function TravelPostForm() {
           </label>
           <input
             type="datetime-local"
-            className="px-4 py-3 rounded-lg text-sm text-text-base bg-[#EDF4FB] ring-0 outline-none"
+            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none text-text-base"
           />
         </div>
 
@@ -111,7 +179,7 @@ export default function TravelPostForm() {
           </label>
           <input
             type="datetime-local"
-            className="px-4 py-3 rounded-lg text-sm text-text-base bg-[#EDF4FB] ring-0 outline-none"
+            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none text-text-base"
           />
         </div>
       </div>
@@ -123,11 +191,11 @@ export default function TravelPostForm() {
         <textarea
           rows={4}
           placeholder="모집 설명을 입력해주세요"
-          className="w-full px-4 py-3 rounded-lg text-sm resize-none placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+          className="w-full px-4 py-2.5 rounded-lg text-sm resize-none bg-[#EDF4FB] outline-none placeholder:text-text-input"
         />
       </div>
 
-      <button className="w-full py-3 rounded-lg font-medium bg-bg-disabled text-text-disabled">
+      <button className="w-full py-2.5 rounded-lg font-medium bg-bg-disabled text-text-disabled">
         게시하기
       </button>
     </div>

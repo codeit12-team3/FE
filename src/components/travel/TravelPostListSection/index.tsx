@@ -1,4 +1,4 @@
-import { TravelPost } from '@/types/meeting/travel'
+import { TravelPost } from '@/types/travel/travel'
 
 import TravelPostCard from '../TravelPostCard'
 

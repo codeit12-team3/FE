@@ -1,7 +1,8 @@
 import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 
-import { TravelPost } from '@/types/meeting/travel'
+import { Button } from '@/components/common/Button'
+import { TravelPost } from '@/types/travel/travel'
 
 export default function TravelPostCard({ post }: { post: TravelPost }) {
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
@@ -15,7 +16,6 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
           <Image src={post.thumbnail} alt="썸네일" fill />
         </div>
 
-        {/* Content */}
         <div className="flex-1 ml-3">
           <div className="flex gap-2 mb-2">
             <span className={tagStyle}>여행스타일 태그</span>
@@ -31,13 +31,11 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
             <p className="text-sm text-text-input">작성자 닉네임</p>
           </div>
 
-          {/* 신청자 */}
           <div className="flex text-sm mb-2 gap-1 mt-8">
             <User className="w-4 h-4" />
             <span>{post.currentMembers}명 신청</span>
           </div>
 
-          {/* 기타 정보 */}
           <div className="flex items-center gap-2 text-sm text-text-input">
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">위치</span>
@@ -81,10 +79,15 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
             />
           </button>
 
-          {/* 버튼 */}
-          <button className="px-6 py-2 rounded-lg font-medium transition-colors bg-main text-white hover:opacity-90">
-            신청하기
-          </button>
+          {post.status === 'CLOSED' ? (
+            <Button size="sm" className="w-39">
+              모집종료
+            </Button>
+          ) : (
+            <Button size="sm" className="w-39">
+              신청하기
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,3 @@
-// src/types/travel.ts
-
 export type TravelSearchParams = {
   region?: string
   startDate?: string
