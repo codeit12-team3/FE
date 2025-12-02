@@ -1,9 +1,3 @@
-import { Button } from '@/components/common/Button'
-
 export default async function Home() {
-  return (
-    <div>
-      <Button>asdasdsd</Button>
-    </div>
-  )
+  return <div>프로젝트초기화</div>
 }
