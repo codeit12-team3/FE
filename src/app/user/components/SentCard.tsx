@@ -5,7 +5,7 @@ import { Button } from '@/components/common/Button'
 
 import BookmarkIcon from './BookmarkIcon'
 
-export default function ReceivedCard() {
+export default function SentCard() {
   const [bookmark, setBookmark] = useState(false)
 
   return (
@@ -43,14 +43,12 @@ export default function ReceivedCard() {
 
         <div className="flex justify-between items-end">
           <div>
-            <div className="flex items-center gap-1.5 mb-1">
-              <Image
-                src="/images/UserIcon.svg"
-                alt="신청자"
-                width={16}
-                height={16}
-              />
-              <span className="font-medium text-sm">신청자 닉네임</span>
+            <div className="mb-1">
+              <span className="font-medium text-sm text-text-input">
+                수락 대기중
+              </span>
+              {/* <span className="font-medium text-sm text-main">수락 완료</span>
+              <span className="font-medium text-sm text-danger">신청 거절</span> */}
             </div>
             <div className="flex items-center text-sm">
               <span className="text-text-disabled mr-1.5">위치</span>
@@ -62,11 +60,8 @@ export default function ReceivedCard() {
           </div>
 
           <div className="flex gap-3">
-            <Button size="md" className="w-39">
-              수락하기
-            </Button>
             <Button size="md" variant="secondary" className="w-39">
-              거절하기
+              신청 취소하기
             </Button>
           </div>
         </div>
