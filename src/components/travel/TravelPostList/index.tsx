@@ -21,7 +21,7 @@ export default function TravelPostList(params: TravelSearchParams) {
       status: 'RECRUITING',
       currentMembers: 2,
       maxMembers: 4,
-      bookmarked: false,
+      bookmarked: true,
       thumbnail: '/이미지.png',
     },
     {

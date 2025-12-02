@@ -12,10 +12,16 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
   return (
     <div className={cardBase}>
       <div className="flex gap-4">
-        <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
-          <Image src={post.thumbnail} alt="썸네일" fill />
-        </div>
-
+        {post.status === 'CLOSED' ? (
+          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">
+            <p className="text-white">모집이 마감되었어요.</p>
+            <Image src={post.thumbnail} alt="썸네일" fill />
+          </div>
+        ) : (
+          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
+            <Image src={post.thumbnail} alt="썸네일" fill />
+          </div>
+        )}
         <div className="flex-1 ml-3">
           <div className="flex gap-2 mb-2">
             <span className={tagStyle}>여행스타일 태그</span>
@@ -80,7 +86,10 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
           </button>
 
           {post.status === 'CLOSED' ? (
-            <Button size="sm" className="w-39">
+            <Button
+              size="sm"
+              className="w-39 bg-bg-disabled text-text-disabled"
+            >
               모집종료
             </Button>
           ) : (
