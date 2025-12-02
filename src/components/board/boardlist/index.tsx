@@ -1,7 +1,8 @@
 'use client'
 
-import { Heart, Plus, Search, User } from 'lucide-react'
+import { Heart, Plus, Search, User, X } from 'lucide-react'
 import Image from 'next/image'
+import { useState } from 'react'
 
 export type TravelSearchParams = {
   region?: string
@@ -41,6 +42,7 @@ function FilterSelect({ placeholder }: { placeholder: string }) {
 }
 
 export default function TravelPostList(params: TravelSearchParams) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const posts = [
     {
       postId: 1,
@@ -118,7 +120,10 @@ export default function TravelPostList(params: TravelSearchParams) {
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input" />
         </div>
 
-        <button className="bg-main text-white px-5 py-2.5 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity h-10">
+        <button
+          className="bg-main text-white px-5 py-2.5 rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity h-10"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Plus className="w-5 h-5" />
           동행 구하기
         </button>
@@ -236,6 +241,167 @@ export default function TravelPostList(params: TravelSearchParams) {
           </div>
         ))}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl w-[520px] p-6 relative h-[95vh] overflow-y-auto">
+            {/* 헤더 */}
+            <div className="flex items-center justify-between mb-6">
+              <div></div>
+              <h2 className="text-lg font-semibold text-text-base ">
+                게시글 작성
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-muted-foreground hover:text-text-base"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-2.5">
+              {/* 모임 이름 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  모임 이름 <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="모임 이름을 작성해주세요"
+                  className="w-full px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+                />
+              </div>
+
+              {/* 여행 테마 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  여행 테마 <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="태그로 선택해주세요, 최대 5개"
+                  className="w-full px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+                />
+              </div>
+
+              {/* 이미지 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  이미지
+                </label>
+                <input
+                  type="text"
+                  placeholder="최대 3장, 5MB 제한"
+                  className="w-full px-4 py-3 rounded-lg text-sm  placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+                />
+              </div>
+
+              {/* 국가 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  국가 <span className="text-danger">*</span>
+                </label>
+                <select className="w-full px-4 py-3 rounded-lg text-sm  text-text-input appearance-none bg-[#EDF4FB] ring-0 outline-none">
+                  <option>국가를 선택해주세요</option>
+                </select>
+              </div>
+
+              {/* 모집 정원 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  모집 정원 <span className="text-danger">*</span>
+                </label>
+
+                <div className="flex gap-4">
+                  <input
+                    type="text"
+                    placeholder="인원을 입력해주세요"
+                    className="w-1/2 px-4 py-3 rounded-lg text-sm placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none "
+                  />
+
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="gender" className="accent-main" />
+                    <span className="text-sm text-text-base">남성만</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="gender" className="accent-main" />
+                    <span className="text-sm text-text-base">여성만</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="gender" className="accent-main" />
+                    <span className="text-sm text-text-base">모두</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* 나이 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  나이 <span className="text-danger">*</span>
+                </label>
+                <div className="flex gap-3 items-center">
+                  <select className="flex-1 px-4 py-3 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] ring-0 outline-none">
+                    <option>출생년도 선택해주세요</option>
+                  </select>
+
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="age" className="accent-main " />
+                    <span className="text-sm text-text-base">이상</span>
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="age" className="accent-main" />
+                    <span className="text-sm text-text-base">이하</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* 날짜 */}
+              <div className="flex justify-between mb-2">
+                <div className="flex flex-col  ">
+                  <label className="text-sm text-text-base mb-2">
+                    여행 시작 일시 <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className=" px-4 py-3 rounded-lg text-sm text-text-base bg-[#EDF4FB] ring-0 outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col  ">
+                  <label className="text-sm text-text-base mb-2">
+                    여행 종료 일시 <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="w-full px-4 py-3 rounded-lg text-sm text-text-base bg-[#EDF4FB] ring-0 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* 설명 */}
+              <div>
+                <label className="block text-sm text-text-base mb-2">
+                  모집 설명 (0/500)
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="모집 설명을 입력해주세요"
+                  className="w-full px-4 py-3 rounded-lg text-sm resize-none placeholder:text-text-input bg-[#EDF4FB] ring-0 outline-none"
+                />
+              </div>
+
+              {/* 버튼 */}
+              <button
+                className="w-full py-3 rounded-lg font-medium 
+                     bg-bg-disabled text-text-disabled"
+              >
+                게시하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
