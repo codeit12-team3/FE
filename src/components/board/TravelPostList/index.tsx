@@ -1,0 +1,63 @@
+'use client'
+
+import { useState } from 'react'
+
+import { TravelPost, TravelSearchParams } from '@/types/meeting/travel'
+
+import FilterBar from '../FilterBar'
+import TravelPostListSection from '../TravelPostListSection'
+import TravelPostModal from '../TravelPostModal'
+
+export default function TravelPostList(params: TravelSearchParams) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  //  임시 데이터
+  const posts: TravelPost[] = [
+    {
+      postId: '1',
+      title: '제주 2박 3일 동행 구해요',
+      region: '제주도',
+      period: { startDate: '2025-01-01', endDate: '2025-01-03' },
+      status: 'RECRUITING',
+      currentMembers: 2,
+      maxMembers: 4,
+      bookmarked: false,
+      thumbnail: '/이미지.png',
+    },
+    {
+      postId: '2',
+      title: '제주 2박 3일 동행 구해요',
+      region: '제주도',
+      period: { startDate: '2025-01-01', endDate: '2025-01-03' },
+      status: 'RECRUITING',
+      currentMembers: 2,
+      maxMembers: 4,
+      bookmarked: false,
+      thumbnail: '/이미지.png',
+    },
+    {
+      postId: '3',
+      title: '제주 2박 3일 동행 구해요',
+      region: '제주도',
+      period: { startDate: '2025-01-01', endDate: '2025-01-03' },
+      status: 'RECRUITING',
+      currentMembers: 2,
+      maxMembers: 4,
+      bookmarked: false,
+      thumbnail: '/이미지.png',
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-bg-base pt-4">
+      <FilterBar onOpenModal={() => setIsModalOpen(true)} />
+
+      <TravelPostListSection posts={posts} />
+
+      <TravelPostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </div>
+  )
+}

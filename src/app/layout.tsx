@@ -3,7 +3,6 @@ import localFont from 'next/font/local'
 
 import './globals.css'
 
-import { Header } from '@/components/common/Header'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 
@@ -29,10 +28,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} font-sans antialiased`}>
         <MSWProvider>
           <QueryProvider>
-            <LazyMotionProvider>
-              <Header />
-              {children}
-            </LazyMotionProvider>
+            <LazyMotionProvider>{children}</LazyMotionProvider>
           </QueryProvider>
         </MSWProvider>
         <Toaster position="top-center" />
