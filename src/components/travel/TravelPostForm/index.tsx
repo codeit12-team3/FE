@@ -63,9 +63,9 @@ export default function TravelPostForm() {
               </span>
             ) : (
               <div className="flex gap-2">
-                {previews.map((src, idx) => (
+                {previews.map((src) => (
                   <Image
-                    key={idx}
+                    key={src}
                     src={src}
                     alt="preview"
                     width={40}

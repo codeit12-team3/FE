@@ -15,11 +15,21 @@ export default function TravelPostCard({ post }: { post: TravelPost }) {
         {post.status === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
-            <Image src={post.thumbnail} alt="썸네일" fill />
+            <Image
+              src={post.thumbnail}
+              alt={post.title}
+              fill
+              className="object-cover"
+            />
           </div>
         ) : (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
-            <Image src={post.thumbnail} alt="썸네일" fill />
+            <Image
+              src={post.thumbnail}
+              alt={post.title}
+              fill
+              className="object-cover"
+            />
           </div>
         )}
         <div className="flex-1 ml-3">

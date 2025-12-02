@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 import TravelPostForm from '../TravelPostForm'
 
-interface TravelPostModaProps {
+interface TravelPostModalProps {
   isOpen: boolean
   onClose: () => void
 }
@@ -13,7 +13,7 @@ interface TravelPostModaProps {
 export default function TravelPostModal({
   isOpen,
   onClose,
-}: TravelPostModaProps) {
+}: TravelPostModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
