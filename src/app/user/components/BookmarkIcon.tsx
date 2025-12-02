@@ -1,12 +1,14 @@
-// components/icons/BookmarkIcon.tsx
 import { cn } from '@/lib/common'
 
 type BookmarkIconProps = {
   filled?: boolean
-  className?: string
+  onClick?: () => void
 }
 
-export default function BookmarkIcon({ filled = false }: BookmarkIconProps) {
+export default function BookmarkIcon({
+  filled = false,
+  onClick,
+}: BookmarkIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,6 +20,7 @@ export default function BookmarkIcon({ filled = false }: BookmarkIconProps) {
         'cursor-pointer',
         filled ? 'text-main' : 'text-text-disabled',
       )}
+      onClick={onClick}
     >
       {filled && (
         <path

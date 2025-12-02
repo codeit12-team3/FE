@@ -1,11 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
 
 import { Button } from '@/components/common/Button'
 
-import BookmarkIcon from './components/BookmarkIcon'
+import EmptyState from './components/EmptyState'
+import ReceivedCard from './components/ReceivedCard'
 
 export default function Userpage() {
   const [filter, setFilter] = useState<
@@ -27,31 +27,17 @@ export default function Userpage() {
             key={value}
             variant={filter === value ? 'default' : 'secondary'}
             onClick={() => setFilter(value)}
+            className="cursor-pointer"
           >
             {label}
           </Button>
         ))}
       </div>
-      <div className="mt-6">
-        <div className="h-61 rounded-4xl border-2 bg-white flex p-6">
-          <div className="mr-6">
-            <Image
-              src="/images/cardImage_test.svg"
-              alt="게시글 이미지"
-              width={188}
-              height={188}
-            />
-          </div>
-          <div className="flex-1">
-            <div className="flex justify-between items-center">
-              <div>뱃지</div>
-              <BookmarkIcon />
-            </div>
-            <h2></h2>
-            <p></p>
-            <div></div>
-          </div>
-        </div>
+      <div className="mt-6 flex flex-col gap-6">
+        <ReceivedCard />
+        <ReceivedCard />
+        <ReceivedCard />
+        <EmptyState type="received" />
       </div>
     </>
   )
