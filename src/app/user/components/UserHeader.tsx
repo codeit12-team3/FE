@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function UserHeader() {
   return (
     <div className="mb-10">
-      <h1 className="text-3xl font-bold mb-8">마이페이지</h1>
+      <h1 className="text-[32px] font-semibold mb-8">마이페이지</h1>
 
       <div className="bg-white rounded-3xl shadow-sm p-6 flex flex-col">
         <div className="flex justify-between items-center">
