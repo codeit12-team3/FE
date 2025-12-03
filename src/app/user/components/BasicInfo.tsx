@@ -16,7 +16,7 @@ export default function BasicInfo() {
         />
       </div>
       <div>
-        <label className="blockfont-medium">
+        <label className="block font-medium">
           이름 <span className="text-danger">*</span>
         </label>
         <Input

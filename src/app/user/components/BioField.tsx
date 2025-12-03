@@ -25,9 +25,7 @@ export default function BioField() {
           name="bio"
           type="text"
           value={bio}
-          onChange={(e) => {
-            if (e.target.value.length <= max) setBio(e.target.value)
-          }}
+          onChange={(e) => setBio(e.target.value)}
           placeholder={`자기소개를 입력해주세요 ${bio.length}/100`}
           className="h-11 bg-[#EDF4FB] mt-3"
           maxLength={max}

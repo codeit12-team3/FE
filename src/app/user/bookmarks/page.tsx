@@ -39,13 +39,15 @@ type Filters = {
   gender: string
 }
 
-export default function Bookmarkspage() {
-  const [filters, setFilters] = useState<Filters>({
-    country: '',
-    date: '',
-    age: '',
-    gender: '',
-  })
+const initialFilters: Filters = {
+  country: '',
+  date: '',
+  age: '',
+  gender: '',
+}
+
+export default function BookmarksPage() {
+  const [filters, setFilters] = useState<Filters>(initialFilters)
 
   const handleFilterChange = (key: keyof Filters, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }))

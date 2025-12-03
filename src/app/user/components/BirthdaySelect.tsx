@@ -3,7 +3,10 @@
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-const years = Array.from({ length: 100 }, (_, i) => 2025 - i)
+const years = Array.from(
+  { length: 100 },
+  (_, i) => new Date().getFullYear() - i,
+)
 const months = Array.from({ length: 12 }, (_, i) => i + 1)
 
 export default function BirthdaySelect({
