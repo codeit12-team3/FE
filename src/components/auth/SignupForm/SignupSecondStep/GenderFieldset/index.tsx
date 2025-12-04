@@ -4,7 +4,7 @@ import { CircleAlert } from 'lucide-react'
 import { useController, useFormContext } from 'react-hook-form'
 
 import AnimateFieldset from '@/components/auth/AnimateFieldset'
-import { GENDER_LIST } from '@/constants/member'
+import { GENDER_LIST, GENDER_MAP } from '@/constants/member'
 import { cn } from '@/lib/common'
 import { SignupFormValues } from '@/types/auth'
 
@@ -25,7 +25,7 @@ export default function GenderFieldset({ className }: Props) {
       <div className="space-y-2 w-full">
         <legend className="text-base font-medium">성별</legend>
         <div className="flex items-center justify-around space-y-1 py-3 w-full">
-          {GENDER_LIST.map((gender, idx) => (
+          {GENDER_LIST.map((gender) => (
             <label
               key={gender}
               className={cn(
@@ -39,7 +39,7 @@ export default function GenderFieldset({ className }: Props) {
                   field.value === gender ? 'text-text-base' : 'text-text-input',
                 )}
               >
-                {GENDER_LIST[idx] === 'male' ? '남자' : '여자'}
+                {GENDER_MAP[gender]}
               </span>
               <input
                 type="radio"
