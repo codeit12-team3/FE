@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { SingupForm } from '@/components/auth'
+import { SignupForm } from '@/components/auth'
 
 export default function Page() {
   return (
@@ -25,7 +25,7 @@ export default function Page() {
             className="w-full h-auto"
           />
         </section>
-        <SingupForm />
+        <SignupForm />
       </div>
     </main>
   )
