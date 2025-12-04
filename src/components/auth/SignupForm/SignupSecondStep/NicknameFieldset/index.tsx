@@ -12,7 +12,10 @@ import { Button } from '@/components/common'
 import { SignupFormValues } from '@/types/auth'
 
 export default function NicknameFieldset() {
-  const { control } = useFormContext<SignupFormValues>()
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<SignupFormValues>()
   const nickname = useWatch({ control, name: 'nickname' })
   const { mutate, isPending: isChecking } = useCheckNickname()
   const [isChecked, setIsChecked] = useState(false)
@@ -40,7 +43,7 @@ export default function NicknameFieldset() {
             className="w-[158px]"
             type="button"
             size={'md'}
-            disabled={isChecking}
+            disabled={isChecking || !nickname || !!errors.nickname}
             onClick={checkNickname}
           >
             {isChecking ? (
