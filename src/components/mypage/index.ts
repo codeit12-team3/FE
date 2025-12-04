@@ -1,5 +1,0 @@
-export { default as BookmarkIcon } from './BookmarkIcon/BookmarkIcon'
-export { default as EmptyState } from './EmptyState/EmptyState'
-export { default as MyPageHeader } from './MyPageHeader/MyPageHeader'
-export { default as TabLink } from './TabLink/TabLink'
-export { default as ReceivedCard } from './ReceivedCard/ReceivedCard'
