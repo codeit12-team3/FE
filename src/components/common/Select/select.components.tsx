@@ -99,24 +99,22 @@ const SelectTrigger = ({
   'aria-invalid': invalid,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
-  const { open, setOpen } = useSelect()
+  const { open, setOpen, value } = useSelect()
   return (
     <div
       onClick={() => setOpen(!open)}
       className={cn(
-        'flex h-12 w-full cursor-pointer items-center justify-between rounded-xl bg-bg-input px-4 py-3 text-text-base',
+        'flex h-12 w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3',
         open ? 'border-main border shadow-sm' : '',
         String(invalid) === 'true' && 'border-danger',
+        value ? 'bg-main text-white' : 'bg-bg-input text-text-base',
         className,
       )}
       {...props}
     >
       {children}
       <IconArrowDown
-        className={cn(
-          'size-6 transition-transform',
-          open && 'rotate-180 text-main',
-        )}
+        className={cn('size-6 transition-transform', open && 'rotate-180')}
       />
     </div>
   )
@@ -148,12 +146,12 @@ const SelectContent = ({
   return (
     <div
       className={cn(
-        'absolute top-full z-50 mt-1 bg-bg-input text-text-input max-h-60 w-full overflow-auto rounded-xl animate-in fade-in-80 zoom-in-95',
+        ' absolute shadow-xl top-full z-50 mt-1 bg-white max-h-60 w-full overflow-auto rounded-xl animate-in fade-in-80 zoom-in-95 no-scrollbar',
         className,
       )}
       {...props}
     >
-      <div className="p-1">{children}</div>
+      <div className="p-1 divide-y-2 divide-bg-input">{children}</div>
     </div>
   )
 }
@@ -177,8 +175,8 @@ const SelectItem = ({
         onChange(value)
       }}
       className={cn(
-        'relative flex w-full cursor-pointer select-none items-center rounded-xl px-4 py-3 outline-none',
-        isSelected && 'bg-main text-white',
+        'relative flex w-full cursor-pointer select-none items-center px-4 py-3 outline-none',
+        isSelected && 'bg-bg-input',
         className,
       )}
       {...props}
