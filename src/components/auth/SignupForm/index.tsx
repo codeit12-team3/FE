@@ -79,7 +79,7 @@ export default function SignupForm() {
           이미 회원이신가요?{' '}
           <Link
             className="text-main underline underline-offset-1"
-            href={'/sign-in'}
+            href={'/signin'}
           >
             로그인
           </Link>
