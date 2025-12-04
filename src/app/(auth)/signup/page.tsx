@@ -21,7 +21,7 @@ export default function Page() {
             width={640}
             height={563}
             src={'/images/auth/intro.png'}
-            alt={'인트로 이미지'}
+            alt={'함께 여행하는 모습이 담긴 인트로 일러스트 이미지'}
             className="w-full h-auto"
           />
         </section>
