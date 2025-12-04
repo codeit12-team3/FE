@@ -1,1 +1,1 @@
-export { BASE_URL } from './axios.const'
+export * from './axios.const'
