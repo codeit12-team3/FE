@@ -46,7 +46,7 @@ export const signupSchema = z
         message: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
       }),
     year: z.string().min(1, '년도를 선택해주세요'),
-    month: z.string().min(1, '월를 선택해주세요'),
+    month: z.string().min(1, '월을 선택해주세요'),
     day: z.string().min(1, '일을 선택해주세요'),
     gender: z.enum(GENDER_LIST, '성별을 선택해주세요').optional(),
     mbti: z.enum(MBTI_LIST, 'MBTI를 선택해주세요').optional(),
