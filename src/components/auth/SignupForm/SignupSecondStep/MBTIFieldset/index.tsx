@@ -8,7 +8,11 @@ import { Label, Select } from '@/components/common'
 import { MBTI_LIST } from '@/constants/member'
 import { SignupFormValues } from '@/types/auth'
 
-export default function MBTIFieldset() {
+interface Props {
+  className?: string
+}
+
+export default function MBTIFieldset({ className }: Props) {
   const {
     control,
     formState: { errors },
@@ -20,7 +24,7 @@ export default function MBTIFieldset() {
   } = useController({ name: 'mbti', control })
 
   return (
-    <AnimateFieldset>
+    <AnimateFieldset className={className}>
       <legend className="sr-only">MBTI 선택</legend>
       <div className="space-y-2 w-full">
         <Label htmlFor={'mbti'}>MBTI</Label>

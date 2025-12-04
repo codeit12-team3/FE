@@ -14,7 +14,7 @@ import SignupSecondStep from './SignupSecondStep'
 
 export default function SignupForm() {
   const router = useRouter()
-  const { step, next } = useFormStep({ maxStep: 2 })
+  const { step, next, prev } = useFormStep({ maxStep: 2 })
   const { mutate } = useSignupEmail()
   const verification = useEmailVerification()
   const methods = useForm<SignupFormValues>({
@@ -72,7 +72,9 @@ export default function SignupForm() {
             {step === 1 && (
               <SignupFirstStep verification={verification} onNext={next} />
             )}
-            {step === 2 && <SignupSecondStep verification={verification} />}
+            {step === 2 && (
+              <SignupSecondStep onPrev={prev} verification={verification} />
+            )}
           </form>
         </div>
         <p className="text-center text-sm">

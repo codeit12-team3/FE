@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/common'
@@ -19,6 +20,7 @@ export default function SignupFirstStep({ verification, onNext }: Props) {
     trigger,
     formState: { errors },
   } = useFormContext()
+  const router = useRouter()
   const { isChecked } = verification
 
   const [password, passwordConfirm] = useWatch({
@@ -53,15 +55,26 @@ export default function SignupFirstStep({ verification, onNext }: Props) {
         <PasswordFieldset />
       </section>
 
-      <Button
-        type="button"
-        onClick={handleNextClick}
-        className="w-full"
-        disabled={!isValid}
-        size={'lg'}
-      >
-        다음
-      </Button>
+      <div className="flex items-center justify-between gap-4">
+        <Button
+          type="button"
+          variant={'secondary'}
+          className="flex-1"
+          size={'lg'}
+          onClick={() => router.back()}
+        >
+          나가기
+        </Button>
+        <Button
+          type="button"
+          onClick={handleNextClick}
+          className="flex-1"
+          disabled={!isValid}
+          size={'lg'}
+        >
+          다음
+        </Button>
+      </div>
     </div>
   )
 }

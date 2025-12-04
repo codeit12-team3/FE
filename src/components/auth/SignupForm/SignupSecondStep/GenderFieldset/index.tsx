@@ -8,7 +8,11 @@ import { GENDER_LIST } from '@/constants/member'
 import { cn } from '@/lib/common'
 import { SignupFormValues } from '@/types/auth'
 
-export default function GenderFieldset() {
+interface Props {
+  className?: string
+}
+
+export default function GenderFieldset({ className }: Props) {
   const { control } = useFormContext<SignupFormValues>()
 
   const {
@@ -17,10 +21,10 @@ export default function GenderFieldset() {
   } = useController({ name: 'gender', control })
 
   return (
-    <AnimateFieldset>
+    <AnimateFieldset className={className}>
       <div className="space-y-2 w-full">
         <legend className="text-base font-medium">성별</legend>
-        <div className="flex items-center gap-[18px] space-y-1 w-full">
+        <div className="flex items-center justify-around space-y-1 py-3 w-full">
           {GENDER_LIST.map((gender, idx) => (
             <label
               key={gender}

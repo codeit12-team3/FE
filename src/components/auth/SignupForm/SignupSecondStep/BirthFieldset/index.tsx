@@ -55,6 +55,7 @@ export default function BirthFieldset() {
         <div className="flex items-center gap-3 space-y-1 w-full">
           {/* 년 Select */}
           <Select
+            className="flex-2"
             ref={yearRef}
             value={yearField.value}
             onValueChange={yearField.onChange}
@@ -79,6 +80,7 @@ export default function BirthFieldset() {
 
           {/* 월 Select */}
           <Select
+            className="flex-1"
             ref={monthRef}
             value={monthField.value}
             onValueChange={monthField.onChange}
@@ -102,6 +104,7 @@ export default function BirthFieldset() {
 
           {/* 일 Select */}
           <Select
+            className="flex-1"
             ref={dayRef}
             value={dayField.value}
             onValueChange={dayField.onChange}

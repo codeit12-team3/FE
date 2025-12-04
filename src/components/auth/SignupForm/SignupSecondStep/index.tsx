@@ -14,10 +14,11 @@ import MBTIFieldset from './MBTIFieldset'
 import NicknameFieldset from './NicknameFieldset'
 
 interface Props {
+  onPrev: () => void
   verification: ReturnType<typeof useEmailVerification>
 }
 
-export default function SignupSecondStep({ verification }: Props) {
+export default function SignupSecondStep({ onPrev, verification }: Props) {
   const { formState } = useFormContext<SignupFormValues>()
   const { isPending } = useSignupEmail()
   const { isChecked } = verification
@@ -25,19 +26,32 @@ export default function SignupSecondStep({ verification }: Props) {
     <div className="space-y-[11px]">
       <section>
         <NicknameFieldset />
-        <GenderFieldset />
         <BirthFieldset />
-        <MBTIFieldset />
+        <div className="md:flex items-center gap-6">
+          <MBTIFieldset className="flex-1" />
+          <GenderFieldset className="flex-1" />
+        </div>
       </section>
 
-      <Button
-        disabled={!formState.isValid || !isChecked || isPending}
-        className="w-full"
-        type="submit"
-        size={'lg'}
-      >
-        {isPending ? <Loader className="size-7" /> : '회원가입'}
-      </Button>
+      <div className="flex items-center justify-between gap-4">
+        <Button
+          type="button"
+          variant={'secondary'}
+          className="flex-1"
+          size={'lg'}
+          onClick={onPrev}
+        >
+          뒤로가기
+        </Button>
+        <Button
+          disabled={!formState.isValid || !isChecked || isPending}
+          className="flex-1"
+          type="submit"
+          size={'lg'}
+        >
+          {isPending ? <Loader className="size-7" /> : '회원가입'}
+        </Button>
+      </div>
     </div>
   )
 }
