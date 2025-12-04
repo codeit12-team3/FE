@@ -36,7 +36,5 @@ export const checkEmailCode = async ({
  * @param body {이메일, 패스워드, 닉네임, 생년월일, 성별, MBTI}
  */
 export const signupEmail = async (body: SignupEmailReq) => {
-  return await axios.post<ApiResponse<SignupEmailRes>>('/auth/signup', {
-    body,
-  })
+  return await axios.post<ApiResponse<SignupEmailRes>>('/auth/signup', body)
 }
