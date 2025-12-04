@@ -40,7 +40,7 @@ export default function MBTIFieldset({ className }: Props) {
               onChange: (e) => field.onChange(e.target.value),
             }}
           >
-            <Select.Trigger aria-invalid={!!errors.year}>
+            <Select.Trigger aria-invalid={!!errors.mbti}>
               <Select.Value placeholder="MBTI를 선택해주세요" />
             </Select.Trigger>
             <Select.Content>
