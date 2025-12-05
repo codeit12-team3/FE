@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export function Header() {
+export default function Header() {
   const pathname = usePathname()
 
   return (
