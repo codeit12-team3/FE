@@ -85,6 +85,7 @@ export default function BirthFieldset() {
             value={monthField.value}
             onValueChange={monthField.onChange}
             selectProps={{
+              id: 'month',
               name: monthField.name,
               onBlur: monthField.onBlur,
               onChange: (e) => monthField.onChange(e.target.value),
@@ -109,6 +110,7 @@ export default function BirthFieldset() {
             value={dayField.value}
             onValueChange={dayField.onChange}
             selectProps={{
+              id: 'day',
               name: dayField.name,
               onBlur: dayField.onBlur,
               onChange: (e) => dayField.onChange(e.target.value),
