@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 
-export default function TravelPostForm() {
+export default function PostForm() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
 

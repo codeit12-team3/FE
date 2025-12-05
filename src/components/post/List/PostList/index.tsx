@@ -5,10 +5,9 @@ import { useState } from 'react'
 import { TravelPost, TravelSearchParams } from '@/types/post/post.type'
 
 import FilterBar from '../FilterBar'
-import TravelPostListSection from '../TravelPostListSection'
-import TravelPostModal from '../TravelPostModal'
+import TravelPostListSection from '../PostListSection'
 
-export default function TravelPostList(params: TravelSearchParams) {
+export default function PostList(params: TravelSearchParams) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   //  임시 데이터
@@ -53,11 +52,6 @@ export default function TravelPostList(params: TravelSearchParams) {
       <FilterBar onOpenModal={() => setIsModalOpen(true)} />
 
       <TravelPostListSection posts={posts} />
-
-      <TravelPostModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   )
 }

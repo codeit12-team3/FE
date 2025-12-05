@@ -1,10 +1,10 @@
 import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 
-import { Button } from '@/components/common/Button'
-import { TravelPost } from '@/types/post/post.type'
+import { Button } from '@/components/common'
+import { Post } from '@/types/post/post.type'
 
-export default function TravelPostCard({ post }: { post: TravelPost }) {
+export default function PostCard({ post }: { post: Post }) {
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const cardBase =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-border'

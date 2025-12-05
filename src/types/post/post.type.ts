@@ -15,7 +15,7 @@ export type TravelPeriod = {
   endDate: string
 }
 
-export type TravelPost = {
+export type Post = {
   postId: string
   title: string
   region: string
@@ -34,12 +34,12 @@ export type PageInfo = {
   totalElements: number
 }
 
-export type TravelPostListResponse = {
+export type ostListResponse = {
   success: boolean
   status: number
   timestamp: string
   data: {
-    posts: TravelPost[]
+    posts: Post[]
     pageInfo: PageInfo
   }
 }
