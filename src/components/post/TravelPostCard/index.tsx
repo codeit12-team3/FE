@@ -2,7 +2,7 @@ import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 
 import { Button } from '@/components/common/Button'
-import { TravelPost } from '@/types/travel/travel'
+import { TravelPost } from '@/types/post/post.type'
 
 export default function TravelPostCard({ post }: { post: TravelPost }) {
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'

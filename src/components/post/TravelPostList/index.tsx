@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { TravelPost, TravelSearchParams } from '@/types/travel/travel'
+import { TravelPost, TravelSearchParams } from '@/types/post/post.type'
 
 import FilterBar from '../FilterBar'
 import TravelPostListSection from '../TravelPostListSection'
