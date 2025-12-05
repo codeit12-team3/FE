@@ -1,4 +1,5 @@
 import { Loader } from 'lucide-react'
+import { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import AnimateFieldset from '@/components/auth/AnimateFieldset'
@@ -56,17 +57,17 @@ export default function EmailFieldset({ verification }: Props) {
   }
 
   // 3. 이메일 코드 발송 버튼 텍스트
-  const transSendEmailCodeText = () => {
+  const transSendEmailCodeText = useMemo(() => {
     if (timer > 0) return '재발송'
     if (isChecked) return '인증완료'
     return '인증번호 발송'
-  }
+  }, [timer, isChecked])
 
   // 4. 이메일 코드 검증 버튼 텍스트
-  const transCheckEmailCodeText = () => {
+  const transCheckEmailCodeText = useMemo(() => {
     if (isChecked) return '인증완료'
     return '이메일 인증'
-  }
+  }, [isChecked])
 
   return (
     <AnimateFieldset disabled={isChecked} className="group">
@@ -88,7 +89,7 @@ export default function EmailFieldset({ verification }: Props) {
             {isSending ? (
               <Loader className="size-6 animate-spin" />
             ) : (
-              transSendEmailCodeText()
+              transSendEmailCodeText
             )}
           </Button>
         }
@@ -111,7 +112,7 @@ export default function EmailFieldset({ verification }: Props) {
             {isChecking ? (
               <Loader className="size-6 animate-spin" />
             ) : (
-              transCheckEmailCodeText()
+              transCheckEmailCodeText
             )}
           </Button>
         }
