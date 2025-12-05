@@ -1,17 +1,10 @@
-'use client'
+import { Post, TravelSearchParams } from '@/types/post/post.type'
 
-import { useState } from 'react'
-
-import { TravelPost, TravelSearchParams } from '@/types/post/post.type'
-
-import FilterBar from '../FilterBar'
-import TravelPostListSection from '../PostListSection'
+import { FilterBar, PostListSection } from '..'
 
 export default function PostList(params: TravelSearchParams) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
   //  임시 데이터
-  const posts: TravelPost[] = [
+  const posts: Post[] = [
     {
       postId: '1',
       title: '제주 2박 3일 동행 구해요',
@@ -49,9 +42,8 @@ export default function PostList(params: TravelSearchParams) {
 
   return (
     <div className="min-h-screen bg-bg-base pt-4">
-      <FilterBar onOpenModal={() => setIsModalOpen(true)} />
-
-      <TravelPostListSection posts={posts} />
+      <FilterBar />
+      <PostListSection posts={posts} />
     </div>
   )
 }

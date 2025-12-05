@@ -1,8 +1,8 @@
-import { TravelPost } from '@/types/post/post.type'
+import { Post } from '@/types/post/post.type'
 
 import TravelPostCard from '../PostCard'
 
-export default function PostListSection({ posts }: { posts: TravelPost[] }) {
+export default function PostListSection({ posts }: { posts: Post[] }) {
   const isEmpty = posts.length === 0
 
   return (
