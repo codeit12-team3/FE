@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/common'
 import { useEmailVerification } from '@/hooks/auth'
@@ -16,24 +16,13 @@ interface Props {
 
 export default function SignupFirstStep({ verification, onNext }: Props) {
   const {
-    control,
     trigger,
     formState: { errors },
   } = useFormContext()
   const router = useRouter()
   const { isChecked } = verification
 
-  const [password, passwordConfirm] = useWatch({
-    control,
-    name: ['password', 'passwordConfirm'],
-  })
-
-  const isValid =
-    isChecked &&
-    !!password &&
-    !!passwordConfirm &&
-    !errors.password &&
-    !errors.passwordConfirm
+  const isValid = isChecked && !errors.password && !errors.passwordConfirm
 
   const handleNextClick = async () => {
     const isValid = await trigger([
