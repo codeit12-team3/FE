@@ -1,12 +1,14 @@
 'use client'
 
 import { Plus, Search } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/common/Button'
 
 import FilterSelect from '../FilterSelect'
 
 export default function FilterBar() {
+  const router = useRouter()
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
       <div className="flex gap-2">
@@ -25,7 +27,11 @@ export default function FilterBar() {
         <Search className="absolute right-3 top-1/2 -translate-y-3.5 w-5 h-5 text-text-input" />
       </div>
 
-      <Button size="sm" className="gap-2 w-36">
+      <Button
+        size="sm"
+        className="gap-2 w-36"
+        onClick={() => router.push('/add')}
+      >
         <Plus className="w-5 h-5" />
         동행 구하기
       </Button>

@@ -1,9 +1,9 @@
-import { Post, TravelSearchParams } from '@/types/post/post.type'
+import { Post } from '@/types/post/post.type'
 
-import { FilterBar, PostListSection } from '..'
+import FilterBar from '../FilterBar'
+import PostListSection from '../PostListSection'
 
-export default function PostList(params: TravelSearchParams) {
-  //  임시 데이터
+export default function PostList() {
   const posts: Post[] = [
     {
       postId: '1',
@@ -39,9 +39,8 @@ export default function PostList(params: TravelSearchParams) {
       thumbnail: '/이미지.png',
     },
   ]
-
   return (
-    <div className="min-h-screen bg-bg-base pt-4">
+    <div>
       <FilterBar />
       <PostListSection posts={posts} />
     </div>
