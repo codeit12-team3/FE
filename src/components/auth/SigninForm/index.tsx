@@ -23,6 +23,7 @@ export default function SigninForm() {
   const { formState } = methods
 
   const onSubmit = async (data: SigninFormValues) => {
+    // TODO: NextAuth 로직 완성 후 작성
     console.log(data)
   }
 
