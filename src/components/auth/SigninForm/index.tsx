@@ -59,7 +59,7 @@ export default function SigninForm() {
             />
           </AnimateFieldset>
           <Button
-            disabled={!formState.isValid}
+            disabled={!formState.isValid || isPending}
             className="w-full"
             type="submit"
             size={'lg'}
