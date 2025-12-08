@@ -23,9 +23,15 @@ export default function PostList() {
       nickname: '푸우님과함께',
       currentMembers: 2,
       maxMembers: 4,
-      conditions: ['20대', 1998, '여성만'],
+      conditions: {
+        ageCondition: '20대',
+        birthYear: 2000,
+        genderCondition: '여성만',
+      },
       bookmarked: true,
       thumbnail: '/',
+      createdAt: String(new Date()),
+      updatedAt: '',
     },
     {
       postId: 'post-2',
@@ -40,9 +46,15 @@ export default function PostList() {
       nickname: '가족여행러버',
       currentMembers: 3,
       maxMembers: 3,
-      conditions: ['30대', 1993, '누구나'],
+      conditions: {
+        ageCondition: '30대',
+        birthYear: 1993,
+        genderCondition: '누구나',
+      },
       bookmarked: false,
       thumbnail: '/',
+      createdAt: String(new Date()),
+      updatedAt: '',
     },
     {
       postId: 'post-3',
@@ -57,9 +69,15 @@ export default function PostList() {
       nickname: '산타는고양이',
       currentMembers: 1,
       maxMembers: 2,
-      conditions: ['40대', 1995, '남성만'],
+      conditions: {
+        ageCondition: '20대',
+        birthYear: 1993,
+        genderCondition: '누구나',
+      },
       bookmarked: true,
       thumbnail: '/',
+      createdAt: String(new Date()),
+      updatedAt: '',
     },
   ]
   const [filters, setFilters] = useState({
@@ -70,12 +88,15 @@ export default function PostList() {
   })
   const filteredPosts = posts.filter((post) => {
     const matchRegion = !filters.region || post.region.includes(filters.region)
-    const matchAge = !filters.age || post.conditions[0] === filters.age
+    const matchAge =
+      !filters.age || post.conditions.ageCondition === filters.age
     const matchGender =
       filters.gender === '' ||
       filters.gender === 'ALL' ||
-      (filters.gender === 'MALE' && post.conditions[2].includes('남')) ||
-      (filters.gender === 'FEMALE' && post.conditions[2].includes('여'))
+      (filters.gender === 'MALE' &&
+        post.conditions.genderCondition.includes('남')) ||
+      (filters.gender === 'FEMALE' &&
+        post.conditions.genderCondition.includes('여'))
     return matchRegion && matchAge && matchGender
   })
 

@@ -163,7 +163,7 @@ export default function FilterBar({
       <Button
         size="sm"
         className="gap-2 w-36"
-        onClick={() => router.push('/add')}
+        onClick={() => router.push('/post/add')}
       >
         <Plus className="w-5 h-5" />
         동행 구하기

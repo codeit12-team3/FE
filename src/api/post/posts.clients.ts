@@ -1,15 +1,6 @@
-import { axios } from '../common'
+import { PostCreatePayload, PostParams } from '@/types/post/post.type'
 
-export interface PostParams {
-  region?: string
-  date?: string
-  age?: number
-  ageType?: 'OLDER' | 'YOUNGER'
-  gender?: 'MALE' | 'FEMALE' | 'ALL'
-  keyword?: string
-  size?: number
-  isLast?: boolean
-}
+import { axios } from '../common'
 
 export const fetchPosts = async (params: PostParams) => {
   return await axios.get('/v1/posts', {
@@ -19,22 +10,31 @@ export const fetchPosts = async (params: PostParams) => {
     },
   })
 }
-export const fetchPostsDetail = async (postId: number) => {
+export const fetchPostsDetail = async (postId: string) => {
   const { data } = await axios.get(`/v1/posts/${postId}`)
   return data.data
 }
-export const createPost = async () => {
-  return await axios.post('/v1/posts')
+export const createPost = async (payload: PostCreatePayload) => {
+  const { data } = await axios.post(`/v1/posts`, payload)
+  return data.data
 }
-export const updatePost = async (postId: number) => {
-  return await axios.patch(`/v1/posts${postId}`)
+
+export const updatePost = async (
+  postId: string,
+  payload: PostCreatePayload,
+) => {
+  const { data } = await axios.patch(`/v1/posts/${postId}`, payload)
+  return data.data
 }
-export const deletePost = async (postId: number) => {
-  return await axios.delete(`//v1/posts/${postId}`)
+export const deletePost = async (postId: string) => {
+  const { data } = await axios.delete(`/v1/posts/${postId}`)
+  return data.data
 }
-export const addBookmark = async (postId: number) => {
-  return await axios.post(`/v1/posts/${postId}/bookmark`)
+export const addBookmark = async (postId: string) => {
+  const { data } = await axios.post(`/v1/posts/${postId}/bookmark`)
+  return data.data
 }
-export const removeBookmark = async (postId: number) => {
-  return await axios.delete(`/v1/posts/${postId}/bookmark`)
+export const removeBookmark = async (postId: string) => {
+  const { data } = await axios.delete(`/v1/posts/${postId}/bookmark`)
+  return data.data
 }

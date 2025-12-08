@@ -77,14 +77,18 @@ export default function PostCard({ post }: { post: PostContent }) {
 
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">나이</span>
-              <span className="text-text-base">{post.conditions[0]}</span>
+              <span className="text-text-base">
+                {post.conditions.ageCondition}
+              </span>
             </div>
 
             <span className="text-text-disabled">|</span>
 
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">성별</span>
-              <span className="text-text-base">{post.conditions[2]}</span>
+              <span className="text-text-base">
+                {post.conditions.genderCondition}
+              </span>
             </div>
           </div>
         </div>

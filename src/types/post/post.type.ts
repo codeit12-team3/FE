@@ -25,12 +25,42 @@ export interface PostContent {
   nickname: string
   currentMembers: number
   maxMembers: number
-  conditions: [ageCondition: string, birthYear: number, genderCondition: string]
+  conditions: {
+    ageCondition: string
+    birthYear: number
+    genderCondition: string
+  }
   bookmarked: boolean
   thumbnail: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Post {
   content: PostContent[]
   isLast: boolean
+}
+
+export interface PostParams {
+  region?: string
+  date?: string
+  age?: number
+  ageType?: 'OLDER' | 'YOUNGER'
+  gender?: 'MALE' | 'FEMALE' | 'ALL'
+  keyword?: string
+  size?: number
+  isLast?: boolean
+}
+export interface PostCreatePayload {
+  title: string
+  region: string
+  startDate: string
+  endDate: string
+  maxMembers: number
+  content: string
+  tags: string[]
+  images: string[]
+  genderType: 'MALE' | 'FEMALE' | 'ALL'
+  birthYear: number
+  ageType: 'OLDER' | 'YOUNGER'
 }
