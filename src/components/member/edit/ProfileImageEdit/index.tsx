@@ -6,13 +6,13 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import useImageCompress from '@/hooks/member/useImageCompress'
-import { MemberEditState } from '@/stores/member.store'
+import { useMemberEditState } from '@/stores/member.store'
 
 export default function ProfileImageEdit() {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [profileImg, setprofileImg] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
-  const { setUploadedImageUrl, setIsUploadingImage } = MemberEditState()
+  const { setUploadedImageUrl, setIsUploadingImage } = useMemberEditState()
 
   const handleEditClick = () => {
     fileInputRef.current?.click()
@@ -22,7 +22,7 @@ export default function ProfileImageEdit() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
       toast.error('JPG, JPEG, PNG, WebP만 업로드 가능해요!')
       e.target.value = ''
@@ -30,10 +30,8 @@ export default function ProfileImageEdit() {
     }
 
     try {
-      console.log(file)
       const result = await compress(file)
-      console.log('압축됨', result)
-      setPreviewUrl(result.previewUrl)
+      setprofileImg(result.previewUrl)
       setIsUploadingImage(true)
 
       // 백에서 프리사인드URL나오면 S3 업로드 처리할예정입니다
@@ -50,18 +48,18 @@ export default function ProfileImageEdit() {
 
   useEffect(() => {
     return () => {
-      if (previewUrl?.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl)
+      if (profileImg?.startsWith('blob:')) {
+        URL.revokeObjectURL(profileImg)
       }
     }
-  }, [previewUrl])
+  }, [profileImg])
 
   return (
     <div className="relative group">
       <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
         <Image
           fill
-          src={previewUrl || '/images/profile_default.svg'}
+          src={profileImg || '/images/profile_default.svg'}
           className="object-cover"
           alt="프로필 이미지"
           priority
@@ -77,7 +75,7 @@ export default function ProfileImageEdit() {
 
       <input
         type="file"
-        accept="image/jpeg,image/jpg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp"
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"

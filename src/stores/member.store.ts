@@ -9,7 +9,7 @@ interface MemberEditState {
   reset: () => void
 }
 
-export const MemberEditState = create<MemberEditState>((set) => ({
+export const useMemberEditState = create<MemberEditState>((set) => ({
   uploadedImageUrl: null,
   isUploadingImage: false,
 
