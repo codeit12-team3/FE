@@ -1,4 +1,3 @@
-// hooks/useImageCompress.ts
 import imageCompression, { Options } from 'browser-image-compression'
 import { useState } from 'react'
 
@@ -7,7 +6,7 @@ interface CompressResult {
   previewUrl: string
   originalSize: number
   compressedSize: number
-  ratio: number // 압축 비율 (%)
+  ratio: number
 }
 
 interface UseImageCompressReturn {
@@ -19,11 +18,11 @@ interface UseImageCompressReturn {
 }
 
 const defaultOptions: Options = {
-  maxSizeMB: 1, // 최대 1MB
-  maxWidthOrHeight: 1024, // 최대 1024px
+  maxSizeMB: 0.5,
+  maxWidthOrHeight: 512,
   useWebWorker: true,
-  fileType: 'image/webp', // 가능하면 webp로 변환 (용량 절반!)
-  initialQuality: 0.8,
+  fileType: 'image/webp',
+  initialQuality: 0.85,
 }
 
 export default function useImageCompress(
@@ -48,7 +47,6 @@ export default function useImageCompress(
 
       const compressedFile = await imageCompression(file, options)
 
-      // webp 변환 안 된 경우 강제로 이름 바꾸기 (브라우저 호환성)
       const finalFile =
         compressedFile.type === 'image/webp' &&
         !compressedFile.name.endsWith('.webp')

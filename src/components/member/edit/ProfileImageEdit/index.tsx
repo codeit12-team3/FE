@@ -1,14 +1,18 @@
 'use client'
 
-import { LoaderCircle, Pencil } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
+import useImageCompress from '@/hooks/member/useImageCompress'
+import { MemberEditState } from '@/stores/member.store'
+
 export default function ProfileImageEdit() {
-  const [imageUrl, setImageUrl] = useState('/images/profile_default.svg')
-  const [isLoading, setIsLoading] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { compress } = useImageCompress()
+  const { setUploadedImageUrl, setIsUploadingImage } = MemberEditState()
 
   const handleEditClick = () => {
     fileInputRef.current?.click()
@@ -20,57 +24,56 @@ export default function ProfileImageEdit() {
 
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
-      toast.error('JPG, PNG, WebP, HEIC만 업로드 가능해요!')
+      toast.error('JPG, JPEG, PNG, WebP만 업로드 가능해요!')
       e.target.value = ''
       return
     }
 
-    setIsLoading(true)
-    const loadingToast = toast.loading('이미지 처리 중...')
+    try {
+      console.log(file)
+      const result = await compress(file)
+      console.log('압축됨', result)
+      setPreviewUrl(result.previewUrl)
+      setIsUploadingImage(true)
 
-    setTimeout(() => {
-      const preview = URL.createObjectURL(file)
-      setImageUrl(preview)
-      setIsLoading(false)
-
-      toast.dismiss(loadingToast)
+      // 백에서 프리사인드URL나오면 S3 업로드 처리할예정입니다
       toast.success('프로필 사진이 변경되었습니다!', {
-        description: '이제 다른 정보도 수정하고 저장해보세요',
-        duration: 4000,
+        duration: 2000,
       })
-    }, 2000)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsUploadingImage(false)
+      e.target.value = ''
+    }
   }
 
+  useEffect(() => {
+    return () => {
+      if (previewUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl])
+
   return (
-    <div className="flex flex-col items-center gap-6 mt-10">
-      <div className="relative group">
-        <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD]">
-          <Image
-            fill
-            src={imageUrl}
-            className="object-cover"
-            alt="프로필 이미지"
-            priority
-          />
-
-          {isLoading && (
-            <div className="absolute inset-0 bg-black/70 rounded-full flex flex-col items-center justify-center gap-3">
-              <LoaderCircle size={48} className="text-white animate-spin" />
-            </div>
-          )}
-        </div>
-
-        <button
-          onClick={handleEditClick}
-          disabled={isLoading}
-          className="absolute w-12 h-12 border-2 border-[#dddddd] rounded-full flex items-center justify-center bg-white bottom-0 right-0 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
-                     "
-        >
-          <Pencil size={24} className="text-gray-700" />
-        </button>
+    <div className="relative group">
+      <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
+        <Image
+          fill
+          src={previewUrl || '/images/profile_default.svg'}
+          className="object-cover"
+          alt="프로필 이미지"
+          priority
+        />
       </div>
 
-      <h2 className="text-2xl font-bold text-black">나의닉네임</h2>
+      <button
+        onClick={handleEditClick}
+        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95"
+      >
+        <Pencil size={24} className="text-gray-700" />
+      </button>
 
       <input
         type="file"
