@@ -24,6 +24,7 @@ interface SelectProviderProps {
   defaultValue?: string | number
   value?: string | number
   onValueChange?: (value: string) => void
+  onChange?: (value: string) => void
 }
 export function SelectProvider({
   children,

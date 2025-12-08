@@ -1,6 +1,6 @@
 import { PostContent } from '@/types/post/post.type'
 
-import TravelPostCard from '../PostCard'
+import PostCard from '../PostCard'
 
 export default function PostListSection({ posts }: { posts: PostContent[] }) {
   const isEmpty = posts.length === 0
@@ -17,7 +17,7 @@ export default function PostListSection({ posts }: { posts: PostContent[] }) {
       ) : (
         <div className="space-y-4">
           {posts.map((post) => (
-            <TravelPostCard key={post.postId} post={post} />
+            <PostCard key={post.postId} post={post} />
           ))}
         </div>
       )}

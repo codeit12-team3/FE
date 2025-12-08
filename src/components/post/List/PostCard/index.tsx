@@ -34,8 +34,11 @@ export default function PostCard({ post }: { post: PostContent }) {
         )}
         <div className="flex-1 ml-3">
           <div className="flex gap-2 mb-2">
-            <span className={tagStyle}>여행스타일 태그</span>
-            <span className={tagStyle}>숙소취향 태그</span>
+            {post.tags.map((tag, idx) => (
+              <span key={idx} className={tagStyle}>
+                {tag}
+              </span>
+            ))}
           </div>
 
           <h3 className="text-lg font-semibold text-text-base mb-1">
@@ -44,7 +47,7 @@ export default function PostCard({ post }: { post: PostContent }) {
 
           <div className="flex gap-1">
             <p className="text-sm text-text-disabled mb-3">작성자</p>
-            <p className="text-sm text-text-input">작성자 닉네임</p>
+            <p className="text-sm text-text-input">{post.nickname}</p>
           </div>
 
           <div className="flex text-sm mb-2 gap-1 mt-8">
@@ -74,14 +77,14 @@ export default function PostCard({ post }: { post: PostContent }) {
 
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">나이</span>
-              <span className="text-text-base">20대만</span>
+              <span className="text-text-base">{post.conditions[0]}</span>
             </div>
 
             <span className="text-text-disabled">|</span>
 
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">성별</span>
-              <span className="text-text-base">남여자만</span>
+              <span className="text-text-base">{post.conditions[2]}</span>
             </div>
           </div>
         </div>

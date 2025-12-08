@@ -71,7 +71,7 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center ">
-      <div className="max-w-7xl w-full bg-white rounded-lg shadow-sm p-8 ">
+      <div className="max-w-7xl w-full bg-bg-base rounded-lg shadow-sm p-8 ">
         <PostHeader
           title={mockData.title}
           timestamp={mockData.createdAt}

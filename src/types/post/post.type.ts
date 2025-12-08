@@ -16,7 +16,7 @@ export interface Period {
 }
 
 export interface PostContent {
-  postId: number
+  postId: string
   title: string
   region: string
   period: Period

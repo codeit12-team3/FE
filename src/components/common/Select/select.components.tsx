@@ -44,11 +44,14 @@ interface SelectRootProps extends React.ComponentProps<typeof SelectProvider> {
   selectProps?: React.InputHTMLAttributes<HTMLSelectElement>
 }
 const SelectRoot = forwardRef<HTMLSelectElement, SelectRootProps>(
-  ({ children, className, selectProps, ...providerProps }, ref) => {
+  (
+    { children, className, selectProps, value, onChange, ...providerProps },
+    ref,
+  ) => {
     const containerRef = useRef<HTMLDivElement>(null)
 
     return (
-      <SelectProvider {...providerProps}>
+      <SelectProvider value={value} onChange={onChange} {...providerProps}>
         <SelectContainer ref={containerRef} className={className}>
           <HiddenSelect ref={ref} {...selectProps} />
           {children}
