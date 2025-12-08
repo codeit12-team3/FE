@@ -63,7 +63,7 @@ export default function SigninForm() {
             type="submit"
             size={'lg'}
           >
-            {isPending ? <Loader className="size-7" /> : '회원가입'}
+            {isPending ? <Loader className="size-7" /> : '로그인'}
           </Button>
         </div>
       </form>

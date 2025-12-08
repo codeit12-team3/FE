@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <section className="px-4 md:px-14 py-6 md:py-11 rounded-[40px] bg-white flex-1 w-full space-y-4">
       <div className="space-y-[35px]">
-        <h2 className="text-2xl font-semibold text-center">회원가입</h2>
+        <h2 className="text-2xl font-semibold text-center">로그인</h2>
         <SigninForm />
       </div>
       <p className="text-center text-sm">
