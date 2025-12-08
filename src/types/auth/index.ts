@@ -1,2 +1,2 @@
-export * from './signup.schema'
-export * from './signup.type'
+export * from './schema'
+export * from './type'
