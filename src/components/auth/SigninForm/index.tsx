@@ -3,7 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from 'lucide-react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import { useSigninEmail } from '@/api/auth'
 import { Button } from '@/components/common'
 import { SigninFormValues, signinSchema } from '@/types/auth'
 
@@ -11,6 +13,7 @@ import AnimateFieldset from '../AnimateFieldset'
 import FormInput from '../FormInput'
 
 export default function SigninForm() {
+  const { mutate, isPending } = useSigninEmail()
   const methods = useForm<SigninFormValues>({
     resolver: zodResolver(signinSchema),
     mode: 'onChange',
@@ -24,7 +27,14 @@ export default function SigninForm() {
 
   const onSubmit = async (data: SigninFormValues) => {
     // TODO: NextAuth 로직 완성 후 작성
-    console.log(data)
+    mutate(data, {
+      onSuccess: () => {
+        toast.success('로그인 되었습니다')
+      },
+      onError: (error) => {
+        toast.error(`${error.message}`)
+      },
+    })
   }
 
   return (
@@ -37,12 +47,14 @@ export default function SigninForm() {
               name="email"
               label="이메일"
               placeholder="이메일을 입력해주세요"
+              autoComplete="username"
             />
             <FormInput
               name="password"
               type="password"
               label="비밀번호"
               placeholder="비밀번호를 입력해주세요"
+              autoComplete="current-password"
             />
           </AnimateFieldset>
           <Button
@@ -51,7 +63,7 @@ export default function SigninForm() {
             type="submit"
             size={'lg'}
           >
-            {false ? <Loader className="size-7" /> : '회원가입'}
+            {isPending ? <Loader className="size-7" /> : '회원가입'}
           </Button>
         </div>
       </form>
