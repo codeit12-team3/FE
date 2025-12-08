@@ -30,7 +30,7 @@ client.interceptors.request.use(
 // 응답 인터셉터
 client.interceptors.response.use(
   (res: AxiosResponse) => {
-    return res
+    return res.data
   },
   async (error) => {
     // TODO: 공통 에러 처리 로직

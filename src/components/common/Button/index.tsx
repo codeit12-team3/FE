@@ -12,9 +12,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-main text-white font-semibold disabled:bg-bg-disabled disabled:text-bg-disabled disabled:font-medium disabled:pointer-events-none',
+          'bg-main text-white font-semibold disabled:bg-bg-disabled disabled:text-text-disabled disabled:font-medium disabled:pointer-events-none',
         secondary:
-          'font-semibold border border-main text-main bg-white disabled:border-bg-disabled disabled:text-bg-disabled disabled:pointer-events-none',
+          'font-semibold border border-main text-main bg-white disabled:border-bg-disabled disabled:text-text-disabled disabled:pointer-events-none',
       },
       size: {
         sm: 'h-10 px-4 py-2.5 rounded-[10px] text-sm',
