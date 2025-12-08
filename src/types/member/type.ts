@@ -3,7 +3,7 @@ import { Gender, MBTI } from '@/constants/member'
 export interface Member {
   email: string
   nickname: string
-  brith: string
+  birth: string
   gender: Gender
   mbti: MBTI
 }
