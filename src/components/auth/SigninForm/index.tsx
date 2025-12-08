@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -13,6 +14,7 @@ import AnimateFieldset from '../AnimateFieldset'
 import FormInput from '../FormInput'
 
 export default function SigninForm() {
+  const router = useRouter()
   const { mutate, isPending } = useSigninEmail()
   const methods = useForm<SigninFormValues>({
     resolver: zodResolver(signinSchema),
@@ -30,9 +32,8 @@ export default function SigninForm() {
     mutate(data, {
       onSuccess: () => {
         toast.success('로그인 되었습니다')
-      },
-      onError: (error) => {
-        toast.error(`${error.message}`)
+
+        router.push('/')
       },
     })
   }
@@ -63,7 +64,7 @@ export default function SigninForm() {
             type="submit"
             size={'lg'}
           >
-            {isPending ? <Loader className="size-7" /> : '로그인'}
+            {isPending ? <Loader className="size-7 animate-spin" /> : '로그인'}
           </Button>
         </div>
       </form>
