@@ -1,32 +1,25 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { SignupForm } from '@/components/auth'
 
 export default function Page() {
   return (
-    <main className="w-full flex-1 flex items-center justify-center max-w-7xl mx-auto px-4 md:px-8">
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-3 w-full">
-        <section className="flex-1 space-y-3 w-full">
-          <h3 className="text-2xl font-semibold text-center">
-            Welcome to Trip Us!
-          </h3>
-          <p className="font-medium text-center">
-            {/* TODO: 멘트 결정나면 바꿈 */}
-            한줄 소개 있으면 좋을 것 같습니다.
-          </p>
-          <Image
-            width={640}
-            height={563}
-            src={'/images/auth/intro.png'}
-            alt={'함께 여행하는 모습이 담긴 인트로 일러스트 이미지'}
-            className="w-full h-auto"
-          />
-        </section>
+    <section className="px-4 md:px-14 py-6 md:py-11 rounded-[40px] bg-white flex-1 w-full space-y-4">
+      <div className="space-y-[35px]">
+        <h2 className="text-2xl font-semibold text-center">회원가입</h2>
         <SignupForm />
       </div>
-    </main>
+      <p className="text-center text-sm">
+        이미 회원이신가요?{' '}
+        <Link
+          className="text-main underline underline-offset-1"
+          href={'/signin'}
+        >
+          로그인
+        </Link>
+      </p>
+    </section>
   )
 }
