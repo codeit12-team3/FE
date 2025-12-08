@@ -2,7 +2,7 @@ import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
 
-export const postHandlers = [
+export const postsHandlers = [
   http.get(`${MOCK_URL}/v1/posts`, async ({ request }) => {
     await delay(2000)
 
