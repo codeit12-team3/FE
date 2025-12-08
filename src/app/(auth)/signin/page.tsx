@@ -13,7 +13,7 @@ export default function Page() {
         트립어스가 처음이신가요?{' '}
         <Link
           className="text-main underline underline-offset-1"
-          href={'/signin'}
+          href={'/signup'}
         >
           회원가입
         </Link>
