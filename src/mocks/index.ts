@@ -1,6 +1,7 @@
 import { SetupWorker } from 'msw/browser'
 
 import { authHandlers, memberHandlers } from './handlers'
+import { companionsHandlers } from './handlers/companions'
 import { postsHandlers } from './handlers/posts'
 
 declare global {
@@ -16,13 +17,23 @@ export async function initMocks() {
     if (!window.mswWorker) {
       const { worker } = await import('./browser')
       window.mswWorker = worker
-      worker.use(...postsHandlers, ...authHandlers, ...memberHandlers)
+      worker.use(
+        ...companionsHandlers,
+        ...postsHandlers,
+        ...authHandlers,
+        ...memberHandlers,
+      )
       await worker.start({
         onUnhandledRequest: 'bypass',
       })
     } else {
       const worker = window.mswWorker
-      worker.use(...postsHandlers, ...authHandlers, ...memberHandlers)
+      worker.use(
+        ...companionsHandlers,
+        ...postsHandlers,
+        ...authHandlers,
+        ...memberHandlers,
+      )
     }
   }
 }

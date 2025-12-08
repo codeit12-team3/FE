@@ -111,6 +111,7 @@ export const postsHandlers = [
     })
   }),
   http.post(`${MOCK_URL}/v1/posts/:postId/bookmark`, async ({ params }) => {
+    await delay(2000)
     const { postId } = params
     if (!postId) {
       return HttpResponse.json(
@@ -134,6 +135,7 @@ export const postsHandlers = [
     })
   }),
   http.delete(`${MOCK_URL}/v1/posts/:postId/bookmark`, async ({ params }) => {
+    await delay(2000)
     const { postId } = params
     if (!postId) {
       return HttpResponse.json(
@@ -157,6 +159,7 @@ export const postsHandlers = [
     })
   }),
   http.delete(`${MOCK_URL}/v1/posts/:postId`, async ({ params }) => {
+    await delay(2000)
     const { postId } = params
     if (!postId) {
       return HttpResponse.json({
