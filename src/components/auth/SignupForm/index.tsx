@@ -65,28 +65,14 @@ export default function SignupForm() {
 
   return (
     <FormProvider {...methods}>
-      <section className="px-4 md:px-14 py-6 md:py-11 rounded-[40px] bg-white flex-1 w-full space-y-4">
-        <div className="space-y-[35px]">
-          <h2 className="text-2xl font-semibold text-center">회원가입</h2>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            {step === 1 && (
-              <SignupFirstStep verification={verification} onNext={next} />
-            )}
-            {step === 2 && (
-              <SignupSecondStep onPrev={prev} verification={verification} />
-            )}
-          </form>
-        </div>
-        <p className="text-center text-sm">
-          이미 회원이신가요?{' '}
-          <Link
-            className="text-main underline underline-offset-1"
-            href={'/signin'}
-          >
-            로그인
-          </Link>
-        </p>
-      </section>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        {step === 1 && (
+          <SignupFirstStep verification={verification} onNext={next} />
+        )}
+        {step === 2 && (
+          <SignupSecondStep onPrev={prev} verification={verification} />
+        )}
+      </form>
     </FormProvider>
   )
 }
