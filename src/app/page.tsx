@@ -1,9 +1,9 @@
-import { PostDetail } from '@/components/post'
+import { PostList } from '@/components/post'
 
 export default async function Home() {
   return (
     <div>
-      <PostDetail />
+      <PostList />
     </div>
   )
 }

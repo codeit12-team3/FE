@@ -2,9 +2,9 @@ import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 
 import { Button } from '@/components/common/Button'
-import { Post } from '@/types/post/post.type'
+import { PostContent } from '@/types/post/post.type'
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post }: { post: PostContent }) {
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const cardBase =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-border'
@@ -12,7 +12,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <div className={cardBase}>
       <div className="flex gap-4">
-        {post.status === 'CLOSED' ? (
+        {post.recruitStatus === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
             <Image
@@ -95,7 +95,7 @@ export default function PostCard({ post }: { post: Post }) {
             />
           </button>
 
-          {post.status === 'CLOSED' ? (
+          {post.recruitStatus === 'CLOSED' ? (
             <Button
               size="sm"
               className="w-39 bg-bg-disabled text-text-disabled"

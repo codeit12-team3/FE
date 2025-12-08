@@ -1,4 +1,4 @@
-export type TravelSearchParams = {
+export interface TravelSearchParams {
   region?: string
   startDate?: string
   endDate?: string
@@ -10,36 +10,27 @@ export type TravelSearchParams = {
   size?: number
 }
 
-export type TravelPeriod = {
+export interface Period {
   startDate: string
   endDate: string
 }
 
-export type Post = {
-  postId: string
+export interface PostContent {
+  postId: number
   title: string
   region: string
-  period: TravelPeriod
-  status: 'RECRUITING' | 'CLOSED'
+  period: Period
+  recruitStatus: 'RECRUITING' | 'CLOSED'
+  tags: string[]
+  nickname: string
   currentMembers: number
   maxMembers: number
-  bookmarked: boolean | null
+  conditions: [ageCondition: string, birthYear: number, genderCondition: string]
+  bookmarked: boolean
   thumbnail: string
 }
 
-export type PageInfo = {
-  page: number
-  size: number
-  totalPages: number
-  totalElements: number
-}
-
-export type ostListResponse = {
-  success: boolean
-  status: number
-  timestamp: string
-  data: {
-    posts: Post[]
-    pageInfo: PageInfo
-  }
+export interface Post {
+  content: PostContent[]
+  isLast: boolean
 }
