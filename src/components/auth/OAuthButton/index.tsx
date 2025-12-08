@@ -26,7 +26,7 @@ const variants = cva('rounded-full flex items-center justify-center', {
 
 type SVGIconType = React.FC<React.SVGProps<SVGSVGElement>>
 
-const PROVIDER_ICON: Record<string, SVGIconType> = {
+const PROVIDER_ICON: Record<OAuth, SVGIconType> = {
   google: IconGoogle,
   kakao: IconKakao,
   naver: IconNaver,
