@@ -3,13 +3,23 @@
 import { useState } from 'react'
 
 import { Button } from '@/components/common'
-import { PostContent } from '@/types/posts/posts.type'
+import { PostContent, PostParams } from '@/types/posts'
 
 import FilterBar from './FilterBar'
 import PostListSection from './PostListSection'
 
 export default function PostList() {
-  const posts: PostContent[] = [
+  const [filters, setFilters] = useState<PostParams>({
+    region: '',
+    date: '',
+    age: '',
+    ageType: '',
+    gender: '',
+    keyword: '',
+  })
+
+  // 임시 데이터
+  const mockPosts: PostContent[] = [
     {
       postId: 'post-1',
       title: '도쿄 디즈니 2박 3일 급구!',
@@ -80,35 +90,25 @@ export default function PostList() {
       updatedAt: '',
     },
   ]
-  const [filters, setFilters] = useState({
-    region: '',
-    date: '',
-    age: '',
-    gender: '',
-    search: '',
-  })
-  const filteredPosts = posts.filter((post) => {
-    const matchRegion = !filters.region || post.region.includes(filters.region)
-    const matchAge =
-      !filters.age || post.conditions.ageCondition === filters.age
-    const matchGender =
-      filters.gender === '' ||
-      filters.gender === 'ALL' ||
-      (filters.gender === 'MALE' &&
-        post.conditions.genderCondition.includes('남')) ||
-      (filters.gender === 'FEMALE' &&
-        post.conditions.genderCondition.includes('여'))
-    const matchSearch =
-      !filters.search ||
-      post.title.toLowerCase().includes(filters.search.toLowerCase())
-    return matchRegion && matchAge && matchGender && matchSearch
-  })
+
+  // 나중에 API 연동 시 주석 해제
+  // const [cursor, setCursor] = useState<string | undefined>(undefined)
+  // const { data } = usePosts({
+  //   lastPostId: cursor,
+  //   size: 20,
+  //   region: filters.region || undefined,
+  //   date: filters.date || undefined, // yyyy-MM-dd 형식
+  //   age: filters.age ? Number(filters.age) : undefined,
+  //   ageType: filters.ageType || undefined, // OLDER | YOUNGER
+  //   gender: filters.gender === '' ? undefined : filters.gender, // MALE | FEMALE | ALL
+  //   keyword: filters.search || undefined,
+  // })
 
   return (
     <div>
       <FilterBar filters={filters} onChangeFilters={setFilters} />
-      <PostListSection posts={filteredPosts} />
-      {posts.length > 0 && (
+      <PostListSection posts={mockPosts} />
+      {mockPosts.length > 0 && (
         <div className="flex justify-center mt-8">
           <Button>더보기</Button>
         </div>

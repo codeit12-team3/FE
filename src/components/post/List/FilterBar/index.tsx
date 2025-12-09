@@ -1,3 +1,4 @@
+// FilterBar.tsx
 'use client'
 
 import { Plus, Search } from 'lucide-react'
@@ -12,24 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/common/Select/select.components'
+import {
+  AGE_OPTIONS,
+  AGE_TYPE_OPTIONS,
+  GENDER_OPTIONS,
+  REGION_OPTIONS,
+} from '@/constants/posts'
+import { AgeType, GenderType, PostParams } from '@/types/posts'
 
 interface FilterBarProps {
-  filters: {
-    region: string
-    date: string
-    age: string
-    gender: string
-    search: string
-  }
-  onChangeFilters: React.Dispatch<
-    React.SetStateAction<{
-      region: string
-      date: string
-      age: string
-      gender: string
-      search: string
-    }>
-  >
+  filters: PostParams
+  onChangeFilters: React.Dispatch<React.SetStateAction<PostParams>>
 }
 
 export default function FilterBar({
@@ -37,159 +31,111 @@ export default function FilterBar({
   onChangeFilters,
 }: FilterBarProps) {
   const router = useRouter()
-  const [searchInput, setSearchInput] = useState(filters.search || '')
+  const [keywordInput, setKeywordInput] = useState(filters.keyword || '')
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      onChangeFilters((prev) => ({ ...prev, search: searchInput }))
+      onChangeFilters((prev) => ({ ...prev, keyword: keywordInput }))
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [searchInput, onChangeFilters])
+  }, [keywordInput, onChangeFilters])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value)
+    setKeywordInput(e.target.value)
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
       <div className="flex gap-2">
-        <SelectRoot value={filters.region}>
+        <SelectRoot
+          value={filters.region}
+          onValueChange={(value) =>
+            onChangeFilters((prev) => ({ ...prev, region: value }))
+          }
+        >
           <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
-            <SelectValue placeholder="국가" />
+            <SelectValue placeholder="지역" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value=""
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, region: '' }))
-              }
-            >
-              국가
-            </SelectItem>
-            <SelectItem
-              value="한국"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, region: '한국' }))
-              }
-            >
-              한국
-            </SelectItem>
-            <SelectItem
-              value="일본"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, region: '일본' }))
-              }
-            >
-              일본
-            </SelectItem>
-            <SelectItem
-              value="미국"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, region: '미국' }))
-              }
-            >
-              미국
-            </SelectItem>
+            <SelectItem value="">전체</SelectItem>
+            {REGION_OPTIONS.map((region) => (
+              <SelectItem key={region} value={region}>
+                {region}
+              </SelectItem>
+            ))}
           </SelectContent>
         </SelectRoot>
 
-        <SelectRoot value={filters.date}>
+        <SelectRoot
+          value={filters.date}
+          onValueChange={(value) =>
+            onChangeFilters((prev) => ({ ...prev, date: value }))
+          }
+        >
           <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
             <SelectValue placeholder="날짜" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value=""
-              onClick={() => onChangeFilters((prev) => ({ ...prev, date: '' }))}
-            >
-              날짜
-            </SelectItem>
-            <SelectItem
-              value="이번달"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, date: '이번달' }))
-              }
-            >
-              이번달
-            </SelectItem>
-            <SelectItem
-              value="다음달"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, date: '다음달' }))
-              }
-            >
-              다음달
-            </SelectItem>
+            <SelectItem value="">전체</SelectItem>
           </SelectContent>
         </SelectRoot>
 
-        <SelectRoot value={filters.age}>
+        <SelectRoot
+          value={filters.age}
+          onValueChange={(value) =>
+            onChangeFilters((prev) => ({ ...prev, age: value }))
+          }
+        >
           <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
             <SelectValue placeholder="나이" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value=""
-              onClick={() => onChangeFilters((prev) => ({ ...prev, age: '' }))}
-            >
-              나이
-            </SelectItem>
-            <SelectItem
-              value="20대"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, age: '20대' }))
-              }
-            >
-              20대
-            </SelectItem>
-            <SelectItem
-              value="30대"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, age: '30대' }))
-              }
-            >
-              30대
-            </SelectItem>
+            <SelectItem value="">전체</SelectItem>
+            {AGE_OPTIONS.map((age) => (
+              <SelectItem key={age} value={String(age)}>
+                {age}
+              </SelectItem>
+            ))}
           </SelectContent>
         </SelectRoot>
 
-        <SelectRoot value={filters.gender}>
+        <SelectRoot
+          value={filters.ageType}
+          onValueChange={(value) =>
+            onChangeFilters((prev) => ({ ...prev, ageType: value as AgeType }))
+          }
+        >
+          <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
+            <SelectValue placeholder="나이 조건" />
+          </SelectTrigger>
+          <SelectContent>
+            {AGE_TYPE_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </SelectRoot>
+
+        <SelectRoot
+          value={filters.gender}
+          onValueChange={(value) =>
+            onChangeFilters((prev) => ({
+              ...prev,
+              gender: value as GenderType,
+            }))
+          }
+        >
           <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
             <SelectValue placeholder="성별" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value=""
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, gender: '' }))
-              }
-            >
-              전체
-            </SelectItem>
-            <SelectItem
-              value="MALE"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, gender: 'MALE' }))
-              }
-            >
-              남성만
-            </SelectItem>
-            <SelectItem
-              value="FEMALE"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, gender: 'FEMALE' }))
-              }
-            >
-              여성만
-            </SelectItem>
-            <SelectItem
-              value="ALL"
-              onClick={() =>
-                onChangeFilters((prev) => ({ ...prev, gender: 'ALL' }))
-              }
-            >
-              무관
-            </SelectItem>
+            {GENDER_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </SelectRoot>
       </div>
@@ -197,7 +143,7 @@ export default function FilterBar({
       <div className="flex-1 relative max-w-[456px]">
         <input
           type="text"
-          value={searchInput}
+          value={keywordInput}
           onChange={handleSearchChange}
           placeholder="검색어를 입력해 주세요"
           className="w-full px-4 py-2 pr-10 border border-border rounded-lg text-sm bg-bg-disabled text-text-base placeholder:text-text-input"

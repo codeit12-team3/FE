@@ -1,6 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { PostCreatePayload, PostParams } from '@/types/posts/posts.type'
+import { ApiResponse } from '@/types/common'
+import {
+  FetchPostsResponse,
+  PostContent,
+  PostCreatePayload,
+  PostParams,
+} from '@/types/posts'
 
 import {
   addBookmark,
@@ -18,23 +24,26 @@ interface UpdateArgs {
 }
 
 export const usePosts = (params: PostParams) => {
-  return useQuery({
+  return useQuery<ApiResponse<FetchPostsResponse>>({
     queryKey: ['posts', params],
     queryFn: () => fetchPosts(params),
   })
 }
+
 export const usePostDetail = (postId: string) => {
-  return useQuery({
+  return useQuery<ApiResponse<PostContent>>({
     queryKey: ['postdetail', postId],
     queryFn: () => fetchPostsDetail(postId),
   })
 }
+
 export const useCreatePost = () => {
   return useMutation({
     mutationFn: (payload: PostCreatePayload) => createPost(payload),
     retry: 0,
   })
 }
+
 export const useUpdatePost = () => {
   return useMutation({
     mutationFn: ({ postId, payload }: UpdateArgs) =>
@@ -49,12 +58,14 @@ export const useDeletePost = () => {
     retry: 0,
   })
 }
+
 export const useAddBookmark = () => {
   return useMutation({
     mutationFn: (postId: string) => addBookmark(postId),
     retry: 0,
   })
 }
+
 export const useRemoveBookmark = () => {
   return useMutation({
     mutationFn: (postId: string) => removeBookmark(postId),

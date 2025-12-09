@@ -21,42 +21,52 @@ export const companionsHandlers = [
       await delay(2000)
       const { postId } = params
       const body = (await request.json()) as { applyMessage: string }
+
       const targetPost = mockPosts.find((p) => p.postId === postId)
 
       if (!targetPost) {
-        return HttpResponse.json({
-          success: false,
-          status: 404,
-          data: {
-            status: 'POST_NOT_FOUND',
-            message: '존재하지 않는 게시글입니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 404,
+            data: {
+              errorCode: 'POST_NOT_FOUND',
+              message: '존재하지 않는 게시글입니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 404, statusText: 'Not Found' },
+        )
       }
 
       if (targetPost.recruitStatus === 'CLOSED') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'POST_CLOSED',
-            message: '모집이 종료된 게시글입니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'POST_CLOSED',
+              message: '모집이 종료된 게시글입니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
 
       if (targetPost.writerId === CURRENT_USER_ID) {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'MY_POST',
-            message: '본인의 게시글에는 신청할 수 없습니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'MY_POST',
+              message: '본인의 게시글에는 신청할 수 없습니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
 
       const myHistory = mockCompanions.find(
@@ -64,39 +74,48 @@ export const companionsHandlers = [
       )
 
       if (myHistory?.status === 'PENDING') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'ALREADY_APPLIED',
-            message: '이미 신청한 게시글입니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'ALREADY_APPLIED',
+              message: '이미 신청한 게시글입니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
 
       if (myHistory?.status === 'REJECTED') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'REJECTED_USER',
-            message: '이미 거절된 동행입니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'REJECTED_USER',
+              message: '이미 거절된 동행입니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
 
       if (myHistory?.status === 'EXITED') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'ALREADY_EXITED',
-            message: '나간 동행은 재참여가 불가합니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'ALREADY_EXITED',
+              message: '나간 동행은 재참여가 불가합니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
 
       const newCompanion = {
@@ -106,138 +125,180 @@ export const companionsHandlers = [
         status: 'PENDING' as const,
         applyMessage: body.applyMessage,
       }
+
       mockCompanions.push(newCompanion)
 
-      return HttpResponse.json({
-        success: true,
-        status: 201,
-        data: {
-          postId: String(postId),
-          status: 'PENDING',
+      return HttpResponse.json(
+        {
+          success: true,
+          status: 201,
+          data: {
+            companionId: newCompanion.companionId,
+            status: newCompanion.status,
+          },
+          timestamp: new Date().toISOString(),
         },
-        timestamp: new Date().toISOString(),
-      })
+        { status: 201, statusText: 'Created' },
+      )
     },
   ),
+
   http.patch(
     `${MOCK_URL}/v1/companions/:companionId`,
     async ({ params, request }) => {
       await delay(2000)
       const { companionId } = params
       const body = (await request.json()) as { status: 'APPROVE' | 'DENIED' }
+
       const companion = mockCompanions.find(
         (c) => c.companionId === Number(companionId),
       )
 
       if (!companion) {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'COMPANION_007',
-            message: '해당 동행을 수락할 권한이 없습니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 404,
+            data: {
+              errorCode: 'COMPANION_007',
+              message: '해당 동행 신청을 찾을 수 없습니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 404, statusText: 'Not Found' },
+        )
       }
+
       const post = mockPosts.find((p) => p.postId === companion.postId)
-      if (!post) {
-        return HttpResponse.json({
-          success: false,
-          status: 404,
-          data: {
-            status: 'POST_NOT_FOUND',
-            message: '존재하지 않는 게시글입니다.',
+
+      if (!post || post.writerId !== CURRENT_USER_ID) {
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 403,
+            data: {
+              errorCode: 'COMPANION_007',
+              message: '해당 동행을 수락할 권한이 없습니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 403, statusText: 'Forbidden' },
+        )
       }
-      if (post.writerId !== CURRENT_USER_ID) {
-        return HttpResponse.json({
-          success: false,
-          status: 403,
-          data: {
-            status: 'COMPANION_007',
-            message: '해당 동행을 수락할 권한이 없습니다.',
-          },
-          timestamp: '2025-12-02',
-        })
-      }
+
       if (companion.status !== 'PENDING') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'NOT_PENDING_STATUS',
-            message: '승인 대기 중인 신청이 아닙니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'NOT_PENDING_STATUS',
+              message: '승인 대기 상태가 아닙니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
+
       if (body.status !== 'APPROVE' && body.status !== 'DENIED') {
-        return HttpResponse.json({
-          success: false,
-          status: 400,
-          data: {
-            status: 'INVALID_STATUS',
-            message:
-              '유효하지 않은 상태값입니다. APPROVE 또는 DENIED만 가능합니다.',
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 400,
+            data: {
+              errorCode: 'INVALID_STATUS',
+              message: 'APPROVE 또는 DENIED만 가능합니다.',
+            },
+            timestamp: new Date().toISOString(),
           },
-          timestamp: '2025-12-02',
-        })
+          { status: 400, statusText: 'Bad Request' },
+        )
       }
-      return HttpResponse.json({
-        success: true,
-        status: 200,
-        data: null,
-        timestamp: '2025-12-02',
-      })
+
+      companion.status = body.status === 'APPROVE' ? 'APPROVED' : 'DENIED'
+
+      return HttpResponse.json(
+        {
+          success: true,
+          status: 200,
+          data: {
+            companionId: companion.companionId,
+            status: companion.status,
+          },
+          timestamp: new Date().toISOString(),
+        },
+        { status: 200, statusText: 'OK' },
+      )
     },
   ),
+
   http.delete(`${MOCK_URL}/v1/companions/:companionId`, async ({ params }) => {
     await delay(2000)
     const { companionId } = params
+
     const companion = mockCompanions.find(
       (c) => c.companionId === Number(companionId),
     )
-    if (!companionId) {
-      return HttpResponse.json({
-        success: false,
-        status: 404,
-        data: {
-          status: 'COMPANION_001',
-          message: '동행 신청을 찾을 수 없습니다.',
+
+    if (!companion) {
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 404,
+          data: {
+            errorCode: 'COMPANION_001',
+            message: '동행 신청을 찾을 수 없습니다.',
+          },
+          timestamp: new Date().toISOString(),
         },
-        timestamp: '2025-12-02',
-      })
+        { status: 404, statusText: 'Not Found' },
+      )
     }
-    if (companion?.status !== 'PENDING') {
-      return HttpResponse.json({
-        success: false,
-        status: 400,
+
+    if (companion.userId !== CURRENT_USER_ID) {
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 403,
+          data: {
+            errorCode: 'COMPANION_010',
+            message: '본인이 신청한 동행만 취소할 수 있습니다.',
+          },
+          timestamp: new Date().toISOString(),
+        },
+        { status: 403, statusText: 'Forbidden' },
+      )
+    }
+
+    if (companion.status !== 'PENDING') {
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 400,
+          data: {
+            errorCode: 'COMPANION_008',
+            message: '승인 대기 상태만 취소 가능합니다.',
+          },
+          timestamp: new Date().toISOString(),
+        },
+        { status: 400, statusText: 'Bad Request' },
+      )
+    }
+
+    companion.status = 'EXITED'
+
+    return HttpResponse.json(
+      {
+        success: true,
+        status: 200,
         data: {
-          status: 'COMPANION_008',
-          message: '승인 대기 중인 신청이 아닙니다.',
+          companionId: companion.companionId,
+          status: companion.status,
         },
         timestamp: new Date().toISOString(),
-      })
-    }
-    if (companion?.userId !== CURRENT_USER_ID) {
-      return HttpResponse.json({
-        success: false,
-        status: 400,
-        data: {
-          status: 'COMPANION_010',
-          message: '본인이 신청한 동행이 아닙니다.',
-        },
-        timestamp: '2025-12-02',
-      })
-    }
-    return HttpResponse.json({
-      success: true,
-      status: 200,
-      data: null,
-      timestamp: '2025-12-02',
-    })
+      },
+      { status: 200, statusText: 'OK' },
+    )
   }),
 ]
