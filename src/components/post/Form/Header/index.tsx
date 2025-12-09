@@ -31,7 +31,7 @@ export default function Header({
           여행 태그 <span className="text-danger">*</span>
         </label>
         <input
-          value={tags}
+          value={tags.join(', ')}
           onChange={(e) => onChangeTags(e.target.value)}
           type="text"
           placeholder="태그로 선택해주세요, 최대 5개"

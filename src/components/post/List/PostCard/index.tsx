@@ -41,8 +41,8 @@ export default function PostCard({ post }: { post: PostContent }) {
         )}
         <div className="flex-1 ml-3">
           <div className="flex gap-2 mb-2">
-            {post.tags.map((tag, idx) => (
-              <span key={idx} className={tagStyle}>
+            {post.tags.map((tag) => (
+              <span key={tag} className={tagStyle}>
                 {tag}
               </span>
             ))}

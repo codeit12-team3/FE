@@ -222,7 +222,7 @@ export const companionsHandlers = [
         timestamp: new Date().toISOString(),
       })
     }
-    if (companion?.status !== 'PENDING') {
+    if (companion?.userId !== CURRENT_USER_ID) {
       return HttpResponse.json({
         success: false,
         status: 400,
