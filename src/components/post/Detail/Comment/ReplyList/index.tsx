@@ -1,4 +1,4 @@
-import { CommentType } from '@/types/post/comment.type'
+import { CommentType } from '@/types/comments/comments.type'
 
 import ReplyItem from '../ReplyItem'
 

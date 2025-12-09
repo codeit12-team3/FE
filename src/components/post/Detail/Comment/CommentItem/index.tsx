@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { formatRelativeTime } from '@/lib/common'
-import { CommentType } from '@/types/post/comment.type'
+import { CommentType } from '@/types/comments/comments.type'
 
 interface CommentItemProps {
   comment: CommentType

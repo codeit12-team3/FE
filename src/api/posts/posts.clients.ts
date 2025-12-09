@@ -1,4 +1,4 @@
-import { PostCreatePayload, PostParams } from '@/types/post/post.type'
+import { PostCreatePayload, PostParams } from '@/types/posts/posts.type'
 
 import { axios } from '../common'
 

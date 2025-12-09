@@ -1,4 +1,4 @@
-import { PostContent } from '@/types/post/post.type'
+import { PostContent } from '@/types/posts/posts.type'
 
 import PostCard from '../PostCard'
 

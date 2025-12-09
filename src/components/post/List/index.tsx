@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Button } from '@/components/common'
-import { PostContent } from '@/types/post/post.type'
+import { PostContent } from '@/types/posts/posts.type'
 
 import FilterBar from './FilterBar'
 import PostListSection from './PostListSection'

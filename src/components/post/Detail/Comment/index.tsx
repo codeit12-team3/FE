@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 
-import { CommentType } from '@/types/post/comment.type'
+import { CommentType } from '@/types/comments/comments.type'
 
 import CommentInput from './CommentInput'
 import CommentList from './CommentList'

@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { PostCreatePayload, PostParams } from '@/types/post/post.type'
+import { PostCreatePayload, PostParams } from '@/types/posts/posts.type'
 
 import {
   addBookmark,

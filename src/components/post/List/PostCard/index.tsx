@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/common/Button'
-import { PostContent } from '@/types/post/post.type'
+import { PostContent } from '@/types/posts/posts.type'
 
 export default function PostCard({ post }: { post: PostContent }) {
   const router = useRouter()
