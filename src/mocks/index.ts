@@ -1,6 +1,7 @@
 import { SetupWorker } from 'msw/browser'
 
 import { authHandlers, memberHandlers } from './handlers'
+import { commentHandlers } from './handlers/comments'
 import { companionsHandlers } from './handlers/companions'
 import { postsHandlers } from './handlers/posts'
 
@@ -18,6 +19,7 @@ export async function initMocks() {
       const { worker } = await import('./browser')
       window.mswWorker = worker
       worker.use(
+        ...commentHandlers,
         ...companionsHandlers,
         ...postsHandlers,
         ...authHandlers,
@@ -29,6 +31,7 @@ export async function initMocks() {
     } else {
       const worker = window.mswWorker
       worker.use(
+        ...commentHandlers,
         ...companionsHandlers,
         ...postsHandlers,
         ...authHandlers,

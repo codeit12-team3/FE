@@ -4,7 +4,7 @@ import {
   applyCompanion,
   cancelCompanion,
   updateCompanionStatus,
-} from './companion.client'
+} from './companion.clients'
 
 export const useApplyCompanion = () => {
   const queryClient = useQueryClient()
