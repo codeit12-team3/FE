@@ -3,6 +3,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
+import { getSession, signOut } from 'next-auth/react'
 
 import { BASE_URL } from '@/constants/common'
 
@@ -17,8 +18,15 @@ const client: AxiosInstance = axios.create({
 
 // 요청 인터셉터
 client.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    // TODO: 헤더에 토큰 추가 로직
+  async (config: InternalAxiosRequestConfig) => {
+    if (typeof window !== 'undefined') {
+      const session = await getSession()
+      const accessToken = session?.user.tokenResponse.accessToken
+
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`
+      }
+    }
 
     return config
   },
@@ -33,11 +41,10 @@ client.interceptors.response.use(
     return res
   },
   async (error) => {
-    // TODO: 공통 에러 처리 로직
     const status = error.response?.status
 
-    if (status === 401) {
-      // TODO: 리프레시 토큰 로직
+    if (status === 401 && typeof window !== 'undefined') {
+      signOut({ callbackUrl: '/signin' })
     }
 
     return Promise.reject(error)
