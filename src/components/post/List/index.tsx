@@ -85,6 +85,7 @@ export default function PostList() {
     date: '',
     age: '',
     gender: '',
+    search: '',
   })
   const filteredPosts = posts.filter((post) => {
     const matchRegion = !filters.region || post.region.includes(filters.region)
@@ -97,14 +98,16 @@ export default function PostList() {
         post.conditions.genderCondition.includes('남')) ||
       (filters.gender === 'FEMALE' &&
         post.conditions.genderCondition.includes('여'))
-    return matchRegion && matchAge && matchGender
+    const matchSearch =
+      !filters.search ||
+      post.title.toLowerCase().includes(filters.search.toLowerCase())
+    return matchRegion && matchAge && matchGender && matchSearch
   })
 
   return (
     <div>
       <FilterBar filters={filters} onChangeFilters={setFilters} />
       <PostListSection posts={filteredPosts} />
-
       {posts.length > 0 && (
         <div className="flex justify-center mt-8">
           <Button>더보기</Button>

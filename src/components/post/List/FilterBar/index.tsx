@@ -2,6 +2,7 @@
 
 import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/common/Button'
 import {
@@ -18,6 +19,7 @@ interface FilterBarProps {
     date: string
     age: string
     gender: string
+    search: string
   }
   onChangeFilters: React.Dispatch<
     React.SetStateAction<{
@@ -25,6 +27,7 @@ interface FilterBarProps {
       date: string
       age: string
       gender: string
+      search: string
     }>
   >
 }
@@ -34,6 +37,18 @@ export default function FilterBar({
   onChangeFilters,
 }: FilterBarProps) {
   const router = useRouter()
+  const [searchInput, setSearchInput] = useState(filters.search || '')
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onChangeFilters((prev) => ({ ...prev, search: searchInput }))
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchInput, onChangeFilters])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value)
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
@@ -43,6 +58,14 @@ export default function FilterBar({
             <SelectValue placeholder="국가" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem
+              value=""
+              onClick={() =>
+                onChangeFilters((prev) => ({ ...prev, region: '' }))
+              }
+            >
+              국가
+            </SelectItem>
             <SelectItem
               value="한국"
               onClick={() =>
@@ -76,6 +99,12 @@ export default function FilterBar({
           </SelectTrigger>
           <SelectContent>
             <SelectItem
+              value=""
+              onClick={() => onChangeFilters((prev) => ({ ...prev, date: '' }))}
+            >
+              날짜
+            </SelectItem>
+            <SelectItem
               value="이번달"
               onClick={() =>
                 onChangeFilters((prev) => ({ ...prev, date: '이번달' }))
@@ -99,6 +128,12 @@ export default function FilterBar({
             <SelectValue placeholder="나이" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem
+              value=""
+              onClick={() => onChangeFilters((prev) => ({ ...prev, age: '' }))}
+            >
+              나이
+            </SelectItem>
             <SelectItem
               value="20대"
               onClick={() =>
@@ -124,12 +159,20 @@ export default function FilterBar({
           </SelectTrigger>
           <SelectContent>
             <SelectItem
+              value=""
+              onClick={() =>
+                onChangeFilters((prev) => ({ ...prev, gender: '' }))
+              }
+            >
+              전체
+            </SelectItem>
+            <SelectItem
               value="MALE"
               onClick={() =>
                 onChangeFilters((prev) => ({ ...prev, gender: 'MALE' }))
               }
             >
-              남성
+              남성만
             </SelectItem>
             <SelectItem
               value="FEMALE"
@@ -137,7 +180,7 @@ export default function FilterBar({
                 onChangeFilters((prev) => ({ ...prev, gender: 'FEMALE' }))
               }
             >
-              여성
+              여성만
             </SelectItem>
             <SelectItem
               value="ALL"
@@ -154,16 +197,18 @@ export default function FilterBar({
       <div className="flex-1 relative max-w-[456px]">
         <input
           type="text"
+          value={searchInput}
+          onChange={handleSearchChange}
           placeholder="검색어를 입력해 주세요"
-          className="w-full px-4 py-2 border border-border rounded-lg text-sm bg-bg-disabled text-text-base placeholder:text-text-input"
+          className="w-full px-4 py-2 pr-10 border border-border rounded-lg text-sm bg-bg-disabled text-text-base placeholder:text-text-input"
         />
-        <Search className="absolute right-3 top-1/2 -translate-y-3.5 w-5 h-5 text-text-input" />
+        <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
       </div>
 
       <Button
         size="sm"
         className="gap-2 w-36"
-        onClick={() => router.push('/post/add')}
+        onClick={() => router.push('/posts/add')}
       >
         <Plus className="w-5 h-5" />
         동행 구하기

@@ -1,16 +1,23 @@
+'use client'
+
 import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/common/Button'
 import { PostContent } from '@/types/post/post.type'
 
 export default function PostCard({ post }: { post: PostContent }) {
+  const router = useRouter()
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const cardBase =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-border'
 
   return (
-    <div className={cardBase}>
+    <div
+      className={cardBase}
+      onClick={() => router.push(`/posts/${post.postId}`)}
+    >
       <div className="flex gap-4">
         {post.recruitStatus === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">

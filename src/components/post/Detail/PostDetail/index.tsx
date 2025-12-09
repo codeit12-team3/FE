@@ -11,7 +11,7 @@ import PostWriter from './PostWriter'
 
 export default function PostDetail() {
   // 임시 데이터
-  const mockData = {
+  const postDetail = {
     title: '카지노 가보실 분',
     region: '미국',
     period: {
@@ -40,6 +40,8 @@ export default function PostDetail() {
       gender: 'MALE',
       mbti: 'ENTP',
       birth: 1999,
+      tripStyle: '힐링',
+      accommodationPreference: '호텔',
     },
     comments: [
       {
@@ -71,44 +73,46 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center ">
-      <div className="max-w-7xl w-full bg-bg-base rounded-lg shadow-sm p-8 ">
+      <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border  border-[#DDDDDD]  ">
         <PostHeader
-          title={mockData.title}
-          timestamp={mockData.createdAt}
-          stats={{ viewCount: mockData.stats.viewCount }}
-          commentCount={mockData.commentCount}
-          isBookmarked={mockData.isBookmarked}
+          title={postDetail.title}
+          timestamp={postDetail.createdAt}
+          stats={{ viewCount: postDetail.stats.viewCount }}
+          commentCount={postDetail.commentCount}
+          isBookmarked={postDetail.isBookmarked}
         />
 
-        <PostImages images={mockData.images} />
+        <PostImages images={postDetail.images} />
 
-        <PostTags tags={mockData.tags} />
+        <PostTags tags={postDetail.tags} />
 
         <PostInfo
-          region={mockData.region}
+          region={postDetail.region}
           period={{
-            startDate: mockData.period.startDate,
-            endDate: mockData.period.endDate,
+            startDate: postDetail.period.startDate,
+            endDate: postDetail.period.endDate,
           }}
-          content={mockData.content}
+          content={postDetail.content}
           stats={{
-            maxMembers: mockData.stats.maxMembers,
-            currentMembers: mockData.stats.currentMembers,
+            maxMembers: postDetail.stats.maxMembers,
+            currentMembers: postDetail.stats.currentMembers,
           }}
           conditions={{
-            ageCondition: mockData.conditions.ageCondition,
-            birthYear: mockData.conditions.birthYear,
-            genderCondition: mockData.conditions.genderCondition,
+            ageCondition: postDetail.conditions.ageCondition,
+            birthYear: postDetail.conditions.birthYear,
+            genderCondition: postDetail.conditions.genderCondition,
           }}
         />
 
         <PostWriter
           writer={{
-            nickname: mockData.writer.nickname,
-            age: mockData.writer.age,
-            gender: mockData.writer.gender as 'MALE' | 'FEMALE',
-            mbti: mockData.writer.mbti,
-            birth: mockData.writer.birth,
+            nickname: postDetail.writer.nickname,
+            age: postDetail.writer.age,
+            gender: postDetail.writer.gender as 'MALE' | 'FEMALE',
+            mbti: postDetail.writer.mbti,
+            birth: postDetail.writer.birth,
+            tripstyle: postDetail.writer.tripStyle,
+            accommodationPreference: postDetail.writer.accommodationPreference,
           }}
         />
 
@@ -122,7 +126,7 @@ export default function PostDetail() {
         </div>
 
         <Comment
-          data={mockData.comments}
+          data={postDetail.comments}
           currentUserId={1}
           mutateComment={({ content }) => console.log('댓글 등록:', content)}
           mutateReply={({ parentId, content }) =>
