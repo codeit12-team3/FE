@@ -3,6 +3,8 @@ import localFont from 'next/font/local'
 
 import './globals.css'
 
+import { SessionProvider } from 'next-auth/react'
+
 import { Header } from '@/components/common'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
@@ -31,10 +33,12 @@ export default function RootLayout({
       >
         <MSWProvider>
           <QueryProvider>
-            <LazyMotionProvider>
-              <Header />
-              {children}
-            </LazyMotionProvider>
+            <SessionProvider>
+              <LazyMotionProvider>
+                <Header />
+                {children}
+              </LazyMotionProvider>
+            </SessionProvider>
           </QueryProvider>
         </MSWProvider>
         <Toaster position="top-center" />
