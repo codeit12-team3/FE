@@ -19,7 +19,7 @@ interface UpdateArgs {
 
 export const usePosts = (params: PostParams) => {
   return useQuery({
-    queryKey: ['post', params],
+    queryKey: ['posts', params],
     queryFn: () => fetchPosts(params),
   })
 }
