@@ -1,3 +1,6 @@
+import { default as originAxios } from 'axios'
+
+import { BASE_URL } from '@/constants/common'
 import {
   SigninEmailReq,
   SigninEmailRes,
@@ -13,7 +16,7 @@ import { axios } from '../common'
  * @param email 이메일주소
  */
 export const sendEmailCode = async (email: string) => {
-  return await axios.post<ApiResponse<null>>('/auth/email/code', {
+  return await axios.post<ApiResponse<null>>('/v1/auth/email/code', {
     email,
   })
 }
@@ -30,7 +33,7 @@ export const checkEmailCode = async ({
   email: string
   code: string
 }) => {
-  const res = await axios.post<ApiResponse<null>>('/auth/email/verify', {
+  const res = await axios.post<ApiResponse<null>>('/v1/auth/email/verify', {
     email,
     emailVerifyCode: code,
   })
@@ -44,7 +47,7 @@ export const checkEmailCode = async ({
  */
 export const signupEmail = async (body: SignupEmailReq) => {
   const res = await axios.post<ApiResponse<SignupEmailRes>>(
-    '/auth/signup',
+    '/v1/auth/signup',
     body,
   )
 
@@ -56,7 +59,34 @@ export const signupEmail = async (body: SignupEmailReq) => {
  * @param body {이메일, 패스워드}
  */
 export const signinEmail = async (body: SigninEmailReq) => {
-  const res = await axios.post<ApiResponse<SigninEmailRes>>('/auth/login', body)
+  const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
+    `${BASE_URL}/v1/auth/login`,
+    body,
+    {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 10000,
+    },
+  )
+
+  return res.data
+}
+
+/**
+ * 토큰 갱신 요청
+ * @param token 리프레시토큰
+ */
+export const renewalToken = async (token: string) => {
+  const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
+    `${BASE_URL}/v1/auth/refresh`,
+    {},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `refreshToken=${token}`,
+      },
+      timeout: 10000,
+    },
+  )
 
   return res.data
 }
