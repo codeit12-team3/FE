@@ -4,10 +4,11 @@ import Credentials from 'next-auth/providers/credentials'
 import z from 'zod'
 
 import { renewalToken, signinEmail } from '@/api/auth'
+import { TOKEN_REFRESH_BUFFER_MS } from '@/constants/auth'
 
 import { authConfig } from './auth.config'
 
-async function refreshAcessToken(token: JWT): Promise<JWT> {
+async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
     const res = await renewalToken(token.tokenResponse.refreshToken)
 
@@ -86,11 +87,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return token
       }
 
-      if (Date.now() < (token.expiresAt as number) - 10000) {
+      if (Date.now() < (token.expiresAt as number) - TOKEN_REFRESH_BUFFER_MS) {
         return token
       }
 
-      return await refreshAcessToken(token)
+      return await refreshAccessToken(token)
     },
     async session({ session, token }) {
       if (token && session.user) {
