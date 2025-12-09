@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import 'react-datepicker/dist/react-datepicker.css'
 import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
 
 import { Header } from '@/components/common'
+import { SelectProvider } from '@/components/common/Select/select.context'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 
