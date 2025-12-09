@@ -1,6 +1,6 @@
 import { default as originAxios } from 'axios'
 
-import { BASE_URL } from '@/constants/common'
+import { BASE_URL, TIMEOUT_LIMIT } from '@/constants/common'
 import {
   SigninEmailReq,
   SigninEmailRes,
@@ -64,7 +64,7 @@ export const signinEmail = async (body: SigninEmailReq) => {
     body,
     {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 10000,
+      timeout: TIMEOUT_LIMIT,
     },
   )
 
@@ -74,6 +74,7 @@ export const signinEmail = async (body: SigninEmailReq) => {
 /**
  * 토큰 갱신 요청
  * @param token 리프레시토큰
+ * next-auth와의 순환 참조 문제로 인한
  */
 export const renewalToken = async (token: string) => {
   const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
@@ -84,7 +85,7 @@ export const renewalToken = async (token: string) => {
         'Content-Type': 'application/json',
         'Cookie': `refreshToken=${token}`,
       },
-      timeout: 10000,
+      timeout: TIMEOUT_LIMIT,
     },
   )
 

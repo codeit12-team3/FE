@@ -5,14 +5,14 @@ import axios, {
 } from 'axios'
 import { getSession, signOut } from 'next-auth/react'
 
-import { BASE_URL } from '@/constants/common'
+import { BASE_URL, TIMEOUT_LIMIT } from '@/constants/common'
 
 const client: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000,
+  timeout: TIMEOUT_LIMIT,
   withCredentials: true,
 })
 
