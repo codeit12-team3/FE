@@ -1,4 +1,9 @@
-import { SignupEmailReq, SignupEmailRes } from '@/types/auth'
+import {
+  SigninEmailReq,
+  SigninEmailRes,
+  SignupEmailReq,
+  SignupEmailRes,
+} from '@/types/auth'
 import { ApiResponse } from '@/types/common'
 
 import { axios } from '../common'
@@ -25,10 +30,12 @@ export const checkEmailCode = async ({
   email: string
   code: string
 }) => {
-  return await axios.post<ApiResponse<null>>('/auth/email/verify', {
+  const res = await axios.post<ApiResponse<null>>('/auth/email/verify', {
     email,
     emailVerifyCode: code,
   })
+
+  return res.data
 }
 
 /**
@@ -36,5 +43,20 @@ export const checkEmailCode = async ({
  * @param body {이메일, 패스워드, 닉네임, 생년월일, 성별, MBTI}
  */
 export const signupEmail = async (body: SignupEmailReq) => {
-  return await axios.post<ApiResponse<SignupEmailRes>>('/auth/signup', body)
+  const res = await axios.post<ApiResponse<SignupEmailRes>>(
+    '/auth/signup',
+    body,
+  )
+
+  return res.data
+}
+
+/**
+ * 로그인 요청
+ * @param body {이메일, 패스워드}
+ */
+export const signinEmail = async (body: SigninEmailReq) => {
+  const res = await axios.post<ApiResponse<SigninEmailRes>>('/auth/login', body)
+
+  return res.data
 }
