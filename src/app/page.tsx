@@ -1,3 +1,5 @@
-export default async function Home() {
-  return <div>프로젝트초기화</div>
+import { PostList } from '@/components/post'
+
+export default function Home() {
+  return <PostList />
 }

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import 'react-datepicker/dist/react-datepicker.css'
 import './globals.css'
 
 import { Header } from '@/components/common'
+import { SelectProvider } from '@/components/common/Select/select.context'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 
@@ -31,10 +33,12 @@ export default function RootLayout({
       >
         <MSWProvider>
           <QueryProvider>
-            <LazyMotionProvider>
-              <Header />
-              {children}
-            </LazyMotionProvider>
+            <SelectProvider>
+              <LazyMotionProvider>
+                <Header />
+                {children}
+              </LazyMotionProvider>
+            </SelectProvider>
           </QueryProvider>
         </MSWProvider>
         <Toaster position="top-center" />

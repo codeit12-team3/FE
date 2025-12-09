@@ -33,7 +33,8 @@ const PROVIDER_ICON: Record<OAuth, SVGIconType> = {
 }
 
 interface Props
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof variants> {
   provider: OAuth
   size?: 'sm' | 'md' | 'lg'
