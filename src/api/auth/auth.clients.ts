@@ -57,6 +57,7 @@ export const signupEmail = async (body: SignupEmailReq) => {
 /**
  * 로그인 요청
  * @param body {이메일, 패스워드}
+ * next-auth와의 순환 참조 문제로 원본 axios 사용
  */
 export const signinEmail = async (body: SigninEmailReq) => {
   const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
@@ -74,7 +75,7 @@ export const signinEmail = async (body: SigninEmailReq) => {
 /**
  * 토큰 갱신 요청
  * @param token 리프레시토큰
- * next-auth와의 순환 참조 문제로 인한
+ * next-auth와의 순환 참조 문제로 원본 axios 사용
  */
 export const renewalToken = async (token: string) => {
   const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
