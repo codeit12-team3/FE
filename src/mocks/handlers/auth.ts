@@ -3,7 +3,7 @@ import { delay, http, HttpResponse } from 'msw'
 import { MOCK_URL } from '@/constants/common'
 
 export const authHandlers = [
-  http.post(`${MOCK_URL}/auth/email/code`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/email/code`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as { email: string }
@@ -33,7 +33,7 @@ export const authHandlers = [
       timestamp: '2025-12-02',
     })
   }),
-  http.post(`${MOCK_URL}/auth/email/verify`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/email/verify`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as {
@@ -66,7 +66,7 @@ export const authHandlers = [
       timestamp: '2025-12-02',
     })
   }),
-  http.post(`${MOCK_URL}/auth/login`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/login`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as {
@@ -104,8 +104,45 @@ export const authHandlers = [
         tokenResponse: {
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
-          accessTokenExpiration: 1800000,
-          refreshTokenExpiration: 1209600000,
+          accessTokenExpiration: '2025-12-09T14:30:00',
+          refreshTokenExpiration: '2025-12-16T14:30:00',
+        },
+      },
+      timestamp: '2025-12-02',
+    })
+  }),
+  http.post(`${MOCK_URL}/v1/auth/refresh`, async ({ request, cookies }) => {
+    await delay(2000)
+
+    const refreshToken = cookies.refreshToken
+
+    if (!refreshToken || refreshToken === 'invalid_token') {
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 400,
+          data: {
+            errorCode: '',
+            message: '리프레시 토큰이 없거나 만료되었습니다',
+          },
+          timestamp: '2025-12-02',
+        },
+        {
+          status: 401,
+          statusText: 'Bad Request',
+        },
+      )
+    }
+
+    return HttpResponse.json({
+      success: true,
+      status: 201,
+      data: {
+        tokenResponse: {
+          accessToken: 'new_mock_access_token_12345',
+          refreshToken: 'new_mock_refresh_token_67890',
+          accessTokenExpiration: '2025-12-09T14:30:00',
+          refreshTokenExpiration: '2025-12-16T14:30:00',
         },
       },
       timestamp: '2025-12-02',

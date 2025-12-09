@@ -3,7 +3,7 @@ import { delay, http, HttpResponse } from 'msw'
 import { MOCK_URL } from '@/constants/common'
 
 export const memberHandlers = [
-  http.post(`${MOCK_URL}/member/nickname/check`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/member/nickname/check`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as { nickname: string }
