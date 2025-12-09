@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware'
 
 import { MemberEditState, MemberState } from '@/types/member'
 
-export const useMemberEditState = create<MemberEditState>((set) => ({
+export const useUploadingImageStore = create<MemberEditState>((set) => ({
   isUploadingImage: false,
 
   setIsUploadingImage: (uploading) => set({ isUploadingImage: uploading }),
@@ -30,6 +30,22 @@ export const useMemberStore = create<MemberState>()(
           profile: state.profile ? { ...state.profile, image } : null,
           isDirty: true,
         })),
+
+      setBirth: (birth: string) => {
+        set((state) => ({
+          profile: state.profile ? { ...state.profile, birth } : null,
+          isDirty: true,
+        }))
+      },
+
+      getBirthDate: () => {
+        const birth = get().profile?.birth
+        if (!birth || birth === '') {
+          return { year: 0, month: 0, day: 0 }
+        }
+        const [y, m, d] = birth.split('-').map(Number)
+        return { year: y || 0, month: m || 0, day: d || 0 }
+      },
 
       setDirty: (dirty) => set({ isDirty: dirty }),
       setSubmitting: (submitting) => set({ isSubmitting: submitting }),

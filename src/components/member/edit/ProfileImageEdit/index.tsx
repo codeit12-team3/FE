@@ -6,13 +6,13 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import useImageCompress from '@/hooks/member/useImageCompress'
-import { useMemberEditState } from '@/stores/member.store'
+import { useUploadingImageStore } from '@/stores/member.store'
 
 export default function ProfileImageEdit() {
   const [profileImg, setprofileImg] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
-  const { setIsUploadingImage } = useMemberEditState()
+  const { setIsUploadingImage } = useUploadingImageStore()
 
   const handleEditClick = () => {
     fileInputRef.current?.click()

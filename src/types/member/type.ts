@@ -42,7 +42,8 @@ export interface MemberState {
   setImage: (image: string | null) => void
   setDirty: (dirty: boolean) => void
   setSubmitting: (submitting: boolean) => void
-
+  setBirth: (birth: string) => void
+  getBirthDate: () => { year: number; month: number; day: number }
   getUpdatePayload: () => UpdateMyProfileReq
   reset: () => void
 }

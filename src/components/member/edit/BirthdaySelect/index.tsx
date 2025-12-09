@@ -3,36 +3,62 @@
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { useMemberStore } from '@/stores/member.store'
+
 const years = Array.from(
   { length: 100 },
   (_, i) => new Date().getFullYear() - i,
 )
 const months = Array.from({ length: 12 }, (_, i) => i + 1)
 
-export default function BirthdaySelect({
-  onChange,
-}: {
-  onChange?: (date: { year: number; month: number; day: number }) => void
-}) {
-  const [year, setYear] = useState<number>(0)
-  const [month, setMonth] = useState<number>(0)
-  const [day, setDay] = useState<number>(0)
+export default function BirthdaySelect() {
+  const { profile, getBirthDate, setBirth } = useMemberStore()
 
-  const getDaysInMonth = (y: number, m: number) => {
-    if (!y || !m) return 31
-    return new Date(y, m, 0).getDate()
-  }
-
-  const days = Array.from(
-    { length: getDaysInMonth(year, month) },
-    (_, i) => i + 1,
-  )
+  const initial = getBirthDate()
+  const [selected, setSelected] = useState({
+    year: initial.year,
+    month: initial.month,
+    day: initial.day,
+  })
 
   useEffect(() => {
-    if (year && month && day) {
-      onChange?.({ year, month, day })
+    const syncBirthDate = () => {
+      const current = getBirthDate()
+      setSelected({
+        year: current.year,
+        month: current.month,
+        day: current.day,
+      })
     }
-  }, [year, month, day, onChange])
+
+    syncBirthDate()
+  }, [getBirthDate])
+
+  const getDaysInMonth = (y: number, m: number) => {
+    if (!y || !m) return []
+    return Array.from({ length: new Date(y, m, 0).getDate() }, (_, i) => i + 1)
+  }
+
+  const days = getDaysInMonth(selected.year, selected.month)
+
+  const handleYearChange = (year: number) => {
+    setSelected({ year, month: 0, day: 0 })
+  }
+
+  const handleMonthChange = (month: number) => {
+    setSelected((prev) => ({ ...prev, month, day: 0 }))
+  }
+
+  const handleDayChange = (day: number) => {
+    setSelected((prev) => ({ ...prev, day }))
+
+    if (selected.year && selected.month && day) {
+      const dateStr = `${selected.year}-${String(selected.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+      setBirth(dateStr)
+    }
+  }
+
+  console.log(selected, profile?.birth)
 
   return (
     <div className="flex gap-3 mt-3">
@@ -40,11 +66,8 @@ export default function BirthdaySelect({
         <select
           name="year"
           required
-          value={year}
-          onChange={(e) => {
-            setYear(Number(e.target.value))
-            setDay(0)
-          }}
+          value={selected.year}
+          onChange={(e) => handleYearChange(Number(e.target.value))}
           className="rounded-xl px-3 py-2 min-w-[135px] h-12 bg-[#EDF4FB] appearance-none pr-10"
         >
           <option value={0}>년</option>
@@ -61,11 +84,8 @@ export default function BirthdaySelect({
         <select
           name="month"
           required
-          value={month}
-          onChange={(e) => {
-            setMonth(Number(e.target.value))
-            setDay(0)
-          }}
+          value={selected.month}
+          onChange={(e) => handleMonthChange(Number(e.target.value))}
           className="rounded-xl px-3 py-2 min-w-25 h-12 bg-[#EDF4FB] appearance-none pr-10"
         >
           <option value={0}>월</option>
@@ -80,12 +100,10 @@ export default function BirthdaySelect({
 
       <div className="relative">
         <select
-          name="day"
-          required
-          value={day}
-          onChange={(e) => setDay(Number(e.target.value))}
-          className="rounded-xl px-3 py-2 min-w-25 h-12 bg-[#EDF4FB] appearance-none pr-10"
-          disabled={!year || !month}
+          value={selected.day}
+          onChange={(e) => handleDayChange(Number(e.target.value))}
+          disabled={!selected.year || !selected.month}
+          className="rounded-xl px-3 py-2 min-w-25 h-12 bg-[#EDF4FB] appearance-none pr-10 disabled:opacity-50"
         >
           <option value={0}>일</option>
           {days.map((d) => (
