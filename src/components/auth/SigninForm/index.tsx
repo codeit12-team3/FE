@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -15,6 +15,9 @@ import FormInput from '../FormInput'
 
 export default function SigninForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
+
   const { mutate, isPending } = useSigninEmail()
   const methods = useForm<SigninFormValues>({
     resolver: zodResolver(signinSchema),
@@ -28,12 +31,12 @@ export default function SigninForm() {
   const { formState } = methods
 
   const onSubmit = async (data: SigninFormValues) => {
-    // TODO: NextAuth 로직 완성 후 작성
+    if (isPending || !formState.isValid) return
     mutate(data, {
       onSuccess: () => {
         toast.success('로그인 되었습니다')
 
-        router.push('/')
+        router.push(callbackUrl)
       },
     })
   }
