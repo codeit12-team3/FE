@@ -16,7 +16,7 @@ export default function PostForm() {
     title: '',
     description: '',
     region: '',
-    membar: '',
+    member: '',
     age: '',
     startDate: null as Date | null,
     endDate: null as Date | null,
@@ -47,10 +47,10 @@ export default function PostForm() {
             <ImageUpload />
             <Info
               region={form.region}
-              member={form.membar}
+              member={form.member}
               age={form.age}
               onChangeMember={(v) =>
-                setForm((prev) => ({ ...prev, membar: v }))
+                setForm((prev) => ({ ...prev, member: v }))
               }
               onChangeRegion={(v) =>
                 setForm((prev) => ({ ...prev, region: v }))

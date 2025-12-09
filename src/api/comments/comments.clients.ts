@@ -2,7 +2,8 @@ import { axios } from '../common'
 
 export const fetchComments = async (params: { postId: string }) => {
   const { postId } = params
-  return axios.get(`/v1/posts/${postId}/comments`)
+  const { data } = await axios.get(`/v1/posts/${postId}/comments`)
+  return data.data
 }
 
 export const createComment = async (params: {

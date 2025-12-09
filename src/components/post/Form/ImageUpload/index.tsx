@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function ImageUpload() {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -20,6 +20,11 @@ export default function ImageUpload() {
 
     setPreviews(newUrls)
   }
+  useEffect(() => {
+    return () => {
+      previews.forEach((url) => URL.revokeObjectURL(url))
+    }
+  }, [previews])
   return (
     <div>
       <label className="block text-sm text-text-base mb-3">

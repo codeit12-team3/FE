@@ -3,12 +3,13 @@ import { PostCreatePayload, PostParams } from '@/types/posts/posts.type'
 import { axios } from '../common'
 
 export const fetchPosts = async (params: PostParams) => {
-  return await axios.get('/v1/posts', {
+  const { data } = await axios.get('/v1/posts', {
     params: {
       ...params,
       size: params.size ?? 20,
     },
   })
+  return data.data
 }
 export const fetchPostsDetail = async (postId: string) => {
   const { data } = await axios.get(`/v1/posts/${postId}`)
