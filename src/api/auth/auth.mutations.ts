@@ -1,13 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
+import { signIn } from 'next-auth/react'
 
 import { SigninEmailReq, SignupEmailReq } from '@/types/auth'
 
-import {
-  checkEmailCode,
-  sendEmailCode,
-  signinEmail,
-  signupEmail,
-} from './auth.clients'
+import { checkEmailCode, sendEmailCode, signupEmail } from './auth.clients'
 
 export const useSendEmailCode = () => {
   return useMutation({
@@ -32,9 +28,16 @@ export const useSignupEmail = () => {
 
 export const useSigninEmail = () => {
   return useMutation({
-    mutationFn: (body: SigninEmailReq) => {
-      // TODO: NextAuth 로직 완성 후 signin Callback 로직으로 변경
-      return signinEmail(body)
+    mutationFn: async (body: SigninEmailReq) => {
+      const res = await signIn('credentials', {
+        email: body.email,
+        password: body.password,
+        redirect: false,
+      })
+
+      if (res.error) {
+        throw new Error(res.error)
+      }
     },
     retry: false,
   })
