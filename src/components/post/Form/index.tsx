@@ -16,7 +16,7 @@ export default function PostForm() {
     title: '',
     description: '',
     region: '',
-    membar: '',
+    member: '',
     age: '',
     startDate: null as Date | null,
     endDate: null as Date | null,
