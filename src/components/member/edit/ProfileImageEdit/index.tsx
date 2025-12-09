@@ -12,7 +12,7 @@ export default function ProfileImageEdit() {
   const [profileImg, setprofileImg] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
-  const { setUploadedImageUrl, setIsUploadingImage } = useMemberEditState()
+  const { setIsUploadingImage } = useMemberEditState()
 
   const handleEditClick = () => {
     fileInputRef.current?.click()
