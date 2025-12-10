@@ -7,7 +7,6 @@ import BirthdaySelect from '../BirthdaySelect'
 
 export default function BirthdayAndMbti() {
   const { profile, updateProfile } = useMemberStore()
-  console.log(profile?.birth)
 
   return (
     <div className="flex mt-6">

@@ -18,7 +18,6 @@ export default function FormActionBtn() {
 
   const handleSave = () => {
     const payload = getUpdatePayload()
-    console.log('전송할 데이터:', payload)
 
     setSubmitting(true)
 

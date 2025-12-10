@@ -11,8 +11,6 @@ export default function BioField() {
   const bio = profile?.bio ?? ''
   const length = bio.length
 
-  console.log(profile)
-
   return (
     <div className="mt-6">
       <label className="block font-medium">

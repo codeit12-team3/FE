@@ -29,7 +29,6 @@ export const memberHandlers = [
   //수정하는거 테스트
   http.patch(`${MOCK_URL}/members/me`, async ({ request }) => {
     const updates = (await request.json()) as Partial<typeof mockMember>
-    console.log('프로필 수정 요청:', updates)
     mockMember = { ...mockMember, ...updates }
 
     await delay(800)

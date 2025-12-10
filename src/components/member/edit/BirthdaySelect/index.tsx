@@ -58,8 +58,6 @@ export default function BirthdaySelect() {
     }
   }
 
-  console.log(selected, profile?.birth)
-
   return (
     <div className="flex gap-3 mt-3">
       <div className="relative">
@@ -100,6 +98,8 @@ export default function BirthdaySelect() {
 
       <div className="relative">
         <select
+          name="day"
+          required
           value={selected.day}
           onChange={(e) => handleDayChange(Number(e.target.value))}
           disabled={!selected.year || !selected.month}
