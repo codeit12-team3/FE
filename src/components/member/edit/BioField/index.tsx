@@ -1,12 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-
 import { Input } from '@/components/common/Input'
+import { useMemberStore } from '@/stores/member.store'
+
+const MAX_BIO_LENGTH = 100
 
 export default function BioField() {
-  const [bio, setBio] = useState('')
-  const max = 100
+  const { profile, updateProfile } = useMemberStore()
+
+  const bio = profile?.bio ?? ''
+  const length = bio.length
+
+  console.log(profile)
+
   return (
     <div className="mt-6">
       <label className="block font-medium">
@@ -14,21 +20,21 @@ export default function BioField() {
           자기소개
           <span
             className={`transition-colors ml-1.5 ${
-              bio.length > 90 ? 'text-danger' : 'text-main'
+              length > 90 ? 'text-danger' : 'text-main'
             }`}
           >
-            {bio.length}
+            {length}
           </span>
-          /100
+          /{MAX_BIO_LENGTH}
         </span>
         <Input
           name="bio"
           type="text"
           value={bio}
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => updateProfile({ bio: e.target.value })}
           placeholder={`자기소개를 입력해주세요 ${bio.length}/100`}
           className="h-11 bg-[#EDF4FB] mt-3"
-          maxLength={max}
+          maxLength={MAX_BIO_LENGTH}
         />
       </label>
     </div>
