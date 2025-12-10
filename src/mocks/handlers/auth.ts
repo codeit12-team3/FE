@@ -3,7 +3,7 @@ import { delay, http, HttpResponse } from 'msw'
 import { MOCK_URL } from '@/constants/common'
 
 export const authHandlers = [
-  http.post(`${MOCK_URL}/auth/email/code`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/email/code`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as { email: string }
@@ -33,7 +33,7 @@ export const authHandlers = [
       timestamp: '2025-12-02',
     })
   }),
-  http.post(`${MOCK_URL}/auth/email/verify`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/email/verify`, async ({ request }) => {
     await delay(2000)
 
     const body = (await request.json()) as {
@@ -66,13 +66,15 @@ export const authHandlers = [
       timestamp: '2025-12-02',
     })
   }),
-  http.post(`${MOCK_URL}/auth/login`, async ({ request }) => {
+  http.post(`${MOCK_URL}/v1/auth/login`, async ({ request }) => {
+    console.log('🔐 [MSW] 로그인 요청 받음')
     await delay(2000)
 
     const body = (await request.json()) as {
       email: string
       password: string
     }
+    console.log('📧 [MSW] 로그인 이메일:', body.email)
 
     if (body.email === 'error@error.com') {
       return HttpResponse.json(
@@ -92,6 +94,14 @@ export const authHandlers = [
       )
     }
 
+    // 리프레시 토큰 테스트용: short@test.com 이메일은 1분 후 만료
+    const isShortExpiry = body.email === 'short@test.com'
+    const now = new Date()
+    const accessExpiry = new Date(
+      now.getTime() + (isShortExpiry ? 55000 : 24 * 60 * 60 * 1000),
+    ) // 1분 or 1일
+    const refreshExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7일
+
     return HttpResponse.json({
       success: true,
       status: 201,
@@ -102,13 +112,56 @@ export const authHandlers = [
         gender: '남',
         mbti: 'INTP',
         tokenResponse: {
-          accessToken: 'accessToken',
-          refreshToken: 'refreshToken',
-          accessTokenExpiration: 1800000,
-          refreshTokenExpiration: 1209600000,
+          accessToken: 'mock_access_token_12345',
+          refreshToken: 'mock_refresh_token_67890',
+          accessTokenExpiration: accessExpiry.toISOString(),
+          refreshTokenExpiration: refreshExpiry.toISOString(),
         },
       },
-      timestamp: '2025-12-02',
+      timestamp: new Date().toISOString(),
+    })
+  }),
+  http.post(`${MOCK_URL}/v1/auth/refresh`, async ({ cookies }) => {
+    console.log('🔄 [MSW] 토큰 갱신 요청 받음:', {
+      refreshToken: cookies.refreshToken,
+    })
+    await delay(2000)
+
+    const refreshToken = cookies.refreshToken
+
+    if (!refreshToken || refreshToken === 'invalid_token') {
+      console.log('❌ [MSW] 토큰 갱신 실패: 유효하지 않은 토큰')
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 400,
+          data: {
+            errorCode: '',
+            message: '리프레시 토큰이 없거나 만료되었습니다',
+          },
+          timestamp: '2025-12-02',
+        },
+        {
+          status: 401,
+          statusText: 'Bad Request',
+        },
+      )
+    }
+
+    console.log('✅ [MSW] 토큰 갱신 성공')
+
+    return HttpResponse.json({
+      success: true,
+      status: 201,
+      data: {
+        tokenResponse: {
+          accessToken: 'new_mock_access_token_12345',
+          refreshToken: 'new_mock_refresh_token_67890',
+          accessTokenExpiration: '2025-12-10T16:00:00',
+          refreshTokenExpiration: '2025-12-17T16:00:00',
+        },
+      },
+      timestamp: '2025-12-09',
     })
   }),
 ]

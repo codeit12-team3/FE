@@ -7,5 +7,6 @@ export async function register() {
     server.listen({
       onUnhandledRequest: 'bypass',
     })
+    console.log('🎭 [MSW] 시작됨')
   }
 }
