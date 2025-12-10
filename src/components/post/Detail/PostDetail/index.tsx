@@ -70,7 +70,8 @@ export default function PostDetail() {
       },
     ],
   }
-
+  //  const { data, isLoading } = usePostDetail(params.id)
+  //  if(isLoading ) <PostDetailSkeleton />
   return (
     <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center ">
       <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border  border-[#DDDDDD]  ">

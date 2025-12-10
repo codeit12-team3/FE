@@ -93,7 +93,7 @@ export default function PostList() {
 
   // 나중에 API 연동 시 주석 해제
   // const [cursor, setCursor] = useState<string | undefined>(undefined)
-  // const { data } = usePosts({
+  // const { data,isLoading } = usePosts({
   //   lastPostId: cursor,
   //   size: 20,
   //   region: filters.region || undefined,
@@ -103,6 +103,7 @@ export default function PostList() {
   //   gender: filters.gender === '' ? undefined : filters.gender, // MALE | FEMALE | ALL
   //   keyword: filters.search || undefined,
   // })
+  // if(isLoading) return <PostListSkeleton/>
 
   return (
     <div>
