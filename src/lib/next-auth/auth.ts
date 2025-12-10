@@ -80,14 +80,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.gender = user.gender
         token.mbti = user.mbti
         token.tokenResponse = user.tokenResponse
-        token.expiresAt = new Date(
-          user.tokenResponse.accessTokenExpiration,
-        ).getTime()
+        token.expiresAt = user.tokenResponse.accessTokenExpiration
 
         return token
       }
 
-      if (Date.now() < (token.expiresAt as number) - TOKEN_REFRESH_BUFFER_MS) {
+      if (Date.now() < token.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
         return token
       }
 
