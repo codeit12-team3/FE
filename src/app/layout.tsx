@@ -33,10 +33,12 @@ export default function RootLayout({
       >
         <MSWProvider>
           <QueryProvider>
-            <LazyMotionProvider>
-              <Header />
-              {children}
-            </LazyMotionProvider>
+            <SelectProvider>
+              <LazyMotionProvider>
+                <Header />
+                {children}
+              </LazyMotionProvider>
+            </SelectProvider>
           </QueryProvider>
         </MSWProvider>
         <Toaster position="top-center" />
