@@ -43,7 +43,6 @@ export default function Comment({
           }
         }}
       />
-
       <CommentList
         parents={parents}
         replies={replies}

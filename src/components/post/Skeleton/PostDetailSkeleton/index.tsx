@@ -1,5 +1,7 @@
 'use client'
 
+import CommentSkeleton from '../CommentSkeleton'
+
 export default function PostDetailSkeleton() {
   return (
     <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center">
@@ -60,6 +62,7 @@ export default function PostDetailSkeleton() {
           <div className="h-10 w-68 bg-bg-disabled rounded-md" />
           <div className="h-10 w-68 bg-bg-disabled rounded-md" />
         </div>
+        <CommentSkeleton />
       </div>
     </div>
   )
