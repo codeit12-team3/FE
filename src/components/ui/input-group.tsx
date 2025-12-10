@@ -8,31 +8,43 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/common/index'
 
-function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
+const InputGroupContext = React.createContext<{ disabled?: boolean }>({
+  disabled: false,
+})
+
+function InputGroup({
+  className,
+  disabled,
+  ...props
+}: React.ComponentProps<'div'> & { disabled?: boolean }) {
   return (
-    <div
-      data-slot="input-group"
-      role="group"
-      className={cn(
-        'group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none',
-        'h-9 min-w-0 has-[>textarea]:h-auto',
+    <InputGroupContext.Provider value={{ disabled }}>
+      <div
+        data-slot="input-group"
+        role="group"
+        className={cn(
+          'group/input-group overflow-hidden dark:bg-input/30 relative bg-input flex w-full items-center rounded-xl transition-[color,box-shadow] outline-none',
+          'h-12 min-w-0 has-[>textarea]:h-auto',
 
-        // Variants based on alignment.
-        'has-[>[data-align=inline-start]]:[&>input]:pl-2',
-        'has-[>[data-align=inline-end]]:[&>input]:pr-2',
-        'has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3',
-        'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
+          // Variants based on alignment.
+          'has-[>[data-align=inline-start]]:[&>input]:pl-2',
+          'has-[>[data-align=inline-end]]:[&>input]:pr-2',
+          'has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3',
+          'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
-        // Focus state.
-        'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
+          // Focus state.
+          'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
 
-        // Error state.
-        'has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40',
+          // Error state.
+          'has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40',
 
-        className,
-      )}
-      {...props}
-    />
+          disabled && 'bg-muted text-muted-foreground',
+
+          className,
+        )}
+        {...props}
+      />
+    </InputGroupContext.Provider>
   )
 }
 
@@ -80,7 +92,7 @@ function InputGroupAddon({
 }
 
 const inputGroupButtonVariants = cva(
-  'text-sm shadow-none flex gap-2 items-center',
+  'text-sm shadow-none flex gap-2 items-center disabled:bg-transparent',
   {
     variants: {
       size: {
@@ -102,14 +114,17 @@ function InputGroupButton({
   type = 'button',
   variant = 'ghost',
   size = 'xs',
+  disabled,
   ...props
 }: Omit<React.ComponentProps<typeof Button>, 'size'> &
   VariantProps<typeof inputGroupButtonVariants>) {
+  const { disabled: groupDisabled } = React.useContext(InputGroupContext)
   return (
     <Button
       type={type}
       data-size={size}
       variant={variant}
+      disabled={groupDisabled || disabled}
       className={cn(inputGroupButtonVariants({ size }), className)}
       {...props}
     />
@@ -130,11 +145,14 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
 
 function InputGroupInput({
   className,
+  disabled,
   ...props
 }: React.ComponentProps<'input'>) {
+  const { disabled: groupDisabled } = React.useContext(InputGroupContext)
   return (
     <Input
       data-slot="input-group-control"
+      disabled={groupDisabled || disabled}
       className={cn(
         'flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent',
         className,
@@ -146,11 +164,14 @@ function InputGroupInput({
 
 function InputGroupTextarea({
   className,
+  disabled,
   ...props
 }: React.ComponentProps<'textarea'>) {
+  const { disabled: groupDisabled } = React.useContext(InputGroupContext)
   return (
     <Textarea
       data-slot="input-group-control"
+      disabled={groupDisabled || disabled}
       className={cn(
         'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent',
         className,
