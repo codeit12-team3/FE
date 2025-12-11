@@ -65,6 +65,7 @@ export default function PostCard({ post }: { post: PostContent }) {
           <div className="flex items-center gap-2 text-sm text-text-input">
             <div className="flex items-center gap-1">
               <span className="text-text-disabled">위치</span>
+              <span className="text-text-base">{post.nation}</span>
               <span className="text-text-base">{post.region}</span>
             </div>
 

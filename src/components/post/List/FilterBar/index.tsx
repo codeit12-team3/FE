@@ -44,9 +44,9 @@ export default function FilterBar({
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
       <div className="flex gap-4">
         <SelectRoot
-          value={filters.region}
+          value={filters.nation}
           onValueChange={(value) =>
-            onChangeFilters((prev) => ({ ...prev, region: value }))
+            onChangeFilters((prev) => ({ ...prev, nation: value }))
           }
         >
           <SelectTrigger>

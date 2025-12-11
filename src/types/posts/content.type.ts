@@ -10,6 +10,7 @@ export interface PostContent {
   postId: string
   title: string
   content: string
+  nation: string
   region: string
   period: Period
   recruitStatus: 'RECRUITING' | 'CLOSED'

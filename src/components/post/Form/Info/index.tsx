@@ -12,21 +12,21 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
 
 interface InfoProps {
+  nation: string
   region: string
-  city: string
   member: string
   age: string
   gender: string
   onChangeMember: (v: string) => void
   onChangeRegion: (v: string) => void
-  onChangeCity: (v: string) => void
+  onChangeNation: (v: string) => void
   onChangeAge: (v: string) => void
   onChangeGender: (v: string) => void
 }
 
 export default function Info({
+  nation,
   region,
-  city,
   member,
   age,
   gender,
@@ -34,7 +34,7 @@ export default function Info({
   onChangeRegion,
   onChangeAge,
   onChangeGender,
-  onChangeCity,
+  onChangeNation,
 }: InfoProps) {
   return (
     <>
@@ -66,7 +66,7 @@ export default function Info({
             도시 <span className="text-danger">*</span>
           </Label>
           <div className="relative">
-            <Select value={city} onValueChange={onChangeCity}>
+            <Select value={nation} onValueChange={onChangeNation}>
               <SelectTrigger className=" w-full">
                 <SelectValue placeholder="도시를 선택해주세요" />
               </SelectTrigger>

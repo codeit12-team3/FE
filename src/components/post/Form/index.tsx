@@ -16,8 +16,8 @@ export default function PostForm() {
   const [form, setForm] = useState({
     title: '',
     description: '',
+    nation: '',
     region: '',
-    city: '',
     member: '',
     age: '' as AgeType | '',
     gender: '' as GenderType | '',
@@ -69,13 +69,13 @@ export default function PostForm() {
           />
           <ImageUpload />
           <Info
+            nation={form.nation}
             region={form.region}
-            city={form.city}
             member={form.member}
             age={form.age}
             gender={form.gender}
             onChangeRegion={(v) => setForm((prev) => ({ ...prev, region: v }))}
-            onChangeCity={(v) => setForm((prev) => ({ ...prev, city: v }))}
+            onChangeNation={(v) => setForm((prev) => ({ ...prev, nation: v }))}
             onChangeMember={(v) => setForm((prev) => ({ ...prev, member: v }))}
             onChangeAge={(v) =>
               setForm((prev) => ({ ...prev, age: v as AgeType }))

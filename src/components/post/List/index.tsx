@@ -10,7 +10,7 @@ import PostListSection from './PostListSection'
 
 export default function PostList() {
   const [filters, setFilters] = useState<PostParams>({
-    region: '',
+    nation: '',
     date: '',
     ageType: undefined,
     gender: undefined,
@@ -23,7 +23,8 @@ export default function PostList() {
       postId: '1',
       title: '베트남 여행 같이 가실 분~',
       content: '베트남 여행 같이 가실 분 모집합니다!',
-      region: '베트남',
+      nation: '베트남',
+      region: '다낭',
       period: {
         startDate: '2024-12-15',
         endDate: '2024-12-20',
@@ -46,7 +47,8 @@ export default function PostList() {
       postId: 'post-2',
       title: '다낭 4박5일 가족여행 동행 구해요',
       content: '가족 여행 동행 구합니다.',
-      region: '베트남 다낭',
+      nation: '베트남',
+      region: '다낭',
       period: {
         startDate: '2025-02-21',
         endDate: '2025-02-25',
@@ -69,7 +71,8 @@ export default function PostList() {
       postId: 'post-3',
       title: '제주도 한라산 등반 같이 가실 분!',
       content: '한라산 등반 같이 가요!',
-      region: '한국 제주도',
+      nation: '한국',
+      region: '제주도',
       period: {
         startDate: '2024-12-30',
         endDate: '2024-12-31',
@@ -95,6 +98,7 @@ export default function PostList() {
   // const { data,isLoading } = usePosts({
   //   lastPostId: cursor,
   //   size: 20,
+  //   nation: filters.nation || undefined.
   //   region: filters.region || undefined,
   //   date: filters.date || undefined, // yyyy-MM-dd 형식
   //   age: filters.age ? Number(filters.age) : undefined,
