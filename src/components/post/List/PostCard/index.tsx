@@ -11,7 +11,7 @@ export default function PostCard({ post }: { post: PostContent }) {
   const router = useRouter()
   const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const cardBase =
-    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-border'
+    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-input'
 
   return (
     <div

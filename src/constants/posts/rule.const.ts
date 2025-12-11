@@ -15,8 +15,6 @@ export const AGE_OPTIONS = [
   { value: '20', label: '20대' },
   { value: '30', label: '30대' },
   { value: '40', label: '40대' },
-
-  { value: 'ALL', label: '전체' },
 ] as const
 
 export const GENDER_OPTIONS = [
