@@ -52,7 +52,7 @@ export default function ImageUpload() {
       <div className="flex gap-2">
         <div
           onClick={openPicker}
-          className="flex items-center gap-2 px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm  cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer"
         >
           {previews.length === 0 ? (
             <span className="text-muted-foreground font-medium text-base">

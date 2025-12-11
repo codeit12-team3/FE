@@ -23,7 +23,7 @@ export default function PostCard({ post }: { post: PostContent }) {
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
             <Image
-              src={post.thumbnail}
+              src={post.thumbnail[0]}
               alt={post.title}
               fill
               className="object-cover"
@@ -32,7 +32,7 @@ export default function PostCard({ post }: { post: PostContent }) {
         ) : (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
             <Image
-              src={post.thumbnail}
+              src={post.thumbnail[0]}
               alt={post.title}
               fill
               className="object-cover"

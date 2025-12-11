@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 import { Button } from '@/components/common'
-import { AgeType, GenderType, PostContent, PostParams } from '@/types/posts'
+import { PostContent, PostParams } from '@/types/posts'
 
 import FilterBar from './FilterBar'
 import PostListSection from './PostListSection'
@@ -12,8 +12,8 @@ export default function PostList() {
   const [filters, setFilters] = useState<PostParams>({
     region: '',
     date: '',
-    ageType: '' as AgeType,
-    gender: '' as GenderType,
+    ageType: undefined,
+    gender: undefined,
     keyword: '',
   })
 

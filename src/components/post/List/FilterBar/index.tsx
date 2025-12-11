@@ -14,7 +14,7 @@ import {
 } from '@/components/common/Select/select.components'
 import { InputGroup, InputGroupInput } from '@/components/ui'
 import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
-import { GenderType, PostParams } from '@/types/posts'
+import { AgeType, GenderType, PostParams } from '@/types/posts'
 
 interface FilterBarProps {
   filters: PostParams
@@ -77,18 +77,20 @@ export default function FilterBar({
         </SelectRoot>
 
         <SelectRoot
-          value={filters.age}
+          value={filters.ageType ?? ''}
           onValueChange={(value) =>
-            onChangeFilters((prev) => ({ ...prev, age: value }))
+            onChangeFilters((prev) => ({ ...prev, ageType: value as AgeType }))
           }
         >
           <SelectTrigger>
             <SelectValue placeholder="나이" />
           </SelectTrigger>
+
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
+
             {AGE_OPTIONS.map((age) => (
-              <SelectItem key={age.value} value={String(age.label)}>
+              <SelectItem key={age.value} value={age.value}>
                 {age.label}
               </SelectItem>
             ))}
