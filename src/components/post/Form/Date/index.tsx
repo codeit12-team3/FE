@@ -23,21 +23,20 @@ export default function Date({
   const endRef = useRef<DatePicker | null>(null)
 
   return (
-    <div className="flex justify-between mb-2 gap-8">
-      {/* 시작 날짜 */}
+    <div className="flex gap-8">
       <div className="flex flex-col relative">
-        <Label className=" mb-2">
+        <Label className=" mb-3">
           여행 시작 일시 <span className="text-danger">*</span>
         </Label>
 
-        <div className="relative">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={startRef}
             selected={startDate}
             onChange={(d) => onChangeStartDate(d)}
             dateFormat="yyyy-MM-dd"
-            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none w-[200px]"
-            placeholderText="날짜 선택"
+            className="text-muted-foreground font-medium text-base bg-sub"
+            placeholderText="시작 날짜 선택"
           />
 
           <Calendar
@@ -47,20 +46,19 @@ export default function Date({
         </div>
       </div>
 
-      {/* 종료 날짜 */}
       <div className="flex flex-col relative">
-        <Label className=" mb-2">
+        <Label className=" mb-3">
           여행 종료 일시 <span className="text-danger">*</span>
         </Label>
 
-        <div className="relative">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={endRef}
             selected={endDate}
             onChange={(d) => onChangeEndDate(d)}
             dateFormat="yyyy-MM-dd"
-            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none w-[200px]"
-            placeholderText="날짜 선택"
+            className="text-muted-foreground font-medium text-base bg-sub"
+            placeholderText="종료 날짜 선택"
           />
 
           <Calendar

@@ -32,7 +32,7 @@ export default function PostForm() {
           <h1 className="text-2xl font-semibold mb-6 text-left">게시글 작성</h1>
         </div>
         <div className=" max-w-7xl flex items-center justify-center">
-          <div className="space-y-2.5 ">
+          <div className="space-y-6 ">
             <Header
               title={form.title}
               tags={form.tags}

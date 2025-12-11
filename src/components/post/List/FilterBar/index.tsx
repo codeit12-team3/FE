@@ -13,13 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/common/Select/select.components'
-import {
-  AGE_OPTIONS,
-  AGE_TYPE_OPTIONS,
-  GENDER_OPTIONS,
-  REGION_OPTIONS,
-} from '@/constants/posts'
-import { AgeType, GenderType, PostParams } from '@/types/posts'
+import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
+import { GenderType, PostParams } from '@/types/posts'
 
 interface FilterBarProps {
   filters: PostParams
@@ -93,26 +88,8 @@ export default function FilterBar({
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
             {AGE_OPTIONS.map((age) => (
-              <SelectItem key={age} value={String(age)}>
-                {age}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </SelectRoot>
-
-        <SelectRoot
-          value={filters.ageType}
-          onValueChange={(value) =>
-            onChangeFilters((prev) => ({ ...prev, ageType: value as AgeType }))
-          }
-        >
-          <SelectTrigger className="h-10 rounded-xl bg-bg-disabled">
-            <SelectValue placeholder="나이 조건" />
-          </SelectTrigger>
-          <SelectContent>
-            {AGE_TYPE_OPTIONS.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
+              <SelectItem key={age.value} value={String(age.label)}>
+                {age.value}
               </SelectItem>
             ))}
           </SelectContent>

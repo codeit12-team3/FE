@@ -31,7 +31,7 @@ export default function Header({
   return (
     <>
       <div>
-        <Label className="mb-2">
+        <Label className="mb-3">
           모임 이름 <span className="text-danger">*</span>
         </Label>
         <Input
@@ -42,7 +42,7 @@ export default function Header({
       </div>
 
       <div>
-        <Label className="mb-2">
+        <Label className="mb-3">
           여행 태그 <span className="text-danger">*</span>
         </Label>
 
@@ -58,7 +58,7 @@ export default function Header({
           }}
         />
 
-        <div className="flex flex-wrap gap-2 mt-3">
+        <div className="flex flex-wrap gap-2">
           {tags.map((tag, index) => (
             <div
               key={index}
@@ -70,7 +70,7 @@ export default function Header({
                 onClick={() => onChangeTags(tags.filter((_, i) => i !== index))}
                 className="text-main hover:text-danger"
               >
-                <div className="border border-main rounded-full">
+                <div className="border border-main rounded-full ">
                   <X className="size-3" />
                 </div>
               </button>
