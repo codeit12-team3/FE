@@ -1,3 +1,5 @@
+import { CalendarDays } from 'lucide-react'
+
 interface Props {
   region: string
   period: {
@@ -11,7 +13,6 @@ interface Props {
   }
   conditions: {
     ageCondition: string
-    birthYear: number
     genderCondition: string
   }
 }
@@ -38,13 +39,15 @@ export default function PostInfo({
         </h3>
         <div className="grid grid-cols-2 gap-4 w-2/3">
           <div>
-            <div className="px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input">
+            <div className="px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input flex gap-2">
+              <CalendarDays className="text-main size-5" />
               {period.startDate}
             </div>
           </div>
 
           <div>
-            <div className="px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input">
+            <div className="px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input flex gap-2">
+              <CalendarDays className="text-main size-5" />
               {period.endDate}
             </div>
           </div>
@@ -68,7 +71,6 @@ export default function PostInfo({
             총 <span className="text-main">{stats.maxMembers}</span>명
           </span>
           <span>
-            <span className="text-main">{conditions.birthYear}</span>년생{' '}
             <span className="text-main">{conditions.ageCondition}</span>
           </span>
           <span className="text-main">{conditions.genderCondition}</span>

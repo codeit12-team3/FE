@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { Button } from '@/components/common'
+import { Textarea } from '@/components/ui'
 
 interface CommentInputProps {
   nickname: string
@@ -31,12 +32,12 @@ export default function CommentInput({
         <span className="font-semibold">{nickname}</span>
       </p>
 
-      <textarea
+      <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="댓글을 남겨보세요."
         rows={3}
-        className="w-full border rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none resize-none"
+        className="bg-bg-input"
       />
 
       <div className="flex justify-end gap-2 mt-3">

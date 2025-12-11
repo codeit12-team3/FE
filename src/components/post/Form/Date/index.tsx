@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 import { useRef } from 'react'
 import DatePicker from 'react-datepicker'
 
@@ -39,7 +39,7 @@ export default function Date({
             placeholderText="시작 날짜 선택"
           />
 
-          <Calendar
+          <CalendarDays
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-main size-5"
             onClick={() => startRef.current?.setOpen(true)}
           />
@@ -61,7 +61,7 @@ export default function Date({
             placeholderText="종료 날짜 선택"
           />
 
-          <Calendar
+          <CalendarDays
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-main size-5"
             onClick={() => endRef.current?.setOpen(true)}
           />
