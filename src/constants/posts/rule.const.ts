@@ -20,5 +20,4 @@ export const AGE_OPTIONS = [
 export const GENDER_OPTIONS = [
   { value: 'MALE', label: '남성만' },
   { value: 'FEMALE', label: '여성만' },
-  { value: 'ALL', label: '전체' },
 ] as const

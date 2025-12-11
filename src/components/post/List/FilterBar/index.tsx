@@ -89,7 +89,7 @@ export default function FilterBar({
             <SelectItem value="">전체</SelectItem>
             {AGE_OPTIONS.map((age) => (
               <SelectItem key={age.value} value={String(age.label)}>
-                {age.value}
+                {age.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -108,6 +108,7 @@ export default function FilterBar({
             <SelectValue placeholder="성별" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="">전체</SelectItem>
             {GENDER_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
