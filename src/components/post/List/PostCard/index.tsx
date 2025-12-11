@@ -9,18 +9,22 @@ import { PostContent } from '@/types/posts'
 
 export default function PostCard({ post }: { post: PostContent }) {
   const router = useRouter()
-  const tagStyle = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
-  const cardBase =
+
+  const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
+  const CARD_BASE =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-input'
+  const LABEL = 'text-text-disabled'
+  const VALUE = 'text-text-base'
+  const INFO_ROW = 'flex items-center gap-1'
 
   return (
     <div
-      className={cardBase}
+      className={CARD_BASE}
       onClick={() => router.push(`/posts/${post.postId}`)}
     >
       <div className="flex gap-4">
         {post.recruitStatus === 'CLOSED' ? (
-          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0  bg-black/60 flex items-center justify-center">
+          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
             <Image
               src={post.thumbnail[0]}
@@ -39,10 +43,11 @@ export default function PostCard({ post }: { post: PostContent }) {
             />
           </div>
         )}
+
         <div className="flex-1 ml-3">
           <div className="flex gap-2 mb-2">
             {post.tags.map((tag) => (
-              <span key={tag} className={tagStyle}>
+              <span key={tag} className={TAG_STYLE}>
                 {tag}
               </span>
             ))}
@@ -63,17 +68,17 @@ export default function PostCard({ post }: { post: PostContent }) {
           </div>
 
           <div className="flex items-center gap-2 text-sm text-text-input">
-            <div className="flex items-center gap-1">
-              <span className="text-text-disabled">위치</span>
-              <span className="text-text-base">{post.nation}</span>
-              <span className="text-text-base">{post.region}</span>
+            <div className={INFO_ROW}>
+              <span className={LABEL}>위치</span>
+              <span className={VALUE}>{post.nation}</span>
+              <span className={VALUE}>{post.region}</span>
             </div>
 
-            <span className="text-text-disabled">|</span>
+            <span className={LABEL}>|</span>
 
-            <div className="flex items-center gap-1">
-              <span className="text-text-disabled">날짜</span>
-              <span className="text-text-base">
+            <div className={INFO_ROW}>
+              <span className={LABEL}>날짜</span>
+              <span className={VALUE}>
                 {new Date(post.period.startDate).toLocaleDateString('ko-KR', {
                   month: 'long',
                   day: 'numeric',
@@ -81,22 +86,18 @@ export default function PostCard({ post }: { post: PostContent }) {
               </span>
             </div>
 
-            <span className="text-text-disabled">|</span>
+            <span className={LABEL}>|</span>
 
-            <div className="flex items-center gap-1">
-              <span className="text-text-disabled">나이</span>
-              <span className="text-text-base">
-                {post.conditions.ageCondition}
-              </span>
+            <div className={INFO_ROW}>
+              <span className={LABEL}>나이</span>
+              <span className={VALUE}>{post.conditions.ageCondition}</span>
             </div>
 
-            <span className="text-text-disabled">|</span>
+            <span className={LABEL}>|</span>
 
-            <div className="flex items-center gap-1">
-              <span className="text-text-disabled">성별</span>
-              <span className="text-text-base">
-                {post.conditions.genderCondition}
-              </span>
+            <div className={INFO_ROW}>
+              <span className={LABEL}>성별</span>
+              <span className={VALUE}>{post.conditions.genderCondition}</span>
             </div>
           </div>
         </div>

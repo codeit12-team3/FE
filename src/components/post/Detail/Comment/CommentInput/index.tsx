@@ -20,14 +20,15 @@ export default function CommentInput({
 }: CommentInputProps) {
   const [text, setText] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     if (!text.trim()) return
     onSubmit(text.trim(), parentId)
     setText('')
   }
 
   return (
-    <div className="bg-blue-50 rounded-lg p-4">
+    <form className="bg-blue-50 rounded-lg p-4" onSubmit={handleSubmit}>
       <p className="text-sm text-gray-900 mb-3">
         <span className="font-semibold">{nickname}</span>
       </p>
@@ -40,14 +41,19 @@ export default function CommentInput({
       />
 
       <div className="flex justify-end gap-2 mt-3">
-        <Button variant="secondary" className="h-8" onClick={onCancel}>
+        <Button
+          variant="secondary"
+          className="h-8"
+          onClick={onCancel}
+          type="button"
+        >
           취소
         </Button>
 
-        <Button className="h-8" onClick={handleSubmit}>
+        <Button className="h-8" type="submit">
           등록
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

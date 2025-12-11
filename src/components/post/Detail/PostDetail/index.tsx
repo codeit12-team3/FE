@@ -14,7 +14,8 @@ export default function PostDetail() {
   const postDetail = {
     postId: 'post-2',
     title: '카지노 가보실 분',
-    region: '미국',
+    nation: '미국',
+    region: '뉴욕',
     period: {
       startDate: '2025-02-10',
       endDate: '2025-02-20 ',
@@ -89,6 +90,7 @@ export default function PostDetail() {
         <PostTags tags={postDetail.tags} />
 
         <PostInfo
+          nation={postDetail.nation}
           region={postDetail.region}
           period={{
             startDate: postDetail.period.startDate,
