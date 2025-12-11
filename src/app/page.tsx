@@ -1,5 +1,5 @@
-import { PostList } from '@/components/post'
+import { PostForm, PostList } from '@/components/post'
 
 export default function Home() {
-  return <PostList />
+  return <PostForm />
 }

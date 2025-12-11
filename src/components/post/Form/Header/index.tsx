@@ -58,7 +58,7 @@ export default function Header({
           }}
         />
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mt-3">
           {tags.map((tag, index) => (
             <div
               key={index}
