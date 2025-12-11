@@ -58,11 +58,11 @@ export default function Header({
           }}
         />
 
-        <div className="flex flex-wrap gap-2 mt-3">
+        <div className="flex flex-wrap gap-2 ">
           {tags.map((tag, index) => (
             <div
               key={index}
-              className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub"
+              className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub mt-3"
             >
               <span>#{tag}</span>
               <button

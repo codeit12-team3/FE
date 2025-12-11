@@ -12,6 +12,7 @@ import PostWriter from './PostWriter'
 export default function PostDetail() {
   // 임시 데이터
   const postDetail = {
+    postId: 'post-2',
     title: '카지노 가보실 분',
     region: '미국',
     period: {

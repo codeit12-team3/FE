@@ -13,17 +13,20 @@ import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
 
 interface InfoProps {
   region: string
+  city: string
   member: string
   age: string
   gender: string
   onChangeMember: (v: string) => void
   onChangeRegion: (v: string) => void
+  onChangeCity: (v: string) => void
   onChangeAge: (v: string) => void
   onChangeGender: (v: string) => void
 }
 
 export default function Info({
   region,
+  city,
   member,
   age,
   gender,
@@ -31,9 +34,55 @@ export default function Info({
   onChangeRegion,
   onChangeAge,
   onChangeGender,
+  onChangeCity,
 }: InfoProps) {
   return (
     <>
+      <div className="flex">
+        <div className="w-1/2">
+          <Label className=" mb-3">
+            국가 <span className="text-danger">*</span>
+          </Label>
+
+          <div className="relative">
+            <Select value={region} onValueChange={onChangeRegion}>
+              <SelectTrigger>
+                <SelectValue placeholder="국가를 선택해주세요" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {REGION_OPTIONS.map((location) => (
+                    <SelectItem key={location} value={location}>
+                      {location}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="w-1/2">
+          <Label className=" mb-3">
+            도시 <span className="text-danger">*</span>
+          </Label>
+          <div className="relative">
+            <Select value={city} onValueChange={onChangeCity}>
+              <SelectTrigger>
+                <SelectValue placeholder="도시를 선택해주세요" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {REGION_OPTIONS.map((location) => (
+                    <SelectItem key={location} value={location}>
+                      {location}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
       <div>
         <Label className="mb-3">
           모집 정원 <span className="text-danger">*</span>
@@ -65,29 +114,6 @@ export default function Info({
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <div>
-          <Label className=" mb-3">
-            국가 <span className="text-danger">*</span>
-          </Label>
-
-          <div className="relative">
-            <Select value={region} onValueChange={onChangeRegion}>
-              <SelectTrigger>
-                <SelectValue placeholder="국가를 선택해주세요" />
-              </SelectTrigger>
-
-              <SelectContent>
-                <SelectGroup>
-                  {REGION_OPTIONS.map((location) => (
-                    <SelectItem key={location} value={location}>
-                      {location}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
         <div>
           <Label className=" mb-5">
             나이 <span className="text-danger">*</span>

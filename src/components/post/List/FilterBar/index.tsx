@@ -49,7 +49,7 @@ export default function FilterBar({
             onChangeFilters((prev) => ({ ...prev, region: value }))
           }
         >
-          <SelectTrigger className="rounded-xl bg-bg-disabled">
+          <SelectTrigger>
             <SelectValue placeholder="지역" />
           </SelectTrigger>
           <SelectContent>
@@ -68,7 +68,7 @@ export default function FilterBar({
             onChangeFilters((prev) => ({ ...prev, date: value }))
           }
         >
-          <SelectTrigger className=" rounded-xl bg-bg-disabled">
+          <SelectTrigger>
             <SelectValue placeholder="날짜" />
           </SelectTrigger>
           <SelectContent>
@@ -82,7 +82,7 @@ export default function FilterBar({
             onChangeFilters((prev) => ({ ...prev, age: value }))
           }
         >
-          <SelectTrigger className="rounded-xl bg-bg-disabled">
+          <SelectTrigger>
             <SelectValue placeholder="나이" />
           </SelectTrigger>
           <SelectContent>
@@ -104,7 +104,7 @@ export default function FilterBar({
             }))
           }
         >
-          <SelectTrigger className=" rounded-xl bg-bg-disabled">
+          <SelectTrigger>
             <SelectValue placeholder="성별" />
           </SelectTrigger>
           <SelectContent>

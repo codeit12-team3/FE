@@ -37,7 +37,6 @@ export default function CommentInput({
         onChange={(e) => setText(e.target.value)}
         placeholder="댓글을 남겨보세요."
         rows={3}
-        className="bg-bg-input"
       />
 
       <div className="flex justify-end gap-2 mt-3">

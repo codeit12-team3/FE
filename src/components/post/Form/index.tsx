@@ -1,9 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 import { Button } from '@/components/common'
+import { AgeType, GenderType } from '@/types/posts'
 
 import Date from './Date'
 import Description from './Description'
@@ -17,77 +18,100 @@ export default function PostForm() {
     description: '',
     region: '',
     member: '',
-    age: '',
-    gender: '',
+    age: '' as AgeType | '',
+    gender: '' as GenderType | '',
     startDate: null as Date | null,
     endDate: null as Date | null,
     tags: [] as string[],
     images: [] as string[],
   })
+
   const router = useRouter()
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!form.age || !form.gender || !form.startDate || !form.endDate) {
+      alert('모든 필드를 입력해주세요.')
+      return
+    }
+
+    const payload = {
+      title: form.title,
+      content: form.description,
+      region: form.region,
+      startDate: form.startDate.toISOString().split('T')[0],
+      endDate: form.endDate.toISOString().split('T')[0],
+      maxMembers: parseInt(form.member) || 0,
+      tags: form.tags,
+      images: form.images,
+      genderType: form.gender as GenderType,
+      ageType: form.age as AgeType,
+    }
+  }
+
   return (
-    <>
-      <div className="flex flex-col  items-center">
-        <div className="max-w-7xl w-full px-8">
-          <h1 className="text-2xl font-semibold mb-6 text-left">게시글 작성</h1>
-        </div>
-        <div className=" max-w-7xl flex items-center justify-center">
-          <div className="space-y-6 ">
-            <Header
-              title={form.title}
-              tags={form.tags}
-              onChangeTitle={(v) => setForm((prev) => ({ ...prev, title: v }))}
-              onChangeTags={(text) => {
-                const tags = text.map((t) => t.trim()).filter((t) => t !== '')
-                setForm((prev) => ({ ...prev, tags }))
-              }}
-            />
-            <ImageUpload />
-            <Info
-              region={form.region}
-              member={form.member}
-              age={form.age}
-              gender={form.gender}
-              onChangeRegion={(v) =>
-                setForm((prev) => ({ ...prev, region: v }))
-              }
-              onChangeMember={(v) =>
-                setForm((prev) => ({ ...prev, member: v }))
-              }
-              onChangeAge={(v) => setForm((prev) => ({ ...prev, age: v }))}
-              onChangeGender={(v) =>
-                setForm((prev) => ({ ...prev, gender: v }))
-              }
-            />
-            <Date
-              startDate={form.startDate}
-              endDate={form.endDate}
-              onChangeStartDate={(v) =>
-                setForm((prev) => ({ ...prev, startDate: v }))
-              }
-              onChangeEndDate={(v) =>
-                setForm((prev) => ({ ...prev, endDate: v }))
-              }
-            />
-            <Description
-              description={form.description}
-              onChangeDescription={(v) =>
-                setForm((prev) => ({ ...prev, description: v }))
-              }
-            />
-            <div className="flex items-center gap-8 justify-center">
-              <Button
-                size="md"
-                variant="secondary"
-                onClick={() => router.push('/')}
-              >
-                나가기
-              </Button>
-              <Button size="md">게시글 등록</Button>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col items-center">
+      <div className="max-w-7xl w-full px-8">
+        <h1 className="text-2xl font-semibold mb-6 text-left">게시글 작성</h1>
       </div>
-    </>
+      <div className="max-w-7xl flex items-center justify-center">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Header
+            title={form.title}
+            tags={form.tags}
+            onChangeTitle={(v) => setForm((prev) => ({ ...prev, title: v }))}
+            onChangeTags={(text) => {
+              const tags = text.map((t) => t.trim()).filter((t) => t !== '')
+              setForm((prev) => ({ ...prev, tags }))
+            }}
+          />
+          <ImageUpload />
+          <Info
+            region={form.region}
+            member={form.member}
+            age={form.age}
+            gender={form.gender}
+            onChangeRegion={(v) => setForm((prev) => ({ ...prev, region: v }))}
+            onChangeMember={(v) => setForm((prev) => ({ ...prev, member: v }))}
+            onChangeAge={(v) =>
+              setForm((prev) => ({ ...prev, age: v as AgeType }))
+            }
+            onChangeGender={(v) =>
+              setForm((prev) => ({ ...prev, gender: v as GenderType }))
+            }
+          />
+          <Date
+            startDate={form.startDate}
+            endDate={form.endDate}
+            onChangeStartDate={(v) =>
+              setForm((prev) => ({ ...prev, startDate: v }))
+            }
+            onChangeEndDate={(v) =>
+              setForm((prev) => ({ ...prev, endDate: v }))
+            }
+          />
+          <Description
+            description={form.description}
+            onChangeDescription={(v) =>
+              setForm((prev) => ({ ...prev, description: v }))
+            }
+          />
+          <div className="flex items-center gap-8 justify-center">
+            <Button
+              type="button"
+              size="md"
+              variant="secondary"
+              onClick={() => router.push('/')}
+            >
+              나가기
+            </Button>
+            <Button type="submit" size="md">
+              게시글 등록
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

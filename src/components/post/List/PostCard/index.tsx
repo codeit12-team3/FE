@@ -101,10 +101,10 @@ export default function PostCard({ post }: { post: PostContent }) {
         </div>
 
         <div className="flex flex-col items-end justify-between">
-          <button className="w-10 h-10 flex items-center justify-center hover:bg-bg-input rounded-full transition-colors">
+          <button className="w-10 h-10 flex items-center justify-center rounded-full transition-colors">
             <Heart
               className={`w-6 h-6 ${
-                post.bookmarked ? 'fill-main text-main' : 'text-text-input'
+                post.isBookmarked ? 'fill-main text-main' : 'text-text-input'
               }`}
             />
           </button>

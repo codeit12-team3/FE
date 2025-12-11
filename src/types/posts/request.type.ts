@@ -11,7 +11,6 @@ export interface PostParams {
 export interface PostApiParams {
   region?: string
   date?: string
-  age?: number
   ageType?: AgeType
   gender?: GenderType
   keyword?: string
@@ -29,6 +28,5 @@ export interface PostCreatePayload {
   tags: string[]
   images: string[]
   genderType: 'MALE' | 'FEMALE' | 'ALL'
-  birthYear: number
-  ageType: 'OLDER' | 'YOUNGER'
+  ageType: AgeType
 }

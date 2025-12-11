@@ -1,5 +1,11 @@
-import { PostForm, PostList } from '@/components/post'
+import { PostDetail, PostForm, PostList } from '@/components/post'
 
 export default function Home() {
-  return <PostForm />
+  return (
+    <div>
+      <PostForm />
+      {/* <PostList /> */}
+      {/* <PostDetail /> */}
+    </div>
+  )
 }
