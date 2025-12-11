@@ -38,7 +38,7 @@ export default function Info({
 }: InfoProps) {
   return (
     <>
-      <div className="flex">
+      <div className="flex gap-4">
         <div className="w-1/2">
           <Label className=" mb-3">
             국가 <span className="text-danger">*</span>
@@ -46,7 +46,7 @@ export default function Info({
 
           <div className="relative">
             <Select value={region} onValueChange={onChangeRegion}>
-              <SelectTrigger>
+              <SelectTrigger className=" w-full">
                 <SelectValue placeholder="국가를 선택해주세요" />
               </SelectTrigger>
               <SelectContent>
@@ -67,7 +67,7 @@ export default function Info({
           </Label>
           <div className="relative">
             <Select value={city} onValueChange={onChangeCity}>
-              <SelectTrigger>
+              <SelectTrigger className=" w-full">
                 <SelectValue placeholder="도시를 선택해주세요" />
               </SelectTrigger>
               <SelectContent>
