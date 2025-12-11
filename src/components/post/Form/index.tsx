@@ -17,6 +17,7 @@ export default function PostForm() {
     title: '',
     description: '',
     region: '',
+    city: '',
     member: '',
     age: '' as AgeType | '',
     gender: '' as GenderType | '',
@@ -69,10 +70,12 @@ export default function PostForm() {
           <ImageUpload />
           <Info
             region={form.region}
+            city={form.city}
             member={form.member}
             age={form.age}
             gender={form.gender}
             onChangeRegion={(v) => setForm((prev) => ({ ...prev, region: v }))}
+            onChangeCity={(v) => setForm((prev) => ({ ...prev, city: v }))}
             onChangeMember={(v) => setForm((prev) => ({ ...prev, member: v }))}
             onChangeAge={(v) =>
               setForm((prev) => ({ ...prev, age: v as AgeType }))

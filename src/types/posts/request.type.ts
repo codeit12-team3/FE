@@ -3,7 +3,6 @@ import { AgeType, GenderType } from './content.type'
 export interface PostParams {
   region: string
   date: string
-  age: string
   ageType: AgeType
   gender: GenderType
   keyword: string
