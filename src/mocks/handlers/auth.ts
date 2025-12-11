@@ -164,4 +164,35 @@ export const authHandlers = [
       timestamp: '2025-12-09',
     })
   }),
+
+  http.post(`${MOCK_URL}/v1/auth/signup`, async ({ request }) => {
+    await delay(2000)
+
+    const body = (await request.json()) as { email: string }
+
+    if (body.email === 'error@error.com') {
+      return HttpResponse.json(
+        {
+          success: false,
+          status: 400,
+          data: {
+            errorCode: '',
+            message: '에러',
+          },
+          timestamp: '2025-12-02',
+        },
+        {
+          status: 400,
+          statusText: 'Bad Request',
+        },
+      )
+    }
+
+    return HttpResponse.json({
+      success: true,
+      status: 201,
+      data: null,
+      timestamp: '2025-12-02',
+    })
+  }),
 ]
