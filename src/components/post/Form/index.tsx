@@ -18,6 +18,7 @@ export default function PostForm() {
     region: '',
     member: '',
     age: '',
+    gender: '',
     startDate: null as Date | null,
     endDate: null as Date | null,
     tags: [] as string[],
@@ -37,10 +38,7 @@ export default function PostForm() {
               tags={form.tags}
               onChangeTitle={(v) => setForm((prev) => ({ ...prev, title: v }))}
               onChangeTags={(text) => {
-                const tags = text
-                  .split(',')
-                  .map((t) => t.trim())
-                  .filter((t) => t !== '')
+                const tags = text.map((t) => t.trim()).filter((t) => t !== '')
                 setForm((prev) => ({ ...prev, tags }))
               }}
             />
@@ -49,13 +47,17 @@ export default function PostForm() {
               region={form.region}
               member={form.member}
               age={form.age}
-              onChangeMember={(v) =>
-                setForm((prev) => ({ ...prev, member: v }))
-              }
+              gender={form.gender}
               onChangeRegion={(v) =>
                 setForm((prev) => ({ ...prev, region: v }))
               }
+              onChangeMember={(v) =>
+                setForm((prev) => ({ ...prev, member: v }))
+              }
               onChangeAge={(v) => setForm((prev) => ({ ...prev, age: v }))}
+              onChangeGender={(v) =>
+                setForm((prev) => ({ ...prev, gender: v }))
+              }
             />
             <Date
               startDate={form.startDate}

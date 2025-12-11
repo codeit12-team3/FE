@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
+import { Button } from '@/components/common'
+import { Label } from '@/components/ui'
+
 export default function ImageUpload() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
@@ -27,9 +30,9 @@ export default function ImageUpload() {
   }, [previews])
   return (
     <div>
-      <label className="block text-sm text-text-base mb-3">
+      <Label className=" mb-2">
         이미지 <span className="text-danger">*</span>
-      </label>
+      </Label>
 
       <div className="flex justify-between gap-2 ">
         <div
@@ -56,12 +59,9 @@ export default function ImageUpload() {
           )}
         </div>
 
-        <button
-          onClick={openPicker}
-          className=" p-2.5 w-25 border border-main text-main rounded-lg text-sm hover:bg-blue-50"
-        >
+        <Button onClick={openPicker} variant="secondary">
           파일 찾기
-        </button>
+        </Button>
 
         <input
           ref={fileInputRef}

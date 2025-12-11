@@ -4,6 +4,8 @@ import { Calendar } from 'lucide-react'
 import { useRef } from 'react'
 import DatePicker from 'react-datepicker'
 
+import { Label } from '@/components/ui'
+
 interface DateProps {
   startDate: Date | null
   endDate: Date | null
@@ -24,9 +26,9 @@ export default function Date({
     <div className="flex justify-between mb-2 gap-8">
       {/* 시작 날짜 */}
       <div className="flex flex-col relative">
-        <label className="text-sm text-text-base mb-2">
+        <Label className=" mb-2">
           여행 시작 일시 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
         <div className="relative">
           <DatePicker
@@ -47,9 +49,9 @@ export default function Date({
 
       {/* 종료 날짜 */}
       <div className="flex flex-col relative">
-        <label className="text-sm text-text-base mb-2">
+        <Label className=" mb-2">
           여행 종료 일시 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
         <div className="relative">
           <DatePicker

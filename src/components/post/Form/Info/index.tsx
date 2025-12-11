@@ -1,26 +1,34 @@
+import { Label } from '@/components/ui'
+import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
 interface InfoProps {
   region: string
   member: string
   age: string
+  gender: string
   onChangeMember: (v: string) => void
   onChangeRegion: (v: string) => void
   onChangeAge: (v: string) => void
+  onChangeGender: (v: string) => void
 }
 
 export default function Info({
   region,
   member,
   age,
+  gender,
   onChangeMember,
   onChangeRegion,
   onChangeAge,
+  onChangeGender,
 }: InfoProps) {
   return (
     <>
       <div>
-        <label className="block text-sm text-text-base mb-3">
+        <Label className=" mb-2">
           국가 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
         <div className="relative">
           <select
@@ -41,38 +49,56 @@ export default function Info({
       </div>
 
       <div>
-        <label className="block text-sm text-text-base mb-2">
+        <Label className="mb-2">
           모집 정원 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="flex gap-4">
-          <input
-            type="text"
+        <div className="flex gap-4 items-center">
+          <Input
             value={member}
             onChange={(e) => onChangeMember(e.target.value)}
             placeholder="인원을 입력해주세요"
-            className="w-1/2 px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] placeholder:text-text-input outline-none"
+            className="w-1/2"
           />
+
+          <RadioGroup
+            value={gender}
+            onValueChange={onChangeGender}
+            className="flex gap-3 items-center"
+          >
+            <Label className="flex items-center gap-2 cursor-pointer">
+              <RadioGroupItem value="남성" />
+              <span className=" text-sm">남성만</span>
+            </Label>
+
+            <Label className="flex items-center gap-2 cursor-pointer">
+              <RadioGroupItem value="여성" />
+              <span className="text-sm">여성만</span>
+            </Label>
+
+            <Label className="flex items-center gap-2 cursor-pointer">
+              <RadioGroupItem value="모두" />
+              <span className=" text-sm">모두</span>
+            </Label>
+          </RadioGroup>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm text-text-base mb-2">
+        <Label className=" mb-2">
           나이 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="flex gap-3 items-center">
-          <select
-            value={age}
-            onChange={(e) => onChangeAge(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none"
-          >
-            <option value="">출생년도 선택해주세요</option>
-            <option value="2005">2005년</option>
-            <option value="2000">2000년</option>
-            <option value="1995">1995년</option>
-          </select>
-        </div>
+        <select
+          value={age}
+          onChange={(e) => onChangeAge(e.target.value)}
+          className="flex-1 px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none"
+        >
+          <option value="">출생년도 선택해주세요</option>
+          <option value="2005">2005년</option>
+          <option value="2000">2000년</option>
+          <option value="1995">1995년</option>
+        </select>
       </div>
     </>
   )
