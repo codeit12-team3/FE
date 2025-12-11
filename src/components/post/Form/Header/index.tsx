@@ -59,15 +59,15 @@ export default function Header({
         />
 
         <div className="flex flex-wrap gap-2 ">
-          {tags.map((tag, index) => (
+          {tags.map((tag) => (
             <div
-              key={index}
+              key={tag}
               className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub mt-3"
             >
               <span>#{tag}</span>
               <button
                 type="button"
-                onClick={() => onChangeTags(tags.filter((_, i) => i !== index))}
+                onClick={() => onChangeTags(tags)}
                 className="text-main hover:text-danger"
               >
                 <div className="border border-main rounded-full ">

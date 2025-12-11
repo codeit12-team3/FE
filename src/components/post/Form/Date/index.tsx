@@ -29,7 +29,7 @@ export default function Date({
           여행 시작 일시 <span className="text-danger">*</span>
         </Label>
 
-        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm  cursor-pointer">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={startRef}
             selected={startDate}
@@ -51,7 +51,7 @@ export default function Date({
           여행 종료 일시 <span className="text-danger">*</span>
         </Label>
 
-        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-[#EDF4FB] rounded-lg text-sm  cursor-pointer">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={endRef}
             selected={endDate}
