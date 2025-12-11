@@ -12,24 +12,26 @@ import PostWriter from './PostWriter'
 export default function PostDetail() {
   // 임시 데이터
   const postDetail = {
+    postId: 'post-2',
     title: '카지노 가보실 분',
-    region: '미국',
+    nation: '미국',
+    region: '뉴욕',
     period: {
-      startDate: '2025-02-10 09:00 AM',
-      endDate: '2025-02-20 06:00 PM',
+      startDate: '2025-02-10',
+      endDate: '2025-02-20 ',
     },
     stats: {
       maxMembers: 3,
       currentMembers: 0,
       viewCount: 5,
     },
-    content: '함께 여행할 분을 찾습니다!',
+    content:
+      '함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!',
     createdAt: '2025-12-06T16:19:42.712967883',
     tags: ['힐링', '도박', '카지노'],
     conditions: {
-      ageCondition: '이상',
-      birthYear: 1995,
-      genderCondition: '모두',
+      ageCondition: '20대만',
+      genderCondition: '남자만',
     },
     isBookmarked: false,
     commentCount: 22,
@@ -88,6 +90,7 @@ export default function PostDetail() {
         <PostTags tags={postDetail.tags} />
 
         <PostInfo
+          nation={postDetail.nation}
           region={postDetail.region}
           period={{
             startDate: postDetail.period.startDate,
@@ -100,7 +103,6 @@ export default function PostDetail() {
           }}
           conditions={{
             ageCondition: postDetail.conditions.ageCondition,
-            birthYear: postDetail.conditions.birthYear,
             genderCondition: postDetail.conditions.genderCondition,
           }}
         />

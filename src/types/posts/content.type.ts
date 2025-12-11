@@ -1,5 +1,5 @@
-export type GenderType = 'MALE' | 'FEMALE' | 'ALL' | ''
-export type AgeType = 'OLDER' | 'YOUNGER' | ''
+export type GenderType = 'MALE' | 'FEMALE' | 'ALL'
+export type AgeType = 'TWENTY' | 'THIRTY' | 'FOURTY' | 'FIFTY' | 'ETC'
 
 export interface Period {
   startDate: string
@@ -9,6 +9,8 @@ export interface Period {
 export interface PostContent {
   postId: string
   title: string
+  content: string
+  nation: string
   region: string
   period: Period
   recruitStatus: 'RECRUITING' | 'CLOSED'
@@ -17,12 +19,11 @@ export interface PostContent {
   currentMembers: number
   maxMembers: number
   conditions: {
-    ageCondition: string
-    birthYear: number
-    genderCondition: string
+    ageCondition: AgeType
+    genderCondition: GenderType
   }
-  bookmarked: boolean
-  thumbnail: string
+  isBookmarked: boolean
+  thumbnail: string[]
   createdAt: string
   updatedAt: string
 }

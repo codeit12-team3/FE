@@ -10,43 +10,45 @@ import PostListSection from './PostListSection'
 
 export default function PostList() {
   const [filters, setFilters] = useState<PostParams>({
-    region: '',
+    nation: '',
     date: '',
-    age: '',
-    ageType: '',
-    gender: '',
+    ageType: undefined,
+    gender: undefined,
     keyword: '',
   })
 
   // 임시 데이터
   const mockPosts: PostContent[] = [
     {
-      postId: 'post-1',
-      title: '도쿄 디즈니 2박 3일 급구!',
-      region: '일본 도쿄',
+      postId: '1',
+      title: '베트남 여행 같이 가실 분~',
+      content: '베트남 여행 같이 가실 분 모집합니다!',
+      nation: '베트남',
+      region: '다낭',
       period: {
-        startDate: '2025-01-10',
-        endDate: '2025-01-12',
+        startDate: '2024-12-15',
+        endDate: '2024-12-20',
       },
       recruitStatus: 'RECRUITING',
-      tags: ['힐링', '맛집', '쇼핑'],
-      nickname: '푸우님과함께',
+      tags: ['여행', '베트남'],
+      nickname: '여행러버',
       currentMembers: 2,
       maxMembers: 4,
       conditions: {
-        ageCondition: '20대',
-        birthYear: 2000,
-        genderCondition: '여성만',
+        ageCondition: 'TWENTY',
+        genderCondition: 'FEMALE',
       },
-      bookmarked: true,
-      thumbnail: '/',
-      createdAt: String(new Date()),
-      updatedAt: '',
+      isBookmarked: false,
+      thumbnail: ['/'],
+      createdAt: '2024-12-01',
+      updatedAt: '2024-12-01',
     },
     {
       postId: 'post-2',
       title: '다낭 4박5일 가족여행 동행 구해요',
-      region: '베트남 다낭',
+      content: '가족 여행 동행 구합니다.',
+      nation: '베트남',
+      region: '다낭',
       period: {
         startDate: '2025-02-21',
         endDate: '2025-02-25',
@@ -57,19 +59,20 @@ export default function PostList() {
       currentMembers: 3,
       maxMembers: 3,
       conditions: {
-        ageCondition: '30대',
-        birthYear: 1993,
-        genderCondition: '누구나',
+        ageCondition: 'THIRTY',
+        genderCondition: 'ALL',
       },
-      bookmarked: false,
-      thumbnail: '/',
-      createdAt: String(new Date()),
-      updatedAt: '',
+      isBookmarked: false,
+      thumbnail: ['/'],
+      createdAt: '2025-02-21',
+      updatedAt: '2025-02-21',
     },
     {
       postId: 'post-3',
       title: '제주도 한라산 등반 같이 가실 분!',
-      region: '한국 제주도',
+      content: '한라산 등반 같이 가요!',
+      nation: '한국',
+      region: '제주도',
       period: {
         startDate: '2024-12-30',
         endDate: '2024-12-31',
@@ -80,14 +83,13 @@ export default function PostList() {
       currentMembers: 1,
       maxMembers: 2,
       conditions: {
-        ageCondition: '20대',
-        birthYear: 1993,
-        genderCondition: '누구나',
+        ageCondition: 'TWENTY',
+        genderCondition: 'ALL',
       },
-      bookmarked: true,
-      thumbnail: '/',
-      createdAt: String(new Date()),
-      updatedAt: '',
+      isBookmarked: true,
+      thumbnail: ['/'],
+      createdAt: '2024-12-30',
+      updatedAt: '2024-12-30',
     },
   ]
 
@@ -96,6 +98,7 @@ export default function PostList() {
   // const { data,isLoading } = usePosts({
   //   lastPostId: cursor,
   //   size: 20,
+  //   nation: filters.nation || undefined.
   //   region: filters.region || undefined,
   //   date: filters.date || undefined, // yyyy-MM-dd 형식
   //   age: filters.age ? Number(filters.age) : undefined,

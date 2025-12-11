@@ -1,78 +1,137 @@
+import {
+  Label,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui'
+import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
+
 interface InfoProps {
+  nation: string
   region: string
   member: string
   age: string
+  gender: string
   onChangeMember: (v: string) => void
   onChangeRegion: (v: string) => void
+  onChangeNation: (v: string) => void
   onChangeAge: (v: string) => void
+  onChangeGender: (v: string) => void
 }
 
 export default function Info({
+  nation,
   region,
   member,
   age,
+  gender,
   onChangeMember,
   onChangeRegion,
   onChangeAge,
+  onChangeGender,
+  onChangeNation,
 }: InfoProps) {
+  const LABEL = 'mb-3'
+  const RADIO_LABEL = 'flex items-center gap-2 cursor-pointer'
+  const FLEX_ROW = 'flex gap-4 items-center'
+  const SECTION = 'mt-6'
+
   return (
     <>
-      <div>
-        <label className="block text-sm text-text-base mb-3">
-          국가 <span className="text-danger">*</span>
-        </label>
+      <div className="flex gap-4">
+        <div className="w-1/2">
+          <Label className={LABEL}>
+            국가 <span className="text-danger">*</span>
+          </Label>
 
-        <div className="relative">
-          <select
-            value={region}
-            onChange={(e) => onChangeRegion(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none"
-          >
-            <option value="">국가를 선택해주세요</option>
-            <option value="korea">대한민국</option>
-            <option value="japan">일본</option>
-            <option value="usa">미국</option>
-          </select>
+          <Select value={nation} onValueChange={onChangeNation}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="국가를 선택해주세요" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {REGION_OPTIONS.map((location) => (
+                  <SelectItem key={location} value={location}>
+                    {location}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
 
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-input pointer-events-none">
-            ▼
-          </span>
+        <div className="w-1/2">
+          <Label className={LABEL}>
+            도시 <span className="text-danger">*</span>
+          </Label>
+
+          <Select value={region} onValueChange={onChangeRegion}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="도시를 선택해주세요" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {REGION_OPTIONS.map((location) => (
+                  <SelectItem key={location} value={location}>
+                    {location}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm text-text-base mb-2">
+      <div className={SECTION}>
+        <Label className={LABEL}>
           모집 정원 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="flex gap-4">
-          <input
-            type="text"
+        <div className={FLEX_ROW}>
+          <Input
             value={member}
             onChange={(e) => onChangeMember(e.target.value)}
             placeholder="인원을 입력해주세요"
-            className="w-1/2 px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] placeholder:text-text-input outline-none"
+            className="w-1/2"
           />
+
+          <RadioGroup
+            value={gender}
+            onValueChange={onChangeGender}
+            className="flex gap-3 items-center"
+          >
+            {GENDER_OPTIONS.map((opt) => (
+              <Label key={opt.value} className={RADIO_LABEL}>
+                <RadioGroupItem value={opt.value} />
+                <span className="text-sm">{opt.label}</span>
+              </Label>
+            ))}
+          </RadioGroup>
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm text-text-base mb-2">
+      <div className={SECTION}>
+        <Label className={LABEL}>
           나이 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="flex gap-3 items-center">
-          <select
-            value={age}
-            onChange={(e) => onChangeAge(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm text-text-input appearance-none bg-[#EDF4FB] outline-none"
-          >
-            <option value="">출생년도 선택해주세요</option>
-            <option value="2005">2005년</option>
-            <option value="2000">2000년</option>
-            <option value="1995">1995년</option>
-          </select>
-        </div>
+        <RadioGroup
+          value={age}
+          onValueChange={onChangeAge}
+          className="flex gap-3 items-center mb-3"
+        >
+          {AGE_OPTIONS.map((opt) => (
+            <Label key={opt.value} className={RADIO_LABEL}>
+              <RadioGroupItem value={opt.value} />
+              <span className="text-sm">{opt.label}</span>
+            </Label>
+          ))}
+        </RadioGroup>
       </div>
     </>
   )

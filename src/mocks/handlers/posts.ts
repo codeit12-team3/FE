@@ -55,7 +55,7 @@ export const postsHandlers = [
       endDate: string
     }
 
-    if (body.endDate > body.startDate) {
+    if (body.startDate > body.endDate) {
       return HttpResponse.json(
         {
           success: false,
