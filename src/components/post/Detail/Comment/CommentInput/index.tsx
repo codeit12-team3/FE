@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { Button } from '@/components/common'
+import { Textarea } from '@/components/ui'
 
 interface CommentInputProps {
   nickname: string
@@ -19,35 +20,40 @@ export default function CommentInput({
 }: CommentInputProps) {
   const [text, setText] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     if (!text.trim()) return
     onSubmit(text.trim(), parentId)
     setText('')
   }
 
   return (
-    <div className="bg-blue-50 rounded-lg p-4">
+    <form className="bg-blue-50 rounded-lg p-4" onSubmit={handleSubmit}>
       <p className="text-sm text-gray-900 mb-3">
         <span className="font-semibold">{nickname}</span>
       </p>
 
-      <textarea
+      <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="댓글을 남겨보세요."
         rows={3}
-        className="w-full border rounded-lg px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none resize-none"
       />
 
       <div className="flex justify-end gap-2 mt-3">
-        <Button variant="secondary" className="h-8" onClick={onCancel}>
+        <Button
+          variant="secondary"
+          className="h-8"
+          onClick={onCancel}
+          type="button"
+        >
           취소
         </Button>
 
-        <Button className="h-8" onClick={handleSubmit}>
+        <Button className="h-8" type="submit">
           등록
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

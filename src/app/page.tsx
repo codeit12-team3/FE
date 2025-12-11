@@ -1,5 +1,9 @@
 import { PostList } from '@/components/post'
 
 export default function Home() {
-  return <PostList />
+  return (
+    <div>
+      <PostList />
+    </div>
+  )
 }

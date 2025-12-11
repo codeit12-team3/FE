@@ -1,8 +1,10 @@
 'use client'
 
-import { Calendar } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 import { useRef } from 'react'
 import DatePicker from 'react-datepicker'
+
+import { Label } from '@/components/ui'
 
 interface DateProps {
   startDate: Date | null
@@ -21,47 +23,45 @@ export default function Date({
   const endRef = useRef<DatePicker | null>(null)
 
   return (
-    <div className="flex justify-between mb-2 gap-8">
-      {/* 시작 날짜 */}
+    <div className="flex gap-8">
       <div className="flex flex-col relative">
-        <label className="text-sm text-text-base mb-2">
+        <Label className=" mb-3">
           여행 시작 일시 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="relative">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={startRef}
             selected={startDate}
             onChange={(d) => onChangeStartDate(d)}
             dateFormat="yyyy-MM-dd"
-            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none w-[200px]"
-            placeholderText="날짜 선택"
+            className="text-muted-foreground font-medium text-base bg-sub"
+            placeholderText="시작 날짜 선택"
           />
 
-          <Calendar
+          <CalendarDays
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-main size-5"
             onClick={() => startRef.current?.setOpen(true)}
           />
         </div>
       </div>
 
-      {/* 종료 날짜 */}
       <div className="flex flex-col relative">
-        <label className="text-sm text-text-base mb-2">
+        <Label className=" mb-3">
           여행 종료 일시 <span className="text-danger">*</span>
-        </label>
+        </Label>
 
-        <div className="relative">
+        <div className="relative flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer">
           <DatePicker
             ref={endRef}
             selected={endDate}
             onChange={(d) => onChangeEndDate(d)}
             dateFormat="yyyy-MM-dd"
-            className="px-4 py-2.5 rounded-lg text-sm bg-[#EDF4FB] outline-none w-[200px]"
-            placeholderText="날짜 선택"
+            className="text-muted-foreground font-medium text-base bg-sub"
+            placeholderText="종료 날짜 선택"
           />
 
-          <Calendar
+          <CalendarDays
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-main size-5"
             onClick={() => endRef.current?.setOpen(true)}
           />

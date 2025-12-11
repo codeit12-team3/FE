@@ -7,7 +7,6 @@ import './globals.css'
 import { SessionProvider } from 'next-auth/react'
 
 import { Header } from '@/components/common'
-import { SelectProvider } from '@/components/common/Select/select.context'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 

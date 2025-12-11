@@ -1,17 +1,15 @@
 import { AgeType, GenderType } from './content.type'
 
 export interface PostParams {
-  region: string
-  date: string
-  age: string
-  ageType: AgeType
-  gender: GenderType
-  keyword: string
+  nation?: string
+  date?: string
+  ageType?: AgeType
+  gender?: GenderType
+  keyword?: string
 }
 export interface PostApiParams {
-  region?: string
+  nation?: string
   date?: string
-  age?: number
   ageType?: AgeType
   gender?: GenderType
   keyword?: string
@@ -21,6 +19,7 @@ export interface PostApiParams {
 
 export interface PostCreatePayload {
   title: string
+  nation: string
   region: string
   startDate: string
   endDate: string
@@ -29,6 +28,5 @@ export interface PostCreatePayload {
   tags: string[]
   images: string[]
   genderType: 'MALE' | 'FEMALE' | 'ALL'
-  birthYear: number
-  ageType: 'OLDER' | 'YOUNGER'
+  ageType: AgeType
 }
