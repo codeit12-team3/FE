@@ -25,6 +25,7 @@
   --color-main: #498cf8; /* Main Color */
   --color-main-from: #498cf8; /* Gradient from */
   --color-main-to: #003c9d; /* Gradient to */
+  --color-sub: #edf4fb; /* Sub Color */
 
   --color-bg-base: #fafafa; /* Background */
   --color-bg-input: #f9fafb; /* Input Field */

@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './Input'
+export * from './Skeleton'
 export { default as Header } from './Header'
 export { default as Label } from './Label'
 export { default as Select } from './Select'
