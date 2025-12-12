@@ -3,16 +3,27 @@
 import { Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import useImageCompress from '@/hooks/member/useImageCompress'
-import { useUploadingImageStore } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function ProfileImageEdit() {
-  const [profileImg, setprofileImg] = useState<string | null>(null)
+  const { setValue, watch } = useFormContext<ProfileEditFormData>()
+  const imageValue = watch('image')
+
+  const [profileImg, setProfileImg] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
-  const { setIsUploadingImage } = useUploadingImageStore()
+
+  // 폼의 image 값이 변경되면 미리보기 업데이트
+  useEffect(() => {
+    if (imageValue && !imageValue.startsWith('blob:')) {
+      setProfileImg(imageValue)
+    }
+  }, [imageValue])
 
   const handleEditClick = () => {
     fileInputRef.current?.click()
@@ -30,18 +41,22 @@ export default function ProfileImageEdit() {
     }
 
     try {
+      setIsUploading(true)
       const result = await compress(file)
-      setprofileImg(result.previewUrl)
-      setIsUploadingImage(true)
+      setProfileImg(result.previewUrl)
 
-      // 백에서 프리사인드URL나오면 S3 업로드 처리할예정입니다
+      // 폼프로바이더의 image 필드 업데이트할 예정
+      setValue('image', result.previewUrl, { shouldDirty: true })
+
+      // 백엔드에서 프리사인드 URL 나오면 S3 업로드 처리할 예정
       toast.success('프로필 사진이 변경되었습니다!', {
         duration: 2000,
       })
     } catch (err) {
       console.error(err)
+      toast.error('이미지 업로드 중 오류가 발생했습니다')
     } finally {
-      setIsUploadingImage(false)
+      setIsUploading(false)
       e.target.value = ''
     }
   }
@@ -64,15 +79,20 @@ export default function ProfileImageEdit() {
           alt="프로필 이미지"
           priority
         />
+        {isUploading && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="text-white text-sm">업로드 중...</div>
+          </div>
+        )}
       </div>
-
       <button
+        type="button"
         onClick={handleEditClick}
-        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95"
+        disabled={isUploading}
+        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Pencil size={24} className="text-gray-700" />
       </button>
-
       <input
         type="file"
         accept="image/jpeg,image/png,image/webp"

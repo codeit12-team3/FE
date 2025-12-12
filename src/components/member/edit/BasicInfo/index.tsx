@@ -1,10 +1,16 @@
 'use client'
 
+import { useFormContext } from 'react-hook-form'
+
 import { Input } from '@/components/common/Input'
-import { useMemberStore } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function BasicInfo() {
-  const { profile, updateProfile } = useMemberStore()
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<ProfileEditFormData>()
+
   return (
     <>
       <div>
@@ -12,28 +18,28 @@ export default function BasicInfo() {
           닉네임 <span className="text-danger">*</span>
         </label>
         <Input
-          name="nickname"
-          value={profile?.nickname ?? ''}
-          onChange={(e) => updateProfile({ nickname: e.target.value })}
+          {...register('nickname')}
           type="text"
-          required
           className="w-42 h-11 bg-[#EDF4FB] mt-3"
           placeholder="닉네임"
         />
+        {errors.nickname && (
+          <p className="text-danger text-sm mt-1">{errors.nickname.message}</p>
+        )}
       </div>
       <div>
         <label className="block font-medium">
           이름 <span className="text-danger">*</span>
         </label>
         <Input
-          name="name"
+          {...register('name')}
           type="text"
-          value={profile?.name ?? ''}
-          onChange={(e) => updateProfile({ name: e.target.value })}
-          required
           className="h-11 w-41.5 bg-[#EDF4FB] mt-3"
           placeholder="이름"
         />
+        {errors.name && (
+          <p className="text-danger text-sm mt-1">{errors.name.message}</p>
+        )}
       </div>
     </>
   )
