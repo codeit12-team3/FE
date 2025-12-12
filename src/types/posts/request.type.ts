@@ -9,6 +9,14 @@ export interface PostParams {
   keyword?: string
   lastItemId?: string
 }
+
+export interface PostFilterParams {
+  nation?: string
+  date?: string
+  ageType?: AgeType
+  gender?: GenderType
+  keyword?: string
+}
 export interface PostApiParams {
   nation?: string
   date?: string

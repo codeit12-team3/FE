@@ -11,46 +11,59 @@ export const postsHandlers = [
 
     const lastItemId = url.searchParams.get('lastItemId')
     const size = Number(url.searchParams.get('size') || 20)
-    const age = url.searchParams.get('age')
+
+    const keyword = url.searchParams.get('keyword')
+    const nation = url.searchParams.get('nation')
     const ageType = url.searchParams.get('ageType')
-    const mockData: PostListItem[] = Array.from({ length: size }).map(
-      (_, idx) => ({
-        postId: lastItemId ? Number(lastItemId) + idx + 1 : idx + 1,
-        title: `Mock title ${idx + 1}`,
-        nation: '한국',
-        region: '서울',
-        period: {
-          startDate: '2025-01-01',
-          endDate: '2025-01-02',
-        },
-        recruitStatus: 'RECRUITING',
-        tags: ['힐링', '여행'],
-        nickname: 'mockUser',
-        currentMembers: 1,
-        maxMembers: 3,
-        conditions: {
-          ageType: '20대',
-          genderCondition: '모두',
-        },
-        isBookmarked: false,
-        thumbnail: '/mock.png',
-      }),
-    )
-    if ((age && !ageType) || (!age && ageType)) {
-      return HttpResponse.json(
-        {
-          success: false,
-          status: 400,
-          data: {
-            errorCode: 'AGE_BAD_REQUEST',
-            message: 'age와 ageType은 함께 전달되어야 합니다.',
+    const gender = url.searchParams.get('gender')
+
+    const startId = lastItemId ? Number(lastItemId) + 1 : 1
+
+    let mockData: PostListItem[] = Array.from({ length: size }).map(
+      (_, idx) => {
+        const id = startId + idx
+
+        return {
+          postId: id,
+          title: `Mock title ${id}`,
+          nation: id % 2 === 0 ? '한국' : '일본',
+          region: id % 2 === 0 ? '서울' : '도쿄',
+          period: {
+            startDate: '2025-01-01',
+            endDate: '2025-01-02',
           },
-          timestamp: '2025-12-02',
-        },
-        {
-          status: 400,
-          statusText: 'Bad Request',
-        },
+          recruitStatus: 'RECRUITING',
+          tags: ['힐링', '여행'],
+          nickname: 'mockUser',
+          currentMembers: 1,
+          maxMembers: 3,
+          conditions: {
+            ageType: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
+            genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          },
+          isBookmarked: false,
+          thumbnail: '/mock.png',
+        }
+      },
+    )
+
+    if (keyword) {
+      mockData = mockData.filter((post) =>
+        post.title.toLowerCase().includes(keyword.toLowerCase()),
+      )
+    }
+
+    if (nation) {
+      mockData = mockData.filter((post) => post.nation === nation)
+    }
+
+    if (ageType) {
+      mockData = mockData.filter((post) => post.conditions.ageType === ageType)
+    }
+
+    if (gender) {
+      mockData = mockData.filter(
+        (post) => post.conditions.genderCondition === gender,
       )
     }
 
