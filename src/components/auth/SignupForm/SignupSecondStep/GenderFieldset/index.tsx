@@ -1,18 +1,17 @@
 'use client'
 
 import { CircleAlert } from 'lucide-react'
+import { ComponentProps } from 'react'
 import { useController, useFormContext } from 'react-hook-form'
 
-import AnimateFieldset from '@/components/auth/AnimateFieldset'
+import { AnimateFieldset } from '@/components/auth/form'
+import { Label, RadioGroup, RadioGroupItem } from '@/components/ui'
 import { GENDER_LIST, GENDER_MAP } from '@/constants/member'
-import { cn } from '@/lib/common'
 import { SignupFormValues } from '@/types/auth'
 
-interface Props {
-  className?: string
-}
+type Props = ComponentProps<typeof AnimateFieldset>
 
-export default function GenderFieldset({ className }: Props) {
+export default function GenderFieldset(props: Props) {
   const { control } = useFormContext<SignupFormValues>()
 
   const {
@@ -21,47 +20,23 @@ export default function GenderFieldset({ className }: Props) {
   } = useController({ name: 'gender', control })
 
   return (
-    <AnimateFieldset className={className}>
+    <AnimateFieldset {...props}>
       <div className="space-y-2 w-full">
-        <legend className="text-base font-medium">성별</legend>
-        <div className="flex items-center justify-around space-y-1 py-3 w-full">
+        <Label asChild>
+          <legend>성별</legend>
+        </Label>
+        <RadioGroup
+          className="flex items-center gap-14 px-4"
+          ref={ref}
+          onValueChange={field.onChange}
+        >
           {GENDER_LIST.map((gender) => (
-            <label
-              key={gender}
-              className={cn(
-                'flex items-center gap-3 cursor-pointer',
-                'px-4 rounded-xl transition-colors',
-              )}
-            >
-              <span
-                className={cn(
-                  'text-base font-semibold',
-                  field.value === gender ? 'text-text-base' : 'text-text-input',
-                )}
-              >
-                {GENDER_MAP[gender]}
-              </span>
-              <input
-                type="radio"
-                value={gender}
-                checked={field.value === gender}
-                onChange={(e) => field.onChange(e.target.value)}
-                name={field.name}
-                ref={ref}
-                className="sr-only"
-              />
-              <span
-                className={cn(
-                  'size-6 rounded-full border flex items-center justify-center border-text-input',
-                )}
-              >
-                {field.value === gender && (
-                  <span className="size-3 rounded-full bg-main" />
-                )}
-              </span>
-            </label>
+            <div className="flex items-center gap-3" key={`gender-${gender}`}>
+              <Label htmlFor={`gender-${gender}`}>{GENDER_MAP[gender]}</Label>
+              <RadioGroupItem id={`gender-${gender}`} value={gender} />
+            </div>
           ))}
-        </div>
+        </RadioGroup>
         <p className="h-6 flex text-xs text-danger items-center gap-1 px-4">
           {error && <CircleAlert className="size-4" />}
           {error?.message}

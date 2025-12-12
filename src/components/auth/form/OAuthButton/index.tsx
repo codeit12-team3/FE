@@ -39,7 +39,7 @@ interface Props
   size?: 'sm' | 'md' | 'lg'
 }
 
-export const OAuthButton = forwardRef<HTMLButtonElement, Props>(
+const OAuthButton = forwardRef<HTMLButtonElement, Props>(
   ({ className, provider, size = 'md', children, ...props }, ref) => {
     const Icon = PROVIDER_ICON[provider]
 
@@ -57,3 +57,5 @@ export const OAuthButton = forwardRef<HTMLButtonElement, Props>(
   },
 )
 OAuthButton.displayName = 'OAuthButton'
+
+export default OAuthButton

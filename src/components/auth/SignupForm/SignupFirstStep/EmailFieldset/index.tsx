@@ -1,18 +1,25 @@
+'use client'
+
 import { Loader } from 'lucide-react'
-import { useMemo } from 'react'
+import { ComponentProps, useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import AnimateFieldset from '@/components/auth/AnimateFieldset'
-import FormInput from '@/components/auth/FormInput'
-import { Button } from '@/components/common'
+import { AnimateFieldset } from '@/components/auth/form'
+import { FormInput } from '@/components/form'
+import { Button } from '@/components/ui'
 import { useEmailVerification } from '@/hooks/auth'
+import { cn } from '@/lib/common'
 import { SignupFormValues } from '@/types/auth'
 
-interface Props {
+interface Props extends ComponentProps<typeof AnimateFieldset> {
   verification: ReturnType<typeof useEmailVerification>
 }
 
-export default function EmailFieldset({ verification }: Props) {
+export default function EmailFieldset({
+  verification,
+  className,
+  ...props
+}: Props) {
   const {
     isSending,
     isChecking,
@@ -22,6 +29,7 @@ export default function EmailFieldset({ verification }: Props) {
     sendEmailCode,
     checkEmailCode,
   } = verification
+
   const {
     control,
     trigger,
@@ -30,9 +38,9 @@ export default function EmailFieldset({ verification }: Props) {
 
   const [email, emailCode] = useWatch({ control, name: ['email', 'emailCode'] })
 
-  const isSendEmailCodeDisabled = isSending || !email || !!errors.email
+  const isSendEmailCodeDisabled = !email || !!errors.email
   const isCheckEmailCodeDisabled =
-    isChecking || timer === 0 || !emailCode || !!errors.emailCode
+    timer === 0 || !emailCode || !!errors.emailCode
 
   // 1. 인증코드 발송 요청 핸들러
   const handleSendEmailCode = async () => {
@@ -70,7 +78,11 @@ export default function EmailFieldset({ verification }: Props) {
   }, [isChecked])
 
   return (
-    <AnimateFieldset disabled={isChecked} className="group">
+    <AnimateFieldset
+      disabled={isChecked || isChecking || isSending}
+      className={cn('group', className)}
+      {...props}
+    >
       <legend className="sr-only">이메일 입력 및 인증</legend>
       <FormInput
         className="w-full"
@@ -93,8 +105,8 @@ export default function EmailFieldset({ verification }: Props) {
             )}
           </Button>
         }
-        disabled={isChecking}
         autoComplete="username"
+        required
       />
       <FormInput
         className="w-full"
@@ -117,8 +129,9 @@ export default function EmailFieldset({ verification }: Props) {
           </Button>
         }
         rightContent={formattedTimer}
-        disabled={isChecking}
         autoComplete="one-time-code"
+        disabled={timer === 0}
+        required
       />
     </AnimateFieldset>
   )
