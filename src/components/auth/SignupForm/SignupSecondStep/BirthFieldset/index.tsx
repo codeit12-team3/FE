@@ -5,7 +5,7 @@ import { ComponentProps, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { UnitSelect } from '@/components/form'
+import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui'
 import { SignupFormValues } from '@/types/auth'
 
@@ -39,7 +39,7 @@ export default function BirthFieldset(props: Props) {
         <div className="space-y-1 w-full">
           <div className="flex items-center gap-3 space-y-1 w-full">
             {/* 년 */}
-            <UnitSelect
+            <FormSelect
               name="year"
               options={yearOptions}
               placeholder="년"
@@ -48,7 +48,7 @@ export default function BirthFieldset(props: Props) {
             />
 
             {/* 월 */}
-            <UnitSelect
+            <FormSelect
               name="month"
               options={monthOptions}
               placeholder="월"
@@ -57,7 +57,7 @@ export default function BirthFieldset(props: Props) {
             />
 
             {/* 일 */}
-            <UnitSelect
+            <FormSelect
               name="day"
               options={dayOptions}
               placeholder="일"

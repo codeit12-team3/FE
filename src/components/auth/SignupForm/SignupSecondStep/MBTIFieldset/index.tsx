@@ -5,7 +5,7 @@ import { ComponentProps } from 'react'
 import { useController, useFormContext } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { UnitSelect } from '@/components/form'
+import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui'
 import { MBTI_LIST } from '@/constants/member'
 import { SignupFormValues } from '@/types/auth'
@@ -26,7 +26,7 @@ export default function MBTIFieldset(props: Props) {
       <div className="space-y-2 w-full">
         <Label htmlFor={'mbti'}>MBTI</Label>
         <div className="space-y-1 w-full">
-          <UnitSelect
+          <FormSelect
             className="w-full"
             name={field.name}
             options={MBTI_LIST}
