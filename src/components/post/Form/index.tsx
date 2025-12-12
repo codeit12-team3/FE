@@ -1,8 +1,10 @@
 'use client'
 
+import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
 
+import { createPost } from '@/api/posts'
 import { Button } from '@/components/common'
 import { AgeType, GenderType } from '@/types/posts'
 
@@ -28,7 +30,15 @@ export default function PostForm() {
   })
 
   const router = useRouter()
-
+  const mutation = useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      alert('게시글이 등록되었습니다.')
+    },
+    onError: () => {
+      alert('게시글 등록 실패')
+    },
+  })
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -40,6 +50,7 @@ export default function PostForm() {
     const payload = {
       title: form.title,
       content: form.description,
+      nation: form.nation,
       region: form.region,
       startDate: form.startDate.toISOString().split('T')[0],
       endDate: form.endDate.toISOString().split('T')[0],
@@ -49,6 +60,7 @@ export default function PostForm() {
       genderType: form.gender as GenderType,
       ageType: form.age as AgeType,
     }
+    mutation.mutate(payload)
   }
 
   return (

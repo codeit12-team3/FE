@@ -1,6 +1,7 @@
 import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
+import { PostListItem } from '@/types/posts'
 
 export const postsHandlers = [
   http.get(`${MOCK_URL}/v1/posts`, async ({ request }) => {
@@ -8,11 +9,33 @@ export const postsHandlers = [
 
     const url = new URL(request.url)
 
-    const lastPostId = url.searchParams.get('lastPostId')
+    const lastItemId = url.searchParams.get('lastItemId')
     const size = Number(url.searchParams.get('size') || 20)
     const age = url.searchParams.get('age')
     const ageType = url.searchParams.get('ageType')
-
+    const mockData: PostListItem[] = Array.from({ length: size }).map(
+      (_, idx) => ({
+        postId: lastItemId ? Number(lastItemId) + idx + 1 : idx + 1,
+        title: `Mock title ${idx + 1}`,
+        nation: '한국',
+        region: '서울',
+        period: {
+          startDate: '2025-01-01',
+          endDate: '2025-01-02',
+        },
+        recruitStatus: 'RECRUITING',
+        tags: ['힐링', '여행'],
+        nickname: 'mockUser',
+        currentMembers: 1,
+        maxMembers: 3,
+        conditions: {
+          ageType: '20대',
+          genderCondition: '모두',
+        },
+        isBookmarked: false,
+        thumbnail: '/mock.png',
+      }),
+    )
     if ((age && !ageType) || (!age && ageType)) {
       return HttpResponse.json(
         {
@@ -30,11 +53,6 @@ export const postsHandlers = [
         },
       )
     }
-
-    const mockData = Array.from({ length: size }).map((_, idx) => ({
-      postId: lastPostId ? Number(lastPostId) + idx + 1 : idx + 1,
-      title: `Mock title ${idx + 1}`,
-    }))
 
     return HttpResponse.json({
       success: true,
@@ -72,12 +90,17 @@ export const postsHandlers = [
         },
       )
     }
-    return HttpResponse.json({
-      success: true,
-      status: 201,
-      data: null,
-      timestamp: '2025-12-02',
-    })
+    return HttpResponse.json(
+      {
+        success: true,
+        status: 201,
+        data: null,
+        timestamp: '2025-12-02',
+      },
+      {
+        status: 201,
+      },
+    )
   }),
   http.get(`${MOCK_URL}/v1/posts/:postId`, async ({ params }) => {
     await delay(2000)

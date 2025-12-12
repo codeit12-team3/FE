@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 import { ApiResponse } from '@/types/common'
 import {
@@ -23,10 +23,14 @@ interface UpdateArgs {
   payload: PostCreatePayload
 }
 
-export const usePosts = (params: PostParams) => {
+export const usePosts = (
+  params: PostParams,
+  options?: UseQueryOptions<ApiResponse<FetchPostsResponse>>,
+) => {
   return useQuery<ApiResponse<FetchPostsResponse>>({
     queryKey: ['posts', params],
     queryFn: () => fetchPosts(params),
+    ...options,
   })
 }
 
