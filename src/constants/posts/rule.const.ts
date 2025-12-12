@@ -14,7 +14,7 @@ export const REGION_OPTIONS = [
 export const AGE_OPTIONS = [
   { value: 'TWENTY', label: '20대' },
   { value: 'THIRTY', label: '30대' },
-  { value: 'FORTY', label: '40대' },
+  { value: 'FOURTY', label: '40대' },
   { value: 'FIFTY', label: '50대' },
   { value: 'ETC', label: '모두' },
 ] as const

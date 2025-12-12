@@ -34,8 +34,8 @@ export default function PostForm() {
       member: 0,
       ageType: undefined,
       gender: undefined,
-      startDate: undefined,
-      endDate: undefined,
+      startDate: '',
+      endDate: '',
       tags: [],
       images: [],
       tag: '',
@@ -43,18 +43,15 @@ export default function PostForm() {
   })
 
   const { formState } = methods
-  const toLocalISOString19 = (date: Date) => {
-    const offset = date.getTimezoneOffset() * 60000
-    return new Date(date.getTime() - offset).toISOString().slice(0, 19)
-  }
+
   const onSubmit = (data: PostFormWithTagValues) => {
     const payload = {
       title: data.title,
       content: data.description,
       nation: data.nation,
       region: data.region,
-      startDate: toLocalISOString19(data.startDate),
-      endDate: toLocalISOString19(data.endDate),
+      startDate: data.startDate,
+      endDate: data.endDate,
       maxMembers: Number(data.member),
       tags: data.tags,
       images: data.images ?? [],
