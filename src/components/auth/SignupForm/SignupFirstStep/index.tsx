@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/ui'
@@ -28,12 +29,21 @@ export default function SignupFirstStep({ emailVerification, onNext }: Props) {
     name: ['password', 'passwordConfirm'],
   })
 
-  const isValid =
-    isChecked &&
-    !errors.password &&
-    !errors.passwordConfirm &&
-    !!password &&
-    !!passwordConfirm
+  const isValid = useMemo(() => {
+    return (
+      isChecked &&
+      !errors.password &&
+      !errors.passwordConfirm &&
+      !!password &&
+      !!passwordConfirm
+    )
+  }, [
+    isChecked,
+    errors.password,
+    errors.passwordConfirm,
+    password,
+    passwordConfirm,
+  ])
 
   const handleNextClick = async () => {
     const isValid = await trigger([
