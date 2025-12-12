@@ -1,6 +1,6 @@
 'use client'
 
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import {
   FieldValues,
   Path,
@@ -17,9 +17,11 @@ import {
   SelectValue,
 } from '@/components/ui'
 
+type Option = string | { label: string; value: string }
+
 interface Props<T extends FieldValues> {
   name: Path<T>
-  options: readonly string[]
+  options: readonly Option[]
   placeholder?: string
   className?: string
   suffix?: string
@@ -39,6 +41,16 @@ const UnitSelect = memo(
       fieldState: { error },
     } = useController({ name, control })
 
+    const normalizedOptions = useMemo(
+      () =>
+        options.map((option) =>
+          typeof option === 'string'
+            ? { label: option, value: option }
+            : option,
+        ),
+      [options],
+    )
+
     return (
       <Select value={field.value || ''} onValueChange={field.onChange}>
         <SelectTrigger ref={ref} className={className} aria-invalid={!!error}>
@@ -46,9 +58,9 @@ const UnitSelect = memo(
         </SelectTrigger>
         <SelectContent className="max-h-60">
           <SelectGroup>
-            {options.map((option) => (
-              <SelectItem key={`${name}-${option}`} value={option}>
-                {option}
+            {normalizedOptions.map(({ label, value }) => (
+              <SelectItem key={`${name}-${value}`} value={value}>
+                {label}
                 {suffix}
               </SelectItem>
             ))}
