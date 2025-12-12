@@ -1,20 +1,22 @@
+'use client'
+
 import { Search } from 'lucide-react'
+import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/common/Input'
-import { useMemberStore } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function PreferenceInfo() {
-  const { profile, updateProfile } = useMemberStore()
+  const { register } = useFormContext<ProfileEditFormData>()
+
   return (
     <div className="flex mt-6 gap-6">
       <div className="relative">
         <label className="block font-medium">
           숙소 취향
           <Input
-            name="accommodation"
+            {...register('accommodation')}
             type="text"
-            value={profile?.accommodation ?? ''}
-            onChange={(e) => updateProfile({ accommodation: e.target.value })}
             placeholder="숙소 취향을 입력해주세요"
             className="h-11 w-66 bg-[#EDF4FB] mt-3 pr-10"
           />
@@ -27,10 +29,8 @@ export default function PreferenceInfo() {
         <label className="block font-medium">
           여행 스타일
           <Input
-            name="travelStyle"
+            {...register('travelStyle')}
             type="text"
-            value={profile?.travelStyle ?? ''}
-            onChange={(e) => updateProfile({ travelStyle: e.target.value })}
             placeholder="여행 스타일을 입력해주세요"
             className="h-11 w-66 bg-[#EDF4FB] mt-3 pr-10"
           />
