@@ -4,7 +4,8 @@ import { CircleAlert } from 'lucide-react'
 import { ComponentProps, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { AnimateFieldset, UnitSelect } from '@/components/auth/form'
+import { AnimateFieldset } from '@/components/auth/form'
+import { UnitSelect } from '@/components/common'
 import { Label } from '@/components/ui'
 import { SignupFormValues } from '@/types/auth'
 

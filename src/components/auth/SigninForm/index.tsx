@@ -7,10 +7,11 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useSigninEmail } from '@/api/auth'
+import { FormInput } from '@/components/common'
 import { Button } from '@/components/ui'
 import { SigninFormValues, signinSchema } from '@/types/auth'
 
-import { AnimateFieldset, FormInput } from '../form'
+import { AnimateFieldset } from '../form'
 
 export default function SigninForm() {
   const router = useRouter()
