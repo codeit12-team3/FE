@@ -1,3 +1,3 @@
 export { default as FormInput } from './FormInput'
 export { default as PasswordInput } from './PasswordInput'
-export { default as UnitSelect } from './UnitSelect'
+export { default as FormSelect } from './FormSelect'

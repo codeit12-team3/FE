@@ -27,7 +27,7 @@ interface Props<T extends FieldValues> {
   suffix?: string
 }
 
-const UnitSelect = memo(
+const FormSelect = memo(
   <T extends FieldValues>({
     name,
     options,
@@ -70,6 +70,6 @@ const UnitSelect = memo(
     )
   },
 )
-UnitSelect.displayName = 'UnitSelect'
+FormSelect.displayName = 'FormSelect'
 
-export default UnitSelect
+export default FormSelect
