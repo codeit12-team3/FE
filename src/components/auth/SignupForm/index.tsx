@@ -1,11 +1,17 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import { useSignupEmail } from '@/api/auth'
-import { useEmailVerification, useFormStep } from '@/hooks/auth'
+import { useSigninEmail, useSignupEmail } from '@/api/auth'
+import {
+  useEmailVerification,
+  useFormStep,
+  useNicknameVerification,
+} from '@/hooks/auth'
 import { SignupEmailReq, SignupFormValues, signupSchema } from '@/types/auth'
 
 import SignupFirstStep from './SignupFirstStep'
@@ -14,8 +20,11 @@ import SignupSecondStep from './SignupSecondStep'
 export default function SignupForm() {
   const router = useRouter()
   const { step, next, prev } = useFormStep({ maxStep: 2 })
-  const { mutate } = useSignupEmail()
-  const verification = useEmailVerification()
+  const { mutate: signupMutate, isPending: isSignup } = useSignupEmail()
+  const { mutate: signinMutate, isPending: isSignin } = useSigninEmail()
+  const emailVerification = useEmailVerification()
+  const nicknameVerification = useNicknameVerification()
+
   const methods = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
@@ -34,7 +43,7 @@ export default function SignupForm() {
   })
 
   const onSubmit = (data: SignupFormValues) => {
-    if (!verification.isChecked) return
+    if (!emailVerification.isChecked || !nicknameVerification.isChecked) return
 
     const formattedData: SignupEmailReq = {
       email: data.email,
@@ -45,31 +54,42 @@ export default function SignupForm() {
       mbti: data.mbti!,
     }
 
-    // mutate(formattedData, {
-    //   onSuccess: () => {
-    //     // TODO: NextAuth 인증 로직 구현 후 완성
-    //     // 1. 성공시
-    //     // 1-1. NextAuth signIn 호출
-    //     // 1-2. 메인 페이지로 이동
-    //     // 2. 실패시
-    //     // 2-1. toast 에러 메시지
-    //     // 2-2. 로그인 페이지로 이동
-    //   },
-    // })
+    signupMutate(formattedData, {
+      onSuccess: () => {
+        toast.success('회원가입 완료')
 
-    console.log(formattedData)
-
-    router.push('/signin')
+        signinMutate(
+          {
+            email: data.email,
+            password: data.password,
+          },
+          {
+            onSuccess: () => {
+              toast.success('로그인 되었습니다')
+              router.replace('/')
+            },
+          },
+        )
+      },
+    })
   }
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         {step === 1 && (
-          <SignupFirstStep verification={verification} onNext={next} />
+          <SignupFirstStep
+            emailVerification={emailVerification}
+            onNext={next}
+          />
         )}
         {step === 2 && (
-          <SignupSecondStep onPrev={prev} verification={verification} />
+          <SignupSecondStep
+            onPrev={prev}
+            emailVerification={emailVerification}
+            nicknameVerification={nicknameVerification}
+            isPending={isSignup || isSignin}
+          />
         )}
       </form>
     </FormProvider>
