@@ -3,7 +3,7 @@
 import { ComponentProps } from 'react'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { FormInput } from '@/components/common'
+import { FormInput } from '@/components/form'
 
 type Props = ComponentProps<typeof AnimateFieldset>
 

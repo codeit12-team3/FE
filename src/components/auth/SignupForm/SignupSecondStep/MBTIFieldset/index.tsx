@@ -5,7 +5,7 @@ import { ComponentProps } from 'react'
 import { useController, useFormContext } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { UnitSelect } from '@/components/common'
+import { UnitSelect } from '@/components/form'
 import { Label } from '@/components/ui'
 import { MBTI_LIST } from '@/constants/member'
 import { SignupFormValues } from '@/types/auth'

@@ -5,7 +5,7 @@ import { ComponentProps, useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { FormInput } from '@/components/common'
+import { FormInput } from '@/components/form'
 import { Button } from '@/components/ui'
 import { useEmailVerification } from '@/hooks/auth'
 import { cn } from '@/lib/common'

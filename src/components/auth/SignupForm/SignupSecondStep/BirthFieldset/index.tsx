@@ -5,7 +5,7 @@ import { ComponentProps, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
-import { UnitSelect } from '@/components/common'
+import { UnitSelect } from '@/components/form'
 import { Label } from '@/components/ui'
 import { SignupFormValues } from '@/types/auth'
 

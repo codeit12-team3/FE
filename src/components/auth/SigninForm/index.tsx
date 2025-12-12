@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useSigninEmail } from '@/api/auth'
-import { FormInput } from '@/components/common'
+import { FormInput } from '@/components/form'
 import { Button } from '@/components/ui'
 import { SigninFormValues, signinSchema } from '@/types/auth'
 
