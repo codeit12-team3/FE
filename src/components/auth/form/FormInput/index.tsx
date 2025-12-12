@@ -10,7 +10,7 @@ import {
 import { Label } from '@/components/ui'
 import { cn } from '@/lib/common'
 
-import PasswordInput from './PasswordInput'
+import PasswordInput from '../PasswordInput'
 
 interface Props<T extends FieldValues>
   extends Omit<ComponentProps<'input'>, 'name'> {
