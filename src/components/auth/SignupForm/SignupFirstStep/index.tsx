@@ -1,28 +1,39 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
-import { Button } from '@/components/common'
+import { Button } from '@/components/ui'
 import { useEmailVerification } from '@/hooks/auth'
 
 import EmailFieldset from './EmailFieldset'
 import PasswordFieldset from './PasswordFieldset'
 
 interface Props {
-  verification: ReturnType<typeof useEmailVerification>
+  emailVerification: ReturnType<typeof useEmailVerification>
   onNext: () => void
 }
 
-export default function SignupFirstStep({ verification, onNext }: Props) {
+export default function SignupFirstStep({ emailVerification, onNext }: Props) {
   const {
     trigger,
+    control,
     formState: { errors },
   } = useFormContext()
   const router = useRouter()
-  const { isChecked } = verification
+  const { isChecked } = emailVerification
 
-  const isValid = isChecked && !errors.password && !errors.passwordConfirm
+  const [password, passwordConfirm] = useWatch({
+    control,
+    name: ['password', 'passwordConfirm'],
+  })
+
+  const isValid =
+    isChecked &&
+    !errors.password &&
+    !errors.passwordConfirm &&
+    !!password &&
+    !!passwordConfirm
 
   const handleNextClick = async () => {
     const isValid = await trigger([
@@ -40,14 +51,14 @@ export default function SignupFirstStep({ verification, onNext }: Props) {
   return (
     <div className="space-y-[11px]">
       <section>
-        <EmailFieldset verification={verification} />
-        <PasswordFieldset />
+        <EmailFieldset idx={0} verification={emailVerification} />
+        <PasswordFieldset idx={1} />
       </section>
 
       <div className="flex items-center justify-between gap-4">
         <Button
           type="button"
-          variant={'secondary'}
+          variant={'outline'}
           className="flex-1"
           size={'lg'}
           onClick={() => router.back()}
