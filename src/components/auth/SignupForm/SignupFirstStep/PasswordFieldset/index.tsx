@@ -1,9 +1,14 @@
-import AnimateFieldset from '@/components/auth/AnimateFieldset'
-import FormInput from '@/components/auth/FormInput'
+'use client'
 
-export default function PasswordFieldset() {
+import { ComponentProps } from 'react'
+
+import { AnimateFieldset, FormInput } from '@/components/auth/form'
+
+type Props = ComponentProps<typeof AnimateFieldset>
+
+export default function PasswordFieldset(props: Props) {
   return (
-    <AnimateFieldset>
+    <AnimateFieldset {...props}>
       <legend className="sr-only">비밀번호 입력 및 확인</legend>
       <FormInput
         label="비밀번호"
@@ -11,6 +16,7 @@ export default function PasswordFieldset() {
         name="password"
         placeholder="비밀번호를 입력해주세요"
         autoComplete="new-password"
+        required
       />
       <FormInput
         label="비밀번호 확인"
@@ -18,6 +24,7 @@ export default function PasswordFieldset() {
         name="passwordConfirm"
         placeholder="비밀번호를 입력해주세요"
         autoComplete="new-password"
+        required
       />
     </AnimateFieldset>
   )
