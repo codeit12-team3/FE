@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
-import { OAuthButton, SigninForm } from '@/components/auth'
+import { SigninForm } from '@/components/auth'
+import { OAuthButton } from '@/components/auth/form'
 
 export default function Page() {
   return (
