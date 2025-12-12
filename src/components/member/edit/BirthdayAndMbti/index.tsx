@@ -1,12 +1,17 @@
 'use client'
 
+import { useFormContext } from 'react-hook-form'
+
 import { Input } from '@/components/common/Input'
-import { useMemberStore } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 import BirthdaySelect from '../BirthdaySelect'
 
 export default function BirthdayAndMbti() {
-  const { profile, updateProfile } = useMemberStore()
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<ProfileEditFormData>()
 
   return (
     <div className="flex mt-6">
@@ -15,14 +20,15 @@ export default function BirthdayAndMbti() {
           생일 <span className="text-danger">*</span>
         </label>
         <BirthdaySelect />
+        {errors.birth && (
+          <p className="text-danger text-sm mt-1">{errors.birth.message}</p>
+        )}
       </div>
       <div>
         <label className="block">MBTI</label>
         <Input
-          name="mbti"
+          {...register('mbti')}
           type="text"
-          value={profile?.mbti ?? ''}
-          onChange={(e) => updateProfile({ mbti: e.target.value })}
           placeholder="MBTI"
           className="h-11 bg-[#EDF4FB] w-42 mt-3"
         />
