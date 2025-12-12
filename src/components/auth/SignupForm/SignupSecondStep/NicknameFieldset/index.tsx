@@ -1,36 +1,50 @@
 'use client'
 
 import { Loader } from 'lucide-react'
-import { useState } from 'react'
+import { ComponentProps } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
-import { useCheckNickname } from '@/api/member'
-import AnimateFieldset from '@/components/auth/AnimateFieldset'
-import FormInput from '@/components/auth/FormInput'
-import { Button } from '@/components/common'
+import { AnimateFieldset } from '@/components/auth/form'
+import { FormInput } from '@/components/form'
+import { Button } from '@/components/ui'
+import { useNicknameVerification } from '@/hooks/auth'
+import { cn } from '@/lib/common'
 import { SignupFormValues } from '@/types/auth'
 
-export default function NicknameFieldset() {
+interface Props extends ComponentProps<typeof AnimateFieldset> {
+  verification: ReturnType<typeof useNicknameVerification>
+}
+
+export default function NicknameFieldset({
+  className,
+  verification,
+  ...props
+}: Props) {
   const {
     control,
+    trigger,
     formState: { errors },
   } = useFormContext<SignupFormValues>()
   const nickname = useWatch({ control, name: 'nickname' })
-  const { mutate, isPending: isChecking } = useCheckNickname()
-  const [isChecked, setIsChecked] = useState(false)
 
-  const checkNickname = () => {
-    mutate(nickname, {
-      onSuccess: () => {
-        setIsChecked(true)
-        toast.success('사용 가능한 닉네임입니다')
-      },
+  const { isChecked, isChecking, checkNickname } = verification
+
+  const handleCheckNickname = async () => {
+    const isValid = await trigger('nickname', {
+      shouldFocus: true,
     })
+
+    if (isValid && !isChecking) {
+      checkNickname(nickname)
+    }
   }
 
   return (
-    <AnimateFieldset disabled={isChecked} className="group">
+    <AnimateFieldset
+      disabled={isChecked || isChecking}
+      className={cn('group', className)}
+      {...props}
+    >
       <legend className="sr-only">닉네임 입력 및 검증</legend>
       <FormInput
         className="w-full"
@@ -43,8 +57,8 @@ export default function NicknameFieldset() {
             className="w-[158px]"
             type="button"
             size={'md'}
-            disabled={isChecking || !nickname || !!errors.nickname}
-            onClick={checkNickname}
+            disabled={!nickname || !!errors.nickname}
+            onClick={handleCheckNickname}
           >
             {isChecking ? (
               <Loader className="size-6 animate-spin" />
@@ -55,7 +69,6 @@ export default function NicknameFieldset() {
             )}
           </Button>
         }
-        disabled={isChecking}
       />
     </AnimateFieldset>
   )

@@ -7,11 +7,11 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useSigninEmail } from '@/api/auth'
-import { Button } from '@/components/common'
+import { FormInput } from '@/components/form'
+import { Button } from '@/components/ui'
 import { SigninFormValues, signinSchema } from '@/types/auth'
 
-import AnimateFieldset from '../AnimateFieldset'
-import FormInput from '../FormInput'
+import { AnimateFieldset } from '../form'
 
 export default function SigninForm() {
   const router = useRouter()
@@ -53,6 +53,8 @@ export default function SigninForm() {
               placeholder="이메일을 입력해주세요"
               autoComplete="username"
             />
+          </AnimateFieldset>
+          <AnimateFieldset>
             <FormInput
               name="password"
               type="password"

@@ -3,9 +3,8 @@
 import { Loader } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 
-import { useSignupEmail } from '@/api/auth'
-import { Button } from '@/components/common'
-import { useEmailVerification } from '@/hooks/auth'
+import { Button } from '@/components/ui'
+import { useEmailVerification, useNicknameVerification } from '@/hooks/auth'
 import { SignupFormValues } from '@/types/auth'
 
 import BirthFieldset from './BirthFieldset'
@@ -15,28 +14,34 @@ import NicknameFieldset from './NicknameFieldset'
 
 interface Props {
   onPrev: () => void
-  verification: ReturnType<typeof useEmailVerification>
+  emailVerification: ReturnType<typeof useEmailVerification>
+  nicknameVerification: ReturnType<typeof useNicknameVerification>
+  isPending?: boolean
 }
 
-export default function SignupSecondStep({ onPrev, verification }: Props) {
+export default function SignupSecondStep({
+  onPrev,
+  emailVerification,
+  nicknameVerification,
+  isPending,
+}: Props) {
   const { formState } = useFormContext<SignupFormValues>()
-  const { isPending } = useSignupEmail()
-  const { isChecked } = verification
+  const { isChecked: isEmailChecked } = emailVerification
+  const { isChecked: isNicknameChecked } = nicknameVerification
+
   return (
     <div className="space-y-[11px]">
       <section>
-        <NicknameFieldset />
-        <BirthFieldset />
-        <div className="md:flex items-center gap-6">
-          <MBTIFieldset className="flex-1" />
-          <GenderFieldset className="flex-1" />
-        </div>
+        <NicknameFieldset verification={nicknameVerification} idx={0} />
+        <BirthFieldset idx={1} />
+        <MBTIFieldset idx={2} className="flex-1" />
+        <GenderFieldset idx={3} className="flex-1" />
       </section>
 
       <div className="flex items-center justify-between gap-4">
         <Button
           type="button"
-          variant={'secondary'}
+          variant={'outline'}
           className="flex-1"
           size={'lg'}
           onClick={onPrev}
@@ -44,12 +49,17 @@ export default function SignupSecondStep({ onPrev, verification }: Props) {
           뒤로가기
         </Button>
         <Button
-          disabled={!formState.isValid || !isChecked || isPending}
+          disabled={
+            isPending ||
+            !isEmailChecked ||
+            !isNicknameChecked ||
+            !formState.isValid
+          }
           className="flex-1"
           type="submit"
           size={'lg'}
         >
-          {isPending ? <Loader className="size-7" /> : '회원가입'}
+          {isPending ? <Loader className="size-7 animate-spin" /> : '회원가입'}
         </Button>
       </div>
     </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import { CircleAlert } from 'lucide-react'
 import { ComponentProps } from 'react'
 import {
@@ -7,8 +9,10 @@ import {
   useFormContext,
 } from 'react-hook-form'
 
-import { Input, Label } from '@/components/common'
+import { Label } from '@/components/ui'
 import { cn } from '@/lib/common'
+
+import PasswordInput from '../PasswordInput'
 
 interface Props<T extends FieldValues>
   extends Omit<ComponentProps<'input'>, 'name'> {
@@ -24,6 +28,7 @@ export default function FormInput<T extends FieldValues>({
   className,
   rightElement,
   rightContent,
+  required,
   ...props
 }: Props<T>) {
   const { control } = useFormContext<T>()
@@ -37,12 +42,16 @@ export default function FormInput<T extends FieldValues>({
 
   return (
     <div className={cn('space-y-2 w-full', className)}>
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name} className="gap-1">
+        {label}
+        {required && <span className="text-destructive">*</span>}
+      </Label>
       <div className="space-y-1 w-full">
         <div className="flex items-center gap-2 w-full">
-          <Input
+          <PasswordInput
             aria-invalid={isError ? 'true' : 'false'}
             id={name}
+            required={required}
             {...field}
             {...props}
           />

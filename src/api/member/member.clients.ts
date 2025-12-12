@@ -8,7 +8,7 @@ import { axios } from '../common'
  * @param 닉네임
  */
 export const checkNickname = async (nickname: string) => {
-  return await axios.post('/member/nickname/check', {
+  return await axios.post('/v1/member/nickname/check', {
     nickname,
   })
 }
