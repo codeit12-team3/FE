@@ -3,11 +3,15 @@
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/common'
 import { Label } from '@/components/ui'
+import type { PostFormValues } from '@/types/posts/schema'
 
 export default function ImageUpload() {
+  const { setValue } = useFormContext<PostFormValues>()
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
 
@@ -25,7 +29,10 @@ export default function ImageUpload() {
       }
     })
 
-    setPreviews((prev) => [...prev, ...newUrls])
+    const next = [...previews, ...newUrls]
+    setPreviews(next)
+
+    setValue('images', next, { shouldValidate: true, shouldDirty: true })
 
     e.target.value = ''
   }
@@ -35,6 +42,8 @@ export default function ImageUpload() {
     URL.revokeObjectURL(next[idx])
     next.splice(idx, 1)
     setPreviews(next)
+
+    setValue('images', next, { shouldValidate: true, shouldDirty: true })
   }
 
   useEffect(() => {
@@ -52,7 +61,7 @@ export default function ImageUpload() {
       <div className="flex gap-2">
         <div
           onClick={openPicker}
-          className="flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm  cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm cursor-pointer"
         >
           {previews.length === 0 ? (
             <span className="text-muted-foreground font-medium text-base">
@@ -70,13 +79,14 @@ export default function ImageUpload() {
                     className="rounded-md object-cover"
                   />
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeImage(idx)
                     }}
                     className="absolute -top-1 -right-1 bg-black/50 text-white size-4 text-xs rounded-full flex items-center justify-center"
                   >
-                    <div className="border border-main rounded-full ">
+                    <div className="border border-main rounded-full">
                       <X className="size-3" />
                     </div>
                   </button>
@@ -86,7 +96,7 @@ export default function ImageUpload() {
           )}
         </div>
 
-        <Button onClick={openPicker} variant="secondary">
+        <Button type="button" onClick={openPicker} variant="secondary">
           파일 찾기
         </Button>
 

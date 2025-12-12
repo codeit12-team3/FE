@@ -1,66 +1,73 @@
 'use client'
 
-import { useMutation } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import type { Resolver } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import { createPost } from '@/api/posts'
+import { useCreatePost } from '@/api/posts'
 import { Button } from '@/components/common'
 import { AgeType, GenderType } from '@/types/posts'
+import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
-import Date from './Date'
+import DateSection from './Date'
 import Description from './Description'
 import Header from './Header'
 import ImageUpload from './ImageUpload'
 import Info from './Info'
 
 export default function PostForm() {
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    nation: '',
-    region: '',
-    member: '',
-    age: '' as AgeType | '',
-    gender: '' as GenderType | '',
-    startDate: null as Date | null,
-    endDate: null as Date | null,
-    tags: [] as string[],
-    images: [] as string[],
-  })
-
   const router = useRouter()
-  const mutation = useMutation({
-    mutationFn: createPost,
-    onSuccess: () => {
-      alert('게시글이 등록되었습니다.')
-    },
-    onError: () => {
-      alert('게시글 등록 실패')
+  const { mutate, isPending } = useCreatePost()
+  const resolver = zodResolver(
+    postSchema,
+  ) as unknown as Resolver<PostFormWithTagValues>
+  const methods = useForm<PostFormWithTagValues>({
+    resolver,
+    mode: 'onChange',
+    defaultValues: {
+      title: '',
+      description: '',
+      nation: '',
+      region: '',
+      member: 0,
+      ageType: undefined,
+      gender: undefined,
+      startDate: undefined,
+      endDate: undefined,
+      tags: [],
+      images: [],
+      tag: '',
     },
   })
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
 
-    if (!form.age || !form.gender || !form.startDate || !form.endDate) {
-      alert('모든 필드를 입력해주세요.')
-      return
-    }
-
+  const { formState } = methods
+  const toLocalISOString19 = (date: Date) => {
+    const offset = date.getTimezoneOffset() * 60000
+    return new Date(date.getTime() - offset).toISOString().slice(0, 19)
+  }
+  const onSubmit = (data: PostFormWithTagValues) => {
     const payload = {
-      title: form.title,
-      content: form.description,
-      nation: form.nation,
-      region: form.region,
-      startDate: form.startDate.toISOString().split('T')[0],
-      endDate: form.endDate.toISOString().split('T')[0],
-      maxMembers: parseInt(form.member) || 0,
-      tags: form.tags,
-      images: form.images,
-      genderType: form.gender as GenderType,
-      ageType: form.age as AgeType,
+      title: data.title,
+      content: data.description,
+      nation: data.nation,
+      region: data.region,
+      startDate: toLocalISOString19(data.startDate),
+      endDate: toLocalISOString19(data.endDate),
+      maxMembers: Number(data.member),
+      tags: data.tags,
+      images: data.images ?? [],
+      genderType: data.gender as GenderType,
+      ageType: data.ageType as AgeType,
     }
-    mutation.mutate(payload)
+
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success('게시글이 등록되었습니다.')
+        router.push('/')
+      },
+    })
   }
 
   return (
@@ -69,63 +76,33 @@ export default function PostForm() {
         <h1 className="text-2xl font-semibold mb-6 text-left">게시글 작성</h1>
       </div>
       <div className="max-w-7xl flex items-center justify-center">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <Header
-            title={form.title}
-            tags={form.tags}
-            onChangeTitle={(v) => setForm((prev) => ({ ...prev, title: v }))}
-            onChangeTags={(text) => {
-              const tags = text.map((t) => t.trim()).filter((t) => t !== '')
-              setForm((prev) => ({ ...prev, tags }))
-            }}
-          />
-          <ImageUpload />
-          <Info
-            nation={form.nation}
-            region={form.region}
-            member={form.member}
-            age={form.age}
-            gender={form.gender}
-            onChangeRegion={(v) => setForm((prev) => ({ ...prev, region: v }))}
-            onChangeNation={(v) => setForm((prev) => ({ ...prev, nation: v }))}
-            onChangeMember={(v) => setForm((prev) => ({ ...prev, member: v }))}
-            onChangeAge={(v) =>
-              setForm((prev) => ({ ...prev, age: v as AgeType }))
-            }
-            onChangeGender={(v) =>
-              setForm((prev) => ({ ...prev, gender: v as GenderType }))
-            }
-          />
-          <Date
-            startDate={form.startDate}
-            endDate={form.endDate}
-            onChangeStartDate={(v) =>
-              setForm((prev) => ({ ...prev, startDate: v }))
-            }
-            onChangeEndDate={(v) =>
-              setForm((prev) => ({ ...prev, endDate: v }))
-            }
-          />
-          <Description
-            description={form.description}
-            onChangeDescription={(v) =>
-              setForm((prev) => ({ ...prev, description: v }))
-            }
-          />
-          <div className="flex items-center gap-8 justify-center">
-            <Button
-              type="button"
-              size="md"
-              variant="secondary"
-              onClick={() => router.push('/')}
-            >
-              나가기
-            </Button>
-            <Button type="submit" size="md">
-              게시글 등록
-            </Button>
-          </div>
-        </form>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+            <Header />
+            <ImageUpload />
+            <Info />
+            <DateSection />
+            <Description />
+
+            <div className="flex items-center gap-8 justify-center">
+              <Button
+                type="button"
+                size="md"
+                variant="secondary"
+                onClick={() => router.push('/')}
+              >
+                나가기
+              </Button>
+              <Button
+                type="submit"
+                size="md"
+                disabled={!formState.isValid || isPending}
+              >
+                {isPending ? '등록 중...' : '게시글 등록'}
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   )

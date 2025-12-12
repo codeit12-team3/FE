@@ -1,5 +1,16 @@
-export type GenderType = 'MALE' | 'FEMALE' | 'ALL'
-export type AgeType = 'TWENTY' | 'THIRTY' | 'FOURTY' | 'FIFTY' | 'ETC'
+export enum AgeType {
+  TWENTY = 'TWENTY',
+  THIRTY = 'THIRTY',
+  FOURTY = 'FOURTY',
+  FIFTY = 'FIFTY',
+  ETC = 'ETC',
+}
+
+export enum GenderType {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  ALL = 'ALL',
+}
 
 export interface Period {
   startDate: string
