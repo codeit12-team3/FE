@@ -1,14 +1,20 @@
 'use client'
 
+import { useFormContext } from 'react-hook-form'
+
 import { Input } from '@/components/common/Input'
-import { useMemberStore } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 const MAX_BIO_LENGTH = 100
 
 export default function BioField() {
-  const { profile, updateProfile } = useMemberStore()
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<ProfileEditFormData>()
 
-  const bio = profile?.bio ?? ''
+  const bio = watch('bio') ?? ''
   const length = bio.length
 
   return (
@@ -26,15 +32,16 @@ export default function BioField() {
           /{MAX_BIO_LENGTH}
         </span>
         <Input
-          name="bio"
+          {...register('bio')}
           type="text"
-          value={bio}
-          onChange={(e) => updateProfile({ bio: e.target.value })}
-          placeholder={`자기소개를 입력해주세요 ${bio.length}/100`}
+          placeholder={`자기소개를 입력해주세요 ${length}/100`}
           className="h-11 bg-[#EDF4FB] mt-3"
           maxLength={MAX_BIO_LENGTH}
         />
       </label>
+      {errors.bio && (
+        <p className="text-danger text-sm mt-1">{errors.bio.message}</p>
+      )}
     </div>
   )
 }
