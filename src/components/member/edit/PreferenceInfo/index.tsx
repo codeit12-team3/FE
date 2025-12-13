@@ -3,7 +3,12 @@
 import { Search } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 
-import { Input } from '@/components/common/Input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group'
+import { Label } from '@/components/ui/label'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function PreferenceInfo() {
@@ -11,33 +16,36 @@ export default function PreferenceInfo() {
 
   return (
     <div className="flex mt-6 gap-6">
-      <div className="relative">
-        <label className="block font-medium">
-          숙소 취향
-          <Input
+      <div className="flex flex-col gap-3 flex-1">
+        <Label htmlFor="accommodation">숙소 취향</Label>
+        <InputGroup>
+          <InputGroupInput
+            id="accommodation"
             {...register('accommodation')}
             type="text"
             placeholder="숙소 취향을 입력해주세요"
-            className="h-11 w-66 bg-[#EDF4FB] mt-3 pr-10"
+            className="w-66"
           />
-        </label>
-        <div className="absolute bottom-3 right-2 cursor-pointer">
-          <Search className="w-5 h-5" />
-        </div>
+          <InputGroupAddon align="inline-end">
+            <Search className="w-5 h-5" />
+          </InputGroupAddon>
+        </InputGroup>
       </div>
-      <div className="relative">
-        <label className="block font-medium">
-          여행 스타일
-          <Input
+
+      <div className="flex flex-col gap-3 flex-1">
+        <Label htmlFor="travelStyle">여행 스타일</Label>
+        <InputGroup>
+          <InputGroupInput
+            id="travelStyle"
             {...register('travelStyle')}
             type="text"
             placeholder="여행 스타일을 입력해주세요"
-            className="h-11 w-66 bg-[#EDF4FB] mt-3 pr-10"
+            className="w-66"
           />
-        </label>
-        <div className="absolute bottom-3 right-2 cursor-pointer">
-          <Search className="w-5 h-5" />
-        </div>
+          <InputGroupAddon align="inline-end">
+            <Search className="w-5 h-5" />
+          </InputGroupAddon>
+        </InputGroup>
       </div>
     </div>
   )

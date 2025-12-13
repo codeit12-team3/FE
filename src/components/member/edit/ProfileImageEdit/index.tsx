@@ -18,7 +18,6 @@ export default function ProfileImageEdit() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
 
-  // 폼의 image 값이 변경되면 미리보기 업데이트
   useEffect(() => {
     if (imageValue && !imageValue.startsWith('blob:')) {
       setProfileImg(imageValue)
@@ -45,7 +44,7 @@ export default function ProfileImageEdit() {
       const result = await compress(file)
       setProfileImg(result.previewUrl)
 
-      // 폼프로바이더의 image 필드 업데이트할 예정
+      // 폼프로바이더값 업데이트할거
       setValue('image', result.previewUrl, { shouldDirty: true })
 
       // 백엔드에서 프리사인드 URL 나오면 S3 업로드 처리할 예정

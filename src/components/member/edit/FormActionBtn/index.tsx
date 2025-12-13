@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useUpdateMyProfile } from '@/api/member'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { UpdateMyProfileReq } from '@/types/member'
 import { ProfileEditFormData } from '@/types/member/schema'
 
@@ -54,7 +54,7 @@ export default function FormActionBtn() {
         type="button"
         variant="secondary"
         size="md"
-        className="w-[185px] text-lg font-extrabold cursor-pointer"
+        className="w-[185px] text-lg font-extrabold"
         onClick={() => router.back()}
       >
         나가기
@@ -62,7 +62,7 @@ export default function FormActionBtn() {
       <Button
         type="button"
         size="md"
-        className="w-[185px] text-lg font-extrabold cursor-pointer"
+        className="w-[185px] text-lg font-extrabold"
         onClick={handleSubmit(onSubmit)}
         disabled={!isDirty || isLoading}
       >

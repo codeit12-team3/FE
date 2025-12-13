@@ -1,42 +1,49 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function GenderField() {
   const {
-    register,
+    control,
     formState: { errors },
   } = useFormContext<ProfileEditFormData>()
 
   return (
-    <div>
-      <label className="block font-medium">
+    <div className="flex flex-col gap-3">
+      <Label>
         성별 <span className="text-danger">*</span>
-      </label>
-      <div className="mt-3 flex gap-5 h-11">
-        <label className="flex items-center gap-3">
-          <span>남</span>
-          <input
-            {...register('gender')}
-            type="radio"
-            value="male"
-            className="w-6 h-6"
-          />
-        </label>
-        <label className="flex items-center gap-3">
-          <span>여</span>
-          <input
-            {...register('gender')}
-            type="radio"
-            value="female"
-            className="w-6 h-6"
-          />
-        </label>
-      </div>
+      </Label>
+      <Controller
+        name="gender"
+        control={control}
+        render={({ field }) => (
+          <RadioGroup
+            value={field.value}
+            onValueChange={field.onChange}
+            className="flex flex-row gap-5 h-11 items-center"
+            aria-invalid={!!errors.gender}
+          >
+            <div className="flex items-center gap-3">
+              <Label htmlFor="gender-male" className="font-normal">
+                남
+              </Label>
+              <RadioGroupItem id="gender-male" value="male" />
+            </div>
+            <div className="flex items-center gap-3">
+              <Label htmlFor="gender-female" className="font-normal">
+                여
+              </Label>
+              <RadioGroupItem id="gender-female" value="female" />
+            </div>
+          </RadioGroup>
+        )}
+      />
       {errors.gender && (
-        <p className="text-danger text-sm mt-1">{errors.gender.message}</p>
+        <p className="text-danger text-sm">{errors.gender.message}</p>
       )}
     </div>
   )

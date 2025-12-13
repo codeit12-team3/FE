@@ -1,9 +1,15 @@
 'use client'
 
-import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 const years = Array.from(
@@ -18,104 +24,133 @@ export default function BirthdaySelect() {
 
   const parseBirthDate = (birth: string) => {
     if (!birth || birth === '') {
-      return { year: 0, month: 0, day: 0 }
+      return { year: '', month: '', day: '' }
     }
-    const [y, m, d] = birth.split('-').map(Number)
-    return { year: y || 0, month: m || 0, day: d || 0 }
+    const [y, m, d] = birth.split('-')
+    const monthNum = parseInt(m)
+    const dayNum = parseInt(d)
+
+    return {
+      year: y || '',
+      month: !isNaN(monthNum) ? String(monthNum) : '',
+      day: !isNaN(dayNum) ? String(dayNum) : '',
+    }
   }
 
-  const initial = parseBirthDate(birthValue)
-  const [selected, setSelected] = useState({
-    year: initial.year,
-    month: initial.month,
-    day: initial.day,
-  })
+  const [selected, setSelected] = useState({ year: '', month: '', day: '' })
 
   useEffect(() => {
-    const SetData = () => {
+    const syncBirthValue = () => {
       const current = parseBirthDate(birthValue)
-      setSelected({
-        year: current.year,
-        month: current.month,
-        day: current.day,
-      })
+      setSelected(current)
     }
-    SetData()
+    syncBirthValue()
   }, [birthValue])
 
-  const getDaysInMonth = (y: number, m: number) => {
-    if (!y || !m) return []
-    return Array.from({ length: new Date(y, m, 0).getDate() }, (_, i) => i + 1)
+  const getDaysInMonth = (y: string, m: string) => {
+    const year = parseInt(y)
+    const month = parseInt(m)
+    if (!year || !month || isNaN(year) || isNaN(month)) return []
+    return Array.from(
+      { length: new Date(year, month, 0).getDate() },
+      (_, i) => i + 1,
+    )
   }
 
   const days = getDaysInMonth(selected.year, selected.month)
 
-  const handleYearChange = (year: number) => {
-    setSelected({ year, month: 0, day: 0 })
-    setValue('birth', '', { shouldDirty: true })
+  const handleYearChange = (year: string) => {
+    if (year === 'none') {
+      setSelected({ year: '', month: '', day: '' })
+      setValue('birth', '', { shouldDirty: true })
+    } else {
+      setSelected({ year, month: '', day: '' })
+    }
   }
 
-  const handleMonthChange = (month: number) => {
-    setSelected((prev) => ({ ...prev, month, day: 0 }))
-    setValue('birth', '', { shouldDirty: true })
+  const handleMonthChange = (month: string) => {
+    if (month === 'none') {
+      setSelected((prev) => ({ ...prev, month: '', day: '' }))
+      setValue('birth', '', { shouldDirty: true })
+    } else {
+      setSelected((prev) => ({ ...prev, month, day: '' }))
+    }
   }
 
-  const handleDayChange = (day: number) => {
-    setSelected((prev) => ({ ...prev, day }))
-    if (selected.year && selected.month && day) {
-      const dateStr = `${selected.year}-${String(selected.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-      setValue('birth', dateStr, { shouldDirty: true })
+  const handleDayChange = (day: string) => {
+    if (day === 'none') {
+      setSelected((prev) => ({ ...prev, day: '' }))
+      setValue('birth', '', { shouldDirty: true })
+    } else {
+      const year = parseInt(selected.year)
+      const month = parseInt(selected.month)
+      const dayNum = parseInt(day)
+
+      if (!isNaN(year) && !isNaN(month) && !isNaN(dayNum)) {
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`
+        setSelected((prev) => ({ ...prev, day }))
+        setValue('birth', dateStr, { shouldDirty: true })
+      }
     }
   }
 
   return (
-    <div className="flex gap-3 mt-3">
-      <div className="relative">
-        <select
-          value={selected.year}
-          onChange={(e) => handleYearChange(Number(e.target.value))}
-          className="rounded-xl px-3 py-2 min-w-[135px] h-12 bg-[#EDF4FB] appearance-none pr-10"
-        >
-          <option value={0}>년</option>
+    <div className="flex gap-3">
+      <Select
+        key={`year-${selected.year}`}
+        value={selected.year || 'none'}
+        onValueChange={handleYearChange}
+      >
+        <SelectTrigger className="min-w-[135px]">
+          <SelectValue placeholder="년" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">년</SelectItem>
           {years.map((y) => (
-            <option key={y} value={y}>
+            <SelectItem key={y} value={String(y)}>
               {y}
-            </option>
+            </SelectItem>
           ))}
-        </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
-      </div>
-      <div className="relative">
-        <select
-          value={selected.month}
-          onChange={(e) => handleMonthChange(Number(e.target.value))}
-          className="rounded-xl px-3 py-2 min-w-25 h-12 bg-[#EDF4FB] appearance-none pr-10"
-        >
-          <option value={0}>월</option>
+        </SelectContent>
+      </Select>
+
+      <Select
+        key={`month-${selected.month}`}
+        value={selected.month || 'none'}
+        onValueChange={handleMonthChange}
+        disabled={!selected.year}
+      >
+        <SelectTrigger className="min-w-25">
+          <SelectValue placeholder="월" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">월</SelectItem>
           {months.map((m) => (
-            <option key={m} value={m}>
+            <SelectItem key={m} value={String(m)}>
               {m}
-            </option>
+            </SelectItem>
           ))}
-        </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
-      </div>
-      <div className="relative">
-        <select
-          value={selected.day}
-          onChange={(e) => handleDayChange(Number(e.target.value))}
-          disabled={!selected.year || !selected.month}
-          className="rounded-xl px-3 py-2 min-w-25 h-12 bg-[#EDF4FB] appearance-none pr-10 disabled:opacity-50"
-        >
-          <option value={0}>일</option>
+        </SelectContent>
+      </Select>
+
+      <Select
+        key={`day-${selected.day}`}
+        value={selected.day || 'none'}
+        onValueChange={handleDayChange}
+        disabled={!selected.year || !selected.month}
+      >
+        <SelectTrigger className="min-w-25">
+          <SelectValue placeholder="일" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">일</SelectItem>
           {days.map((d) => (
-            <option key={d} value={d}>
+            <SelectItem key={d} value={String(d)}>
               {d}
-            </option>
+            </SelectItem>
           ))}
-        </select>
-        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
-      </div>
+        </SelectContent>
+      </Select>
     </div>
   )
 }

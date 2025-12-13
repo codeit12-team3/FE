@@ -44,6 +44,8 @@ export default function ProfileEditPage() {
     }
   }, [data, methods])
 
+  console.log(data)
+
   useEffect(() => {
     if (isError) {
       toast.error(error?.message || '프로필을 불러오지 못했습니다')
