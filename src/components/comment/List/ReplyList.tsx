@@ -1,6 +1,6 @@
 import { CommentType } from '@/types/comments/comments.type'
 
-import ReplyItem from '../ReplyItem'
+import CommentItem from './CommentItem'
 
 interface ReplyListProps {
   parentId: number
@@ -20,9 +20,9 @@ export default function ReplyList({
   return (
     <div className="ml-16  space-y-4">
       {filtered.map((reply) => (
-        <ReplyItem
+        <CommentItem
           key={reply.commentId}
-          reply={reply}
+          comment={reply}
           currentUserId={currentUserId}
         />
       ))}

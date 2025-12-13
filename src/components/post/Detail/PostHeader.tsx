@@ -1,6 +1,6 @@
 import { Heart } from 'lucide-react'
 
-import { formatDay } from '@/lib/common'
+import { cn, formatDay } from '@/lib/common'
 
 interface PostHeaderProps {
   title: string
@@ -24,14 +24,15 @@ export default function PostHeader({
       <h1 className="text-xl font-bold text-text-base">{title}</h1>
 
       <div className="flex items-center gap-4 text-sm text-text-input">
-        <span>게시날짜 {formatDay(timestamp)} </span>
-        <span>조회수 {stats.viewCount} </span>
-        <span>댓글 {commentCount}</span>
+        <p>게시날짜 {formatDay(timestamp)} </p>
+        <p>조회수 {stats.viewCount} </p>
+        <p>댓글 {commentCount}</p>
 
         <Heart
-          className={`w-5 h-5 ${
-            isBookmarked ? 'fill-main text-main' : 'text-text-input'
-          }`}
+          className={cn(
+            'w-5 h-5 text-text-input',
+            isBookmarked && 'fill-main text-main',
+          )}
         />
       </div>
     </div>

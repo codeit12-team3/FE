@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from 'react'
+
+import Comment from '@/components/comment'
 import { Button } from '@/components/common'
 
-import Comment from '../Comment'
+import PostDetailSkeleton from './PostDetailSkeleton'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
 import PostInfo from './PostInfo'
@@ -10,6 +13,7 @@ import PostTags from './PostTags'
 import PostWriter from './PostWriter'
 
 export default function PostDetail() {
+  const [isLoading, setIsLoading] = useState(false)
   // 임시 데이터
   const postDetail = {
     postId: 'post-2',
@@ -72,52 +76,51 @@ export default function PostDetail() {
       },
     ],
   }
-  //  const { data, isLoading } = usePostDetail(params.id)
-  //  if(isLoading ) <PostDetailSkeleton />
+
+  const headerProps = {
+    title: postDetail.title,
+    timestamp: postDetail.createdAt,
+    stats: { viewCount: postDetail.stats.viewCount },
+    commentCount: postDetail.commentCount,
+    isBookmarked: postDetail.isBookmarked,
+  }
+
+  const infoProps = {
+    nation: postDetail.nation,
+    region: postDetail.region,
+    period: postDetail.period,
+    content: postDetail.content,
+    stats: {
+      maxMembers: postDetail.stats.maxMembers,
+      currentMembers: postDetail.stats.currentMembers,
+    },
+    conditions: postDetail.conditions,
+  }
+
+  const writerProps = {
+    nickname: postDetail.writer.nickname,
+    age: postDetail.writer.age,
+    gender: postDetail.writer.gender as 'MALE' | 'FEMALE',
+    mbti: postDetail.writer.mbti,
+    birth: postDetail.writer.birth,
+    tripstyle: postDetail.writer.tripStyle,
+    accommodationPreference: postDetail.writer.accommodationPreference,
+  }
+  if (isLoading) {
+    return <PostDetailSkeleton />
+  }
   return (
-    <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center ">
-      <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border  border-[#DDDDDD]  ">
-        <PostHeader
-          title={postDetail.title}
-          timestamp={postDetail.createdAt}
-          stats={{ viewCount: postDetail.stats.viewCount }}
-          commentCount={postDetail.commentCount}
-          isBookmarked={postDetail.isBookmarked}
-        />
+    <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center">
+      <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border border-[#DDDDDD]">
+        <PostHeader {...headerProps} />
 
         <PostImages images={postDetail.images} />
 
         <PostTags tags={postDetail.tags} />
 
-        <PostInfo
-          nation={postDetail.nation}
-          region={postDetail.region}
-          period={{
-            startDate: postDetail.period.startDate,
-            endDate: postDetail.period.endDate,
-          }}
-          content={postDetail.content}
-          stats={{
-            maxMembers: postDetail.stats.maxMembers,
-            currentMembers: postDetail.stats.currentMembers,
-          }}
-          conditions={{
-            ageCondition: postDetail.conditions.ageCondition,
-            genderCondition: postDetail.conditions.genderCondition,
-          }}
-        />
+        <PostInfo {...infoProps} />
 
-        <PostWriter
-          writer={{
-            nickname: postDetail.writer.nickname,
-            age: postDetail.writer.age,
-            gender: postDetail.writer.gender as 'MALE' | 'FEMALE',
-            mbti: postDetail.writer.mbti,
-            birth: postDetail.writer.birth,
-            tripstyle: postDetail.writer.tripStyle,
-            accommodationPreference: postDetail.writer.accommodationPreference,
-          }}
-        />
+        <PostWriter writer={writerProps} />
 
         <div className="flex gap-3 items-center justify-center my-8">
           <Button variant="secondary" size="md" className="w-68">
@@ -130,7 +133,6 @@ export default function PostDetail() {
 
         <Comment
           data={postDetail.comments}
-          currentUserId={1}
           mutateComment={({ content }) => console.log('댓글 등록:', content)}
           mutateReply={({ parentId, content }) =>
             console.log('대댓글 등록:', parentId, content)
