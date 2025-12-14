@@ -26,13 +26,12 @@ export default function FormActionBtn() {
     const payload: UpdateMyProfileReq = {
       image: data.image || undefined,
       nickname: data.nickname || undefined,
-      name: data.name || undefined,
       birth: data.birth || undefined,
       gender: data.gender as 'male' | 'female' | undefined,
       mbti: data.mbti || undefined,
-      accommodation: data.accommodation || undefined,
+      lodgingStyle: data.lodgingStyle || undefined,
       travelStyle: data.travelStyle || undefined,
-      bio: data.bio || undefined,
+      introduction: data.introduction || undefined,
     }
 
     updateProfile(payload, {

@@ -10,7 +10,6 @@ export interface Member {
 
 export interface UpdateMyProfileReq {
   nickname?: string
-  name?: string
   birth?: string
   gender?: 'male' | 'female'
   mbti?: string

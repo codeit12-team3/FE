@@ -47,22 +47,16 @@ export default function BasicInfo() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <Label htmlFor="name">
-          이름 <span className="text-danger">*</span>
-        </Label>
+        <Label htmlFor="name">이름</Label>
         <Input
           id="name"
-          {...register('name', {
-            required: '이름을 입력하세요',
-          })}
+          {...register('name')}
           type="text"
           className="w-41.5"
           placeholder="이름"
-          aria-invalid={!!errors.name}
+          disabled
+          aria-readonly="true"
         />
-        {errors.name && (
-          <p className="text-danger text-sm">{errors.name.message}</p>
-        )}
       </div>
     </>
   )

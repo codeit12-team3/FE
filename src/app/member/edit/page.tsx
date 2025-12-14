@@ -4,14 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useMyProfileQuery } from '@/api/member/member.queries'
 import { ProfileEditForm, ProfileImageEdit } from '@/components/member/edit'
 import { ProfileEditFormData, profileEditSchema } from '@/types/member/schema'
 
 export default function ProfileEditPage() {
-  const { data, isLoading, isError, error } = useMyProfileQuery()
+  const { data, isLoading, isError } = useMyProfileQuery()
 
   const methods = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
@@ -43,14 +42,6 @@ export default function ProfileEditPage() {
       })
     }
   }, [data, methods])
-
-  console.log(data)
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(error?.message || '프로필을 불러오지 못했습니다')
-    }
-  }, [isError, error])
 
   if (isLoading) {
     return (
