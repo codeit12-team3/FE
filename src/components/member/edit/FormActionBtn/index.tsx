@@ -24,14 +24,14 @@ export default function FormActionBtn() {
 
   const onSubmit = (data: ProfileEditFormData) => {
     const payload: UpdateMyProfileReq = {
-      image: data.image || undefined,
-      nickname: data.nickname || undefined,
-      birth: data.birth || undefined,
-      gender: data.gender as 'male' | 'female' | undefined,
-      mbti: data.mbti || undefined,
-      lodgingStyle: data.lodgingStyle || undefined,
-      travelStyle: data.travelStyle || undefined,
-      introduction: data.introduction || undefined,
+      image: data.image || 'ALL',
+      nickname: data.nickname || 'ALL',
+      birth: data.birth || 'ALL',
+      gender: data.gender || 'ALL',
+      mbti: data.mbti || 'ALL',
+      lodgingStyle: data.lodgingStyle || 'ALL',
+      travelStyle: data.travelStyle || 'ALL',
+      introduction: data.introduction || 'ALL',
     }
 
     updateProfile(payload, {
@@ -54,7 +54,9 @@ export default function FormActionBtn() {
         variant="secondary"
         size="md"
         className="w-[185px] text-lg font-extrabold"
-        onClick={() => router.back()}
+        onClick={() => {
+          router.back()
+        }}
       >
         나가기
       </Button>
