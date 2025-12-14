@@ -29,3 +29,25 @@ export const GENDER_MAP: Record<Gender, string> = {
   female: '여자',
 } as const
 export type Gender = (typeof GENDER_LIST)[number]
+
+export const LODGING_STYLE_OPTIONS = [
+  '가성비',
+  '호캉스',
+  '감성중시',
+  '청결중시',
+  '교류/파티',
+  '자연/이색',
+] as const
+
+export type LodgingStyle = (typeof LODGING_STYLE_OPTIONS)[number]
+
+export const TRAVEL_STYLE_OPTIONS = [
+  '계획',
+  '힐링',
+  '포토',
+  '먹방',
+  '액티비티',
+  '관광',
+] as const
+
+export type TravelStyle = (typeof TRAVEL_STYLE_OPTIONS)[number]

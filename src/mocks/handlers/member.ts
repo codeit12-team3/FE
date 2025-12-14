@@ -10,9 +10,9 @@ let mockMember = {
   gender: 'male',
   image: null,
   mbti: 'ENFP',
-  accommodation: '게스트하우스',
-  travelStyle: '사진찍기',
-  bio: '세계여행이 꿈입니다~',
+  lodgingStyle: '가성비',
+  travelStyle: '힐링',
+  introduction: '세계여행이 꿈입니다~',
 }
 
 export const memberHandlers = [

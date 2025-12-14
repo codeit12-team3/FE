@@ -15,9 +15,9 @@ export interface UpdateMyProfileReq {
   gender?: 'male' | 'female'
   mbti?: string
   image?: string
-  accommodation?: string
+  lodgingStyle?: string
   travelStyle?: string
-  bio?: string
+  introduction?: string
 }
 
 export interface MyProfile {
@@ -28,7 +28,7 @@ export interface MyProfile {
   gender: 'male' | 'female'
   image: string | null
   mbti?: string
-  accommodation?: string
+  lodgingStyle?: string
   travelStyle?: string
-  bio?: string
+  introduction?: string
 }

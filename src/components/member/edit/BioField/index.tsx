@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ProfileEditFormData } from '@/types/member/schema'
 
-const MAX_BIO_LENGTH = 100
+const MAX_INTRODUCTION_LENGTH = 100
 
 export default function BioField() {
   const {
@@ -15,12 +15,12 @@ export default function BioField() {
     formState: { errors },
   } = useFormContext<ProfileEditFormData>()
 
-  const bio = watch('bio') ?? ''
-  const length = bio.length
+  const introduction = watch('introduction') ?? ''
+  const length = introduction.length
 
   return (
     <div className="mt-6 flex flex-col gap-3">
-      <Label htmlFor="bio">
+      <Label htmlFor="introduction">
         자기소개
         <span
           className={`transition-colors ml-1.5 ${
@@ -29,18 +29,18 @@ export default function BioField() {
         >
           {length}
         </span>
-        /{MAX_BIO_LENGTH}
+        /{MAX_INTRODUCTION_LENGTH}
       </Label>
       <Input
-        id="bio"
-        {...register('bio')}
+        id="introduction"
+        {...register('introduction')}
         type="text"
         placeholder={`자기소개를 입력해주세요`}
-        maxLength={MAX_BIO_LENGTH}
-        aria-invalid={!!errors.bio}
+        maxLength={MAX_INTRODUCTION_LENGTH}
+        aria-invalid={!!errors.introduction}
       />
-      {errors.bio && (
-        <p className="text-danger text-sm">{errors.bio.message}</p>
+      {errors.introduction && (
+        <p className="text-danger text-sm">{errors.introduction.message}</p>
       )}
     </div>
   )

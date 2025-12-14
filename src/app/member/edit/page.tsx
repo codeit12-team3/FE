@@ -22,9 +22,9 @@ export default function ProfileEditPage() {
       birth: '',
       gender: undefined,
       mbti: '',
-      accommodation: '',
+      lodgingStyle: '',
       travelStyle: '',
-      bio: '',
+      introduction: '',
     },
   })
 
@@ -37,9 +37,9 @@ export default function ProfileEditPage() {
         birth: data.birth || '',
         gender: data.gender,
         mbti: data.mbti || '',
-        accommodation: data.accommodation || '',
+        lodgingStyle: data.lodgingStyle || '',
         travelStyle: data.travelStyle || '',
-        bio: data.bio || '',
+        introduction: data.introduction || '',
       })
     }
   }, [data, methods])

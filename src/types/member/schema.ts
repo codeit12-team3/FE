@@ -7,9 +7,12 @@ export const profileEditSchema = z.object({
   birth: z.string().min(1, '생일을 선택해주세요'),
   gender: z.string().min(1, '성별을 선택해주세요'),
   mbti: z.string().optional(),
-  accommodation: z.string().optional(),
+  lodgingStyle: z.string().optional(),
   travelStyle: z.string().optional(),
-  bio: z.string().max(100, '자기소개는 100자 이하로 입력해주세요').optional(),
+  introduction: z
+    .string()
+    .max(100, '자기소개는 100자 이하로 입력해주세요')
+    .optional(),
 })
 
 export type ProfileEditFormData = z.infer<typeof profileEditSchema>
