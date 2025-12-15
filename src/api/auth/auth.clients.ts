@@ -16,9 +16,11 @@ import { axios } from '../common'
  * @param email 이메일주소
  */
 export const sendEmailCode = async (email: string) => {
-  return await axios.post<ApiResponse<null>>('/v1/auth/email/code', {
+  const res = await axios.post<ApiResponse<null>>('/v1/auth/email/code', {
     email,
   })
+
+  return res.data
 }
 
 /**

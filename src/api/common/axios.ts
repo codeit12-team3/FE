@@ -21,7 +21,7 @@ client.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     if (typeof window !== 'undefined') {
       const session = await getSession()
-      const accessToken = session?.user.tokenResponse.accessToken
+      const accessToken = session?.user.accessToken
 
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`

@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.tripus.site',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 }
 
 export default nextConfig

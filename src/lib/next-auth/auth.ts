@@ -28,7 +28,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
         accessTokenExpiration: newTokenRes.accessTokenExpiration,
         refreshTokenExpiration: newTokenRes.refreshTokenExpiration,
       },
-      expiresAt: new Date(newTokenRes.accessTokenExpiration).getTime(),
+      expiresAt: Date.now() + newTokenRes.accessTokenExpiration,
     }
   } catch (e) {
     console.error('토큰 갱신 실패', e)
@@ -80,7 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.gender = user.gender
         token.mbti = user.mbti
         token.tokenResponse = user.tokenResponse
-        token.expiresAt = user.tokenResponse.accessTokenExpiration
+        token.expiresAt = Date.now() + user.tokenResponse.accessTokenExpiration
 
         return token
       }
@@ -98,7 +98,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.birth = token.birth
         session.user.gender = token.gender
         session.user.mbti = token.mbti
-        session.user.tokenResponse = token.tokenResponse
+        session.user.accessToken = token.tokenResponse.accessToken
       }
 
       if (token.error) {
