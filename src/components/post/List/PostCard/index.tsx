@@ -16,10 +16,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const LABEL = 'text-text-disabled'
   const VALUE = 'text-text-base'
   const INFO_ROW = 'flex items-center gap-1'
-  const thumbnailSrc =
-    post.thumbnail && post.thumbnail.length > 0
-      ? post.thumbnail
-      : '/placeholder.png'
+  const thumbnailSrc = post.thumbnail || '/cardImage_test.svg'
   return (
     <div
       className={CARD_BASE}
