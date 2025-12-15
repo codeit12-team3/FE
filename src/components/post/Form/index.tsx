@@ -74,14 +74,15 @@ export default function PostForm() {
       </div>
       <div className="max-w-7xl flex items-center justify-center">
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Header />
+
             <ImageUpload />
             <Info />
             <DateSection />
             <Description />
 
-            <div className="flex items-center gap-8 justify-center">
+            <div className="flex items-center gap-8 justify-center mt-6">
               <Button
                 type="button"
                 size="md"

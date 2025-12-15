@@ -1,6 +1,5 @@
 'use client'
 
-import { CircleAlert } from 'lucide-react'
 import { memo, useMemo } from 'react'
 import {
   FieldValues,
@@ -17,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
-import { cn } from '@/lib/common'
 
 type Option = string | { label: string; value: string }
 
@@ -38,7 +36,6 @@ const FormSelect = memo(
     suffix,
   }: Props<T>) => {
     const { control } = useFormContext<T>()
-
     const {
       field: { ref, ...field },
       fieldState: { error },
@@ -54,41 +51,25 @@ const FormSelect = memo(
       [options],
     )
 
-    const isError = !!error
-
     return (
-      <div className={cn('space-y-2 w-full', className)}>
-        <div className="space-y-1 w-full">
-          <Select value={field.value || ''} onValueChange={field.onChange}>
-            <SelectTrigger
-              ref={ref}
-              id={name}
-              aria-invalid={isError ? 'true' : 'false'}
-              className={cn(isError && 'border-destructive')}
-            >
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-
-            <SelectContent className="max-h-60">
-              <SelectGroup>
-                {normalizedOptions.map(({ label: optLabel, value }) => (
-                  <SelectItem key={`${name}-${value}`} value={value}>
-                    {optLabel}
-                    {suffix}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <p className="h-6 flex text-xs text-danger items-center gap-1 px-4">
-            {isError && <CircleAlert className="size-4" />}
-            {error?.message}
-          </p>
-        </div>
-      </div>
+      <Select value={field.value || ''} onValueChange={field.onChange}>
+        <SelectTrigger ref={ref} aria-invalid={!!error} className={className}>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className="max-h-60">
+          <SelectGroup>
+            {normalizedOptions.map(({ label, value }) => (
+              <SelectItem key={`${name}-${value}`} value={value}>
+                {label}
+                {suffix}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     )
   },
 )
-
 FormSelect.displayName = 'FormSelect'
+
 export default FormSelect

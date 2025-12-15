@@ -60,7 +60,7 @@ export default function Header() {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub"
+              className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub mb-3"
             >
               <span>#{tag}</span>
               <button

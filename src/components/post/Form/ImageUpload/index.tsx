@@ -4,7 +4,9 @@ import { X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import { uploadImage } from '@/api/member/member.clients'
 import { Button } from '@/components/common'
 import { Label } from '@/components/ui'
 import type { PostFormValues } from '@/types/posts/schema'
@@ -14,36 +16,93 @@ export default function ImageUpload() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([])
+  const [isUploading, setIsUploading] = useState(false)
 
-  const openPicker = () => fileInputRef.current?.click()
+  const openPicker = () => {
+    if (!isUploading) {
+      fileInputRef.current?.click()
+    }
+  }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
 
-    const newUrls: string[] = []
+    const filesToUpload = Array.from(files).slice(0, 3 - previews.length)
+    if (filesToUpload.length === 0) return
 
-    Array.from(files).forEach((file) => {
-      if (previews.length + newUrls.length < 3) {
-        newUrls.push(URL.createObjectURL(file))
-      }
-    })
+    setIsUploading(true)
 
-    const next = [...previews, ...newUrls]
-    setPreviews(next)
+    try {
+      const uploadPromises = filesToUpload.map(async (file) => {
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(`${file.name}은(는) 5MB를 초과합니다.`)
+          return null
+        }
 
-    setValue('images', next, { shouldValidate: true, shouldDirty: true })
+        const fileType = file.type.split('/')[1].toUpperCase()
+        const imageType =
+          fileType === 'JPEG' || fileType === 'JPG'
+            ? 'JPG'
+            : fileType === 'PNG'
+              ? 'PNG'
+              : fileType === 'SVG+XML'
+                ? 'SVG'
+                : 'JPG'
 
-    e.target.value = ''
+        const s3Url = await uploadImage(
+          file,
+          imageType as 'JPG' | 'PNG' | 'SVG',
+          'POST',
+        )
+
+        return {
+          preview: URL.createObjectURL(file),
+          s3Url,
+        }
+      })
+
+      const results = await Promise.all(uploadPromises)
+      const successfulUploads = results.filter((r) => r !== null) as {
+        preview: string
+        s3Url: string
+      }[]
+
+      const newPreviews = successfulUploads.map((r) => r.preview)
+      const newUrls = successfulUploads.map((r) => r.s3Url)
+
+      const nextPreviews = [...previews, ...newPreviews]
+      const nextUrls = [...uploadedUrls, ...newUrls]
+
+      setPreviews(nextPreviews)
+      setUploadedUrls(nextUrls)
+      setValue('images', nextUrls, { shouldValidate: true, shouldDirty: true })
+
+      toast.success(
+        `${successfulUploads.length}개의 이미지가 업로드되었습니다.`,
+      )
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error)
+      toast.error('이미지 업로드에 실패했습니다.')
+    } finally {
+      setIsUploading(false)
+      e.target.value = ''
+    }
   }
 
   const removeImage = (idx: number) => {
-    const next = [...previews]
-    URL.revokeObjectURL(next[idx])
-    next.splice(idx, 1)
-    setPreviews(next)
+    const nextPreviews = [...previews]
+    const nextUrls = [...uploadedUrls]
 
-    setValue('images', next, { shouldValidate: true, shouldDirty: true })
+    URL.revokeObjectURL(nextPreviews[idx])
+    nextPreviews.splice(idx, 1)
+    nextUrls.splice(idx, 1)
+
+    setPreviews(nextPreviews)
+    setUploadedUrls(nextUrls)
+
+    setValue('images', nextUrls, { shouldValidate: true, shouldDirty: true })
   }
 
   useEffect(() => {
@@ -53,7 +112,7 @@ export default function ImageUpload() {
   }, [previews])
 
   return (
-    <div>
+    <div className="mb-6">
       <Label className="mb-2">
         이미지 <span className="text-danger">*</span>
       </Label>
@@ -61,9 +120,15 @@ export default function ImageUpload() {
       <div className="flex gap-2">
         <div
           onClick={openPicker}
-          className="flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm cursor-pointer"
+          className={`flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm ${
+            isUploading ? 'cursor-wait opacity-60' : 'cursor-pointer'
+          }`}
         >
-          {previews.length === 0 ? (
+          {isUploading ? (
+            <span className="text-muted-foreground font-medium text-base">
+              이미지 업로드 중...
+            </span>
+          ) : previews.length === 0 ? (
             <span className="text-muted-foreground font-medium text-base">
               최대 3장, 5MB 제한
             </span>
@@ -96,8 +161,13 @@ export default function ImageUpload() {
           )}
         </div>
 
-        <Button type="button" onClick={openPicker} variant="secondary">
-          파일 찾기
+        <Button
+          type="button"
+          onClick={openPicker}
+          variant="secondary"
+          disabled={isUploading || previews.length >= 3}
+        >
+          {isUploading ? '업로드 중...' : '파일 찾기'}
         </Button>
 
         <input

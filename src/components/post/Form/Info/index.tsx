@@ -1,38 +1,53 @@
+import { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
 import { Label, RadioGroup, RadioGroupItem } from '@/components/ui'
-import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
+import {
+  AGE_OPTIONS,
+  GENDER_OPTIONS,
+  NATION_OPTIONS,
+  REGION_OPTIONS,
+} from '@/constants/posts'
 import { PostFormValues } from '@/types/posts/schema'
 
 export default function Info() {
-  const { control } = useFormContext<PostFormValues>()
+  const { control, watch } = useFormContext<PostFormValues>()
+  const selectedNation = watch('nation')
+  const cityOptions = useMemo(() => {
+    if (!selectedNation) return []
+    return (
+      (REGION_OPTIONS as Record<string, readonly string[]>)[selectedNation] ||
+      []
+    )
+  }, [selectedNation])
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between">
+    <div>
+      <div className="flex justify-between mb-6">
         <div>
-          <Label htmlFor="nation" className="mb-3">
+          <Label htmlFor="nation" className="mb-2">
             국가 <span className="text-destructive">*</span>
           </Label>
           <FormSelect
             name="nation"
-            options={REGION_OPTIONS}
+            options={NATION_OPTIONS}
             placeholder="국가를 선택해주세요"
+            className="w-[200px]"
           />
         </div>
 
         <div>
-          <Label htmlFor="nation" className="mb-3">
+          <Label htmlFor="nation" className="mb-2">
             도시 <span className="text-destructive">*</span>
           </Label>
           <FormSelect
             name="region"
-            options={REGION_OPTIONS}
+            options={cityOptions}
             placeholder="도시를 선택해주세요"
+            className="w-[200px]"
           />
         </div>
-        <div></div>
       </div>
 
       <div className="flex justify-between">
@@ -45,7 +60,7 @@ export default function Info() {
           required
         />
         <div>
-          <Label htmlFor="nation" className="mb-3">
+          <Label htmlFor="nation" className="mb-4">
             성별 <span className="text-destructive">*</span>
           </Label>
           <Controller
@@ -68,8 +83,8 @@ export default function Info() {
           />
         </div>
       </div>
-      <div>
-        <Label htmlFor="nation" className="mb-3">
+      <div className="mb-6">
+        <Label htmlFor="nation" className="mb-2">
           나이<span className="text-destructive">*</span>
         </Label>
         <Controller

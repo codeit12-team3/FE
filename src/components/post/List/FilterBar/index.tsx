@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@/components/common/Select/select.components'
 import { InputGroup, InputGroupInput } from '@/components/ui'
-import { AGE_OPTIONS, GENDER_OPTIONS, REGION_OPTIONS } from '@/constants/posts'
+import { AGE_OPTIONS, GENDER_OPTIONS, NATION_OPTIONS } from '@/constants/posts'
 import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
 
 interface FilterBarProps {
@@ -48,7 +48,7 @@ export default function FilterBar({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
-            {REGION_OPTIONS.map((region) => (
+            {NATION_OPTIONS.map((region) => (
               <SelectItem key={region} value={region}>
                 {region}
               </SelectItem>

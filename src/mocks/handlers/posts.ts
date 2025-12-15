@@ -82,8 +82,17 @@ export const postsHandlers = [
     await delay(2000)
 
     const body = (await request.json()) as {
+      title: string
+      content: string
+      nation: string
+      region: string
       startDate: string
       endDate: string
+      maxMembers: number
+      tags: string[]
+      images: string[]
+      genderType: string
+      ageType: string
     }
 
     if (body.startDate > body.endDate) {
@@ -103,17 +112,55 @@ export const postsHandlers = [
         },
       )
     }
+
+    const mockPostId = Math.floor(Math.random() * 1000) + 1
+
     return HttpResponse.json(
       {
         success: true,
         status: 201,
-        data: null,
-        timestamp: '2025-12-02',
+        data: {
+          postId: mockPostId.toString(),
+        },
+        timestamp: new Date().toISOString(),
       },
       {
         status: 201,
       },
     )
+  }),
+
+  http.post(`${MOCK_URL}/v1/images/presigned-url`, async ({ request }) => {
+    console.log('🖼️ [MSW] Presigned URL 요청 받음')
+    await delay(500)
+
+    const body = (await request.json()) as {
+      images: Array<{
+        imageId: string
+        imageType: string
+        imageDirectory: string
+      }>
+    }
+
+    const urls = body.images.map((img) => ({
+      presignedUrl: `https://mock-s3.amazonaws.com/upload/${img.imageId}`,
+      image: `https://mock-cdn.example.com/${img.imageDirectory.toLowerCase()}/${img.imageId}.${img.imageType.toLowerCase()}`,
+    }))
+
+    return HttpResponse.json({
+      success: true,
+      status: 200,
+      data: {
+        urls,
+      },
+      timestamp: new Date().toISOString(),
+    })
+  }),
+
+  http.put('https://mock-s3.amazonaws.com/upload/:imageId', async () => {
+    console.log('📤 [MSW] S3 업로드 완료')
+    await delay(800)
+    return new HttpResponse(null, { status: 200 })
   }),
   http.get(`${MOCK_URL}/v1/posts/:postId`, async ({ params }) => {
     await delay(2000)
