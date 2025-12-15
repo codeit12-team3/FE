@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <MSWProvider>
           <QueryProvider>
-            <SessionProvider>
+            <SessionProvider refetchOnWindowFocus={false}>
               <LazyMotionProvider>
                 <Header />
                 {children}
