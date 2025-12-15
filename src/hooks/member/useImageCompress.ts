@@ -2,7 +2,7 @@ import imageCompression, { Options } from 'browser-image-compression'
 import { useState } from 'react'
 
 interface CompressResult {
-  compressedFile: File
+  file: File
   previewUrl: string
   originalSize: number
   compressedSize: number
@@ -15,14 +15,6 @@ interface UseImageCompressReturn {
   previewUrl: string | null
   reset: () => void
   error: string | null
-}
-
-const defaultOptions: Options = {
-  maxSizeMB: 0.5,
-  maxWidthOrHeight: 512,
-  useWebWorker: true,
-  fileType: 'image/webp',
-  initialQuality: 0.85,
 }
 
 export default function useImageCompress(
@@ -43,31 +35,25 @@ export default function useImageCompress(
     setError(null)
 
     try {
-      const options: Options = { ...defaultOptions, ...customOptions }
+      const options: Options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 512,
+        useWebWorker: true,
+        initialQuality: 0.85,
+        ...customOptions,
+      }
 
       const compressedFile = await imageCompression(file, options)
 
-      const finalFile =
-        compressedFile.type === 'image/webp' &&
-        !compressedFile.name.endsWith('.webp')
-          ? new File(
-              [compressedFile],
-              compressedFile.name.split('.').slice(0, -1).join('.') + '.webp',
-              {
-                type: 'image/webp',
-              },
-            )
-          : compressedFile
-
-      const preview = URL.createObjectURL(finalFile)
+      const preview = URL.createObjectURL(compressedFile)
       setPreviewUrl(preview)
 
       const result: CompressResult = {
-        compressedFile: finalFile,
+        file: compressedFile,
         previewUrl: preview,
         originalSize: file.size,
-        compressedSize: finalFile.size,
-        ratio: Number(((1 - finalFile.size / file.size) * 100).toFixed(1)),
+        compressedSize: compressedFile.size,
+        ratio: Number(((1 - compressedFile.size / file.size) * 100).toFixed(1)),
       }
 
       return result

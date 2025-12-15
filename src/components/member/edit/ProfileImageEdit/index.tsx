@@ -3,56 +3,113 @@
 import { Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import { deleteUnusedImage, uploadImage } from '@/api/member'
 import useImageCompress from '@/hooks/member/useImageCompress'
-import { useMemberEditState } from '@/stores/member.store'
+import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function ProfileImageEdit() {
-  const [profileImg, setprofileImg] = useState<string | null>(null)
+  const { setValue, watch } = useFormContext<ProfileEditFormData>()
+  const imageValue = watch('image')
+
+  const [profileImg, setProfileImg] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
-  const { setUploadedImageUrl, setIsUploadingImage } = useMemberEditState()
+
+  const uploadedImagePathRef = useRef<string | null>(null)
+  const originalImagePathRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (imageValue && !imageValue.startsWith('blob:')) {
+      setProfileImg(imageValue)
+      originalImagePathRef.current = imageValue
+    }
+  }, [imageValue])
+
+  useEffect(() => {
+    return () => {
+      const uploadedPath = uploadedImagePathRef.current
+      const originalPath = originalImagePathRef.current
+
+      if (uploadedPath && uploadedPath !== originalPath) {
+        deleteUnusedImage(uploadedPath).catch((error) => {
+          console.error('이미지삭제실패', error)
+        })
+      }
+
+      if (profileImg?.startsWith('blob:')) {
+        URL.revokeObjectURL(profileImg)
+      }
+    }
+  }, [profileImg])
 
   const handleEditClick = () => {
     fileInputRef.current?.click()
+  }
+
+  const getImageType = (file: File): 'JPG' | 'PNG' | 'SVG' | null => {
+    const extension = file.name.split('.').pop()?.toUpperCase()
+    if (extension === 'JPG' || extension === 'JPEG') return 'JPG'
+    if (extension === 'PNG') return 'PNG'
+    if (extension === 'SVG') return 'SVG'
+    return null
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
-    if (!allowedTypes.includes(file.type)) {
-      toast.error('JPG, JPEG, PNG, WebP만 업로드 가능해요!')
+    const imageType = getImageType(file)
+    if (!imageType) {
+      toast.error('JPG, JPEG, PNG, SVG만 업로드 가능해요!')
       e.target.value = ''
       return
     }
 
     try {
-      const result = await compress(file)
-      setprofileImg(result.previewUrl)
-      setIsUploadingImage(true)
+      setIsUploading(true)
 
-      // 백에서 프리사인드URL나오면 S3 업로드 처리할예정입니다
+      let uploadFile: File | Blob = file
+      let previewUrl: string
+      //압축라이브러리가 SVG는 지원안해서 스킵하는부분
+      if (imageType === 'SVG') {
+        uploadFile = file
+        previewUrl = URL.createObjectURL(file)
+      } else {
+        const compressed = await compress(file)
+        uploadFile = compressed.file
+        previewUrl = compressed.previewUrl
+      }
+
+      setProfileImg(previewUrl)
+      const previousUploadedPath = uploadedImagePathRef.current
+      const originalPath = originalImagePathRef.current
+
+      if (previousUploadedPath && previousUploadedPath !== originalPath) {
+        await deleteUnusedImage(previousUploadedPath).catch((error) => {
+          console.error(error)
+        })
+      }
+
+      //프리사인드 됐으면 S3 업로드할부분
+      const imagePath = await uploadImage(uploadFile, imageType, 'MEMBER')
+      setValue('image', imagePath, { shouldDirty: true })
+      uploadedImagePathRef.current = imagePath
       toast.success('프로필 사진이 변경되었습니다!', {
         duration: 2000,
       })
     } catch (err) {
       console.error(err)
+      setProfileImg(imageValue || null)
+      toast.error('이미지 업로드 중 오류가 발생했습니다')
     } finally {
-      setIsUploadingImage(false)
+      setIsUploading(false)
       e.target.value = ''
     }
   }
-
-  useEffect(() => {
-    return () => {
-      if (profileImg?.startsWith('blob:')) {
-        URL.revokeObjectURL(profileImg)
-      }
-    }
-  }, [profileImg])
 
   return (
     <div className="relative group">
@@ -64,18 +121,23 @@ export default function ProfileImageEdit() {
           alt="프로필 이미지"
           priority
         />
+        {isUploading && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="text-white text-sm">업로드 중...</div>
+          </div>
+        )}
       </div>
-
       <button
+        type="button"
         onClick={handleEditClick}
-        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95"
+        disabled={isUploading}
+        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Pencil size={24} className="text-gray-700" />
       </button>
-
       <input
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/jpg,image/png,image/svg+xml"
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
