@@ -28,10 +28,10 @@ export default function PostForm() {
     mode: 'onChange',
     defaultValues: {
       title: '',
-      description: '',
+      content: '',
       nation: '',
       region: '',
-      member: 0,
+      maxMembers: 0,
       ageType: undefined,
       gender: undefined,
       startDate: '',
@@ -47,12 +47,12 @@ export default function PostForm() {
   const onSubmit = (data: PostFormWithTagValues) => {
     const payload = {
       title: data.title,
-      content: data.description,
+      content: data.content,
       nation: data.nation,
       region: data.region,
       startDate: data.startDate,
       endDate: data.endDate,
-      maxMembers: Number(data.member),
+      maxMembers: Number(data.maxMembers),
       tags: data.tags,
       images: data.images ?? [],
       genderType: data.gender as GenderType,

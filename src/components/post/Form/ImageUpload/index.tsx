@@ -25,6 +25,26 @@ export default function ImageUpload() {
     }
   }
 
+  const validateFile = (file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(`${file.name}은(는) 5MB를 초과합니다.`)
+      return false
+    }
+    if (!file.type.startsWith('image/')) {
+      toast.error(`${file.name}은(는) 이미지 파일이 아닙니다.`)
+      return false
+    }
+    return true
+  }
+
+  const getImageType = (file: File) => {
+    const fileType = file.type.split('/')[1]?.toUpperCase() || 'JPG'
+    if (fileType === 'JPEG' || fileType === 'JPG') return 'JPG'
+    if (fileType === 'PNG') return 'PNG'
+    if (fileType === 'SVG+XML' || fileType === 'SVG') return 'SVG'
+    return 'JPG'
+  }
+
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -36,51 +56,47 @@ export default function ImageUpload() {
 
     try {
       const uploadPromises = filesToUpload.map(async (file) => {
-        if (file.size > 5 * 1024 * 1024) {
-          toast.error(`${file.name}은(는) 5MB를 초과합니다.`)
-          return null
-        }
+        if (!validateFile(file)) return null
 
-        const fileType = file.type.split('/')[1].toUpperCase()
-        const imageType =
-          fileType === 'JPEG' || fileType === 'JPG'
-            ? 'JPG'
-            : fileType === 'PNG'
-              ? 'PNG'
-              : fileType === 'SVG+XML'
-                ? 'SVG'
-                : 'JPG'
-
-        const s3Url = await uploadImage(
-          file,
-          imageType as 'JPG' | 'PNG' | 'SVG',
-          'POST',
-        )
-
-        return {
-          preview: URL.createObjectURL(file),
-          s3Url,
-        }
+        const s3Url = await uploadImage(file, getImageType(file), 'POST')
+        return { preview: URL.createObjectURL(file), s3Url }
       })
 
-      const results = await Promise.all(uploadPromises)
-      const successfulUploads = results.filter((r) => r !== null) as {
-        preview: string
-        s3Url: string
-      }[]
+      const results = await Promise.allSettled(uploadPromises)
+      const successfulUploads = results
+        .filter(
+          (
+            r,
+          ): r is PromiseFulfilledResult<{
+            preview: string
+            s3Url: string
+          } | null> => r.status === 'fulfilled' && r.value !== null,
+        )
+        .map((r) => r.value!)
 
-      const newPreviews = successfulUploads.map((r) => r.preview)
-      const newUrls = successfulUploads.map((r) => r.s3Url)
+      if (successfulUploads.length === 0) {
+        toast.error('업로드된 이미지가 없습니다.')
+        return
+      }
 
-      const nextPreviews = [...previews, ...newPreviews]
-      const nextUrls = [...uploadedUrls, ...newUrls]
+      const nextPreviews = [
+        ...previews,
+        ...successfulUploads.map((r) => r.preview),
+      ]
+      const nextUrls = [
+        ...uploadedUrls,
+        ...successfulUploads.map((r) => r.s3Url),
+      ]
 
       setPreviews(nextPreviews)
       setUploadedUrls(nextUrls)
       setValue('images', nextUrls, { shouldValidate: true, shouldDirty: true })
 
+      const failedCount = results.length - successfulUploads.length
       toast.success(
-        `${successfulUploads.length}개의 이미지가 업로드되었습니다.`,
+        failedCount > 0
+          ? `${successfulUploads.length}개 업로드 성공, ${failedCount}개 실패`
+          : `${successfulUploads.length}개의 이미지가 업로드되었습니다.`,
       )
     } catch (error) {
       console.error('이미지 업로드 실패:', error)
