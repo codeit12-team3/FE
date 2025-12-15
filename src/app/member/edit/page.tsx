@@ -20,8 +20,8 @@ export default function ProfileEditPage() {
       birth: '',
       gender: '',
       mbti: '',
-      lodgingStyle: 'ALL',
-      tripStyle: 'ALL',
+      lodgingStyle: '',
+      tripStyle: '',
       introduction: '',
     },
   })
@@ -39,7 +39,7 @@ export default function ProfileEditPage() {
         introduction: data.introduction || '',
       })
     }
-  }, [data])
+  }, [data, methods])
 
   console.log(data)
 
