@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { Skeleton } from '@/components/ui'
+import { getImageUrl } from '@/lib/common'
 
 interface PostImagesProps {
   images: string[]
@@ -19,7 +20,7 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
       )}
 
       <Image
-        src={src}
+        src={getImageUrl(src)}
         alt={`post-image-${idx}`}
         fill
         sizes="(max-width: 768px) 100vw, 128px"
@@ -44,7 +45,7 @@ export default function PostImages({ images }: PostImagesProps) {
   return (
     <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-2">
       {images.map((src, idx) => (
-        <PostImageItem key={src + idx} src={src} idx={idx} />
+        <PostImageItem key={src + idx} src={getImageUrl(src)} idx={idx} />
       ))}
     </div>
   )
