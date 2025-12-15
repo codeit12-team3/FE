@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 
 import { CommentType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
@@ -11,9 +11,29 @@ import {
 } from './comments.clients'
 
 export const useComments = (params: { postId: string }) => {
-  return useQuery<ApiResponse<CommentType[]>>({
+  return useInfiniteQuery<ApiResponse<CommentType>>({
     queryKey: ['comments', params.postId],
-    queryFn: () => fetchComments(params),
+
+    queryFn: ({ pageParam }) =>
+      fetchComments({
+        postId: params.postId,
+        lastCommentId: pageParam as number,
+        size: 10,
+      }),
+
+    initialPageParam: 0,
+
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.success) return undefined
+      if (lastPage.data.isLast) return undefined
+
+      const comments = lastPage.data.content
+      return comments.length > 0
+        ? comments[comments.length - 1].commentId
+        : undefined
+    },
+
+    staleTime: 5 * 60 * 1000,
   })
 }
 

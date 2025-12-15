@@ -6,9 +6,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { useCreatePost } from '@/api/posts'
+import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
 import { Button } from '@/components/common'
-import { AgeType, GenderType } from '@/types/posts'
+import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
 import DateSection from './Date'
@@ -17,32 +17,59 @@ import Header from './Header'
 import ImageUpload from './ImageUpload'
 import Info from './Info'
 
-export default function PostForm() {
+interface PostFormProps {
+  mode: 'add' | 'edit'
+  initialData?: PostContent
+  postId?: string
+}
+
+export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const router = useRouter()
-  const { mutate, isPending } = useCreatePost()
+  const createPost = useCreatePost()
+  const updatePost = useUpdatePost()
+  const deletePost = useDeletePost()
   const resolver = zodResolver(
     postSchema,
   ) as unknown as Resolver<PostFormWithTagValues>
+
   const methods = useForm<PostFormWithTagValues>({
     resolver,
     mode: 'onChange',
-    defaultValues: {
-      title: '',
-      content: '',
-      nation: '',
-      region: '',
-      maxMembers: 0,
-      ageType: undefined,
-      gender: undefined,
-      startDate: '',
-      endDate: '',
-      tags: [],
-      images: [],
-      tag: '',
-    },
+    defaultValues: initialData
+      ? {
+          title: initialData.title,
+          content: initialData.content,
+          nation: initialData.nation,
+          region: initialData.region,
+          maxMembers: initialData.stats.maxMembers,
+          ageType: initialData.conditions.ageCondition,
+          gender: initialData.conditions.genderCondition,
+          startDate: initialData.period.startDate,
+          endDate: initialData.period.endDate,
+          tags: initialData.tags,
+          images: initialData.images,
+          tag: '',
+        }
+      : {
+          title: '',
+          content: '',
+          nation: '',
+          region: '',
+          maxMembers: 0,
+          ageType: undefined,
+          gender: undefined,
+          startDate: '',
+          endDate: '',
+          tags: [],
+          images: [],
+          tag: '',
+        },
   })
 
   const { formState } = methods
+
+  const isEdit = mode === 'edit'
+  const isPending = isEdit ? updatePost.isPending : createPost.isPending
 
   const onSubmit = (data: PostFormWithTagValues) => {
     const payload = {
@@ -59,18 +86,32 @@ export default function PostForm() {
       ageType: data.ageType as AgeType,
     }
 
-    mutate(payload, {
-      onSuccess: () => {
-        toast.success('게시글이 등록되었습니다.')
-        router.push('/')
-      },
-    })
+    if (isEdit && postId) {
+      updatePost.mutate(
+        { postId, payload },
+        {
+          onSuccess: () => {
+            toast.success('게시글이 수정되었습니다.')
+            router.push(`/posts/${postId}`)
+          },
+        },
+      )
+    } else {
+      createPost.mutate(payload, {
+        onSuccess: () => {
+          toast.success('게시글이 등록되었습니다.')
+          router.push('/')
+        },
+      })
+    }
   }
 
   return (
     <div className="flex flex-col items-center">
-      <div className="max-w-7xl w-full px-8">
-        <h1 className="text-2xl font-semibold mb-6 text-left">게시글 작성</h1>
+      <div className="max-w-xl w-full px-4">
+        <h1 className="text-2xl font-semibold mb-6 text-left">
+          {isEdit ? '게시글 수정' : '게시글 작성'}
+        </h1>
       </div>
       <div className="max-w-7xl flex items-center justify-center">
         <FormProvider {...methods}>
@@ -82,21 +123,47 @@ export default function PostForm() {
             <DateSection />
             <Description />
 
-            <div className="flex items-center gap-8 justify-center mt-6">
-              <Button
-                type="button"
-                size="md"
-                variant="secondary"
-                onClick={() => router.push('/')}
-              >
-                나가기
-              </Button>
+            <div className="flex items-center gap-8 justify-center my-3">
+              {isEdit && postId ? (
+                <Button
+                  type="button"
+                  size="md"
+                  variant="secondary"
+                  onClick={() => {
+                    if (!confirm('정말 삭제하시겠어요?')) return
+                    deletePost.mutate(postId, {
+                      onSuccess: () => {
+                        toast.success('게시글이 삭제되었습니다.')
+                        router.push('/')
+                      },
+                    })
+                  }}
+                >
+                  삭제
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="md"
+                  variant="secondary"
+                  onClick={() => router.push('/')}
+                >
+                  나가기
+                </Button>
+              )}
+
               <Button
                 type="submit"
                 size="md"
                 disabled={!formState.isValid || isPending}
               >
-                {isPending ? '등록 중...' : '게시글 등록'}
+                {isPending
+                  ? isEdit
+                    ? '수정 중...'
+                    : '등록 중...'
+                  : isEdit
+                    ? '게시글 수정'
+                    : '게시글 등록'}
               </Button>
             </div>
           </form>

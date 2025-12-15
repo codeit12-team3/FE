@@ -1,4 +1,9 @@
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from '@tanstack/react-query'
 
 import { ApiResponse } from '@/types/common'
 import {
@@ -33,11 +38,23 @@ export const usePosts = (
     ...options,
   })
 }
-
-export const usePostDetail = (postId: string) => {
-  return useQuery<ApiResponse<PostContent>>({
+export const usePostDetail = ({
+  postId,
+  initialData,
+}: {
+  postId: string
+  initialData: ApiResponse<PostContent>
+}) => {
+  return useQuery({
     queryKey: ['postdetail', postId],
     queryFn: () => fetchPostsDetail(postId),
+    initialData: initialData,
+    select: (response) => {
+      if (!response.success) {
+        throw new Error(response.data.message)
+      }
+      return response.data
+    },
   })
 }
 
@@ -64,15 +81,52 @@ export const useDeletePost = () => {
 }
 
 export const useAddBookmark = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (postId: string) => addBookmark(postId),
     retry: 0,
+    onSuccess: (_, postId) => {
+      queryClient.setQueryData<ApiResponse<PostContent>>(
+        ['postdetail', postId],
+        (old) => {
+          if (!old || !old.success) return old
+          return {
+            success: true,
+            status: old.status,
+            timestamp: old.timestamp,
+            data: {
+              ...old.data,
+              isBookmarked: true,
+            },
+          }
+        },
+      )
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
   })
 }
-
 export const useRemoveBookmark = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (postId: string) => removeBookmark(postId),
     retry: 0,
+    onSuccess: (_, postId) => {
+      queryClient.setQueryData<ApiResponse<PostContent>>(
+        ['postdetail', postId],
+        (old) => {
+          if (!old || !old.success) return old
+          return {
+            success: true,
+            status: old.status,
+            timestamp: old.timestamp,
+            data: {
+              ...old.data,
+              isBookmarked: false,
+            },
+          }
+        },
+      )
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
   })
 }

@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/common'
 
-export default function CommentItemSkeleton() {
+export default function CommentSkeleton() {
   return (
     <div className="w-4xl mr-auto p-4">
       <div className=" rounded-lg p-4">

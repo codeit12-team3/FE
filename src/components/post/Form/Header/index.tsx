@@ -60,17 +60,15 @@ export default function Header() {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="flex items-center gap-1 px-2 py-1 border border-main text-main rounded-full text-sm bg-sub mb-3"
+              className="flex items-center gap-1 p-2  text-main rounded-full bg-sub mb-3"
             >
-              <span>#{tag}</span>
+              <span className="text-xs">{tag}</span>
               <button
                 type="button"
                 onClick={() => void removeTag(tag)}
                 className="text-main hover:text-danger"
               >
-                <div className="border border-main rounded-full">
-                  <X className="size-3" />
-                </div>
+                <X className="size-4" />
               </button>
             </div>
           ))}
