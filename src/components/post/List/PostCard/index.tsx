@@ -16,7 +16,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const LABEL = 'text-text-disabled'
   const VALUE = 'text-text-base'
   const INFO_ROW = 'flex items-center gap-1'
-
+  const thumbnailSrc =
+    post.thumbnail && post.thumbnail.length > 0
+      ? post.thumbnail
+      : '/placeholder.png'
   return (
     <div
       className={CARD_BASE}
@@ -27,7 +30,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
             <Image
-              src={post.thumbnail}
+              src={thumbnailSrc}
               alt={post.title}
               fill
               className="object-cover"
@@ -36,7 +39,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
         ) : (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
             <Image
-              src={post.thumbnail}
+              src={thumbnailSrc}
               alt={post.title}
               fill
               className="object-cover"

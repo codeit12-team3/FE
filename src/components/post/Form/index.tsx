@@ -6,8 +6,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { useCreatePost, useUpdatePost } from '@/api/posts'
+import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
 import { Button } from '@/components/common'
+import button from '@/components/ui/button'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
@@ -27,6 +28,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const router = useRouter()
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
+  const deletePost = useDeletePost()
   const resolver = zodResolver(
     postSchema,
   ) as unknown as Resolver<PostFormWithTagValues>
@@ -122,15 +124,34 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
             <DateSection />
             <Description />
 
-            <div className="flex items-center gap-8 justify-center mt-6">
-              <Button
-                type="button"
-                size="md"
-                variant="secondary"
-                onClick={() => router.push(isEdit ? `/posts/${postId}` : '/')}
-              >
-                나가기
-              </Button>
+            <div className="flex items-center gap-8 justify-center my-3">
+              {isEdit && postId ? (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => {
+                    if (!confirm('정말 삭제하시겠어요?')) return
+                    deletePost.mutate(postId, {
+                      onSuccess: () => {
+                        toast.success('게시글이 삭제되었습니다.')
+                        router.push('/')
+                      },
+                    })
+                  }}
+                >
+                  삭제
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="md"
+                  variant="secondary"
+                  onClick={() => router.push('/')}
+                >
+                  나가기
+                </Button>
+              )}
+
               <Button
                 type="submit"
                 size="md"
