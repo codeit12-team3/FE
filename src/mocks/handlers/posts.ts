@@ -1,6 +1,7 @@
 import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
+import { PostListItem } from '@/types/posts'
 
 export const postsHandlers = [
   http.get(`${MOCK_URL}/v1/posts`, async ({ request }) => {
@@ -8,33 +9,63 @@ export const postsHandlers = [
 
     const url = new URL(request.url)
 
-    const lastPostId = url.searchParams.get('lastPostId')
+    const lastItemId = url.searchParams.get('lastItemId')
     const size = Number(url.searchParams.get('size') || 20)
-    const age = url.searchParams.get('age')
-    const ageType = url.searchParams.get('ageType')
 
-    if ((age && !ageType) || (!age && ageType)) {
-      return HttpResponse.json(
-        {
-          success: false,
-          status: 400,
-          data: {
-            errorCode: 'AGE_BAD_REQUEST',
-            message: 'age와 ageType은 함께 전달되어야 합니다.',
+    const keyword = url.searchParams.get('keyword')
+    const nation = url.searchParams.get('nation')
+    const ageType = url.searchParams.get('ageType')
+    const gender = url.searchParams.get('gender')
+
+    const startId = lastItemId ? Number(lastItemId) + 1 : 1
+
+    let mockData: PostListItem[] = Array.from({ length: size }).map(
+      (_, idx) => {
+        const id = startId + idx
+
+        return {
+          postId: id,
+          title: `Mock title ${id}`,
+          nation: id % 2 === 0 ? '한국' : '일본',
+          region: id % 2 === 0 ? '서울' : '도쿄',
+          period: {
+            startDate: '2025-01-01',
+            endDate: '2025-01-02',
           },
-          timestamp: '2025-12-02',
-        },
-        {
-          status: 400,
-          statusText: 'Bad Request',
-        },
+          recruitStatus: 'RECRUITING',
+          tags: ['힐링', '여행'],
+          nickname: 'mockUser',
+          currentMembers: 1,
+          maxMembers: 3,
+          conditions: {
+            ageType: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
+            genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          },
+          isBookmarked: false,
+          thumbnail: '/mock.png',
+        }
+      },
+    )
+
+    if (keyword) {
+      mockData = mockData.filter((post) =>
+        post.title.toLowerCase().includes(keyword.toLowerCase()),
       )
     }
 
-    const mockData = Array.from({ length: size }).map((_, idx) => ({
-      postId: lastPostId ? Number(lastPostId) + idx + 1 : idx + 1,
-      title: `Mock title ${idx + 1}`,
-    }))
+    if (nation) {
+      mockData = mockData.filter((post) => post.nation === nation)
+    }
+
+    if (ageType) {
+      mockData = mockData.filter((post) => post.conditions.ageType === ageType)
+    }
+
+    if (gender) {
+      mockData = mockData.filter(
+        (post) => post.conditions.genderCondition === gender,
+      )
+    }
 
     return HttpResponse.json({
       success: true,
@@ -51,8 +82,17 @@ export const postsHandlers = [
     await delay(2000)
 
     const body = (await request.json()) as {
+      title: string
+      content: string
+      nation: string
+      region: string
       startDate: string
       endDate: string
+      maxMembers: number
+      tags: string[]
+      images: string[]
+      genderType: string
+      ageType: string
     }
 
     if (body.startDate > body.endDate) {
@@ -72,12 +112,55 @@ export const postsHandlers = [
         },
       )
     }
+
+    const mockPostId = Math.floor(Math.random() * 1000) + 1
+
+    return HttpResponse.json(
+      {
+        success: true,
+        status: 201,
+        data: {
+          postId: mockPostId.toString(),
+        },
+        timestamp: new Date().toISOString(),
+      },
+      {
+        status: 201,
+      },
+    )
+  }),
+
+  http.post(`${MOCK_URL}/v1/images/presigned-url`, async ({ request }) => {
+    console.log('🖼️ [MSW] Presigned URL 요청 받음')
+    await delay(500)
+
+    const body = (await request.json()) as {
+      images: Array<{
+        imageId: string
+        imageType: string
+        imageDirectory: string
+      }>
+    }
+
+    const urls = body.images.map((img) => ({
+      presignedUrl: `https://mock-s3.amazonaws.com/upload/${img.imageId}`,
+      image: `https://mock-cdn.example.com/${img.imageDirectory.toLowerCase()}/${img.imageId}.${img.imageType.toLowerCase()}`,
+    }))
+
     return HttpResponse.json({
       success: true,
-      status: 201,
-      data: null,
-      timestamp: '2025-12-02',
+      status: 200,
+      data: {
+        urls,
+      },
+      timestamp: new Date().toISOString(),
     })
+  }),
+
+  http.put('https://mock-s3.amazonaws.com/upload/:imageId', async () => {
+    console.log('📤 [MSW] S3 업로드 완료')
+    await delay(800)
+    return new HttpResponse(null, { status: 200 })
   }),
   http.get(`${MOCK_URL}/v1/posts/:postId`, async ({ params }) => {
     await delay(2000)

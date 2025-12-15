@@ -1,120 +1,56 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/common'
-import { PostContent, PostParams } from '@/types/posts'
+import { useInfinitePosts } from '@/hooks/posts/useInfinitePosts'
+import { PostFilterParams } from '@/types/posts'
 
+import PostListSkeleton from '../Skeleton/PostListSkeleton'
 import FilterBar from './FilterBar'
 import PostListSection from './PostListSection'
 
 export default function PostList() {
-  const [filters, setFilters] = useState<PostParams>({
+  const [filters, setFilters] = useState<PostFilterParams>({
     nation: '',
     date: '',
     ageType: undefined,
     gender: undefined,
     keyword: '',
   })
+  const [keywordInput, setKeywordInput] = useState('')
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilters((prev) => ({ ...prev, keyword: keywordInput }))
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [keywordInput])
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfinitePosts(filters)
 
-  // 임시 데이터
-  const mockPosts: PostContent[] = [
-    {
-      postId: '1',
-      title: '베트남 여행 같이 가실 분~',
-      content: '베트남 여행 같이 가실 분 모집합니다!',
-      nation: '베트남',
-      region: '다낭',
-      period: {
-        startDate: '2024-12-15',
-        endDate: '2024-12-20',
-      },
-      recruitStatus: 'RECRUITING',
-      tags: ['여행', '베트남'],
-      nickname: '여행러버',
-      currentMembers: 2,
-      maxMembers: 4,
-      conditions: {
-        ageCondition: 'TWENTY',
-        genderCondition: 'FEMALE',
-      },
-      isBookmarked: false,
-      thumbnail: ['/'],
-      createdAt: '2024-12-01',
-      updatedAt: '2024-12-01',
-    },
-    {
-      postId: 'post-2',
-      title: '다낭 4박5일 가족여행 동행 구해요',
-      content: '가족 여행 동행 구합니다.',
-      nation: '베트남',
-      region: '다낭',
-      period: {
-        startDate: '2025-02-21',
-        endDate: '2025-02-25',
-      },
-      recruitStatus: 'CLOSED',
-      tags: ['휴양', '숙소좋은곳', '가성비'],
-      nickname: '가족여행러버',
-      currentMembers: 3,
-      maxMembers: 3,
-      conditions: {
-        ageCondition: 'THIRTY',
-        genderCondition: 'ALL',
-      },
-      isBookmarked: false,
-      thumbnail: ['/'],
-      createdAt: '2025-02-21',
-      updatedAt: '2025-02-21',
-    },
-    {
-      postId: 'post-3',
-      title: '제주도 한라산 등반 같이 가실 분!',
-      content: '한라산 등반 같이 가요!',
-      nation: '한국',
-      region: '제주도',
-      period: {
-        startDate: '2024-12-30',
-        endDate: '2024-12-31',
-      },
-      recruitStatus: 'RECRUITING',
-      tags: ['액티비티', '등산', '힐링'],
-      nickname: '산타는고양이',
-      currentMembers: 1,
-      maxMembers: 2,
-      conditions: {
-        ageCondition: 'TWENTY',
-        genderCondition: 'ALL',
-      },
-      isBookmarked: true,
-      thumbnail: ['/'],
-      createdAt: '2024-12-30',
-      updatedAt: '2024-12-30',
-    },
-  ]
+  if (isLoading) return <PostListSkeleton />
+  if (!data) return <div>에러가 발생했습니다.</div>
 
-  // 나중에 API 연동 시 주석 해제
-  // const [cursor, setCursor] = useState<string | undefined>(undefined)
-  // const { data,isLoading } = usePosts({
-  //   lastPostId: cursor,
-  //   size: 20,
-  //   nation: filters.nation || undefined.
-  //   region: filters.region || undefined,
-  //   date: filters.date || undefined, // yyyy-MM-dd 형식
-  //   age: filters.age ? Number(filters.age) : undefined,
-  //   ageType: filters.ageType || undefined, // OLDER | YOUNGER
-  //   gender: filters.gender === '' ? undefined : filters.gender, // MALE | FEMALE | ALL
-  //   keyword: filters.search || undefined,
-  // })
-  // if(isLoading) return <PostListSkeleton/>
+  const posts = data.pages.flatMap((page) =>
+    page.success ? page.data.content : [],
+  )
 
   return (
     <div>
-      <FilterBar filters={filters} onChangeFilters={setFilters} />
-      <PostListSection posts={mockPosts} />
-      {mockPosts.length > 0 && (
+      <FilterBar
+        filters={filters}
+        onChangeFilters={setFilters}
+        keywordInput={keywordInput}
+        onChangeKeyword={setKeywordInput}
+      />
+
+      <PostListSection posts={posts} />
+
+      {hasNextPage && (
         <div className="flex justify-center mt-8">
-          <Button>더보기</Button>
+          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+            더보기
+          </Button>
         </div>
       )}
     </div>

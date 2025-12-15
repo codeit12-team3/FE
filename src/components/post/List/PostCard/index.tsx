@@ -5,9 +5,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/common/Button'
-import { PostContent } from '@/types/posts'
+import { PostListItem } from '@/types/posts'
 
-export default function PostCard({ post }: { post: PostContent }) {
+export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
@@ -27,7 +27,7 @@ export default function PostCard({ post }: { post: PostContent }) {
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
             <Image
-              src={post.thumbnail[0]}
+              src={post.thumbnail}
               alt={post.title}
               fill
               className="object-cover"
@@ -36,7 +36,7 @@ export default function PostCard({ post }: { post: PostContent }) {
         ) : (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
             <Image
-              src={post.thumbnail[0]}
+              src={post.thumbnail}
               alt={post.title}
               fill
               className="object-cover"
@@ -90,7 +90,7 @@ export default function PostCard({ post }: { post: PostContent }) {
 
             <div className={INFO_ROW}>
               <span className={LABEL}>나이</span>
-              <span className={VALUE}>{post.conditions.ageCondition}</span>
+              <span className={VALUE}>{post.conditions.ageType}</span>
             </div>
 
             <span className={LABEL}>|</span>
