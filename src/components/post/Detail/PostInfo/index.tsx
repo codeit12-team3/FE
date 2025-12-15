@@ -18,11 +18,23 @@ interface Props {
   }
 }
 
-const SECTION_TITLE_STYLE = 'font-semibold mb-2 text-text-base text-lg'
 const BLUE_BOX_STYLE = 'px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input'
 const TEXT_STYLE = 'text-sm text-text-input'
 
-export default function PostInfo({
+const InfoSection = ({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) => (
+  <div>
+    <h3 className="font-semibold mb-2 text-text-base text-lg">{title}</h3>
+    {children}
+  </div>
+)
+
+export default function Info({
   nation,
   region,
   period,
@@ -32,14 +44,12 @@ export default function PostInfo({
 }: Props) {
   return (
     <div className="space-y-8">
-      <div>
-        <h3 className={SECTION_TITLE_STYLE}>여행 지역</h3>
+      <InfoSection title="여행 지역">
         <span className={`${TEXT_STYLE} mr-1`}>{nation}</span>
         <span className={TEXT_STYLE}>{region}</span>
-      </div>
+      </InfoSection>
 
-      <div>
-        <h3 className={SECTION_TITLE_STYLE}>여행 일정</h3>
+      <InfoSection title="여행 일정">
         <div className="grid grid-cols-2 gap-4 w-2/3">
           <div className={`${BLUE_BOX_STYLE} flex gap-2`}>
             <CalendarDays className="text-main size-5" />
@@ -50,15 +60,13 @@ export default function PostInfo({
             {period.endDate}
           </div>
         </div>
-      </div>
+      </InfoSection>
 
-      <div>
-        <h3 className={SECTION_TITLE_STYLE}>모집 설명</h3>
+      <InfoSection title="모집 설명">
         <div className={`${BLUE_BOX_STYLE} rounded-lg w-2/3`}>{content}</div>
-      </div>
+      </InfoSection>
 
-      <div>
-        <h3 className={SECTION_TITLE_STYLE}>모집 정원 및 조건</h3>
+      <InfoSection title="모집 정원 및 조건">
         <div className="flex gap-4">
           <span>
             총 <span className="text-main">{stats.maxMembers}</span>명
@@ -66,7 +74,7 @@ export default function PostInfo({
           <span className="text-main">{conditions.ageCondition}</span>
           <span className="text-main">{conditions.genderCondition}</span>
         </div>
-      </div>
+      </InfoSection>
     </div>
   )
 }

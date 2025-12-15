@@ -1,5 +1,5 @@
 interface ApiErrorData {
-  errorCode: string
+  status: string
   message: string
 }
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -33,7 +35,7 @@ export default function Info() {
             name="nation"
             options={NATION_OPTIONS}
             placeholder="국가를 선택해주세요"
-            className="w-[200px]"
+            className="w-[230px]"
           />
         </div>
 
@@ -45,7 +47,7 @@ export default function Info() {
             name="region"
             options={cityOptions}
             placeholder="도시를 선택해주세요"
-            className="w-[200px]"
+            className="w-[230px]"
           />
         </div>
       </div>
@@ -54,32 +56,20 @@ export default function Info() {
         <FormInput
           label="모집 정원"
           type="number"
-          name="member"
+          name="maxMembers"
           placeholder="인원을 입력해주세요"
-          className="w-1/2"
+          className="w-[230px]"
           required
         />
         <div>
-          <Label htmlFor="nation" className="mb-4">
+          <Label htmlFor="gender" className="mb-4">
             성별 <span className="text-destructive">*</span>
           </Label>
-          <Controller
+          <FormSelect
             name="gender"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup
-                value={field.value ?? ''}
-                onValueChange={field.onChange}
-                className="flex gap-3 items-center"
-              >
-                {GENDER_OPTIONS.map((opt) => (
-                  <Label key={opt.value} className="flex items-center gap-2">
-                    <RadioGroupItem value={opt.value} />
-                    <span className="text-sm">{opt.label}</span>
-                  </Label>
-                ))}
-              </RadioGroup>
-            )}
+            options={GENDER_OPTIONS}
+            placeholder="성별을 선택해주세요"
+            className="w-[230px]"
           />
         </div>
       </div>

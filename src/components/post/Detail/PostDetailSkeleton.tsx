@@ -1,37 +1,29 @@
 'use client'
 
+import CommentSkeleton from '@/components/comment/List/CommentSkeleton'
 import { Skeleton } from '@/components/common'
 
-import CommentSkeleton from '../CommentSkeleton'
+import PostImagesSkeleton from './PostImagesSkeleton'
 
 export default function PostDetailSkeleton() {
   return (
     <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center">
       <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border border-[#DDDDDD]  space-y-8">
         <div className="space-y-3">
-          {/* 제목 */}
           <Skeleton />
           <div className="flex gap-2"></div>
         </div>
-        {/* 이미지 */}
-        <div className="flex gap-3 mb-6">
-          {[1, 2, 3].map((num) => (
-            <Skeleton key={num} className="w-32 h-32" />
-          ))}
-        </div>
-        {/* 태그 */}
+        <PostImagesSkeleton />
         <Skeleton size="sm" />
         <div className="flex gap-2">
-          {[1, 2, 3].map((num) => (
-            <Skeleton key={num} className=" w-14" />
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className=" w-14" />
           ))}
         </div>
-        {/* 국가 */}
         <div className="space-y-4">
           <Skeleton />
           <Skeleton size="sm" />
         </div>
-        {/* 일정 */}
         <div>
           <Skeleton className=" mb-2" />
           <div className="grid grid-cols-2 gap-4 w-2/3">
@@ -39,17 +31,14 @@ export default function PostDetailSkeleton() {
             <Skeleton size="lg" />
           </div>
         </div>
-        {/* 설명 */}
         <div className="space-y-4 w-2/3 ">
           <Skeleton />
           <Skeleton size="lg" className="h-30 " />
         </div>
-        {/* 인원 및 조건 */}
         <div>
           <Skeleton className="mb-2" />
           <Skeleton className="h-4 w-70 " />
         </div>
-        {/* 작성자 프로필 */}
         <Skeleton />
         <div className="space-y-3 border p-6 rounded-2xl">
           <div className="flex gap-2">
@@ -69,7 +58,6 @@ export default function PostDetailSkeleton() {
             </div>
           </div>
         </div>
-        {/* 버튼 */}
         <div className="flex gap-3 items-center justify-center my-8">
           <Skeleton className="h-10 w-68" />
           <Skeleton className="h-10 w-68" />

@@ -1,18 +1,17 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { ImagePlus, X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { uploadImage } from '@/api/member/member.clients'
-import { Button } from '@/components/common'
 import { Label } from '@/components/ui'
 import type { PostFormValues } from '@/types/posts/schema'
 
 export default function ImageUpload() {
-  const { setValue } = useFormContext<PostFormValues>()
+  const { setValue, register } = useFormContext<PostFormValues>()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
@@ -126,75 +125,73 @@ export default function ImageUpload() {
       previews.forEach((url) => URL.revokeObjectURL(url))
     }
   }, [previews])
-
+  const MAX_IMAGES = 3
+  useEffect(() => {
+    register('images')
+  }, [register])
   return (
     <div className="mb-6">
-      <Label className="mb-2">
-        이미지 <span className="text-danger">*</span>
-      </Label>
+      <Label className="mb-2">이미지</Label>
 
-      <div className="flex gap-2">
-        <div
+      <div className="flex gap-3">
+        <button
+          type="button"
           onClick={openPicker}
-          className={`flex items-center gap-2 px-4 py-2.5 w-full bg-sub rounded-lg text-sm ${
-            isUploading ? 'cursor-wait opacity-60' : 'cursor-pointer'
-          }`}
+          disabled={isUploading || previews.length >= MAX_IMAGES}
+          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover"
         >
-          {isUploading ? (
-            <span className="text-muted-foreground font-medium text-base">
-              이미지 업로드 중...
-            </span>
-          ) : previews.length === 0 ? (
-            <span className="text-muted-foreground font-medium text-base">
-              최대 3장, 5MB 제한
-            </span>
-          ) : (
-            <div className="flex gap-2">
-              {previews.map((src, idx) => (
-                <div key={src} className="relative">
+          <ImagePlus className="size-8 text-text-input" />
+        </button>
+        {Array.from({ length: MAX_IMAGES }).map((_, idx) => {
+          const src = previews[idx]
+          return (
+            <div
+              key={idx}
+              className="relative bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center"
+            >
+              {src ? (
+                <>
                   <Image
                     src={src}
-                    alt="preview"
-                    width={48}
-                    height={48}
-                    className="rounded-md object-cover"
+                    alt={`preview-${idx + 1}`}
+                    fill
+                    className="object-cover rounded-xl"
                   />
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeImage(idx)
-                    }}
-                    className="absolute -top-1 -right-1 bg-black/50 text-white size-4 text-xs rounded-full flex items-center justify-center"
+                    onClick={() => removeImage(idx)}
+                    className="absolute -top-1 -right-1 bg-black/50 size-5 rounded-full flex items-center justify-center"
                   >
-                    <div className="border border-main rounded-full">
-                      <X className="size-3" />
-                    </div>
+                    <X className="size-3 text-white" />
                   </button>
-                </div>
-              ))}
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openPicker}
+                  disabled={isUploading || previews.length >= MAX_IMAGES}
+                  className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover"
+                >
+                  <ImagePlus className="size-8 text-text-input" />
+                </button>
+              )}
             </div>
-          )}
-        </div>
-
-        <Button
-          type="button"
-          onClick={openPicker}
-          variant="secondary"
-          disabled={isUploading || previews.length >= 3}
-        >
-          {isUploading ? '업로드 중...' : '파일 찾기'}
-        </Button>
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={handleChange}
-        />
+          )
+        })}
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={handleChange}
+      />
+
+      <span className="text-muted-foreground font-medium text-sm">
+        최대 3장, 5MB 제한
+      </span>
     </div>
   )
 }

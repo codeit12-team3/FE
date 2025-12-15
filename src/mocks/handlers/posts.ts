@@ -3,6 +3,42 @@ import { delay, http, HttpResponse } from 'msw'
 import { MOCK_URL } from '@/constants/common'
 import { PostListItem } from '@/types/posts'
 
+const CURRENT_USER_ID = 999
+
+const mockPosts = Array.from({ length: 50 }).map((_, idx) => {
+  const id = String(idx + 1)
+
+  return {
+    postId: id,
+
+    // ✅ 전부 내 글로 만들어서 edit 항상 통과시키기
+    writerId: CURRENT_USER_ID,
+
+    title: `Mock title ${id}`,
+    content: `이것은 게시글 ${id}번의 상세 내용입니다.`,
+    nation: Number(id) % 2 === 0 ? '한국' : '일본',
+    region: Number(id) % 2 === 0 ? '서울' : '도쿄',
+    period: {
+      startDate: '2025-12-01T10:00:00',
+      endDate: '2025-12-06T10:00:00',
+    },
+    recruitStatus: 'RECRUITING',
+    tags: ['힐링', '여행'],
+    images: ['/mock.png'],
+    thumbnail: '/mock.png',
+    conditions: {
+      ageType: Number(id) % 2 === 0 ? 'TWENTY' : 'THIRTY',
+      genderCondition: Number(id) % 2 === 0 ? 'MALE' : 'FEMALE',
+    },
+    stats: {
+      maxMembers: 5,
+      currentMembers: 2,
+      viewCount: 42,
+    },
+    createdAt: '2025-12-01T10:00:00',
+    updatedAt: '2025-12-01T10:00:00',
+  }
+})
 export const postsHandlers = [
   http.get(`${MOCK_URL}/v1/posts`, async ({ request }) => {
     await delay(2000)
@@ -131,7 +167,6 @@ export const postsHandlers = [
   }),
 
   http.post(`${MOCK_URL}/v1/images/presigned-url`, async ({ request }) => {
-    console.log('🖼️ [MSW] Presigned URL 요청 받음')
     await delay(500)
 
     const body = (await request.json()) as {
@@ -158,7 +193,6 @@ export const postsHandlers = [
   }),
 
   http.put('https://mock-s3.amazonaws.com/upload/:imageId', async () => {
-    console.log('📤 [MSW] S3 업로드 완료')
     await delay(800)
     return new HttpResponse(null, { status: 200 })
   }),
@@ -182,13 +216,50 @@ export const postsHandlers = [
       )
     }
 
+    const id = Number(postId)
+
     return HttpResponse.json({
       success: true,
       status: 200,
       data: {
-        postId,
         title: `Mock Title ${postId}`,
-        content: `Mock Content ${postId}`,
+        content: `이것은 게시글 ${postId}번의 상세 내용입니다. 여행을 함께 떠나실 분을 모집합니다!`,
+        nation: id % 2 === 0 ? '한국' : '일본',
+        region: id % 2 === 0 ? '서울' : '도쿄',
+        period: {
+          startDate: '2025-12-01T10:00:00',
+          endDate: '2025-12-06T10:00:00',
+        },
+        stats: {
+          maxMembers: 5,
+          currentMembers: 2,
+          viewCount: 42,
+        },
+        recruitStatus: 'RECRUITING',
+        tags: ['힐링', '여행', '맛집'],
+        nickname: 'mockUser',
+        isOwner: true,
+        conditions: {
+          ageCondition: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
+          genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+        },
+        isBookmarked: false,
+        bookmarkCount: 10,
+        commentCount: 5,
+        images: ['/mock.png', '/mock.png'],
+        writer: {
+          memberId: 1,
+          nickname: 'mockUser',
+          profileImage: '/mock.png',
+          birth: 1990,
+          age: 35,
+          gender: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          mbti: 'ENFP',
+        },
+        thumbnail: ['/mock.png'],
+        createdAt: '2025-12-01T10:00:00',
+        updatedAt: '2025-12-01T10:00:00',
+        timestamp: '2025-12-02',
       },
       timestamp: '2025-12-02',
     })
@@ -267,12 +338,8 @@ export const postsHandlers = [
     await delay(2000)
 
     const { postId } = params
+    const post = mockPosts.find((p) => p.postId === postId)
 
-    const body = (await request.json()) as {
-      userId?: number
-      title?: string
-      content?: string
-    }
     if (!postId) {
       return HttpResponse.json(
         {
@@ -287,18 +354,18 @@ export const postsHandlers = [
         { status: 404 },
       )
     }
-    if (body.userId !== 999) {
+    if (post!.writerId !== CURRENT_USER_ID) {
       return HttpResponse.json(
         {
           success: false,
-          status: 401,
+          status: 403,
           data: {
-            status: 'UNAUTHORIZED',
+            status: 'FORBIDDEN',
             message: '해당 게시글을 수정할 권한이 없습니다.',
           },
           timestamp: '2025-12-02',
         },
-        { status: 401 },
+        { status: 403 },
       )
     }
     return HttpResponse.json(
