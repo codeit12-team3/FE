@@ -97,10 +97,6 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
               뒤로가기
             </Button>
             {postDetail.isOwner ? (
-              <Button size="md" className="w-68">
-                동행 참여하기
-              </Button>
-            ) : (
               <Button
                 size="md"
                 className="w-68"
@@ -108,11 +104,15 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
               >
                 수정하기
               </Button>
+            ) : (
+              <Button size="md" className="w-68">
+                동행 참여하기
+              </Button>
             )}
           </>
         </div>
 
-        {/* <Comment postId={postId} /> */}
+        <Comment postId={postId} />
       </div>
     </div>
   )
