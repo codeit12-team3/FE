@@ -24,14 +24,14 @@ export default function FormActionBtn() {
 
   const onSubmit = (data: ProfileEditFormData) => {
     const payload: UpdateMyProfileReq = {
-      image: data.image || 'ALL',
-      nickname: data.nickname || 'ALL',
-      birth: data.birth || 'ALL',
-      gender: data.gender || 'ALL',
-      mbti: data.mbti || 'ALL',
+      image: data.image || '',
+      nickname: data.nickname || '',
+      birth: data.birth || '',
+      gender: data.gender || '',
+      mbti: data.mbti || '',
       lodgingStyle: data.lodgingStyle || 'ALL',
       tripStyle: data.tripStyle || 'ALL',
-      introduction: data.introduction || 'ALL',
+      introduction: data.introduction || '',
     }
 
     updateProfile(payload, {

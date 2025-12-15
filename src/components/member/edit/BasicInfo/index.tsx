@@ -32,9 +32,7 @@ export default function BasicInfo() {
 
     checkNickname(nickname, {
       onSuccess: (response) => {
-        if (response.success) {
-          toast.success('사용 가능한 닉네임입니다')
-        }
+        if (!response) toast.success('사용 가능한 닉네임입니다')
       },
       onError: (error) => {
         const axiosError = error as AxiosError<ApiResponse<null>>

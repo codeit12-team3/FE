@@ -41,8 +41,6 @@ export default function ProfileEditPage() {
     }
   }, [data, methods])
 
-  console.log(data)
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
