@@ -140,43 +140,35 @@ export default function ImageUpload() {
             isUploading ? 'cursor-wait opacity-60' : 'cursor-pointer'
           }`}
         >
-          {isUploading ? (
-            <span className="text-muted-foreground font-medium text-base">
-              이미지 업로드 중...
-            </span>
-          ) : previews.length === 0 ? (
-            <span className="text-muted-foreground font-medium text-base">
-              최대 3장, 5MB 제한
-            </span>
-          ) : (
-            <div className="flex gap-2">
-              {previews.map((src, idx) => (
-                <div key={src} className="relative">
-                  <Image
-                    src={src}
-                    alt="preview"
-                    width={48}
-                    height={48}
-                    className="rounded-md object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeImage(idx)
-                    }}
-                    className="absolute -top-1 -right-1 bg-black/50 text-white size-4 text-xs rounded-full flex items-center justify-center"
-                  >
-                    <div className="border border-main rounded-full">
-                      <X className="size-3" />
-                    </div>
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex gap-2 rouneded-full">
+            {previews.map((src, idx) => (
+              <div key={src} className="relative">
+                <Image
+                  src={src}
+                  alt="preview"
+                  width={48}
+                  height={48}
+                  className="rounded-md object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeImage(idx)
+                  }}
+                  className="absolute -top-1 -right-1 bg-black/50 text-white size-4 text-xs rounded-full flex items-center justify-center"
+                >
+                  <div className="border border-main rounded-full">
+                    <X className="size-3" />
+                  </div>
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-
+        <span className="text-muted-foreground font-medium text-base">
+          최대 3장, 5MB 제한
+        </span>
         <Button
           type="button"
           onClick={openPicker}

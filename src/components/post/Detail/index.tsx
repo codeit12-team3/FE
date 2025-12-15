@@ -1,6 +1,6 @@
 'use client'
 
-import { notFound } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
@@ -26,7 +26,7 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
     isLoading,
     error,
   } = usePostDetail({ postId, initialData })
-
+  const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
 
@@ -92,12 +92,24 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
         <PostWriter writer={writerProps} />
 
         <div className="flex gap-3 items-center justify-center my-8">
-          <Button variant="secondary" size="md" className="w-68">
-            뒤로가기
-          </Button>
-          <Button size="md" className="w-68">
-            동행 참여하기
-          </Button>
+          <>
+            <Button variant="secondary" size="md" className="w-68">
+              뒤로가기
+            </Button>
+            {postDetail.isOwner ? (
+              <Button size="md" className="w-68">
+                동행 참여하기
+              </Button>
+            ) : (
+              <Button
+                size="md"
+                className="w-68"
+                onClick={() => router.push(`/posts/${postId}/edit`)}
+              >
+                수정하기
+              </Button>
+            )}
+          </>
         </div>
 
         {/* <Comment postId={postId} /> */}

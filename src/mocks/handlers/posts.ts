@@ -193,8 +193,8 @@ export const postsHandlers = [
         nation: id % 2 === 0 ? '한국' : '일본',
         region: id % 2 === 0 ? '서울' : '도쿄',
         period: {
-          startDate: '2025-01-01',
-          endDate: '2025-01-02',
+          startDate: '2025-12-01T10:00:00',
+          endDate: '2025-12-06T10:00:00',
         },
         stats: {
           maxMembers: 5,
@@ -204,7 +204,7 @@ export const postsHandlers = [
         recruitStatus: 'RECRUITING',
         tags: ['힐링', '여행', '맛집'],
         nickname: 'mockUser',
-        isOwner: false,
+        isOwner: true,
         conditions: {
           ageCondition: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
           genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
