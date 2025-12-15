@@ -68,7 +68,7 @@ export default function Info() {
           <FormSelect
             name="gender"
             options={GENDER_OPTIONS}
-            placeholder="국가를 선택해주세요"
+            placeholder="성별을 선택해주세요"
             className="w-[230px]"
           />
         </div>
