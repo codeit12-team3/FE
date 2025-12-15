@@ -23,10 +23,10 @@ export const MBTI_LIST = [
 ] as const
 export type MBTI = (typeof MBTI_LIST)[number]
 
-export const GENDER_LIST = ['male', 'female'] as const
+export const GENDER_LIST = ['MALE', 'FEMALE'] as const
 export const GENDER_MAP: Record<Gender, string> = {
-  male: '남자',
-  female: '여자',
+  MALE: '남자',
+  FEMALE: '여자',
 } as const
 export type Gender = (typeof GENDER_LIST)[number]
 
