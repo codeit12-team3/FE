@@ -89,7 +89,23 @@ export const uploadImage = async (
   imageType: 'JPG' | 'PNG' | 'SVG',
   imageDirectory: 'MEMBER' | 'POST' = 'MEMBER',
 ): Promise<string> => {
+  console.log('🚀 uploadImage 시작', {
+    imageType,
+    imageDirectory,
+    fileSize: file.size,
+  })
+
   // 1. Presigned URL 발급
+  console.log('1️⃣ Presigned URL 요청 데이터:', {
+    images: [
+      {
+        imageId: 'uuid-생성됨', // 실제 uuidv4() 결과는 로그에 안 찍히지만 구조 확인
+        imageType,
+        imageDirectory,
+      },
+    ],
+  })
+
   const presignedData = await getPresignedUrl({
     images: [
       {
@@ -100,14 +116,41 @@ export const uploadImage = async (
     ],
   })
 
-  // 2. S3 업로드
-  const { presignedUrl, image } = presignedData.urls[0]
-  await uploadToS3(presignedUrl, file, getContentType(imageType))
+  console.log('2️⃣ Presigned URL 응답 수신:', {
+    presignedUrl: presignedData.urls[0].presignedUrl.substring(0, 100) + '...', // 너무 길어서 자름
+    imagePath: presignedData.urls[0].image,
+  })
 
-  // 3. 이미지 경로 반환
+  const { presignedUrl, image } = presignedData.urls[0]
+
+  // 2. S3 업로드
+  console.log('3️⃣ S3 PUT 요청 시작...', {
+    url: presignedUrl.substring(0, 100) + '...',
+    contentType: getContentType(imageType),
+    fileSize: file.size,
+  })
+
+  const response = await fetch(presignedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': getContentType(imageType),
+    },
+    body: file,
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(
+      `S3 업로드 실패: ${response.status} ${response.statusText} - ${errorText}`,
+    )
+  }
+
+  console.log('4️⃣ S3 업로드 성공! (HTTP', response.status, ')')
+
+  // 3. 최종 이미지 경로 반환
+  console.log('✅ 최종 반환할 이미지 경로:', image)
   return image
 }
-
 /**
  * 클린업에서 사용할 삭제용 (수정안하고 벗어날때)
  */

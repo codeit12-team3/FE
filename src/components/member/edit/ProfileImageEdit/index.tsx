@@ -62,6 +62,8 @@ export default function ProfileImageEdit() {
     const file = e.target.files?.[0]
     if (!file) return
 
+    console.log('📁 선택된 파일:', file.name, file.size, file.type)
+
     const imageType = getImageType(file)
     if (!imageType) {
       toast.error('JPG, JPEG, PNG, SVG만 업로드 가능해요!')
@@ -69,40 +71,58 @@ export default function ProfileImageEdit() {
       return
     }
 
+    console.log('✅ 허용된 이미지 타입:', imageType)
+
     try {
       setIsUploading(true)
 
       let uploadFile: File | Blob = file
       let previewUrl: string
-      //압축라이브러리가 SVG는 지원안해서 스킵하는부분
+
       if (imageType === 'SVG') {
         uploadFile = file
         previewUrl = URL.createObjectURL(file)
+        console.log('🖼️ SVG는 압축 스킵, 프리뷰 URL 생성')
       } else {
+        console.log('🗜️ 이미지 압축 시작...')
         const compressed = await compress(file)
         uploadFile = compressed.file
         previewUrl = compressed.previewUrl
-      }
-
-      setProfileImg(previewUrl)
-      const previousUploadedPath = uploadedImagePathRef.current
-      const originalPath = originalImagePathRef.current
-
-      if (previousUploadedPath && previousUploadedPath !== originalPath) {
-        await deleteUnusedImage(previousUploadedPath).catch((error) => {
-          console.error(error)
+        console.log('✅ 압축 완료:', {
+          originalSize: file.size,
+          compressedSize: compressed.file.size,
+          ratio:
+            (((file.size - compressed.file.size) / file.size) * 100).toFixed(
+              2,
+            ) + '% 감소',
         })
       }
 
-      //프리사인드 됐으면 S3 업로드할부분
+      setProfileImg(previewUrl)
+
+      // 이전 업로드된 이미지 정리
+      const previousUploadedPath = uploadedImagePathRef.current
+      if (
+        previousUploadedPath &&
+        previousUploadedPath !== originalImagePathRef.current
+      ) {
+        console.log('🗑️ 이전 임시 이미지 삭제 시도:', previousUploadedPath)
+        await deleteUnusedImage(previousUploadedPath).catch((error) => {
+          console.error('❌ 이전 이미지 삭제 실패:', error)
+        })
+      }
+
+      console.log('🔗 Presigned URL 요청 시작...')
       const imagePath = await uploadImage(uploadFile, imageType, 'MEMBER')
+      console.log('🎉 업로드 성공! 반환된 이미지 경로:', imagePath)
+
       setValue('image', imagePath, { shouldDirty: true })
       uploadedImagePathRef.current = imagePath
-      toast.success('프로필 사진이 변경되었습니다!', {
-        duration: 2000,
-      })
+
+      toast.success('프로필 사진이 변경되었습니다!', { duration: 2000 })
     } catch (err) {
-      console.error(err)
+      console.error('💥 이미지 업로드 전체 과정 실패:', err)
+
       setProfileImg(imageValue || null)
       toast.error('이미지 업로드 중 오류가 발생했습니다')
     } finally {
@@ -110,7 +130,6 @@ export default function ProfileImageEdit() {
       e.target.value = ''
     }
   }
-
   return (
     <div className="relative group">
       <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
