@@ -8,15 +8,15 @@ import type { PostFormValues } from '@/types/posts/schema'
 export default function Description() {
   const { watch, setValue } = useFormContext<PostFormValues>()
 
-  const description = watch('description') ?? ''
+  const content = watch('content') ?? ''
 
   return (
     <div>
       <Label className="mb-2">모집 설명</Label>
       <Textarea
-        value={description}
+        value={content}
         onChange={(e) =>
-          setValue('description', e.target.value, {
+          setValue('content', e.target.value, {
             shouldDirty: true,
             shouldValidate: true,
           })
