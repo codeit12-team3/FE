@@ -11,7 +11,7 @@ import { Label } from '@/components/ui'
 import type { PostFormValues } from '@/types/posts/schema'
 
 export default function ImageUpload() {
-  const { setValue } = useFormContext<PostFormValues>()
+  const { setValue, register } = useFormContext<PostFormValues>()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previews, setPreviews] = useState<string[]>([])
@@ -126,12 +126,12 @@ export default function ImageUpload() {
     }
   }, [previews])
   const MAX_IMAGES = 3
-
+  useEffect(() => {
+    register('images')
+  }, [register])
   return (
     <div className="mb-6">
-      <Label className="mb-2">
-        이미지 <span className="text-danger">*</span>
-      </Label>
+      <Label className="mb-2">이미지</Label>
 
       <div className="flex gap-3">
         <button
