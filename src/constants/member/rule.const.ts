@@ -31,7 +31,7 @@ export const GENDER_MAP: Record<Gender, string> = {
 export type Gender = (typeof GENDER_LIST)[number]
 
 export const TRIP_STYLE_OPTIONS = [
-  { value: 'ALL', label: '무관' },
+  { value: 'ALL', label: '선택 안 함' },
   { value: 'PLANNING', label: '계획' },
   { value: 'HEALING', label: '힐링' },
   { value: 'PHOTOGRAPHY', label: '포토' },
@@ -41,7 +41,7 @@ export const TRIP_STYLE_OPTIONS = [
 ] as const
 
 export const LODGING_STYLE_OPTIONS = [
-  { value: 'ALL', label: '무관' },
+  { value: 'ALL', label: '선택 안 함' },
   { value: 'BUDGET_FRIENDLY', label: '가성비' },
   { value: 'LUXURY_HOTEL', label: '호캉스' },
   { value: 'AESTHETIC', label: '감성중시' },

@@ -30,7 +30,7 @@ export default function FormActionBtn() {
       gender: data.gender || 'ALL',
       mbti: data.mbti || 'ALL',
       lodgingStyle: data.lodgingStyle || 'ALL',
-      travelStyle: data.travelStyle || 'ALL',
+      tripStyle: data.tripStyle || 'ALL',
       introduction: data.introduction || 'ALL',
     }
 

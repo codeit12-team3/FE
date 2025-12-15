@@ -5,13 +5,12 @@ import { MOCK_URL } from '@/constants/common'
 let mockMember = {
   memberId: '1',
   nickname: '여행왕',
-  name: '홍길동',
   birth: '2000-07-20',
-  gender: 'male',
+  gender: 'MALE',
   image: null,
   mbti: 'ENFP',
-  lodgingStyle: '가성비',
-  travelStyle: '힐링',
+  lodgingStyle: 'BUDGET_FRIENDLY',
+  tripStyle: 'HEALING',
   introduction: '세계여행이 꿈입니다~',
 }
 

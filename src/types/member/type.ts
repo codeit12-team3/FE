@@ -15,7 +15,7 @@ export interface UpdateMyProfileReq {
   mbti?: string
   image?: string
   lodgingStyle?: string
-  travelStyle?: string
+  tripStyle?: string
   introduction?: string
 }
 
@@ -28,7 +28,7 @@ export interface MyProfile {
   image: string | null
   mbti?: string
   lodgingStyle?: string
-  travelStyle?: string
+  tripStyle?: string
   introduction?: string
 }
 

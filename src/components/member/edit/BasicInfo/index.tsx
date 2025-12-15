@@ -1,63 +1,75 @@
 'use client'
 
+import { AxiosError } from 'axios'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useCheckNickname } from '@/api/member'
+import FormInput from '@/components/form/FormInput'
+import { Button } from '@/components/ui/button'
 import {
   NICKNAME_MAX_LENGTH,
   NICKNAME_REGEX,
 } from '@/constants/member/rule.const'
+import { ApiResponse } from '@/types/common'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function BasicInfo() {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<ProfileEditFormData>()
+  const { watch } = useFormContext<ProfileEditFormData>()
+  const nickname = watch('nickname')
+
+  const { mutate: checkNickname, isPending } = useCheckNickname()
+
+  const handleCheckDuplicate = () => {
+    if (!nickname || nickname.trim().length < 2) {
+      toast.error('닉네임은 2자 이상 입력해주세요')
+      return
+    }
+    if (!NICKNAME_REGEX.test(nickname)) {
+      toast.error('한글, 영문, 숫자, 특수문자만 사용 가능합니다')
+      return
+    }
+
+    checkNickname(nickname, {
+      onSuccess: (response) => {
+        if (response.success) {
+          toast.success('사용 가능한 닉네임입니다')
+        }
+      },
+      onError: (error) => {
+        const axiosError = error as AxiosError<ApiResponse<null>>
+        const message =
+          axiosError.response?.data?.success === false
+            ? axiosError.response.data.data.message
+            : '닉네임 확인에 실패했습니다'
+        toast.error(message)
+      },
+    })
+  }
 
   return (
-    <>
-      <div className="flex flex-col gap-3">
-        <Label htmlFor="nickname">
-          닉네임 <span className="text-danger">*</span>
-        </Label>
-        <Input
-          id="nickname"
-          {...register('nickname', {
-            required: '닉네임을 입력하세요',
-            maxLength: {
-              value: NICKNAME_MAX_LENGTH,
-              message: `닉네임은 최대 ${NICKNAME_MAX_LENGTH}자까지 가능합니다`,
-            },
-            pattern: {
-              value: NICKNAME_REGEX,
-              message: '닉네임에 사용할 수 없는 문자가 포함되어 있습니다',
-            },
-          })}
-          type="text"
-          className="w-42"
-          placeholder="닉네임"
-          maxLength={NICKNAME_MAX_LENGTH}
-          aria-invalid={!!errors.nickname}
-        />
-        {errors.nickname && (
-          <p className="text-danger text-sm">{errors.nickname.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <Label htmlFor="name">이름</Label>
-        <Input
-          id="name"
-          {...register('name')}
-          type="text"
-          className="w-41.5"
-          placeholder="이름"
-          disabled
-          aria-readonly="true"
-        />
-      </div>
-    </>
+    <div className="flex flex-col gap-3">
+      <FormInput
+        label="닉네임"
+        name="nickname"
+        type="text"
+        placeholder="닉네임"
+        maxLength={NICKNAME_MAX_LENGTH}
+        required
+        className="w-100"
+        rightElement={
+          <Button
+            type="button"
+            onClick={handleCheckDuplicate}
+            disabled={isPending || !nickname}
+            variant="secondary"
+            size="sm"
+            className="whitespace-nowrap"
+          >
+            {isPending ? '확인 중' : '중복확인'}
+          </Button>
+        }
+      />
+    </div>
   )
 }
