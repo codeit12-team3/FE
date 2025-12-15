@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-import { CommentType } from '@/types/comments/comments.type'
+import { CommentContent } from '@/types/comments/comments.type'
 
 import Comment from './Comment'
 import ReplyList from './ReplyList'
 
 interface CommentThreadProps {
-  parent: CommentType
-  replies: CommentType[]
+  parent: CommentContent
+  replies: CommentContent[]
 }
 
 export default function CommentThread({ parent, replies }: CommentThreadProps) {

@@ -29,11 +29,23 @@ export const usePosts = (params: PostParams) => {
     queryFn: () => fetchPosts(params),
   })
 }
-
-export const usePostDetail = (postId: string) => {
-  return useQuery<ApiResponse<PostContent>>({
+export const usePostDetail = ({
+  postId,
+  initialData,
+}: {
+  postId: string
+  initialData: ApiResponse<PostContent>
+}) => {
+  return useQuery({
     queryKey: ['postdetail', postId],
     queryFn: () => fetchPostsDetail(postId),
+    initialData: initialData,
+    select: (response) => {
+      if (!response.success) {
+        throw new Error(response.data.message)
+      }
+      return response.data
+    },
   })
 }
 

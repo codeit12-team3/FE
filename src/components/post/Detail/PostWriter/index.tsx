@@ -7,21 +7,11 @@ interface Props {
     gender: 'MALE' | 'FEMALE'
     mbti: string
     birth: number
-    tripstyle: string
-    accommodationPreference: string
   }
 }
 
 export default function PostWriter({ writer }: Props) {
-  const {
-    nickname,
-    age,
-    gender,
-    mbti,
-    birth,
-    tripstyle,
-    accommodationPreference,
-  } = writer
+  const { nickname, age, gender, mbti, birth } = writer
 
   return (
     <div className="my-8 w-2/3">
@@ -50,13 +40,6 @@ export default function PostWriter({ writer }: Props) {
                 </PostWriterRow>
 
                 <PostWriterRow label="MBTI">{mbti}</PostWriterRow>
-              </div>
-              <div>
-                <PostWriterRow label="여행 스타일">{tripstyle}</PostWriterRow>
-
-                <PostWriterRow label="숙소 취향">
-                  {accommodationPreference}
-                </PostWriterRow>
               </div>
             </div>
           </div>

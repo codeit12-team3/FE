@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { notFound } from 'next/navigation'
 
+import { usePostDetail } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/common'
+import { ApiResponse } from '@/types/common/api-response.type'
+import { PostContent } from '@/types/posts'
 
 import PostDetailSkeleton from './PostDetailSkeleton'
 import PostHeader from './PostHeader'
@@ -12,71 +15,17 @@ import PostInfo from './PostInfo'
 import PostTags from './PostTags'
 import PostWriter from './PostWriter'
 
-export default function PostDetail() {
-  const [isLoading, setIsLoading] = useState(false)
-  // 임시 데이터
-  const postDetail = {
-    postId: 'post-2',
-    title: '카지노 가보실 분',
-    nation: '미국',
-    region: '뉴욕',
-    period: {
-      startDate: '2025-02-10',
-      endDate: '2025-02-20 ',
-    },
-    stats: {
-      maxMembers: 3,
-      currentMembers: 0,
-      viewCount: 5,
-    },
-    content:
-      '함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!함께 여행할 분을 찾습니다!',
-    createdAt: '2025-12-06T16:19:42.712967883',
-    tags: ['힐링', '도박', '카지노'],
-    conditions: {
-      ageCondition: '20대만',
-      genderCondition: '남자만',
-    },
-    isBookmarked: false,
-    commentCount: 22,
-    images: ['', '', ''],
-    writer: {
-      nickname: 'abcd',
-      age: 26,
-      gender: 'MALE',
-      mbti: 'ENTP',
-      birth: 1999,
-      tripStyle: '힐링',
-      accommodationPreference: '호텔',
-    },
-    comments: [
-      {
-        commentId: 1,
-        parentId: null,
-        memberId: 1,
-        imageUrl: null,
-        nickname: '홍길동',
-        content: '좋은 게시글이네요!',
-        createdAt: 1701100800000,
-        updatedAt: null,
-        isUpdated: false,
-        depth: 0,
-      },
-      {
-        commentId: 2,
-        parentId: 1,
-        memberId: 3,
-        imageUrl: null,
-        nickname: '김철수',
-        content: '감사합니다~',
-        createdAt: 1701100800000,
-        updatedAt: null,
-        isUpdated: false,
-        depth: 1,
-      },
-    ],
-  }
+interface PostDetailProps {
+  postId: string
+  initialData: ApiResponse<PostContent>
+}
 
+export default function PostDetail({ postId, initialData }: PostDetailProps) {
+  const {
+    data: postDetail,
+    isLoading,
+    error,
+  } = usePostDetail({ postId, initialData })
   const headerProps = {
     title: postDetail.title,
     timestamp: postDetail.createdAt,
@@ -103,8 +52,9 @@ export default function PostDetail() {
     gender: postDetail.writer.gender as 'MALE' | 'FEMALE',
     mbti: postDetail.writer.mbti,
     birth: postDetail.writer.birth,
-    tripstyle: postDetail.writer.tripStyle,
-    accommodationPreference: postDetail.writer.accommodationPreference,
+  }
+  if (error || !postDetail) {
+    notFound()
   }
   if (isLoading) {
     return <PostDetailSkeleton />
@@ -131,13 +81,7 @@ export default function PostDetail() {
           </Button>
         </div>
 
-        <Comment
-          data={postDetail.comments}
-          mutateComment={({ content }) => console.log('댓글 등록:', content)}
-          mutateReply={({ parentId, content }) =>
-            console.log('대댓글 등록:', parentId, content)
-          }
-        />
+        <Comment postId={postId} />
       </div>
     </div>
   )

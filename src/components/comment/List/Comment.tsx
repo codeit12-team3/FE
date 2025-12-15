@@ -3,12 +3,10 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { formatRelativeTime } from '@/lib/common'
-import { CommentType } from '@/types/comments/comments.type'
-
-import CommentSkeleton from './CommentSkeleton'
+import { CommentContent } from '@/types/comments/comments.type'
 
 interface CommentProps {
-  comment: CommentType
+  comment: CommentContent
   currentUserId: number
   replyCount?: number
   onToggleReplies?: () => void
@@ -31,14 +29,10 @@ export default function Comment({
     imageUrl,
     isUpdated,
   } = comment
-  const [isLoading, setIsLoading] = useState(false)
   const [openMenu, setOpenMenu] = useState(false)
 
   const isOwner = currentUserId === memberId
 
-  if (isLoading) {
-    return <CommentSkeleton />
-  }
   return (
     <div className="flex gap-4 pt-8">
       <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center shrink-0 overflow-hidden">

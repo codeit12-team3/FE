@@ -2,31 +2,25 @@
 
 import { useMemo } from 'react'
 
-import { CommentType } from '@/types/comments/comments.type'
+import { createComment, useComments } from '@/api/comments'
+import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentWriteForm from './Form'
 import CommentList from './List'
 
 interface CommentContainerProps {
-  data: CommentType[]
-  mutateComment: (payload: { content: string }) => void
-  mutateReply: (payload: { parentId: number; content: string }) => void
+  postId: string
 }
 
-export default function CommentContainer({
-  data,
-  mutateComment,
-  mutateReply,
-}: CommentContainerProps) {
-  const parents = useMemo(() => data.filter((c) => c.depth === 0), [data])
-  const replies = useMemo(() => data.filter((c) => c.depth === 1), [data])
-
+export default function CommentContainer({ postId }: CommentContainerProps) {
   const handleSubmit = (text: string, parentId?: number | null) => {
-    if (parentId) {
-      mutateReply({ parentId, content: text })
-    } else {
-      mutateComment({ content: text })
-    }
+    const finalParentId =
+      parentId && typeof parentId === 'number' && parentId > 0 ? parentId : null
+    createComment({
+      postId,
+      parentId: finalParentId,
+      content: text,
+    })
   }
 
   return (
@@ -35,7 +29,7 @@ export default function CommentContainer({
 
       <CommentWriteForm onSubmit={handleSubmit} />
 
-      <CommentList parents={parents} replies={replies} />
+      <CommentList postId={postId} />
     </div>
   )
 }
