@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { deleteUnusedImage, uploadImage } from '@/api/member'
+import { uploadMemberImage } from '@/api/images/images.client'
+import { deleteUnusedImage } from '@/api/member'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { ProfileEditFormData } from '@/types/member/schema'
 
@@ -95,7 +96,7 @@ export default function ProfileImageEdit() {
       }
 
       //프리사인드 됐으면 S3 업로드할부분
-      const imagePath = await uploadImage(uploadFile, imageType, 'MEMBER')
+      const imagePath = await uploadMemberImage(uploadFile, imageType, 'MEMBER')
       setValue('image', imagePath, { shouldDirty: true })
       uploadedImagePathRef.current = imagePath
       toast.success('프로필 사진이 변경되었습니다!', {

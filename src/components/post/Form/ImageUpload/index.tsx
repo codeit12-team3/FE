@@ -3,25 +3,47 @@
 import { ImagePlus, X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { uploadImage } from '@/api/member/member.clients'
+import { uploadPostImages } from '@/api/images/images.client'
 import { Label } from '@/components/ui'
+import { getImageUrl } from '@/lib/common'
 import type { PostFormValues } from '@/types/posts/schema'
 
+const MAX_IMAGES = 3
+
 export default function ImageUpload() {
-  const { setValue, register } = useFormContext<PostFormValues>()
+  const { setValue, register, control } = useFormContext<PostFormValues>()
+
+  const formImages = useWatch({ control, name: 'images' })
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previews, setPreviews] = useState<string[]>([])
-  const [uploadedUrls, setUploadedUrls] = useState<string[]>([])
+  const initializedRef = useRef(false)
+
+  const [existingUrls, setExistingUrls] = useState<string[]>([])
+
+  const [newPreviews, setNewPreviews] = useState<string[]>([])
+  const [newUploadedUrls, setNewUploadedUrls] = useState<string[]>([])
+
   const [isUploading, setIsUploading] = useState(false)
 
+  useEffect(() => {
+    register('images')
+  }, [register])
+
+  useEffect(() => {
+    if (initializedRef.current) return
+    if (!Array.isArray(formImages) || formImages.length === 0) return
+
+    setExistingUrls(formImages)
+
+    setValue('images', formImages, { shouldValidate: true, shouldDirty: false })
+    initializedRef.current = true
+  }, [formImages, setValue])
+
   const openPicker = () => {
-    if (!isUploading) {
-      fileInputRef.current?.click()
-    }
+    if (!isUploading) fileInputRef.current?.click()
   }
 
   const validateFile = (file: File) => {
@@ -44,91 +66,109 @@ export default function ImageUpload() {
     return 'JPG'
   }
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
+  const syncFormImages = (
+    nextExisting: string[],
+    nextNewUploaded: string[],
+  ) => {
+    const next = [...nextExisting, ...nextNewUploaded]
+    setValue('images', next, { shouldValidate: true, shouldDirty: true })
+  }
 
-    const filesToUpload = Array.from(files).slice(0, 3 - previews.length)
-    if (filesToUpload.length === 0) return
+  const resolveSrc = (src: string) => {
+    if (src.startsWith('blob:')) return src
+    return getImageUrl(src)
+  }
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files
+    if (!fileList) return
+
+    const remaining =
+      MAX_IMAGES - (existingUrls.length + newUploadedUrls.length)
+
+    if (remaining <= 0) {
+      toast.error(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있습니다.`)
+      e.target.value = ''
+      return
+    }
+
+    const files = Array.from(fileList).filter(validateFile).slice(0, remaining)
+
+    if (files.length === 0) {
+      e.target.value = ''
+      return
+    }
+
+    const imageType = getImageType(files[0])
 
     setIsUploading(true)
 
     try {
-      const uploadPromises = filesToUpload.map(async (file) => {
-        if (!validateFile(file)) return null
-
-        const s3Url = await uploadImage(file, getImageType(file), 'POST')
-        return { preview: URL.createObjectURL(file), s3Url }
-      })
-
-      const results = await Promise.allSettled(uploadPromises)
-      const successfulUploads = results
-        .filter(
-          (
-            r,
-          ): r is PromiseFulfilledResult<{
-            preview: string
-            s3Url: string
-          } | null> => r.status === 'fulfilled' && r.value !== null,
-        )
-        .map((r) => r.value!)
-
-      if (successfulUploads.length === 0) {
-        toast.error('업로드된 이미지가 없습니다.')
-        return
-      }
-
-      const nextPreviews = [
-        ...previews,
-        ...successfulUploads.map((r) => r.preview),
-      ]
-      const nextUrls = [
-        ...uploadedUrls,
-        ...successfulUploads.map((r) => r.s3Url),
-      ]
-
-      setPreviews(nextPreviews)
-      setUploadedUrls(nextUrls)
-      setValue('images', nextUrls, { shouldValidate: true, shouldDirty: true })
-
-      const failedCount = results.length - successfulUploads.length
-      toast.success(
-        failedCount > 0
-          ? `${successfulUploads.length}개 업로드 성공, ${failedCount}개 실패`
-          : `${successfulUploads.length}개의 이미지가 업로드되었습니다.`,
+      const uploadedImagePaths = await uploadPostImages(
+        files,
+        imageType,
+        'POST',
       )
+
+      const previews = files.map((file) => URL.createObjectURL(file))
+
+      const nextNewPreviews = [...newPreviews, ...previews]
+      const nextNewUploaded = [...newUploadedUrls, ...uploadedImagePaths]
+
+      setNewPreviews(nextNewPreviews)
+      setNewUploadedUrls(nextNewUploaded)
+
+      syncFormImages(existingUrls, nextNewUploaded)
+
+      toast.success(`${uploadedImagePaths.length}개 업로드 완료`)
     } catch (error) {
-      console.error('이미지 업로드 실패:', error)
-      toast.error('이미지 업로드에 실패했습니다.')
+      console.error('이미지 업로드 에러:', error)
+      toast.error('이미지 업로드 실패')
     } finally {
       setIsUploading(false)
       e.target.value = ''
     }
   }
 
-  const removeImage = (idx: number) => {
-    const nextPreviews = [...previews]
-    const nextUrls = [...uploadedUrls]
+  const removeExisting = (existingIdx: number) => {
+    const nextExisting = [...existingUrls]
+    nextExisting.splice(existingIdx, 1)
 
-    URL.revokeObjectURL(nextPreviews[idx])
-    nextPreviews.splice(idx, 1)
-    nextUrls.splice(idx, 1)
+    setExistingUrls(nextExisting)
+    syncFormImages(nextExisting, newUploadedUrls)
+  }
 
-    setPreviews(nextPreviews)
-    setUploadedUrls(nextUrls)
+  const removeNew = (newIdx: number) => {
+    const nextPreviews = [...newPreviews]
+    const nextNewUploaded = [...newUploadedUrls]
 
-    setValue('images', nextUrls, { shouldValidate: true, shouldDirty: true })
+    const previewUrl = nextPreviews[newIdx]
+    if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
+
+    nextPreviews.splice(newIdx, 1)
+    nextNewUploaded.splice(newIdx, 1)
+
+    setNewPreviews(nextPreviews)
+    setNewUploadedUrls(nextNewUploaded)
+
+    syncFormImages(existingUrls, nextNewUploaded)
   }
 
   useEffect(() => {
     return () => {
-      previews.forEach((url) => URL.revokeObjectURL(url))
+      newPreviews.forEach((url) => {
+        if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
+      })
     }
-  }, [previews])
-  const MAX_IMAGES = 3
-  useEffect(() => {
-    register('images')
-  }, [register])
+  }, [newPreviews])
+
+  const combined = [
+    ...existingUrls.map((url) => ({ kind: 'existing' as const, url })),
+    ...newPreviews.map((url) => ({ kind: 'new' as const, url })),
+  ]
+
+  const canAddMore = combined.length < MAX_IMAGES
+
   return (
     <div className="mb-6">
       <Label className="mb-2">이미지</Label>
@@ -137,29 +177,38 @@ export default function ImageUpload() {
         <button
           type="button"
           onClick={openPicker}
-          disabled={isUploading || previews.length >= MAX_IMAGES}
-          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover"
+          disabled={isUploading || !canAddMore}
+          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50"
         >
           <ImagePlus className="size-8 text-text-input" />
         </button>
+
         {Array.from({ length: MAX_IMAGES }).map((_, idx) => {
-          const src = previews[idx]
+          const item = combined[idx]
+
           return (
             <div
               key={idx}
               className="relative bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center"
             >
-              {src ? (
+              {item ? (
                 <>
                   <Image
-                    src={src}
+                    src={resolveSrc(item.url)}
                     alt={`preview-${idx + 1}`}
                     fill
                     className="object-cover rounded-xl"
                   />
+
                   <button
                     type="button"
-                    onClick={() => removeImage(idx)}
+                    onClick={() => {
+                      if (item.kind === 'existing') {
+                        removeExisting(idx)
+                      } else {
+                        removeNew(idx - existingUrls.length)
+                      }
+                    }}
                     className="absolute -top-1 -right-1 bg-black/50 size-5 rounded-full flex items-center justify-center"
                   >
                     <X className="size-3 text-white" />
@@ -169,8 +218,8 @@ export default function ImageUpload() {
                 <button
                   type="button"
                   onClick={openPicker}
-                  disabled={isUploading || previews.length >= MAX_IMAGES}
-                  className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover"
+                  disabled={isUploading || !canAddMore}
+                  className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50"
                 >
                   <ImagePlus className="size-8 text-text-input" />
                 </button>

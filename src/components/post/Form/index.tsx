@@ -7,7 +7,8 @@ import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
-import { Button } from '@/components/common'
+import { Button } from '@/components/ui'
+import { NATION_CODE_TO_LABEL, NATION_LABEL_TO_CODE } from '@/constants/posts'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
@@ -39,7 +40,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
       ? {
           title: initialData.title,
           content: initialData.content,
-          nation: initialData.nation,
+          nation: NATION_CODE_TO_LABEL[initialData.nation],
           region: initialData.region,
           maxMembers: initialData.stats.maxMembers,
           ageType: initialData.conditions.ageCondition,
@@ -53,7 +54,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
       : {
           title: '',
           content: '',
-          nation: '',
+          nation: undefined,
           region: '',
           maxMembers: 0,
           ageType: undefined,
@@ -75,7 +76,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
     const payload = {
       title: data.title,
       content: data.content,
-      nation: data.nation,
+      nation: NATION_LABEL_TO_CODE[data.nation],
       region: data.region,
       startDate: data.startDate,
       endDate: data.endDate,
@@ -128,7 +129,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
                 <Button
                   type="button"
                   size="md"
-                  variant="secondary"
+                  variant="destructive"
                   onClick={() => {
                     if (!confirm('정말 삭제하시겠어요?')) return
                     deletePost.mutate(postId, {

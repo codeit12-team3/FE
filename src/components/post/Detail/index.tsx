@@ -1,12 +1,10 @@
 'use client'
 
-import { notFound, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/common'
-import { ApiResponse } from '@/types/common/api-response.type'
-import { PostContent } from '@/types/posts'
 
 import PostDetailSkeleton from './PostDetailSkeleton'
 import PostHeader from './PostHeader'
@@ -17,15 +15,10 @@ import PostWriter from './PostWriter'
 
 interface PostDetailProps {
   postId: string
-  initialData: ApiResponse<PostContent>
 }
 
-export default function PostDetail({ postId, initialData }: PostDetailProps) {
-  const {
-    data: postDetail,
-    isLoading,
-    error,
-  } = usePostDetail({ postId, initialData })
+export default function PostDetail({ postId }: PostDetailProps) {
+  const { data: postDetail, isLoading } = usePostDetail({ postId })
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
@@ -33,12 +26,18 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
   if (isLoading) {
     return <PostDetailSkeleton />
   }
-
-  if (error || !postDetail) {
-    notFound()
+  if (!postDetail) {
+    return (
+      <div className="text-center py-20 text-gray-500">
+        게시글을 불러올 수 없습니다.
+      </div>
+    )
   }
-
   const handleToggleBookmark = async () => {
+    if (!postId) {
+      console.error('postId is undefined')
+      return
+    }
     try {
       if (postDetail.isBookmarked) {
         await removeBookmark.mutateAsync(postId)
@@ -93,7 +92,12 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
 
         <div className="flex gap-3 items-center justify-center my-8">
           <>
-            <Button variant="secondary" size="md" className="w-68" onClick={() => router.back()}>
+            <Button
+              variant="secondary"
+              size="md"
+              className="w-68"
+              onClick={() => router.back()}
+            >
               뒤로가기
             </Button>
             {postDetail.isOwner ? (
@@ -111,8 +115,8 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
             )}
           </>
         </div>
-
-        <Comment postId={postId} />
+        {/* 
+        <Comment postId={postId} /> */}
       </div>
     </div>
   )

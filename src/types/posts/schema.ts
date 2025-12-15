@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { NATION_OPTIONS } from '@/constants/posts'
 import { AgeType, GenderType } from '@/types/posts'
 
 export const postSchema = z
@@ -7,7 +8,7 @@ export const postSchema = z
     title: z.string().min(1, '제목을 입력해주세요'),
     content: z.string().min(1, '내용을 입력해주세요'),
 
-    nation: z.string().min(1, '국가를 선택해주세요'),
+    nation: z.enum(NATION_OPTIONS),
     region: z.string().min(1, '도시를 선택해주세요'),
 
     maxMembers: z.coerce.number().min(1, '모집 정원을 1명 이상 입력해주세요'),
