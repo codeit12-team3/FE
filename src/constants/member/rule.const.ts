@@ -30,24 +30,26 @@ export const GENDER_MAP: Record<Gender, string> = {
 } as const
 export type Gender = (typeof GENDER_LIST)[number]
 
+export const TRIP_STYLE_OPTIONS = [
+  { value: 'ALL', label: '무관' },
+  { value: 'PLANNING', label: '계획' },
+  { value: 'HEALING', label: '힐링' },
+  { value: 'PHOTOGRAPHY', label: '포토' },
+  { value: 'GASTRONOMY', label: '먹방' },
+  { value: 'ACTIVITY', label: '액티비티' },
+  { value: 'SIGHTSEEING', label: '관광' },
+] as const
+
 export const LODGING_STYLE_OPTIONS = [
-  '가성비',
-  '호캉스',
-  '감성중시',
-  '청결중시',
-  '교류/파티',
-  '자연/이색',
+  { value: 'ALL', label: '무관' },
+  { value: 'BUDGET_FRIENDLY', label: '가성비' },
+  { value: 'LUXURY_HOTEL', label: '호캉스' },
+  { value: 'AESTHETIC', label: '감성중시' },
+  { value: 'HYGIENE_FOCUSED', label: '청결중시' },
+  { value: 'SOCIAL_GATHERING', label: '교류/파티' },
+  { value: 'UNIQUE_NATURE', label: '자연/이색' },
 ] as const
 
-export type LodgingStyle = (typeof LODGING_STYLE_OPTIONS)[number]
+export type TripStyleValue = (typeof TRIP_STYLE_OPTIONS)[number]['value']
 
-export const TRAVEL_STYLE_OPTIONS = [
-  '계획',
-  '힐링',
-  '포토',
-  '먹방',
-  '액티비티',
-  '관광',
-] as const
-
-export type TravelStyle = (typeof TRAVEL_STYLE_OPTIONS)[number]
+export type LodgingStyleValue = (typeof LODGING_STYLE_OPTIONS)[number]['value']
