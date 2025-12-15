@@ -32,3 +32,7 @@ export interface SignupEmailRes extends Member {
 export interface SigninEmailRes extends Member {
   tokenResponse: TokenRes
 }
+
+export interface UserSession extends Member {
+  accessToken: string
+}
