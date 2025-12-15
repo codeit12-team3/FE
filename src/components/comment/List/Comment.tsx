@@ -3,23 +3,23 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { formatRelativeTime } from '@/lib/common'
-import { CommentType } from '@/types/comments/comments.type'
+import { CommentContent } from '@/types/comments/comments.type'
 
-interface CommentItemProps {
-  comment: CommentType
+interface CommentProps {
+  comment: CommentContent
   currentUserId: number
   replyCount?: number
   onToggleReplies?: () => void
   isRepliesOpen?: boolean
 }
 
-export default function CommentItem({
+export default function Comment({
   comment,
   currentUserId,
   replyCount = 0,
   onToggleReplies,
   isRepliesOpen = false,
-}: CommentItemProps) {
+}: CommentProps) {
   const {
     nickname,
     createdAt,
@@ -29,7 +29,6 @@ export default function CommentItem({
     imageUrl,
     isUpdated,
   } = comment
-
   const [openMenu, setOpenMenu] = useState(false)
 
   const isOwner = currentUserId === memberId

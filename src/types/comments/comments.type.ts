@@ -1,4 +1,4 @@
-export interface CommentType {
+export interface CommentContent {
   commentId: number
   parentId: number | null
   memberId: number
@@ -9,4 +9,9 @@ export interface CommentType {
   updatedAt: number | null
   isUpdated: boolean
   depth: number
+}
+
+export interface CommentType {
+  content: CommentContent[]
+  isLast: boolean
 }

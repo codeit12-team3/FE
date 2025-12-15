@@ -5,11 +5,19 @@ import { axios } from '../common'
 
 export const fetchComments = async (params: {
   postId: string
-}): Promise<ApiResponse<CommentType[]>> => {
-  const { postId } = params
+  lastCommentId: number
+  size?: number
+}): Promise<ApiResponse<CommentType>> => {
+  const { postId, lastCommentId, size } = params
 
-  const { data } = await axios.get<ApiResponse<CommentType[]>>(
+  const { data } = await axios.get<ApiResponse<CommentType>>(
     `/v1/posts/${postId}/comments`,
+    {
+      params: {
+        lastCommentId,
+        size,
+      },
+    },
   )
 
   return data

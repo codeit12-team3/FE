@@ -182,13 +182,50 @@ export const postsHandlers = [
       )
     }
 
+    const id = Number(postId)
+
     return HttpResponse.json({
       success: true,
       status: 200,
       data: {
-        postId,
         title: `Mock Title ${postId}`,
-        content: `Mock Content ${postId}`,
+        content: `이것은 게시글 ${postId}번의 상세 내용입니다. 여행을 함께 떠나실 분을 모집합니다!`,
+        nation: id % 2 === 0 ? '한국' : '일본',
+        region: id % 2 === 0 ? '서울' : '도쿄',
+        period: {
+          startDate: '2025-01-01',
+          endDate: '2025-01-02',
+        },
+        stats: {
+          maxMembers: 5,
+          currentMembers: 2,
+          viewCount: 42,
+        },
+        recruitStatus: 'RECRUITING',
+        tags: ['힐링', '여행', '맛집'],
+        nickname: 'mockUser',
+        isOwner: false,
+        conditions: {
+          ageCondition: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
+          genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+        },
+        isBookmarked: false,
+        bookmarkCount: 10,
+        commentCount: 5,
+        images: ['/mock.png', '/mock.png'],
+        writer: {
+          memberId: 1,
+          nickname: 'mockUser',
+          profileImage: '/mock.png',
+          birth: 1990,
+          age: 35,
+          gender: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          mbti: 'ENFP',
+        },
+        thumbnail: ['/mock.png'],
+        createdAt: '2025-12-01T10:00:00',
+        updatedAt: '2025-12-01T10:00:00',
+        timestamp: '2025-12-02',
       },
       timestamp: '2025-12-02',
     })
