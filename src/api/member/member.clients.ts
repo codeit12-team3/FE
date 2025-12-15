@@ -15,9 +15,11 @@ import { axios } from '../common'
  * @param 닉네임
  */
 export const checkNickname = async (nickname: string) => {
-  return await axios.post('/v1/member/nickname/check', {
-    nickname,
+  const res = await axios.get('/v1/members/nickname/check', {
+    params: { nickname },
   })
+
+  return res.data
 }
 
 // 내정보 조회
