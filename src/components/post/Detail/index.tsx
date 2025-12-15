@@ -93,7 +93,7 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
 
         <div className="flex gap-3 items-center justify-center my-8">
           <>
-            <Button variant="secondary" size="md" className="w-68">
+            <Button variant="secondary" size="md" className="w-68" onClick={() => router.back()}>
               뒤로가기
             </Button>
             {postDetail.isOwner ? (
