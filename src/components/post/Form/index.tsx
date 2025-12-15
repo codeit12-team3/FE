@@ -8,7 +8,6 @@ import { toast } from 'sonner'
 
 import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
 import { Button } from '@/components/common'
-import button from '@/components/ui/button'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
@@ -128,7 +127,8 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
               {isEdit && postId ? (
                 <Button
                   type="button"
-                  variant="destructive"
+                  size="md"
+                  variant="secondary"
                   onClick={() => {
                     if (!confirm('정말 삭제하시겠어요?')) return
                     deletePost.mutate(postId, {
