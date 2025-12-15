@@ -1,7 +1,6 @@
-import { PostContent } from './content.type'
+import { PostListItem } from './content.type'
 
 export interface FetchPostsResponse {
-  content: PostContent[]
+  content: PostListItem[]
   isLast: boolean
-  totalCount: number
 }
