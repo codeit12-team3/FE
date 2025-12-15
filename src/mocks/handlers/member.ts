@@ -17,7 +17,7 @@ let mockMember = {
 
 export const memberHandlers = [
   // 불러오는거 테스트
-  http.get(`${MOCK_URL}/members/me`, () => {
+  http.get(`${MOCK_URL}/v1/members/me`, () => {
     return HttpResponse.json({
       success: true,
       status: 200,
@@ -27,7 +27,7 @@ export const memberHandlers = [
   }),
 
   //수정하는거 테스트
-  http.patch(`${MOCK_URL}/members/me`, async ({ request }) => {
+  http.patch(`${MOCK_URL}/v1/members/me`, async ({ request }) => {
     const updates = (await request.json()) as Partial<typeof mockMember>
     mockMember = { ...mockMember, ...updates }
 
@@ -41,12 +41,13 @@ export const memberHandlers = [
     })
   }),
 
-  http.post(`${MOCK_URL}/member/nickname/check`, async ({ request }) => {
+  http.get(`${MOCK_URL}/v1/members/nickname/check`, async ({ request }) => {
     await delay(2000)
 
-    const body = (await request.json()) as { nickname: string }
+    const url = new URL(request.url)
+    const nickname = url.searchParams.get('nickname')
 
-    if (body.nickname === '에러') {
+    if (nickname === '에러') {
       return HttpResponse.json(
         {
           success: false,
