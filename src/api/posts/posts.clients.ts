@@ -4,6 +4,7 @@ import {
   PostContent,
   PostCreatePayload,
   PostParams,
+  PostUpdatePayload,
 } from '@/types/posts'
 
 import { axios } from '../common'
@@ -42,7 +43,7 @@ export const createPost = async (
 
 export const updatePost = async (
   postId: string,
-  payload: PostCreatePayload,
+  payload: PostUpdatePayload,
 ): Promise<ApiResponse<{ postId: string }>> => {
   const { data } = await axios.patch<ApiResponse<{ postId: string }>>(
     `/v1/posts/${postId}`,

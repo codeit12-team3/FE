@@ -10,8 +10,46 @@ export const NATION_OPTIONS = [
   '말레이시아',
   '인도네시아',
 ] as const
-export type Nation = Exclude<(typeof NATION_OPTIONS)[number], '모두'>
-export const REGION_OPTIONS: Record<Nation, readonly string[]> = {
+export const NATION_CODE_TO_LABEL = {
+  KR: '한국',
+  JP: '일본',
+  VN: '베트남',
+  TH: '태국',
+  CN: '중국',
+  TW: '대만',
+  PH: '필리핀',
+  SG: '싱가포르',
+  MY: '말레이시아',
+  ID: '인도네시아',
+} as const
+export const NATION_LABEL_TO_CODE = {
+  한국: 'KR',
+  일본: 'JP',
+  베트남: 'VN',
+  태국: 'TH',
+  중국: 'CN',
+  대만: 'TW',
+  필리핀: 'PH',
+  싱가포르: 'SG',
+  말레이시아: 'MY',
+  인도네시아: 'ID',
+} as const
+export const NATION_ENUM_OPTIONS = [
+  { value: 'KR', label: '한국' },
+  { value: 'JP', label: '일본' },
+  { value: 'VN', label: '베트남' },
+  { value: 'TH', label: '태국' },
+  { value: 'CN', label: '중국' },
+  { value: 'TW', label: '대만' },
+  { value: 'PH', label: '필리핀' },
+  { value: 'SG', label: '싱가포르' },
+  { value: 'MY', label: '말레이시아' },
+  { value: 'ID', label: '인도네시아' },
+] as const
+export type NationCode = (typeof NATION_ENUM_OPTIONS)[number]['value']
+export type NationLabel = (typeof NATION_ENUM_OPTIONS)[number]['label']
+
+export const REGION_OPTIONS: Record<NationLabel, readonly string[]> = {
   한국: ['서울', '부산', '제주'],
   일본: ['도쿄', '오사카', '교토'],
   베트남: ['하노이', '호치민', '다낭'],

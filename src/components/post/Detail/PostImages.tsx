@@ -9,7 +9,7 @@ import { getImageUrl } from '@/lib/common'
 interface PostImagesProps {
   images: string[]
 }
-
+const DEFAULT_IMAGE = '/images/default.png'
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   const [isLoading, setIsLoading] = useState(true)
 
@@ -34,18 +34,11 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
 }
 
 export default function PostImages({ images }: PostImagesProps) {
-  if (!images || images.length === 0) {
-    return (
-      <div className="mb-6 h-32 flex items-center justify-center bg-gray-50 rounded-lg text-sm text-gray-400">
-        등록된 이미지가 없습니다.
-      </div>
-    )
-  }
-
+  const imageList = images && images.length > 0 ? images : [DEFAULT_IMAGE]
   return (
     <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-2">
-      {images.map((src, idx) => (
-        <PostImageItem key={src + idx} src={getImageUrl(src)} idx={idx} />
+      {imageList.map((src, idx) => (
+        <PostImageItem key={src + idx} src={src} idx={idx} />
       ))}
     </div>
   )

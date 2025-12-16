@@ -7,7 +7,8 @@ import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
-import { Button } from '@/components/common'
+import { Button } from '@/components/ui'
+import { NATION_CODE_TO_LABEL, NATION_LABEL_TO_CODE } from '@/constants/posts'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
@@ -39,7 +40,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
       ? {
           title: initialData.title,
           content: initialData.content,
-          nation: initialData.nation,
+          nation: NATION_CODE_TO_LABEL[initialData.nation],
           region: initialData.region,
           maxMembers: initialData.stats.maxMembers,
           ageType: initialData.conditions.ageCondition,
@@ -53,7 +54,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
       : {
           title: '',
           content: '',
-          nation: '',
+          nation: undefined,
           region: '',
           maxMembers: 0,
           ageType: undefined,
@@ -72,23 +73,28 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const isPending = isEdit ? updatePost.isPending : createPost.isPending
 
   const onSubmit = (data: PostFormWithTagValues) => {
-    const payload = {
-      title: data.title,
-      content: data.content,
-      nation: data.nation,
-      region: data.region,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      maxMembers: Number(data.maxMembers),
-      tags: data.tags,
-      images: data.images ?? [],
-      genderType: data.gender as GenderType,
-      ageType: data.ageType as AgeType,
-    }
+    if (isEdit && postId && initialData) {
+      const updatePayload = {
+        title: data.title,
+        content: data.content,
+        nation: NATION_LABEL_TO_CODE[data.nation],
+        region: data.region,
+        period: {
+          startDate: data.startDate,
+          endDate: data.endDate,
+        },
+        maxMembers: Number(data.maxMembers),
+        tags: data.tags,
+        images: {
+          add: data.images.filter((img) => !initialData.images.includes(img)),
+          delete: initialData.images.filter(
+            (img) => !data.images.includes(img),
+          ),
+        },
+      }
 
-    if (isEdit && postId) {
       updatePost.mutate(
-        { postId, payload },
+        { postId, payload: updatePayload },
         {
           onSuccess: () => {
             toast.success('게시글이 수정되었습니다.')
@@ -97,7 +103,21 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         },
       )
     } else {
-      createPost.mutate(payload, {
+      const createPayload = {
+        title: data.title,
+        content: data.content,
+        nation: NATION_LABEL_TO_CODE[data.nation],
+        region: data.region,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        maxMembers: Number(data.maxMembers),
+        tags: data.tags,
+        images: data.images ?? [],
+        genderType: data.gender as GenderType,
+        ageType: data.ageType as AgeType,
+      }
+
+      createPost.mutate(createPayload, {
         onSuccess: () => {
           toast.success('게시글이 등록되었습니다.')
           router.push('/')
@@ -128,7 +148,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
                 <Button
                   type="button"
                   size="md"
-                  variant="secondary"
+                  variant="destructive"
                   onClick={() => {
                     if (!confirm('정말 삭제하시겠어요?')) return
                     deletePost.mutate(postId, {

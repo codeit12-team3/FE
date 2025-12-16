@@ -40,3 +40,20 @@ export interface PostCreatePayload {
   genderType: 'MALE' | 'FEMALE' | 'ALL'
   ageType: AgeType
 }
+
+export interface PostUpdatePayload {
+  title: string
+  nation: string
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  maxMembers: number
+  content: string
+  tags: string[]
+  images: {
+    add: string[]
+    delete: string[]
+  }
+}

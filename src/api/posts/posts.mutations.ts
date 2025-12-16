@@ -11,6 +11,7 @@ import {
   PostContent,
   PostCreatePayload,
   PostParams,
+  PostUpdatePayload,
 } from '@/types/posts'
 
 import {
@@ -25,7 +26,7 @@ import {
 
 interface UpdateArgs {
   postId: string
-  payload: PostCreatePayload
+  payload: PostUpdatePayload
 }
 
 export const usePosts = (
@@ -38,25 +39,13 @@ export const usePosts = (
     ...options,
   })
 }
-export const usePostDetail = ({
-  postId,
-  initialData,
-}: {
-  postId: string
-  initialData: ApiResponse<PostContent>
-}) => {
-  return useQuery({
-    queryKey: ['postdetail', postId],
-    queryFn: () => fetchPostsDetail(postId),
-    initialData: initialData,
-    select: (response) => {
-      if (!response.success) {
-        throw new Error(response.data.message)
-      }
-      return response.data
+export const usePostDetail = ({ postId }: { postId: string }) =>
+  useQuery<ApiResponse<PostContent>>({
+    queryKey: ['postDetail', postId],
+    queryFn: async () => {
+      return await fetchPostsDetail(postId)
     },
   })
-}
 
 export const useCreatePost = () => {
   return useMutation({
@@ -87,7 +76,7 @@ export const useAddBookmark = () => {
     retry: 0,
     onSuccess: (_, postId) => {
       queryClient.setQueryData<ApiResponse<PostContent>>(
-        ['postdetail', postId],
+        ['postDetail', postId],
         (old) => {
           if (!old || !old.success) return old
           return {
@@ -112,7 +101,7 @@ export const useRemoveBookmark = () => {
     retry: 0,
     onSuccess: (_, postId) => {
       queryClient.setQueryData<ApiResponse<PostContent>>(
-        ['postdetail', postId],
+        ['postDetail', postId],
         (old) => {
           if (!old || !old.success) return old
           return {

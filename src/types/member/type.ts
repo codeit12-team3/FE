@@ -46,10 +46,8 @@ export interface PresignedUrlRequest {
   }>
 }
 
-export interface PresignedUrlResponse {
-  urls: Array<{
-    imageId: string
-    presignedUrl: string
-    image: string
-  }>
-}
+export type PresignedUrlResponse = Array<{
+  imageId: string
+  presignedUrl: string
+  image: string
+}>

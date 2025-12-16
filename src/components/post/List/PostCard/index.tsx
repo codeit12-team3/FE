@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/common/Button'
+import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
 import { PostListItem } from '@/types/posts'
 
@@ -27,6 +28,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
         {post.recruitStatus === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
+
             <Image
               src={getImageUrl(post.thumbnail)}
               alt={post.title}
@@ -71,7 +73,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
           <div className="flex items-center gap-2 text-sm text-text-input">
             <div className={INFO_ROW}>
               <span className={LABEL}>위치</span>
-              <span className={VALUE}>{post.nation}</span>
+              <span className={VALUE}>{NATION_CODE_TO_LABEL[post.nation]}</span>
               <span className={VALUE}>{post.region}</span>
             </div>
 

@@ -1,7 +1,9 @@
 import { CalendarDays } from 'lucide-react'
 
+import { NATION_CODE_TO_LABEL, NationCode } from '@/constants/posts'
+
 interface Props {
-  nation: string
+  nation: NationCode
   region: string
   period: {
     startDate: string
@@ -45,7 +47,9 @@ export default function Info({
   return (
     <div className="space-y-8">
       <InfoSection title="여행 지역">
-        <span className={`${TEXT_STYLE} mr-1`}>{nation}</span>
+        <span className={TEXT_STYLE}>
+          {NATION_CODE_TO_LABEL[nation] ?? nation}
+        </span>
         <span className={TEXT_STYLE}>{region}</span>
       </InfoSection>
 
