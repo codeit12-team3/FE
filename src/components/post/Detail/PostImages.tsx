@@ -1,20 +1,22 @@
 'use client'
 
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
 import { Skeleton } from '@/components/ui'
-import { getImageUrl } from '@/lib/common'
+import { cn, getImageUrl } from '@/lib/common'
 
 interface PostImagesProps {
   images: string[]
 }
 const DEFAULT_IMAGE = '/images/default.png'
+
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border border-gray-100 shrink-0">
+    <div className="relative w-full h-96 rounded-3xl overflow-hidden bg-gray-100">
       {isLoading && (
         <Skeleton className="absolute inset-0 bg-gray-200 animate-pulse z-10" />
       )}
@@ -23,7 +25,8 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
         src={getImageUrl(src)}
         alt={`post-image-${idx}`}
         fill
-        sizes="(max-width: 768px) 100vw, 128px"
+        quality={100}
+        sizes="(max-width: 768px) 100vw, 800px"
         className={`object-cover transition-opacity duration-300 ${
           isLoading ? 'opacity-0' : 'opacity-100'
         }`}
@@ -35,11 +38,67 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
 
 export default function PostImages({ images }: PostImagesProps) {
   const imageList = images && images.length > 0 ? images : [DEFAULT_IMAGE]
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? imageList.length - 1 : prev - 1))
+  }
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === imageList.length - 1 ? 0 : prev + 1))
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index)
+  }
+
+  if (imageList.length === 1) {
+    return (
+      <div className="mb-6">
+        <PostImageItem src={imageList[0]} idx={0} />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-2">
-      {imageList.map((src, idx) => (
-        <PostImageItem key={src + idx} src={src} idx={idx} />
-      ))}
+    <div className="mb-6 relative group">
+      <PostImageItem src={imageList[currentIndex]} idx={currentIndex} />
+
+      <button
+        onClick={goToPrevious}
+        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label="이전 이미지"
+      >
+        <ChevronLeft className="size-6" />
+      </button>
+
+      <button
+        onClick={goToNext}
+        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label="다음 이미지"
+      >
+        <ChevronRight className="size-6" />
+      </button>
+
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {imageList.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={cn(
+              'w-2 h-2 rounded-full transition-all',
+              currentIndex === index
+                ? 'bg-white w-8'
+                : 'bg-white/50 hover:bg-white/75',
+            )}
+            aria-label={`${index + 1}번째 이미지로 이동`}
+          />
+        ))}
+      </div>
+
+      <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+        {currentIndex + 1} / {imageList.length}
+      </div>
     </div>
   )
 }

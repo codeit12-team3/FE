@@ -1,18 +1,20 @@
 'use client'
 
+import { Heart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
-import { Button } from '@/components/common'
+import { Button } from '@/components/ui'
+import { cn } from '@/lib/common'
 
 import PostDetailSkeleton from './PostDetailSkeleton'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
 import PostInfo from './PostInfo'
-import PostTags from './PostTags'
+import PostManage from './PostManage'
 import PostWriter from './PostWriter'
 
 interface PostDetailProps {
@@ -74,6 +76,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
   }
 
   const postDetail = response.data
+
   const handleToggleBookmark = async () => {
     try {
       if (postDetail.isBookmarked) {
@@ -96,6 +99,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
   }
 
   const headerProps = {
+    tags: postDetail.tags,
     title: postDetail.title,
     timestamp: postDetail.createdAt,
     stats: { viewCount: postDetail.stats.viewCount },
@@ -124,58 +128,61 @@ export default function PostDetail({ postId }: PostDetailProps) {
     birth: postDetail.writer.birth,
   }
   return (
-    <div className="min-h-screen bg-bg-base py-8 px-4 flex justify-center">
-      <div className="max-w-7xl w-full bg-bg-base rounded-lg p-8 border border-[#DDDDDD]">
-        <PostHeader {...headerProps} />
+    <div className="min-h-screen bg-bg-input py-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-12 gap-8 items-start">
+          <div className="col-span-8  rounded-lg p-8 ">
+            <PostHeader {...headerProps} />
+            <PostImages images={postDetail.images} />
+            <PostInfo {...infoProps} />
+            <Comment postId={postId} />
+          </div>
 
-        <PostImages images={postDetail.images} />
+          <div className="col-span-4 sticky  space-y-6">
+            <PostWriter writer={writerProps} />
+            <div className="space-y-3">
+              {postDetail.isOwner ? (
+                <PostManage
+                  postId={postId}
+                  status={postDetail.recruitStatus}
+                  onEdit={() => router.push(`/posts/${postId}/edit`)}
+                  onChangeStatus={() => {}}
+                />
+              ) : (
+                <div className="flex gap-3 justify-center">
+                  <Button size="md" onClick={() => setIsApplyModalOpen(true)}>
+                    동행 참여하기
+                  </Button>
 
-        <PostTags tags={postDetail.tags} />
-
-        <PostInfo {...infoProps} />
-
-        <PostWriter writer={writerProps} />
-
-        <div className="flex gap-3 items-center justify-center my-8">
-          <>
-            <Button
-              variant="secondary"
-              size="md"
-              className="w-68"
-              onClick={() => router.push('/')}
-            >
-              뒤로가기
-            </Button>
-            {postDetail.isOwner ? (
-              <Button
-                size="md"
-                className="w-68"
-                onClick={() => router.push(`/posts/${postId}/edit`)}
-              >
-                수정하기
-              </Button>
-            ) : (
-              <Button
-                size="md"
-                className="w-68"
-                onClick={() => setIsApplyModalOpen(true)}
-              >
-                동행 참여하기
-              </Button>
-            )}
-          </>
-          {isApplyModalOpen && (
-            <ApplyCompanionModal
-              message={applyMessage}
-              onChangeMessage={setApplyMessage}
-              onClose={() => setIsApplyModalOpen(false)}
-              onSubmit={handleApplyCompanion}
-            />
-          )}
+                  <button
+                    onClick={handleToggleBookmark}
+                    className="hover:scale-110 transition-transform rounded-full border p-2"
+                    aria-label={
+                      postDetail.isBookmarked ? '북마크 취소' : '북마크 추가'
+                    }
+                  >
+                    <Heart
+                      className={cn(
+                        'size-8 text-text-input',
+                        postDetail.isBookmarked && 'fill-main text-main',
+                      )}
+                    />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-
-        <Comment postId={postId} />
       </div>
+
+      {isApplyModalOpen && (
+        <ApplyCompanionModal
+          message={applyMessage}
+          onChangeMessage={setApplyMessage}
+          onClose={() => setIsApplyModalOpen(false)}
+          onSubmit={handleApplyCompanion}
+        />
+      )}
     </div>
   )
 }

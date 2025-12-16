@@ -9,6 +9,7 @@ import {
 
 import { axios } from '../common'
 
+export type RecruitStatus = 'RECRUITING' | 'COMPLETED'
 export const fetchPosts = async (
   params: PostParams,
 ): Promise<ApiResponse<FetchPostsResponse>> => {
@@ -27,6 +28,18 @@ export const fetchPostsDetail = async (
     `/v1/posts/${postId}`,
   )
 
+  return data
+}
+export const patchPost = async (
+  postId: string,
+  recruitStatus: RecruitStatus,
+): Promise<ApiResponse<PostContent>> => {
+  const { data } = await axios.patch<ApiResponse<PostContent>>(
+    `/v1/posts/${postId}/status`,
+    {
+      status: recruitStatus,
+    },
+  )
   return data
 }
 

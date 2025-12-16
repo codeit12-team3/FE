@@ -59,15 +59,27 @@ const getContentType = (imageType: string): string => {
 }
 
 /**
+ * 파일에서 이미지 타입 추출
+ */
+const getImageTypeFromFile = (file: File): 'JPG' | 'JPEG' | 'PNG' | 'SVG' => {
+  const fileType = file.type.split('/')[1]?.toUpperCase() || 'JPG'
+  if (fileType === 'JPEG' || fileType === 'JPG') return 'JPEG'
+  if (fileType === 'PNG') return 'PNG'
+  if (fileType === 'SVG+XML' || fileType === 'SVG') return 'SVG'
+  return 'JPEG'
+}
+
+/**
  * 이미지업로드 프리사인드랑 S3올리는거 통합
  */
 export const uploadPostImages = async (
   files: File[],
-  imageType: 'JPG' | 'PNG' | 'SVG',
   imageDirectory: 'POST',
 ): Promise<string[]> => {
   const results = await Promise.all(
     files.map(async (file) => {
+      const imageType = getImageTypeFromFile(file)
+
       const presignedData = await getPresignedUrl({
         images: [
           {
@@ -89,7 +101,7 @@ export const uploadPostImages = async (
 
 export const uploadMemberImage = async (
   file: File | Blob,
-  imageType: 'JPG' | 'PNG' | 'SVG',
+  imageType: 'JPG' | 'JPEG' | 'PNG' | 'SVG',
   imageDirectory: 'MEMBER',
 ): Promise<string> => {
   const presignedData = await getPresignedUrl({
