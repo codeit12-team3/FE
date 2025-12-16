@@ -14,7 +14,6 @@ import {
 
 export const useApplyCompanion = () => {
   const queryClient = useQueryClient()
-
   return useMutation<
     ApplyCompanionRes,
     Error,

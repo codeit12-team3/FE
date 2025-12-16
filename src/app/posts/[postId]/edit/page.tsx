@@ -6,7 +6,7 @@ import { PostForm } from '@/components/post'
 export default async function EditPage({
   params,
 }: {
-  params: { postId: string }
+  params: Promise<{ postId: string }>
 }) {
   const { postId } = await params
   const initialData = await fetchPostsDetail(postId)

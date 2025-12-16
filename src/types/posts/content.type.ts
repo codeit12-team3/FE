@@ -1,3 +1,5 @@
+import { NationCode } from '@/constants/posts'
+
 export enum AgeType {
   TWENTY = 'TWENTY',
   THIRTY = 'THIRTY',
@@ -56,7 +58,7 @@ interface Writer {
 export interface PostListItem {
   postId: number
   title: string
-  nation: string
+  nation: NationCode
   region: string
   period: {
     startDate: string
@@ -77,7 +79,7 @@ export interface PostListItem {
 export interface PostContent {
   title: string
   content: string
-  nation: string
+  nation: NationCode
   region: string
   period: Period
   stats: Stats

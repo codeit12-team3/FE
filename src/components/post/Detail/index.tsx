@@ -1,12 +1,12 @@
 'use client'
 
-import { notFound, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
+import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/common'
-import { ApiResponse } from '@/types/common/api-response.type'
-import { PostContent } from '@/types/posts'
 
 import PostDetailSkeleton from './PostDetailSkeleton'
 import PostHeader from './PostHeader'
@@ -17,27 +17,63 @@ import PostWriter from './PostWriter'
 
 interface PostDetailProps {
   postId: string
-  initialData: ApiResponse<PostContent>
 }
 
-export default function PostDetail({ postId, initialData }: PostDetailProps) {
-  const {
-    data: postDetail,
-    isLoading,
-    error,
-  } = usePostDetail({ postId, initialData })
+function ApplyCompanionModal({
+  message,
+  onChangeMessage,
+  onClose,
+  onSubmit,
+}: {
+  message: string
+  onChangeMessage: (v: string) => void
+  onClose: () => void
+  onSubmit: () => void
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-9999">
+      <div className="bg-white rounded-xl p-6 w-96">
+        <h2 className="text-lg font-semibold mb-4">동행 신청 메시지</h2>
+
+        <textarea
+          value={message}
+          onChange={(e) => onChangeMessage(e.target.value)}
+          className="w-full border rounded-md p-2 mb-4"
+          placeholder="신청 메시지를 입력해주세요"
+        />
+
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" onClick={onClose}>
+            취소
+          </Button>
+          <Button onClick={onSubmit}>신청하기</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function PostDetail({ postId }: PostDetailProps) {
+  const { data: response, isLoading } = usePostDetail({ postId })
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
+  const applyCompanionMutation = useApplyCompanion()
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
+  const [applyMessage, setApplyMessage] = useState('')
 
   if (isLoading) {
     return <PostDetailSkeleton />
   }
-
-  if (error || !postDetail) {
-    notFound()
+  if (!response || !response.success || !response.data) {
+    return (
+      <div className="text-center py-20 text-gray-500">
+        게시글을 불러올 수 없습니다.
+      </div>
+    )
   }
 
+  const postDetail = response.data
   const handleToggleBookmark = async () => {
     try {
       if (postDetail.isBookmarked) {
@@ -48,6 +84,15 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
     } catch (error) {
       console.error('북마크 토글 실패:', error)
     }
+  }
+  const handleApplyCompanion = () => {
+    applyCompanionMutation.mutate({
+      postId,
+      applyMessage,
+    })
+    console.log('동행 신청 성공')
+    setIsApplyModalOpen(false)
+    setApplyMessage('')
   }
 
   const headerProps = {
@@ -93,7 +138,12 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
 
         <div className="flex gap-3 items-center justify-center my-8">
           <>
-            <Button variant="secondary" size="md" className="w-68" onClick={() => router.back()}>
+            <Button
+              variant="secondary"
+              size="md"
+              className="w-68"
+              onClick={() => router.push('/')}
+            >
               뒤로가기
             </Button>
             {postDetail.isOwner ? (
@@ -105,11 +155,23 @@ export default function PostDetail({ postId, initialData }: PostDetailProps) {
                 수정하기
               </Button>
             ) : (
-              <Button size="md" className="w-68">
+              <Button
+                size="md"
+                className="w-68"
+                onClick={() => setIsApplyModalOpen(true)}
+              >
                 동행 참여하기
               </Button>
             )}
           </>
+          {isApplyModalOpen && (
+            <ApplyCompanionModal
+              message={applyMessage}
+              onChangeMessage={setApplyMessage}
+              onClose={() => setIsApplyModalOpen(false)}
+              onSubmit={handleApplyCompanion}
+            />
+          )}
         </div>
 
         <Comment postId={postId} />

@@ -11,12 +11,11 @@ const mockPosts = Array.from({ length: 50 }).map((_, idx) => {
   return {
     postId: id,
 
-    // ✅ 전부 내 글로 만들어서 edit 항상 통과시키기
     writerId: CURRENT_USER_ID,
 
     title: `Mock title ${id}`,
     content: `이것은 게시글 ${id}번의 상세 내용입니다.`,
-    nation: Number(id) % 2 === 0 ? '한국' : '일본',
+    nation: Number(id) % 2 === 0 ? 'KR' : 'JP',
     region: Number(id) % 2 === 0 ? '서울' : '도쿄',
     period: {
       startDate: '2025-12-01T10:00:00',
@@ -62,7 +61,7 @@ export const postsHandlers = [
         return {
           postId: id,
           title: `Mock title ${id}`,
-          nation: id % 2 === 0 ? '한국' : '일본',
+          nation: id % 2 === 0 ? 'KR' : 'JP',
           region: id % 2 === 0 ? '서울' : '도쿄',
           period: {
             startDate: '2025-01-01',
@@ -224,7 +223,7 @@ export const postsHandlers = [
       data: {
         title: `Mock Title ${postId}`,
         content: `이것은 게시글 ${postId}번의 상세 내용입니다. 여행을 함께 떠나실 분을 모집합니다!`,
-        nation: id % 2 === 0 ? '한국' : '일본',
+        nation: id % 2 === 0 ? 'KR' : 'JP',
         region: id % 2 === 0 ? '서울' : '도쿄',
         period: {
           startDate: '2025-12-01T10:00:00',

@@ -47,7 +47,7 @@ export default function PostList() {
       <PostListSection posts={posts} />
 
       {hasNextPage && (
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center my-8">
           <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
             더보기
           </Button>

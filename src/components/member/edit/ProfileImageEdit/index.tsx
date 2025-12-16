@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { uploadImage } from '@/api/member'
+import { uploadMemberImage } from '@/api/images/images.client'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
@@ -91,10 +91,8 @@ export default function ProfileImageEdit() {
       // 프리뷰 이미지 즉시 표시
       setProfileImg(previewUrl)
 
-      // S3 업로드 및 이미지 경로 반환
-      const imagePath = await uploadImage(uploadFile, imageType, 'MEMBER')
-
-      // 폼 상태 업데이트 (dirty 상태로 변경)
+      //프리사인드 됐으면 S3 업로드할부분
+      const imagePath = await uploadMemberImage(uploadFile, imageType, 'MEMBER')
       setValue('image', imagePath, { shouldDirty: true })
 
       toast.success('프로필 사진이 변경되었습니다!', { duration: 2000 })
