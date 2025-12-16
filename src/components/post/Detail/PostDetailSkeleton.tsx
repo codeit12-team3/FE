@@ -1,6 +1,6 @@
 'use client'
 
-import CommentSkeleton from '@/components/comment/List/CommentSkeleton'
+import CommentSkeleton from '@/components/comment/List/Comment/CommentSkeleton'
 import { Skeleton } from '@/components/common'
 
 import PostImagesSkeleton from './PostImagesSkeleton'
