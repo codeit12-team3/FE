@@ -58,14 +58,6 @@ export default function ImageUpload() {
     return true
   }
 
-  const getImageType = (file: File) => {
-    const fileType = file.type.split('/')[1]?.toUpperCase() || 'JPG'
-    if (fileType === 'JPEG' || fileType === 'JPG') return 'JPG'
-    if (fileType === 'PNG') return 'PNG'
-    if (fileType === 'SVG+XML' || fileType === 'SVG') return 'SVG'
-    return 'JPG'
-  }
-
   const syncFormImages = (
     nextExisting: string[],
     nextNewUploaded: string[],
@@ -99,16 +91,10 @@ export default function ImageUpload() {
       return
     }
 
-    const imageType = getImageType(files[0])
-
     setIsUploading(true)
 
     try {
-      const uploadedImagePaths = await uploadPostImages(
-        files,
-        imageType,
-        'POST',
-      )
+      const uploadedImagePaths = await uploadPostImages(files, 'POST')
 
       const previews = files.map((file) => URL.createObjectURL(file))
 

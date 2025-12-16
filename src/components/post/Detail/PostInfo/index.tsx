@@ -1,5 +1,3 @@
-import { CalendarDays } from 'lucide-react'
-
 import { NATION_CODE_TO_LABEL, NationCode } from '@/constants/posts'
 
 interface Props {
@@ -20,7 +18,6 @@ interface Props {
   }
 }
 
-const BLUE_BOX_STYLE = 'px-4 py-2 bg-blue-50 rounded-md text-sm text-text-input'
 const TEXT_STYLE = 'text-sm text-text-input'
 
 const InfoSection = ({
@@ -41,42 +38,45 @@ export default function Info({
   region,
   period,
   content,
-  stats,
   conditions,
+  stats,
 }: Props) {
   return (
-    <div className="space-y-8">
-      <InfoSection title="여행 지역">
-        <span className={TEXT_STYLE}>
-          {NATION_CODE_TO_LABEL[nation] ?? nation}
-        </span>
-        <span className={TEXT_STYLE}>{region}</span>
-      </InfoSection>
-
-      <InfoSection title="여행 일정">
-        <div className="grid grid-cols-2 gap-4 w-2/3">
-          <div className={`${BLUE_BOX_STYLE} flex gap-2`}>
-            <CalendarDays className="text-main size-5" />
-            {period.startDate}
+    <div className="flex flex-col gap-4">
+      <span>{content}</span>
+      <InfoSection title="여행 정보">
+        <div className="bg-bg-disabled rounded-3xl p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex  gap-2">
+              <span className={TEXT_STYLE}>여행 시작</span>
+              <span className="text-sm text-text-base">{period.startDate}</span>
+            </div>
+            <div className="flex  gap-2">
+              <span className={TEXT_STYLE}>여행 종료</span>
+              <span className="text-sm text-text-base">{period.endDate}</span>
+            </div>
           </div>
-          <div className={`${BLUE_BOX_STYLE} flex gap-2`}>
-            <CalendarDays className="text-main size-5" />
-            {period.endDate}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex  gap-1">
+              <span className={TEXT_STYLE}>여행지</span>
+              <span className="text-sm pl-1">
+                {NATION_CODE_TO_LABEL[nation] ?? nation}
+              </span>
+              <span className="text-sm text-text-base">{region}</span>
+            </div>
+            <div className="flex  gap-2">
+              <span className={TEXT_STYLE}>모집 정원</span>
+              <span className="text-sm text-text-base">
+                {stats.maxMembers}명
+              </span>
+            </div>
           </div>
-        </div>
-      </InfoSection>
-
-      <InfoSection title="모집 설명">
-        <div className={`${BLUE_BOX_STYLE} rounded-lg w-2/3`}>{content}</div>
-      </InfoSection>
-
-      <InfoSection title="모집 정원 및 조건">
-        <div className="flex gap-4">
-          <span>
-            총 <span className="text-main">{stats.maxMembers}</span>명
-          </span>
-          <span className="text-main">{conditions.ageCondition}</span>
-          <span className="text-main">{conditions.genderCondition}</span>
+          <div className="flex  gap-2">
+            <span className={TEXT_STYLE}>모집 조건</span>
+            <span className="text-sm text-text-base">
+              {conditions.ageCondition}
+            </span>
+          </div>
         </div>
       </InfoSection>
     </div>

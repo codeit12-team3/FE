@@ -379,4 +379,57 @@ export const postsHandlers = [
       { status: 200 },
     )
   }),
+  http.patch(
+    `${MOCK_URL}/v1/posts/:postId/status`,
+    async ({ params, request }) => {
+      await delay(500)
+
+      const { postId } = params
+      const body = (await request.json()) as {
+        recruitStatus: 'RECRUITING' | 'COMPLETED'
+      }
+
+      const post = mockPosts.find((p) => p.postId === postId)
+
+      if (!post) {
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 404,
+            data: {
+              code: 'POST_NOT_FOUND',
+              message: '게시글을 찾을 수 없습니다.',
+            },
+            timestamp: new Date().toISOString(),
+          },
+          { status: 404 },
+        )
+      }
+
+      if (post.writerId !== CURRENT_USER_ID) {
+        return HttpResponse.json(
+          {
+            success: false,
+            status: 403,
+            data: {
+              code: 'FORBIDDEN',
+              message: '해당 게시글을 수정할 권한이 없습니다.',
+            },
+            timestamp: new Date().toISOString(),
+          },
+          { status: 403 },
+        )
+      }
+
+      // 모집 상태 업데이트
+      post.recruitStatus = body.recruitStatus
+
+      return HttpResponse.json({
+        success: true,
+        status: 200,
+        data: null,
+        timestamp: new Date().toISOString(),
+      })
+    },
+  ),
 ]

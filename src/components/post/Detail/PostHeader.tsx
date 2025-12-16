@@ -1,47 +1,40 @@
-import { Heart } from 'lucide-react'
-
-import { cn, formatDay } from '@/lib/common'
+import { formatDay } from '@/lib/common'
 
 interface PostHeaderProps {
+  tags: string[]
   title: string
   timestamp: string
   stats: {
     viewCount: number
   }
   commentCount: number
-  isBookmarked: boolean
-  onToggleBookmark: () => void
 }
 
 export default function PostHeader({
+  tags,
   title,
   timestamp,
   stats,
   commentCount,
-  isBookmarked,
-  onToggleBookmark,
 }: PostHeaderProps) {
   return (
-    <div className="flex justify-between items-start mb-6">
-      <h1 className="text-xl font-bold text-text-base">{title}</h1>
+    <div className="flex flex-col items-start mb-6 gap-4">
+      <div className="flex gap-4 flex-wrap">
+        {tags.map((tag) => (
+          <button
+            key={tag}
+            className="px-3 py-1 bg-blue-50 text-main rounded-full text-sm hover:bg-main hover:text-white transition"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+      <h1 className="text-xl font-bold text-text-base pl-3">{title}</h1>
 
-      <div className="flex items-center gap-4 text-sm text-text-input">
+      <div className="flex  gap-4 text-sm text-text-input pl-3">
         <p>게시날짜 {formatDay(timestamp)} </p>
         <p>조회수 {stats.viewCount} </p>
         <p>댓글 {commentCount}</p>
-
-        <button
-          onClick={onToggleBookmark}
-          className="hover:scale-110 transition-transform"
-          aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
-        >
-          <Heart
-            className={cn(
-              'w-5 h-5 text-text-input cursor-pointer',
-              isBookmarked && 'fill-main text-main',
-            )}
-          />
-        </button>
       </div>
     </div>
   )

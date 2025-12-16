@@ -20,6 +20,8 @@ import {
   deletePost,
   fetchPosts,
   fetchPostsDetail,
+  patchPost,
+  RecruitStatus,
   removeBookmark,
   updatePost,
 } from './posts.clients'
@@ -46,6 +48,28 @@ export const usePostDetail = ({ postId }: { postId: string }) =>
       return await fetchPostsDetail(postId)
     },
   })
+export const usePatchPost = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      postId,
+      recruitStatus,
+    }: {
+      postId: string
+      recruitStatus: RecruitStatus
+    }) => patchPost(postId, recruitStatus),
+
+    onSuccess: (_, { postId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['postDetail', postId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      })
+    },
+  })
+}
 
 export const useCreatePost = () => {
   return useMutation({

@@ -83,7 +83,7 @@ export interface PostContent {
   region: string
   period: Period
   stats: Stats
-  recruitStatus: 'RECRUITING' | 'CLOSED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED'
   tags: string[]
   nickname: string
   isOwner: boolean

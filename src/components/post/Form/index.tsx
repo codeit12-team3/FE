@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { useCreatePost, useDeletePost, useUpdatePost } from '@/api/posts'
+import { useCreatePost, useUpdatePost } from '@/api/posts'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL, NATION_LABEL_TO_CODE } from '@/constants/posts'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
@@ -28,7 +28,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const router = useRouter()
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
-  const deletePost = useDeletePost()
+
   const resolver = zodResolver(
     postSchema,
   ) as unknown as Resolver<PostFormWithTagValues>
@@ -150,16 +150,10 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
                   size="md"
                   variant="destructive"
                   onClick={() => {
-                    if (!confirm('정말 삭제하시겠어요?')) return
-                    deletePost.mutate(postId, {
-                      onSuccess: () => {
-                        toast.success('게시글이 삭제되었습니다.')
-                        router.push('/')
-                      },
-                    })
+                    router.push(`/posts/${postId}`)
                   }}
                 >
-                  삭제
+                  뒤로가기
                 </Button>
               ) : (
                 <Button
