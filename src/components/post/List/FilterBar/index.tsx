@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import {
+  Button,
+  InputGroup,
+  InputGroupInput,
+  Select,
   SelectContent,
   SelectItem,
-  SelectRoot,
   SelectTrigger,
-} from '@/components/common/Select/select.components'
-import { Button, InputGroup, InputGroupInput } from '@/components/ui'
+} from '@/components/ui'
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,
@@ -52,37 +54,41 @@ export default function FilterBar({
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
       <div className="flex gap-4">
         {/* 국가 */}
-        <SelectRoot
-          value={filters.nation ?? ''}
-          onValueChange={(value) => applyImmediately({ nation: value })}
+        <Select
+          value={filters.nation || 'ALL'}
+          onValueChange={(value) =>
+            applyImmediately({
+              nation: value === 'ALL' ? '' : value,
+            })
+          }
         >
           <SelectTrigger>
             <span
               className={`block truncate ${!filters.nation && 'text-text-input'}`}
             >
               {filters.nation
-                ? NATION_ENUM_OPTIONS.find(
-                    (value) => value.value === filters.nation,
-                  )?.label
+                ? NATION_ENUM_OPTIONS.find((v) => v.value === filters.nation)
+                    ?.label
                 : '국가'}
             </span>
           </SelectTrigger>
+
           <SelectContent>
-            <SelectItem value="">전체</SelectItem>
+            <SelectItem value="ALL">전체</SelectItem>
             {NATION_ENUM_OPTIONS.map((region) => (
               <SelectItem key={region.value} value={region.value}>
                 {region.label}
               </SelectItem>
             ))}
           </SelectContent>
-        </SelectRoot>
+        </Select>
 
         {/* 나이 */}
-        <SelectRoot
-          value={filters.ageType ?? ''}
+        <Select
+          value={filters.ageType || 'ALL'}
           onValueChange={(value) =>
             applyImmediately({
-              ageType: value ? (value as AgeType) : undefined,
+              ageType: value === 'ALL' ? undefined : (value as AgeType),
             })
           }
         >
@@ -96,22 +102,23 @@ export default function FilterBar({
                 : '나이'}
             </span>
           </SelectTrigger>
+
           <SelectContent>
-            <SelectItem value="">전체</SelectItem>
+            <SelectItem value="ALL">전체</SelectItem>
             {AGE_OPTIONS.map((age) => (
               <SelectItem key={age.value} value={age.value}>
                 {age.label}
               </SelectItem>
             ))}
           </SelectContent>
-        </SelectRoot>
+        </Select>
 
         {/* 성별 */}
-        <SelectRoot
-          value={filters.gender ?? ''}
+        <Select
+          value={filters.gender || 'ALL'}
           onValueChange={(value) =>
             applyImmediately({
-              gender: value ? (value as GenderType) : undefined,
+              gender: value === 'ALL' ? undefined : (value as GenderType),
             })
           }
         >
@@ -120,21 +127,19 @@ export default function FilterBar({
               className={`block truncate ${!filters.gender && 'text-text-input'}`}
             >
               {filters.gender
-                ? GENDER_OPTIONS.find(
-                    (option) => option.value === filters.gender,
-                  )?.label
+                ? GENDER_OPTIONS.find((v) => v.value === filters.gender)?.label
                 : '성별'}
             </span>
           </SelectTrigger>
+
           <SelectContent>
-            <SelectItem value="">전체</SelectItem>
             {GENDER_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
             ))}
           </SelectContent>
-        </SelectRoot>
+        </Select>
       </div>
 
       {/* 검색 */}
