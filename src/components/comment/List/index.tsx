@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { useCommentData } from '@/hooks/comment/useCommentData'
 
-import CommentSkeleton from './CommentSkeleton'
+import CommentSkeleton from './Comment/CommentSkeleton'
 import CommentThread from './CommentThread'
 
 interface CommentListProps {

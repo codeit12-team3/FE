@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import { CommentContent } from '@/types/comments/comments.type'
 
-import Comment from './Comment'
-import ReplyList from './ReplyList'
+import Comment from '../Comment'
+import ReplyList from '../ReplyList'
 
 interface CommentThreadProps {
   parent: CommentContent

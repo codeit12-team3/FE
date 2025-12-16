@@ -1,6 +1,6 @@
 import { CommentContent } from '@/types/comments/comments.type'
 
-import Comment from './Comment'
+import Comment from '../Comment'
 
 interface ReplyListProps {
   parentId: number

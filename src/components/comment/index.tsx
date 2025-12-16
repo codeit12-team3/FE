@@ -1,9 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
-
-import { createComment, useComments } from '@/api/comments'
-import { CommentContent } from '@/types/comments/comments.type'
+import { createComment } from '@/api/comments'
 
 import CommentWriteForm from './Form'
 import CommentList from './List'
