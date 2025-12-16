@@ -199,14 +199,41 @@ export default function ImageUpload() {
                     <X className="size-3 text-white" />
                   </button>
                 </>
+              ) : idx === 0 ? (
+                <button
+                  type="button"
+                  onClick={openPicker}
+                  disabled={isUploading || !canAddMore}
+                  className="hover:bg-bg-hover disabled:opacity-50"
+                >
+                  <span className="text-xs text-center leading-tight text-text-input">
+                    여행 이미지를
+                    <br />
+                    추천해요
+                  </span>
+                </button>
+              ) : idx === 1 ? (
+                <button
+                  type="button"
+                  onClick={openPicker}
+                  disabled={isUploading || !canAddMore}
+                  className="hover:bg-bg-hover disabled:opacity-50"
+                >
+                  <span className="text-xs text-center leading-tight text-text-input">
+                    여행 분위기를 <br />
+                    보여주세요
+                  </span>
+                </button>
               ) : (
                 <button
                   type="button"
                   onClick={openPicker}
                   disabled={isUploading || !canAddMore}
-                  className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50"
+                  className="hover:bg-bg-hover disabled:opacity-50"
                 >
-                  <ImagePlus className="size-8 text-text-input" />
+                  <span className="text-xs text-center leading-tight text-text-input">
+                    여행을 한눈에 <br /> 보여줄 사진
+                  </span>
                 </button>
               )}
             </div>

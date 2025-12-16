@@ -4,6 +4,7 @@ import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
+import { useAddBookmark, useRemoveBookmark } from '@/api/posts/posts.mutations'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
@@ -11,6 +12,21 @@ import { PostListItem } from '@/types/posts'
 
 export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
+  const addBookmark = useAddBookmark()
+  const removeBookmark = useRemoveBookmark()
+
+  const handleToggleBookmark = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      if (post.isBookmarked) {
+        await removeBookmark.mutateAsync(String(post.postId))
+      } else {
+        await addBookmark.mutateAsync(String(post.postId))
+      }
+    } catch (error) {
+      console.error('북마크 토글 실패:', error)
+    }
+  }
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const CARD_BASE =
@@ -106,7 +122,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
         </div>
 
         <div className="flex flex-col items-end justify-between">
-          <button className="w-10 h-10 flex items-center justify-center rounded-full transition-colors">
+          <button
+            onClick={handleToggleBookmark}
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-50"
+          >
             <Heart
               className={`w-6 h-6 ${
                 post.isBookmarked ? 'fill-main text-main' : 'text-text-input'
