@@ -75,10 +75,6 @@ export default function PostDetail({ postId }: PostDetailProps) {
 
   const postDetail = response.data
   const handleToggleBookmark = async () => {
-    if (!postId) {
-      console.error('postId is undefined')
-      return
-    }
     try {
       if (postDetail.isBookmarked) {
         await removeBookmark.mutateAsync(postId)
@@ -178,7 +174,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
           )}
         </div>
 
-        {/* <Comment postId={postId} /> */}
+        <Comment postId={postId} />
       </div>
     </div>
   )

@@ -123,7 +123,6 @@ export default function ImageUpload() {
       toast.success(`${uploadedImagePaths.length}개 업로드 완료`)
     } catch (error) {
       console.error('이미지 업로드 에러:', error)
-      toast.error('이미지 업로드 실패')
     } finally {
       setIsUploading(false)
       e.target.value = ''

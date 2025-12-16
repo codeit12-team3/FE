@@ -36,18 +36,14 @@ export const uploadToS3 = async (
     })
 
     if (!res.ok) {
-      const text = await res.text()
-      console.error('❌ PUT failed:', text)
       throw new Error(`S3 upload failed: ${res.status}`)
     }
 
     return res
   } catch (e) {
-    console.error('❌ PUT error:', e)
     throw e
   }
 }
-// api/member/uploadMemberImage.ts
 
 /**
  * Content-Type 매핑
@@ -81,7 +77,7 @@ export const uploadPostImages = async (
           },
         ],
       })
-      console.log('presignedData:', presignedData)
+
       const { presignedUrl, image } = presignedData[0]
       await uploadToS3(presignedUrl, file, getContentType(imageType))
       return image
