@@ -16,17 +16,12 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       throw new Error('Refresh Failed')
     }
 
-    const newTokenRes = res.data.tokenResponse
+    const newTokenRes = res.data
 
     return {
       ...token,
       tokenResponse: {
-        ...token.tokenResponse,
-        accessToken: newTokenRes.accessToken,
-        refreshToken:
-          newTokenRes.refreshToken ?? token.tokenResponse.refreshToken,
-        accessTokenExpiration: newTokenRes.accessTokenExpiration,
-        refreshTokenExpiration: newTokenRes.refreshTokenExpiration,
+        ...newTokenRes,
       },
       expiresAt: Date.now() + newTokenRes.accessTokenExpiration,
     }
