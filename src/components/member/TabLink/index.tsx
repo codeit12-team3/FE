@@ -24,7 +24,7 @@ export default function TabLink({ href, children }: TabLinkProps) {
     <Link
       href={href}
       className={cn(
-        'relative pb-4 px-1 text-xl font-medium transition-colors whitespace-nowrap mt-12.5',
+        'relative pb-4 px-1 text-xl font-medium transition-colors whitespace-nowrap',
         isActive
           ? 'text-main after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-main'
           : 'text-text-input hover:text-text-base',
