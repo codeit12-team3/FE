@@ -10,10 +10,13 @@ import {
   SelectItem,
   SelectRoot,
   SelectTrigger,
-  SelectValue,
 } from '@/components/common/Select/select.components'
 import { InputGroup, InputGroupInput } from '@/components/ui'
-import { AGE_OPTIONS, GENDER_OPTIONS, NATION_OPTIONS } from '@/constants/posts'
+import {
+  AGE_OPTIONS,
+  GENDER_OPTIONS,
+  NATION_ENUM_OPTIONS,
+} from '@/constants/posts'
 import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
 
 export default function FilterBar({
@@ -55,13 +58,21 @@ export default function FilterBar({
           onValueChange={(value) => applyImmediately({ nation: value })}
         >
           <SelectTrigger>
-            <SelectValue placeholder="지역" />
+            <span
+              className={`block truncate ${!filters.nation && 'text-text-input'}`}
+            >
+              {filters.nation
+                ? NATION_ENUM_OPTIONS.find(
+                    (value) => value.value === filters.nation,
+                  )?.label
+                : '국가'}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
-            {NATION_OPTIONS.map((region) => (
-              <SelectItem key={region} value={region}>
-                {region}
+            {NATION_ENUM_OPTIONS.map((region) => (
+              <SelectItem key={region.value} value={region.value}>
+                {region.label}
               </SelectItem>
             ))}
           </SelectContent>

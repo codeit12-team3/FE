@@ -67,11 +67,9 @@ export const AGE_OPTIONS = [
   { value: 'THIRTY', label: '30대' },
   { value: 'FOURTY', label: '40대' },
   { value: 'FIFTY', label: '50대' },
-  { value: 'ETC', label: '모두' },
 ] as const
 
 export const GENDER_OPTIONS = [
   { value: 'MALE', label: '남성만' },
   { value: 'FEMALE', label: '여성만' },
-  { value: 'ALL', label: '모두' },
 ] as const
