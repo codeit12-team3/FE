@@ -6,10 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import {
-  deleteUnusedImage,
-  uploadMemberImage,
-} from '@/api/images/images.client'
+import { uploadMemberImage } from '@/api/images/images.client'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
@@ -93,12 +90,6 @@ export default function ProfileImageEdit() {
 
       // 프리뷰 이미지 즉시 표시
       setProfileImg(previewUrl)
-
-      if (previousUploadedPath && previousUploadedPath !== originalPath) {
-        await deleteUnusedImage(previousUploadedPath).catch((error) => {
-          console.error(error)
-        })
-      }
 
       //프리사인드 됐으면 S3 업로드할부분
       const imagePath = await uploadMemberImage(uploadFile, imageType, 'MEMBER')
