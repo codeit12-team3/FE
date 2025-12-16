@@ -30,10 +30,3 @@ export const updateMyProfile = async (data: UpdateMyProfileReq) => {
   const res = await axios.patch<ApiResponse<null>>('/v1/members/me', data)
   return res.data
 }
-
-/**
- * 클린업에서 사용할 삭제용 (수정안하고 벗어날때)
- */
-export const deleteUnusedImage = async (imagePath: string): Promise<void> => {
-  await axios.delete(`/api/images/${encodeURIComponent(imagePath)}`)
-}

@@ -6,8 +6,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { uploadMemberImage } from '@/api/images/images.client'
-import { deleteUnusedImage } from '@/api/member'
+import {
+  deleteUnusedImage,
+  uploadMemberImage,
+} from '@/api/images/images.client'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { ProfileEditFormData } from '@/types/member/schema'
 
