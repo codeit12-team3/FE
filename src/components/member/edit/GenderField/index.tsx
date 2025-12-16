@@ -31,13 +31,13 @@ export default function GenderField() {
               <Label htmlFor="gender-male" className="font-normal">
                 남
               </Label>
-              <RadioGroupItem id="gender-male" value="male" />
+              <RadioGroupItem id="gender-male" value="MALE" />
             </div>
             <div className="flex items-center gap-3">
               <Label htmlFor="gender-female" className="font-normal">
                 여
               </Label>
-              <RadioGroupItem id="gender-female" value="female" />
+              <RadioGroupItem id="gender-female" value="FEMALE" />
             </div>
           </RadioGroup>
         )}

@@ -17,12 +17,11 @@ export default function ProfileEditPage() {
     defaultValues: {
       image: '',
       nickname: '',
-      name: '',
       birth: '',
-      gender: undefined,
+      gender: '',
       mbti: '',
       lodgingStyle: '',
-      travelStyle: '',
+      tripStyle: '',
       introduction: '',
     },
   })
@@ -32,12 +31,11 @@ export default function ProfileEditPage() {
       methods.reset({
         image: data.image || '',
         nickname: data.nickname || '',
-        name: data.name || '',
         birth: data.birth || '',
         gender: data.gender,
         mbti: data.mbti || '',
-        lodgingStyle: data.lodgingStyle || '',
-        travelStyle: data.travelStyle || '',
+        lodgingStyle: data.lodgingStyle || 'ALL',
+        tripStyle: data.tripStyle || 'ALL',
         introduction: data.introduction || '',
       })
     }

@@ -1,13 +1,14 @@
 'use client'
 
-import { Pencil } from 'lucide-react'
+import { Loader2, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { deleteUnusedImage, uploadImage } from '@/api/member'
+import { uploadImage } from '@/api/member'
 import useImageCompress from '@/hooks/member/useImageCompress'
+import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function ProfileImageEdit() {
@@ -19,37 +20,30 @@ export default function ProfileImageEdit() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { compress } = useImageCompress()
 
-  const uploadedImagePathRef = useRef<string | null>(null)
-  const originalImagePathRef = useRef<string | null>(null)
-
+  // 폼의 image 값이 변경되면 프로필 이미지 상태 업데이트
   useEffect(() => {
     if (imageValue && !imageValue.startsWith('blob:')) {
       setProfileImg(imageValue)
-      originalImagePathRef.current = imageValue
     }
   }, [imageValue])
 
+  // 컴포넌트 언마운트 시 blob URL 메모리 해제
   useEffect(() => {
     return () => {
-      const uploadedPath = uploadedImagePathRef.current
-      const originalPath = originalImagePathRef.current
-
-      if (uploadedPath && uploadedPath !== originalPath) {
-        deleteUnusedImage(uploadedPath).catch((error) => {
-          console.error('이미지삭제실패', error)
-        })
-      }
-
       if (profileImg?.startsWith('blob:')) {
         URL.revokeObjectURL(profileImg)
       }
     }
   }, [profileImg])
 
+  // 파일 input 클릭 트리거
   const handleEditClick = () => {
     fileInputRef.current?.click()
   }
 
+  /**
+   * 파일 확장자를 기반으로 이미지 타입 추출
+   */
   const getImageType = (file: File): 'JPG' | 'PNG' | 'SVG' | null => {
     const extension = file.name.split('.').pop()?.toUpperCase()
     if (extension === 'JPG' || extension === 'JPEG') return 'JPG'
@@ -58,10 +52,18 @@ export default function ProfileImageEdit() {
     return null
   }
 
+  /**
+   * 이미지 파일 선택 및 업로드 처리
+   * 1. 파일 타입 검증
+   * 2. 이미지 압축 (SVG 제외)
+   * 3. S3 업로드
+   * 4. 폼 상태 업데이트
+   */
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // 이미지 타입 검증
     const imageType = getImageType(file)
     if (!imageType) {
       toast.error('JPG, JPEG, PNG, SVG만 업로드 가능해요!')
@@ -74,35 +76,30 @@ export default function ProfileImageEdit() {
 
       let uploadFile: File | Blob = file
       let previewUrl: string
-      //압축라이브러리가 SVG는 지원안해서 스킵하는부분
+
+      // SVG는 압축하지 않고 그대로 사용
       if (imageType === 'SVG') {
         uploadFile = file
         previewUrl = URL.createObjectURL(file)
       } else {
+        // JPG, PNG는 압축 처리
         const compressed = await compress(file)
         uploadFile = compressed.file
         previewUrl = compressed.previewUrl
       }
 
+      // 프리뷰 이미지 즉시 표시
       setProfileImg(previewUrl)
-      const previousUploadedPath = uploadedImagePathRef.current
-      const originalPath = originalImagePathRef.current
 
-      if (previousUploadedPath && previousUploadedPath !== originalPath) {
-        await deleteUnusedImage(previousUploadedPath).catch((error) => {
-          console.error(error)
-        })
-      }
-
-      //프리사인드 됐으면 S3 업로드할부분
+      // S3 업로드 및 이미지 경로 반환
       const imagePath = await uploadImage(uploadFile, imageType, 'MEMBER')
+
+      // 폼 상태 업데이트 (dirty 상태로 변경)
       setValue('image', imagePath, { shouldDirty: true })
-      uploadedImagePathRef.current = imagePath
-      toast.success('프로필 사진이 변경되었습니다!', {
-        duration: 2000,
-      })
+
+      toast.success('프로필 사진이 변경되었습니다!', { duration: 2000 })
     } catch (err) {
-      console.error(err)
+      // 업로드 실패 시 원본 이미지로 복구
       setProfileImg(imageValue || null)
       toast.error('이미지 업로드 중 오류가 발생했습니다')
     } finally {
@@ -116,17 +113,22 @@ export default function ProfileImageEdit() {
       <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
         <Image
           fill
-          src={profileImg || '/images/profile_default.svg'}
+          src={
+            profileImg?.startsWith('blob:')
+              ? profileImg
+              : getImageUrl(profileImg) // 서버 이미지 경로
+          }
           className="object-cover"
           alt="프로필 이미지"
           priority
         />
         {isUploading && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="text-white text-sm">업로드 중...</div>
+            <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
         )}
       </div>
+
       <button
         type="button"
         onClick={handleEditClick}
@@ -135,6 +137,7 @@ export default function ProfileImageEdit() {
       >
         <Pencil size={24} className="text-gray-700" />
       </button>
+
       <input
         type="file"
         accept="image/jpeg,image/jpg,image/png,image/svg+xml"

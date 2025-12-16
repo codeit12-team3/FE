@@ -32,40 +32,11 @@ export const getMyProfile = async (): Promise<MyProfile> => {
 
   return res.data.data
 }
+
 // 프로필 수정할때
 export const updateMyProfile = async (data: UpdateMyProfileReq) => {
   const res = await axios.patch<ApiResponse<null>>('/v1/members/me', data)
   return res.data
-}
-
-/**
- * Presigned URL 발급 요청
- */
-export const getPresignedUrl = async (
-  data: PresignedUrlRequest,
-): Promise<PresignedUrlResponse> => {
-  const res = await axios.post<ApiResponse<PresignedUrlResponse>>(
-    '/v1/images/presigned-url',
-    data,
-  )
-  return res.data.data as PresignedUrlResponse
-}
-
-/**
- * S3에 이미지 직접 업로드 (PUT)
- */
-export const uploadToS3 = async (
-  presignedUrl: string,
-  file: File | Blob,
-  contentType: string,
-): Promise<void> => {
-  await fetch(presignedUrl, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': contentType,
-    },
-    body: file,
-  })
 }
 
 /**
@@ -82,35 +53,101 @@ const getContentType = (imageType: string): string => {
 }
 
 /**
- * 이미지업로드 프리사인드랑 S3올리는거 통합
+ * Presigned URL 발급 요청 (수정)
+ */
+export const getPresignedUrl = async (
+  data: PresignedUrlRequest,
+): Promise<PresignedUrlResponse> => {
+  const res = await axios.post<
+    ApiResponse<
+      Array<{
+        imageId: string
+        presignedUrl: string
+        image: string
+      }>
+    >
+  >('/v1/images/presigned-url', data)
+
+  // 1. success 체크
+  if (!res.data.success) {
+    throw new Error('Presigned URL 발급 실패')
+  }
+
+  // 2. data 존재 확인 (data가 직접 배열)
+  if (!res.data.data) {
+    throw new Error('Presigned URL 응답 데이터가 없습니다')
+  }
+
+  // 3. data가 배열인지 확인
+  const urlsArray = res.data.data
+  if (!Array.isArray(urlsArray)) {
+    throw new Error('Presigned URL 배열이 올바르지 않습니다')
+  }
+
+  if (urlsArray.length === 0) {
+    throw new Error('Presigned URL 배열이 비어있습니다')
+  }
+
+  // 4. PresignedUrlResponse 형태로 반환
+  return { urls: urlsArray }
+}
+
+/**
+ * 이미지 업로드 (안전성 강화)
  */
 export const uploadImage = async (
   file: File | Blob,
   imageType: 'JPG' | 'PNG' | 'SVG',
   imageDirectory: 'MEMBER' | 'POST' = 'MEMBER',
 ): Promise<string> => {
-  // 1. Presigned URL 발급
-  const presignedData = await getPresignedUrl({
-    images: [
-      {
-        imageId: uuidv4(),
-        imageType,
-        imageDirectory,
+  try {
+    // 1. Presigned URL 발급
+    const imageId = uuidv4()
+
+    const presignedData = await getPresignedUrl({
+      images: [
+        {
+          imageId,
+          imageType,
+          imageDirectory,
+        },
+      ],
+    })
+
+    // 첫 번째 URL 정보 추출
+    const urlInfo = presignedData.urls[0]
+    if (!urlInfo || !urlInfo.presignedUrl || !urlInfo.image) {
+      throw new Error('Presigned URL 정보가 올바르지 않습니다')
+    }
+
+    const { presignedUrl, image } = urlInfo
+
+    // 2. S3 업로드
+    const contentType = getContentType(imageType)
+
+    const response = await fetch(presignedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': contentType,
       },
-    ],
-  })
+      body: file,
+    })
 
-  // 2. S3 업로드
-  const { presignedUrl, image } = presignedData.urls[0]
-  await uploadToS3(presignedUrl, file, getContentType(imageType))
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('S3 업로드 실패:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText,
+      })
+      throw new Error(
+        `S3 업로드 실패: ${response.status} ${response.statusText}`,
+      )
+    }
 
-  // 3. 이미지 경로 반환
-  return image
-}
-
-/**
- * 클린업에서 사용할 삭제용 (수정안하고 벗어날때)
- */
-export const deleteUnusedImage = async (imagePath: string): Promise<void> => {
-  await axios.delete(`/api/images/${encodeURIComponent(imagePath)}`)
+    return image
+  } catch (error) {
+    console.error('uploadImage 전체 실패:', error)
+    throw error
+  }
 }
