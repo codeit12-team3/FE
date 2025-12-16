@@ -25,6 +25,7 @@ export const getMyProfile = async (): Promise<MyProfile> => {
 
   return res.data.data
 }
+
 // 프로필 수정할때
 export const updateMyProfile = async (data: UpdateMyProfileReq) => {
   const res = await axios.patch<ApiResponse<null>>('/v1/members/me', data)
