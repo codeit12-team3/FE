@@ -1,4 +1,9 @@
-import { Gender, MBTI } from '@/constants/member'
+import {
+  Gender,
+  LodgingStyleValue,
+  MBTI,
+  TripStyleValue,
+} from '@/constants/member'
 
 export interface Member {
   email: string
@@ -22,14 +27,15 @@ export interface UpdateMyProfileReq {
 export interface MyProfile {
   memberId: string
   nickname: string
-  name: string
+  email: string
   birth: string
-  gender: string
+  age: number
+  gender: Gender
   image: string | null
-  mbti?: string
-  lodgingStyle: string
-  tripStyle: string
-  introduction?: string
+  mbti: string
+  lodgingStyle: LodgingStyleValue | null
+  tripStyle: TripStyleValue | null
+  introduction: string | null
 }
 
 export interface PresignedUrlRequest {
