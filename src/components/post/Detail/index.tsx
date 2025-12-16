@@ -1,7 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
+import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/common'
@@ -17,11 +19,48 @@ interface PostDetailProps {
   postId: string
 }
 
+function ApplyCompanionModal({
+  message,
+  onChangeMessage,
+  onClose,
+  onSubmit,
+}: {
+  message: string
+  onChangeMessage: (v: string) => void
+  onClose: () => void
+  onSubmit: () => void
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-9999">
+      <div className="bg-white rounded-xl p-6 w-96">
+        <h2 className="text-lg font-semibold mb-4">동행 신청 메시지</h2>
+
+        <textarea
+          value={message}
+          onChange={(e) => onChangeMessage(e.target.value)}
+          className="w-full border rounded-md p-2 mb-4"
+          placeholder="신청 메시지를 입력해주세요"
+        />
+
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" onClick={onClose}>
+            취소
+          </Button>
+          <Button onClick={onSubmit}>신청하기</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function PostDetail({ postId }: PostDetailProps) {
   const { data: response, isLoading } = usePostDetail({ postId })
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
+  const applyCompanionMutation = useApplyCompanion()
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
+  const [applyMessage, setApplyMessage] = useState('')
 
   if (isLoading) {
     return <PostDetailSkeleton />
@@ -49,6 +88,15 @@ export default function PostDetail({ postId }: PostDetailProps) {
     } catch (error) {
       console.error('북마크 토글 실패:', error)
     }
+  }
+  const handleApplyCompanion = () => {
+    applyCompanionMutation.mutate({
+      postId,
+      applyMessage,
+    })
+    console.log('동행 신청 성공')
+    setIsApplyModalOpen(false)
+    setApplyMessage('')
   }
 
   const headerProps = {
@@ -98,7 +146,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
               variant="secondary"
               size="md"
               className="w-68"
-              onClick={() => router.back()}
+              onClick={() => router.push('/')}
             >
               뒤로가기
             </Button>
@@ -111,14 +159,26 @@ export default function PostDetail({ postId }: PostDetailProps) {
                 수정하기
               </Button>
             ) : (
-              <Button size="md" className="w-68">
+              <Button
+                size="md"
+                className="w-68"
+                onClick={() => setIsApplyModalOpen(true)}
+              >
                 동행 참여하기
               </Button>
             )}
           </>
+          {isApplyModalOpen && (
+            <ApplyCompanionModal
+              message={applyMessage}
+              onChangeMessage={setApplyMessage}
+              onClose={() => setIsApplyModalOpen(false)}
+              onSubmit={handleApplyCompanion}
+            />
+          )}
         </div>
-        {/* 
-        <Comment postId={postId} /> */}
+
+        {/* <Comment postId={postId} /> */}
       </div>
     </div>
   )
