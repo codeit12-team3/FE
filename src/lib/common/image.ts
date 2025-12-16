@@ -2,9 +2,13 @@
  * 이미지 경로 설정 유틸 함수
  * @param path
  */
-export const getImageUrl = (path: string | null | undefined) => {
+export const getImageUrl = (
+  path: string | null | undefined,
+  profile?: boolean,
+) => {
   if (!path) {
-    return '/images/default.png'
+    if (profile) return '/images/profile-default.png'
+    return '/images/thumbnail-default.png'
   }
 
   if (path.startsWith('http')) {

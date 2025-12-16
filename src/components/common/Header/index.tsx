@@ -1,9 +1,10 @@
 'use client'
 
-import { User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+import UserMenu from './UserMenu'
 
 export default function Header() {
   const pathname = usePathname()
@@ -44,9 +45,7 @@ export default function Header() {
               </Link>
             </nav>
           </div>
-          <button className="w-12 h-12 rounded-full bg-bg-disabled flex items-center justify-center hover:opacity-80 transition-opacity border border-border cursor-pointer">
-            <User className="size-8" />
-          </button>
+          <UserMenu />
         </div>
       </div>
     </header>
