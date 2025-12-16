@@ -11,6 +11,7 @@ import {
   PostContent,
   PostCreatePayload,
   PostParams,
+  PostUpdatePayload,
 } from '@/types/posts'
 
 import {
@@ -25,7 +26,7 @@ import {
 
 interface UpdateArgs {
   postId: string
-  payload: PostCreatePayload
+  payload: PostUpdatePayload
 }
 
 export const usePosts = (
@@ -39,16 +40,10 @@ export const usePosts = (
   })
 }
 export const usePostDetail = ({ postId }: { postId: string }) =>
-  useQuery<PostContent>({
+  useQuery<ApiResponse<PostContent>>({
     queryKey: ['postDetail', postId],
     queryFn: async () => {
-      const res = await fetchPostsDetail(postId)
-
-      if (!res.success) {
-        throw new Error('게시글 조회 실패')
-      }
-
-      return res.data
+      return await fetchPostsDetail(postId)
     },
   })
 

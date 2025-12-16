@@ -58,7 +58,7 @@ interface Writer {
 export interface PostListItem {
   postId: number
   title: string
-  nation: string
+  nation: NationCode
   region: string
   period: {
     startDate: string

@@ -73,23 +73,28 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const isPending = isEdit ? updatePost.isPending : createPost.isPending
 
   const onSubmit = (data: PostFormWithTagValues) => {
-    const payload = {
-      title: data.title,
-      content: data.content,
-      nation: NATION_LABEL_TO_CODE[data.nation],
-      region: data.region,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      maxMembers: Number(data.maxMembers),
-      tags: data.tags,
-      images: data.images ?? [],
-      genderType: data.gender as GenderType,
-      ageType: data.ageType as AgeType,
-    }
+    if (isEdit && postId && initialData) {
+      const updatePayload = {
+        title: data.title,
+        content: data.content,
+        nation: NATION_LABEL_TO_CODE[data.nation],
+        region: data.region,
+        period: {
+          startDate: data.startDate,
+          endDate: data.endDate,
+        },
+        maxMembers: Number(data.maxMembers),
+        tags: data.tags,
+        images: {
+          add: data.images.filter((img) => !initialData.images.includes(img)),
+          delete: initialData.images.filter(
+            (img) => !data.images.includes(img),
+          ),
+        },
+      }
 
-    if (isEdit && postId) {
       updatePost.mutate(
-        { postId, payload },
+        { postId, payload: updatePayload },
         {
           onSuccess: () => {
             toast.success('게시글이 수정되었습니다.')
@@ -98,7 +103,21 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         },
       )
     } else {
-      createPost.mutate(payload, {
+      const createPayload = {
+        title: data.title,
+        content: data.content,
+        nation: NATION_LABEL_TO_CODE[data.nation],
+        region: data.region,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        maxMembers: Number(data.maxMembers),
+        tags: data.tags,
+        images: data.images ?? [],
+        genderType: data.gender as GenderType,
+        ageType: data.ageType as AgeType,
+      }
+
+      createPost.mutate(createPayload, {
         onSuccess: () => {
           toast.success('게시글이 등록되었습니다.')
           router.push('/')

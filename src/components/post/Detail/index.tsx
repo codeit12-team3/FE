@@ -18,7 +18,7 @@ interface PostDetailProps {
 }
 
 export default function PostDetail({ postId }: PostDetailProps) {
-  const { data: postDetail, isLoading } = usePostDetail({ postId })
+  const { data: response, isLoading } = usePostDetail({ postId })
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
@@ -26,13 +26,15 @@ export default function PostDetail({ postId }: PostDetailProps) {
   if (isLoading) {
     return <PostDetailSkeleton />
   }
-  if (!postDetail) {
+  if (!response || !response.success || !response.data) {
     return (
       <div className="text-center py-20 text-gray-500">
         게시글을 불러올 수 없습니다.
       </div>
     )
   }
+
+  const postDetail = response.data
   const handleToggleBookmark = async () => {
     if (!postId) {
       console.error('postId is undefined')
