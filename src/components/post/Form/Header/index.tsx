@@ -41,11 +41,18 @@ export default function Header() {
         className="mb-0"
       />
 
-      <div>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <label className="font-semibold">
+            여행 태그 <span className="text-main">*</span>
+          </label>
+          <p className="text-xs text-text-muted">최대 5개</p>
+        </div>
+
         <FormInput<PostFormWithTagValues>
-          label="여행 태그"
+          label=""
           name="tag"
-          placeholder="여행 테마를 작성해주세요. 최대 5개"
+          placeholder="여행 테마를 입력하세요. (Enter로 추가)"
           className="mb-0"
           onKeyDown={(e) => {
             if (e.key !== 'Enter') return

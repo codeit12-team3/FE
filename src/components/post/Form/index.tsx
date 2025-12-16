@@ -137,12 +137,10 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Header />
-
             <ImageUpload />
             <Info />
             <DateSection />
             <Description />
-
             <div className="flex items-center gap-8 justify-center my-3">
               {isEdit && postId ? (
                 <Button
@@ -158,9 +156,10 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
               ) : (
                 <Button
                   type="button"
-                  size="md"
-                  variant="secondary"
+                  size="sm"
+                  variant="ghost"
                   onClick={() => router.push('/')}
+                  className="flex-1 border border-text-disabled "
                 >
                   나가기
                 </Button>
@@ -168,16 +167,17 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
 
               <Button
                 type="submit"
-                size="md"
+                size="sm"
                 disabled={!formState.isValid || isPending}
+                className="flex-1"
               >
                 {isPending
                   ? isEdit
                     ? '수정 중...'
                     : '등록 중...'
                   : isEdit
-                    ? '게시글 수정'
-                    : '게시글 등록'}
+                    ? '수정하기'
+                    : '등록하기'}
               </Button>
             </div>
           </form>

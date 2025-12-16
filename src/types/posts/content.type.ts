@@ -88,9 +88,9 @@ export interface PostContent {
   nickname: string
   isOwner: boolean
   conditions: Conditions
-  isBookmarked: boolean
-  bookmarkCount: number
-  commentCount: number
+  isBookrkCount: number
+  commenmarked: boolean
+  bookmatCount: number
   images: string[]
   writer: Writer
   thumbnail: string[]

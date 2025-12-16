@@ -2,6 +2,7 @@
 
 import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/common/Button'
 import {
@@ -15,20 +16,35 @@ import { InputGroup, InputGroupInput } from '@/components/ui'
 import { AGE_OPTIONS, GENDER_OPTIONS, NATION_OPTIONS } from '@/constants/posts'
 import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
 
-interface FilterBarProps {
-  filters: PostFilterParams
-  onChangeFilters: React.Dispatch<React.SetStateAction<PostFilterParams>>
-  keywordInput: string
-  onChangeKeyword: (value: string) => void
-}
-
 export default function FilterBar({
-  filters,
-  onChangeFilters,
-  keywordInput,
-  onChangeKeyword,
-}: FilterBarProps) {
+  onApply,
+}: {
+  onApply: (filters: PostFilterParams) => void
+}) {
   const router = useRouter()
+
+  const [filters, setFilters] = useState<Omit<PostFilterParams, 'keyword'>>({
+    nation: '',
+    date: '',
+    ageType: undefined,
+    gender: undefined,
+  })
+
+  const [keyword, setKeyword] = useState('')
+
+  const applyImmediately = (
+    next: Partial<Omit<PostFilterParams, 'keyword'>>,
+  ) => {
+    const updated = { ...filters, ...next }
+    setFilters(updated)
+    onApply({ ...updated, keyword })
+  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onApply({ ...filters, keyword })
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [keyword, filters, onApply])
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4 flex gap-2 justify-between">
@@ -36,12 +52,7 @@ export default function FilterBar({
         {/* 국가 */}
         <SelectRoot
           value={filters.nation ?? ''}
-          onValueChange={(value) =>
-            onChangeFilters((prev) => ({
-              ...prev,
-              nation: value || undefined,
-            }))
-          }
+          onValueChange={(value) => applyImmediately({ nation: value })}
         >
           <SelectTrigger>
             <SelectValue placeholder="지역" />
@@ -60,14 +71,20 @@ export default function FilterBar({
         <SelectRoot
           value={filters.ageType ?? ''}
           onValueChange={(value) =>
-            onChangeFilters((prev) => ({
-              ...prev,
+            applyImmediately({
               ageType: value ? (value as AgeType) : undefined,
-            }))
+            })
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder="나이" />
+            <span
+              className={`block truncate ${!filters.ageType && 'text-text-input'}`}
+            >
+              {filters.ageType
+                ? AGE_OPTIONS.find((age) => age.value === filters.ageType)
+                    ?.label
+                : '나이'}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
@@ -83,14 +100,21 @@ export default function FilterBar({
         <SelectRoot
           value={filters.gender ?? ''}
           onValueChange={(value) =>
-            onChangeFilters((prev) => ({
-              ...prev,
+            applyImmediately({
               gender: value ? (value as GenderType) : undefined,
-            }))
+            })
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder="성별" />
+            <span
+              className={`block truncate ${!filters.gender && 'text-text-input'}`}
+            >
+              {filters.gender
+                ? GENDER_OPTIONS.find(
+                    (option) => option.value === filters.gender,
+                  )?.label
+                : '성별'}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">전체</SelectItem>
@@ -108,8 +132,8 @@ export default function FilterBar({
         <InputGroup>
           <InputGroupInput
             placeholder="검색어를 입력해주세요"
-            value={keywordInput}
-            onChange={(e) => onChangeKeyword(e.target.value)}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
           />
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
         </InputGroup>
