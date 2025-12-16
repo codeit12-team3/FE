@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 
-import { MyPageHeader, TabLink } from '@/components/member'
+import { MyPageHeader, MyProfileSection, TabLink } from '@/components/member'
 
 export default function MemberLayout({
   children,
@@ -14,20 +14,19 @@ export default function MemberLayout({
   if (pathname === '/member/edit') {
     return <div className="max-w-7xl mx-auto mt-17">{children}</div>
   }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto mt-17">
-        <MyPageHeader />
+    <main className="flex-1 max-w-7xl mx-auto w-full px-8 space-y-6">
+      <h2 className="text-2xl font-semibold mt-6">마이페이지</h2>
+      <MyProfileSection />
 
-        <nav className="flex gap-10 border-b border-gray-200 mb-10 -mt-4">
-          <TabLink href="/member">받은 동행 신청</TabLink>
-          <TabLink href="/member/sent">신청한 동행</TabLink>
-          <TabLink href="/member/posts">내 게시글</TabLink>
-          <TabLink href="/member/bookmarks">북마크</TabLink>
-        </nav>
-
-        <div className="mt-8">{children}</div>
-      </div>
-    </div>
+      <nav className="flex gap-10 border-b border-gray-200">
+        <TabLink href="/member">받은 동행 신청</TabLink>
+        <TabLink href="/member/sent">신청한 동행</TabLink>
+        <TabLink href="/member/posts">내 게시글</TabLink>
+        <TabLink href="/member/bookmarks">북마크</TabLink>
+      </nav>
+      {children}
+    </main>
   )
 }
