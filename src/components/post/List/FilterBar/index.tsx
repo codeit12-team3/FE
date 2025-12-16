@@ -4,14 +4,13 @@ import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-import { Button } from '@/components/common/Button'
 import {
   SelectContent,
   SelectItem,
   SelectRoot,
   SelectTrigger,
 } from '@/components/common/Select/select.components'
-import { InputGroup, InputGroupInput } from '@/components/ui'
+import { Button, InputGroup, InputGroupInput } from '@/components/ui'
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,

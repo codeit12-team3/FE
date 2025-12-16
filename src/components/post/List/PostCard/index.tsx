@@ -4,7 +4,7 @@ import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
 import { PostListItem } from '@/types/posts'

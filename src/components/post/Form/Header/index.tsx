@@ -53,7 +53,7 @@ export default function Header() {
           label=""
           name="tag"
           placeholder="여행 테마를 입력하세요. (Enter로 추가)"
-          className="mb-0"
+          className="-mb-6"
           onKeyDown={(e) => {
             if (e.key !== 'Enter') return
             const v = (e.currentTarget.value ?? '').trim()
@@ -67,7 +67,7 @@ export default function Header() {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="flex items-center gap-1 p-2  text-main rounded-full bg-sub mb-3"
+              className="flex items-center gap-1 px-2 py-1  text-main rounded-full bg-sub my-2"
             >
               <span className="text-xs">{tag}</span>
               <button

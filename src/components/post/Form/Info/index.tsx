@@ -40,7 +40,7 @@ export default function Info() {
         </div>
 
         <div className="w-1/2">
-          <Label htmlFor="nation" className="mb-2">
+          <Label htmlFor="region" className="mb-2">
             도시 <span className="text-destructive">*</span>
           </Label>
           <FormSelect
@@ -59,14 +59,19 @@ export default function Info() {
           name="maxMembers"
           placeholder="인원을 입력해주세요"
           className="w-1/2"
+          onFocus={(e) => {
+            if (e.currentTarget.value === '0') {
+              e.currentTarget.value = ''
+            }
+          }}
           required
         />
         <div className="w-1/2">
-          <Label htmlFor="age" className="mb-2">
+          <Label htmlFor="ageType" className="mb-2">
             나이 <span className="text-destructive">*</span>
           </Label>
           <FormSelect
-            name="age"
+            name="ageType"
             options={AGE_OPTIONS}
             placeholder="나이를 선택해주세요"
             className="w-full"
@@ -74,11 +79,11 @@ export default function Info() {
         </div>
       </div>
       <div className="mb-6">
-        <Label htmlFor="nation" className="mb-2">
+        <Label htmlFor="gender" className="mb-2">
           성별<span className="text-destructive">*</span>
         </Label>
         <Controller
-          name="ageType"
+          name="gender"
           control={control}
           render={({ field }) => (
             <RadioGroup
