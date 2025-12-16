@@ -1,25 +1,28 @@
 'use client'
 
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
+import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { MBTI_LIST } from '@/constants/member/rule.const'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 import BirthdaySelect from '../BirthdaySelect'
 
+const MBTI_OPTIONS = [
+  { value: 'NONE', label: '선택 안함' },
+  ...MBTI_LIST.map((mbti) => ({
+    value: mbti,
+    label: mbti,
+  })),
+]
 export default function BirthdayAndMbti() {
   const {
-    control,
+    watch,
     formState: { errors },
   } = useFormContext<ProfileEditFormData>()
+
+  const mbti = watch('mbti')
 
   return (
     <div className="flex mt-6 gap-6">
@@ -35,30 +38,12 @@ export default function BirthdayAndMbti() {
 
       <div className="flex flex-col gap-3">
         <Label htmlFor="mbti">MBTI</Label>
-        <Controller
+        <FormSelect
+          key={`mbti-${mbti}`}
           name="mbti"
-          control={control}
-          render={({ field }) => (
-            <Select
-              key={`mbti-${field.value}`}
-              value={field.value || 'none'}
-              onValueChange={(value) => {
-                field.onChange(value === 'none' ? '' : value)
-              }}
-            >
-              <SelectTrigger id="mbti" className="w-42">
-                <SelectValue placeholder="MBTI" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">선택 안함</SelectItem>
-                {MBTI_LIST.map((mbti) => (
-                  <SelectItem key={mbti} value={mbti}>
-                    {mbti}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+          options={MBTI_OPTIONS}
+          placeholder="MBTI"
+          className="w-42"
         />
       </div>
     </div>
