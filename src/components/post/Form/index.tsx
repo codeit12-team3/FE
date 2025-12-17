@@ -3,12 +3,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
-import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCreatePost, useUpdatePost } from '@/api/posts'
 import { Button } from '@/components/ui'
-import { NATION_CODE_TO_LABEL, NATION_LABEL_TO_CODE } from '@/constants/posts'
+import {
+  AGE_LABEL_TO_ENUM,
+  GENDER_LABEL_TO_ENUM,
+  NATION_CODE_TO_LABEL,
+  NATION_LABEL_TO_CODE,
+} from '@/constants/posts'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
@@ -29,10 +33,8 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
 
-  const resolver = zodResolver(
-    postSchema,
-  ) as unknown as Resolver<PostFormWithTagValues>
-
+  const resolver = zodResolver(postSchema)
+  console.log('initialData:', initialData)
   const methods = useForm<PostFormWithTagValues>({
     resolver,
     mode: 'onChange',
@@ -43,8 +45,14 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
           nation: NATION_CODE_TO_LABEL[initialData.nation],
           region: initialData.region,
           maxMembers: initialData.stats.maxMembers,
-          ageType: initialData.conditions.ageCondition,
-          gender: initialData.conditions.genderCondition,
+          ageType:
+            typeof initialData.conditions.ageCondition === 'string'
+              ? AGE_LABEL_TO_ENUM[initialData.conditions.ageCondition]
+              : initialData.conditions.ageCondition,
+          gender:
+            typeof initialData.conditions.genderCondition === 'string'
+              ? GENDER_LABEL_TO_ENUM[initialData.conditions.genderCondition]
+              : initialData.conditions.genderCondition,
           startDate: initialData.period.startDate,
           endDate: initialData.period.endDate,
           tags: initialData.tags,
@@ -85,6 +93,8 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         },
         maxMembers: Number(data.maxMembers),
         tags: data.tags,
+        ageType: data.ageType,
+        genderType: data.gender,
         images: {
           add: data.images.filter((img) => !initialData.images.includes(img)),
           delete: initialData.images.filter(
@@ -98,7 +108,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         {
           onSuccess: () => {
             toast.success('게시글이 수정되었습니다.')
-            router.push(`/posts/${postId}`)
+            window.location.href = `/posts/${postId}`
           },
         },
       )
@@ -145,11 +155,11 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
               {isEdit && postId ? (
                 <Button
                   type="button"
-                  size="md"
-                  variant="destructive"
+                  size="sm"
                   onClick={() => {
                     router.push(`/posts/${postId}`)
                   }}
+                  className="flex-1"
                 >
                   뒤로가기
                 </Button>
@@ -157,7 +167,6 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
                 <Button
                   type="button"
                   size="sm"
-                  variant="ghost"
                   onClick={() => router.push('/')}
                   className="flex-1 border border-text-disabled "
                 >

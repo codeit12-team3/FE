@@ -3,7 +3,7 @@ import { NationCode } from '@/constants/posts'
 export enum AgeType {
   TWENTY = 'TWENTY',
   THIRTY = 'THIRTY',
-  FOURTY = 'FOURTY',
+  FORTY = 'FORTY',
   FIFTY = 'FIFTY',
   ETC = 'ETC',
 }
@@ -42,8 +42,8 @@ export interface Stats {
   viewCount: number
 }
 interface Conditions {
-  ageCondition: AgeType
-  genderCondition: GenderType
+  ageCondition: AgeType | string
+  genderCondition: GenderType | string
 }
 
 interface Writer {

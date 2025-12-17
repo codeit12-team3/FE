@@ -10,7 +10,7 @@ import { cn, getImageUrl } from '@/lib/common'
 interface PostImagesProps {
   images: string[]
 }
-const DEFAULT_IMAGE = '/images/default.png'
+const DEFAULT_IMAGE = '/images/default-thumbnail.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -22,14 +22,15 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
       )}
 
       <Image
-        src={getImageUrl(src)}
+        src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
         fill
         quality={100}
         sizes="(max-width: 768px) 100vw, 800px"
-        className={`object-cover transition-opacity duration-300 ${
-          isLoading ? 'opacity-0' : 'opacity-100'
-        }`}
+        className={cn(
+          'object-cover transition-opacity duration-300',
+          isLoading ? 'opacity-0' : 'opacity-100',
+        )}
         onLoad={() => setIsLoading(false)}
       />
     </div>
@@ -88,16 +89,12 @@ export default function PostImages({ images }: PostImagesProps) {
             className={cn(
               'w-2 h-2 rounded-full transition-all',
               currentIndex === index
-                ? 'bg-white w-8'
+                ? 'bg-white w-2'
                 : 'bg-white/50 hover:bg-white/75',
             )}
             aria-label={`${index + 1}번째 이미지로 이동`}
           />
         ))}
-      </div>
-
-      <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-        {currentIndex + 1} / {imageList.length}
       </div>
     </div>
   )

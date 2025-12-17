@@ -60,13 +60,22 @@ export const usePatchPost = () => {
       recruitStatus: RecruitStatus
     }) => patchPost(postId, recruitStatus),
 
-    onSuccess: (_, { postId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['postDetail', postId],
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['posts'],
-      })
+    onSuccess: (_, { postId, recruitStatus }) => {
+      queryClient.setQueryData<ApiResponse<PostContent>>(
+        ['postDetail', postId],
+        (old) => {
+          if (!old || !old.success) return old
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              recruitStatus,
+            },
+          }
+        },
+      )
+      queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
 }
