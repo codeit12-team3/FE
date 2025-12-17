@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui/label'
@@ -17,9 +17,12 @@ const MBTI_OPTIONS = [
   })),
 ]
 export default function BirthdayAndMbti() {
-  const { watch } = useFormContext<ProfileEditFormData>()
+  const { control } = useFormContext<ProfileEditFormData>()
 
-  const mbti = watch('mbti')
+  const mbti = useWatch({
+    control,
+    name: 'mbti',
+  })
 
   return (
     <div className="flex mt-6 gap-4">
