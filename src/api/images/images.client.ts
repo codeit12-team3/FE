@@ -26,6 +26,12 @@ export const uploadToS3 = async (
   file: File | Blob,
   contentType: string,
 ) => {
+  console.log('🔍 9. S3 PUT 요청:', {
+    contentType,
+    fileSize: file.size,
+    url: presignedUrl.substring(0, 50) + '...',
+  })
+
   try {
     const res = await fetch(presignedUrl, {
       method: 'PUT',
@@ -33,6 +39,11 @@ export const uploadToS3 = async (
       headers: {
         'Content-Type': contentType,
       },
+    })
+    console.log('🔍 10. S3 응답:', {
+      status: res.status,
+      statusText: res.statusText,
+      ok: res.ok,
     })
 
     if (!res.ok) {
@@ -53,7 +64,7 @@ const getContentType = (imageType: string): string => {
     JPG: 'image/jpeg',
     JPEG: 'image/jpeg',
     PNG: 'image/png',
-    SVG: 'image/svg+xml',
+    WEBP: 'image/webp',
   }
   return typeMap[imageType] || 'image/jpeg'
 }
@@ -61,11 +72,11 @@ const getContentType = (imageType: string): string => {
 /**
  * 파일에서 이미지 타입 추출
  */
-const getImageTypeFromFile = (file: File): 'JPG' | 'JPEG' | 'PNG' | 'SVG' => {
-  const fileType = file.type.split('/')[1]?.toUpperCase() || 'JPG'
+const getImageTypeFromFile = (file: File): 'JPEG' | 'PNG' | 'WEBP' => {
+  const fileType = file.type.split('/')[1]?.toUpperCase() || 'JPEG'
   if (fileType === 'JPEG' || fileType === 'JPG') return 'JPEG'
   if (fileType === 'PNG') return 'PNG'
-  if (fileType === 'SVG+XML' || fileType === 'SVG') return 'SVG'
+  if (fileType === 'WEBP') return 'WEBP'
   return 'JPEG'
 }
 
@@ -101,9 +112,15 @@ export const uploadPostImages = async (
 
 export const uploadMemberImage = async (
   file: File | Blob,
-  imageType: 'JPG' | 'JPEG' | 'PNG' | 'SVG',
+  imageType: 'JPEG' | 'PNG' | 'WEBP', // ✅ 'JPG', 'SVG' 제거
   imageDirectory: 'MEMBER',
 ): Promise<string> => {
+  console.log('🔍 5. uploadMemberImage 호출:', {
+    imageType,
+    fileType: file.type,
+    fileSize: file.size,
+  })
+  // 1. Presigned URL 발급
   const presignedData = await getPresignedUrl({
     images: [
       {
@@ -114,13 +131,28 @@ export const uploadMemberImage = async (
     ],
   })
 
-  // 2. S3 업로드
-  const { presignedUrl, image } = presignedData[0]
-  await uploadToS3(presignedUrl, file, getContentType(imageType))
+  console.log('🔍 6. Presigned URL 발급 성공:', {
+    presignedUrl: presignedData[0].presignedUrl.substring(0, 50) + '...',
+    imagePath: presignedData[0].image,
+  })
 
-  // 3. 이미지 경로 반환
+  // 2. 실제 파일/Blob의 Content-Type 사용 (간소화) ✅
+  const actualContentType = file.type || getContentType(imageType)
+
+  console.log('🔍 7. S3 업로드 시도:', {
+    contentType: actualContentType,
+    fileType: file.type,
+    fallbackType: getContentType(imageType),
+  })
+
+  // 3. S3 업로드
+  const { presignedUrl, image } = presignedData[0]
+  await uploadToS3(presignedUrl, file, actualContentType)
+
+  // 4. 이미지 경로 반환
   return image
 }
+
 export const deleteUnusedImage = async (imagePath: string): Promise<void> => {
   await axios.delete(`/api/images/${encodeURIComponent(imagePath)}`)
 }
