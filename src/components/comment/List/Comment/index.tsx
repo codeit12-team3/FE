@@ -2,39 +2,25 @@
 
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
 
-import { IconDotsVertical } from '@/assets/svgr'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui'
 import { formatRelativeTime, getImageUrl } from '@/lib/common'
 import { CommentContent, ReplyContent } from '@/types/comments/comments.type'
 
-import CommentDeleteDialog from './CommentDelete/CommentDeleteDialog'
+import CommentMenu from '../CommentMenu'
 
 interface CommentProps {
   comment: CommentContent | ReplyContent
   currentUserId: number
-  replyCount?: number
-  toggleReplies?: () => void
-  toggleReplyForm?: () => void
-  isRepliesOpen?: boolean
-  isReplyFormOpen?: boolean
   onConfirm: () => void
 }
 
 export default function Comment({
   comment,
   currentUserId,
-  replyCount,
-  toggleReplies,
-  toggleReplyForm,
-  isRepliesOpen,
-  isReplyFormOpen,
   onConfirm,
 }: CommentProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   const {
     commentId,
@@ -71,31 +57,10 @@ export default function Comment({
           </p>
         </div>
 
-        <Popover>
-          <PopoverTrigger>
-            <IconDotsVertical className="w-6 h-6" />
-          </PopoverTrigger>
-          <PopoverContent className="p-1 w-22 flex flex-col rounded-[12px]">
-            <button className="p-2.5 text-xs text-left hover:bg-blue-50 hover:text-blue-600 rounded-[8px]">
-              댓글 수정
-            </button>
-            <button
-              onClick={() => setIsDeleteDialogOpen(true)}
-              className="p-2.5 text-xs text-left text-red-500 hover:bg-red-50 rounded-[8px]"
-            >
-              댓글 삭제
-            </button>
-          </PopoverContent>
-        </Popover>
+        <CommentMenu onConfirm={onConfirm} />
       </div>
 
       <p className="w-full text-wrap">{content}</p>
-
-      <CommentDeleteDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={onConfirm}
-      />
     </div>
   )
 }

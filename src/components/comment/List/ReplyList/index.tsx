@@ -4,14 +4,17 @@ import { useReplies } from '@/api/comments'
 import { useReplyMutations } from '@/api/comments/replies.mutations'
 
 import Comment from '../Comment'
-import Reply from './Reply'
+import Reply from '../Reply'
 
 interface ReplyListProps {
   commentId: number
   currentUserId: number
 }
 
-export default function Replies({ commentId, currentUserId }: ReplyListProps) {
+export default function ReplyList({
+  commentId,
+  currentUserId,
+}: ReplyListProps) {
   const { replies, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useReplies({ commentId })
 

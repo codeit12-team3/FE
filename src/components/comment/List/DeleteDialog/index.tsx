@@ -18,7 +18,7 @@ interface Props {
   type?: 'comment' | 'reply'
 }
 
-export default function CommentDeleteDialog({
+export default function DeleteDialog({
   open,
   onOpenChange,
   onConfirm,

@@ -8,7 +8,7 @@ import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentWriteForm from '../../Form'
 import Comment from '../Comment'
-import Replies from '../Replies/Replies'
+import ReplyList from '../ReplyList'
 
 interface CommentThreadProps {
   comment: CommentContent
@@ -20,22 +20,12 @@ export default function CommentThread({ comment }: CommentThreadProps) {
   const parentId = comment.commentId
   const { remove } = useCommentMutations(postId)
 
-  const [isRepliesOpen, setIsRepliesOpen] = useState(false)
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false)
   const { data: session } = useSession()
   const currentUserId = Number(session?.user.memberId)
   const { create } = useReplyMutations(postId, parentId)
-  const toggleReplies = () => {
-    setIsRepliesOpen((prev) => !prev)
-    if (isRepliesOpen) {
-      setIsReplyFormOpen(false)
-    }
-  }
 
   const toggleReplyForm = () => {
-    if (!isReplyFormOpen) {
-      setIsRepliesOpen(true)
-    }
     setIsReplyFormOpen((prev) => !prev)
   }
   const handleSubmit = (text: string) => {
@@ -54,10 +44,6 @@ export default function CommentThread({ comment }: CommentThreadProps) {
       <Comment
         comment={comment}
         currentUserId={currentUserId}
-        toggleReplies={toggleReplies}
-        toggleReplyForm={toggleReplyForm}
-        isRepliesOpen={isRepliesOpen}
-        isReplyFormOpen={isReplyFormOpen}
         onConfirm={handleDeleteComments}
       />
       <div>
@@ -79,7 +65,7 @@ export default function CommentThread({ comment }: CommentThreadProps) {
           </div>
         )}
       </div>
-      <Replies commentId={parentId} currentUserId={currentUserId} />
+      <ReplyList commentId={parentId} currentUserId={currentUserId} />
     </div>
   )
 }
