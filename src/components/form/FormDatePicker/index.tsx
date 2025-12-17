@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker'
 import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
 
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/common/cn'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -22,6 +23,9 @@ interface FormDatePickerProps<T extends FieldValues> {
   showYearDropdown?: boolean
   dropdownMode?: 'select' | 'scroll'
   yearDropdownItemNumber?: number
+  className?: string
+  inputClassName?: string
+  iconClassName?: string
 }
 
 export default function FormDatePicker<T extends FieldValues>({
@@ -37,11 +41,14 @@ export default function FormDatePicker<T extends FieldValues>({
   showYearDropdown = true,
   dropdownMode = 'select',
   yearDropdownItemNumber = 100,
+  className,
+  inputClassName,
+  iconClassName,
 }: FormDatePickerProps<T>) {
   const { control } = useFormContext<T>()
 
   return (
-    <div className="space-y-2">
+    <div className={cn('space-y-2', className)}>
       {label && (
         <Label>
           {label}
@@ -75,9 +82,17 @@ export default function FormDatePicker<T extends FieldValues>({
               showYearDropdown={showYearDropdown}
               dropdownMode={dropdownMode}
               yearDropdownItemNumber={yearDropdownItemNumber}
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-base outline-none"
+              className={cn(
+                'w-full rounded-xl border border-gray-200 px-4 py-3 text-base outline-none',
+                inputClassName,
+              )}
             />
-            <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <CalendarIcon
+              className={cn(
+                'absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none',
+                iconClassName,
+              )}
+            />
           </div>
         )}
       />

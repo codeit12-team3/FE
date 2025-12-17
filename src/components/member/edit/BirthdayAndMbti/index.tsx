@@ -29,7 +29,7 @@ export default function BirthdayAndMbti() {
       <div className="flex-1">
         <BirthdaySelect />
       </div>
-      <div className="flex flex-col gap-3 flex-1">
+      <div className="flex flex-col gap-2 flex-1">
         <Label htmlFor="mbti">MBTI</Label>
         <FormSelect
           key={`mbti-${mbti}`}
