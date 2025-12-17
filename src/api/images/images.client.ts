@@ -26,12 +26,6 @@ export const uploadToS3 = async (
   file: File | Blob,
   contentType: string,
 ) => {
-  console.log('🔍 9. S3 PUT 요청:', {
-    contentType,
-    fileSize: file.size,
-    url: presignedUrl.substring(0, 50) + '...',
-  })
-
   try {
     const res = await fetch(presignedUrl, {
       method: 'PUT',
@@ -39,11 +33,6 @@ export const uploadToS3 = async (
       headers: {
         'Content-Type': contentType,
       },
-    })
-    console.log('🔍 10. S3 응답:', {
-      status: res.status,
-      statusText: res.statusText,
-      ok: res.ok,
     })
 
     if (!res.ok) {
@@ -115,11 +104,6 @@ export const uploadMemberImage = async (
   imageType: 'JPEG' | 'PNG' | 'WEBP', // ✅ 'JPG', 'SVG' 제거
   imageDirectory: 'MEMBER',
 ): Promise<string> => {
-  console.log('🔍 5. uploadMemberImage 호출:', {
-    imageType,
-    fileType: file.type,
-    fileSize: file.size,
-  })
   // 1. Presigned URL 발급
   const presignedData = await getPresignedUrl({
     images: [
@@ -131,19 +115,8 @@ export const uploadMemberImage = async (
     ],
   })
 
-  console.log('🔍 6. Presigned URL 발급 성공:', {
-    presignedUrl: presignedData[0].presignedUrl.substring(0, 50) + '...',
-    imagePath: presignedData[0].image,
-  })
-
   // 2. 실제 파일/Blob의 Content-Type 사용 (간소화) ✅
   const actualContentType = file.type || getContentType(imageType)
-
-  console.log('🔍 7. S3 업로드 시도:', {
-    contentType: actualContentType,
-    fileType: file.type,
-    fallbackType: getContentType(imageType),
-  })
 
   // 3. S3 업로드
   const { presignedUrl, image } = presignedData[0]
