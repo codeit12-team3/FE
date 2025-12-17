@@ -3,7 +3,7 @@
 import { Loader2, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { uploadMemberImage } from '@/api/images/images.client'
@@ -12,8 +12,12 @@ import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function ProfileImageEdit() {
-  const { setValue, watch } = useFormContext<ProfileEditFormData>()
-  const imageValue = watch('image')
+  const { setValue, control } = useFormContext<ProfileEditFormData>()
+
+  const imageValue = useWatch({
+    control,
+    name: 'image',
+  })
 
   const [profileImg, setProfileImg] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)

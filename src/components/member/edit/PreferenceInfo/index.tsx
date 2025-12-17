@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui'
@@ -11,10 +11,17 @@ import {
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function PreferenceInfo() {
-  const { watch } = useFormContext<ProfileEditFormData>()
+  const { control } = useFormContext<ProfileEditFormData>()
 
-  const lodgingStyle = watch('lodgingStyle')
-  const tripStyle = watch('tripStyle')
+  const lodgingStyle = useWatch({
+    control,
+    name: 'lodgingStyle',
+  })
+
+  const tripStyle = useWatch({
+    control,
+    name: 'tripStyle',
+  })
 
   return (
     <div className="flex mt-6 gap-6 w-inherit">
