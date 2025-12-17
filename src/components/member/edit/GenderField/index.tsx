@@ -28,16 +28,16 @@ export default function GenderField() {
             aria-invalid={!!errors.gender}
           >
             <div className="flex items-center gap-3">
-              <Label htmlFor="gender-male" className="font-normal">
-                남
-              </Label>
               <RadioGroupItem id="gender-male" value="MALE" />
+              <Label htmlFor="gender-male" className="font-normal">
+                남성
+              </Label>
             </div>
             <div className="flex items-center gap-3">
-              <Label htmlFor="gender-female" className="font-normal">
-                여
-              </Label>
               <RadioGroupItem id="gender-female" value="FEMALE" />
+              <Label htmlFor="gender-female" className="font-normal">
+                여성
+              </Label>
             </div>
           </RadioGroup>
         )}

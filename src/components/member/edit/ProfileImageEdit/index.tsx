@@ -3,7 +3,7 @@
 import { Loader2, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { uploadMemberImage } from '@/api/images/images.client'
@@ -12,8 +12,12 @@ import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function ProfileImageEdit() {
-  const { setValue, watch } = useFormContext<ProfileEditFormData>()
-  const imageValue = watch('image')
+  const { setValue, control } = useFormContext<ProfileEditFormData>()
+
+  const imageValue = useWatch({
+    control,
+    name: 'image',
+  })
 
   const [profileImg, setProfileImg] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -108,7 +112,7 @@ export default function ProfileImageEdit() {
 
   return (
     <div className="relative group">
-      <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
+      <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
         <Image
           fill
           src={
@@ -131,9 +135,9 @@ export default function ProfileImageEdit() {
         type="button"
         onClick={handleEditClick}
         disabled={isUploading}
-        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute bottom-0 -right-2.5 w-8 h-8 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <Pencil size={24} className="text-gray-700" />
+        <Pencil size={18} className="text-gray-700" />
       </button>
 
       <input

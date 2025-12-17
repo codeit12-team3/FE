@@ -1,7 +1,7 @@
 'use client'
 
 import { AxiosError } from 'axios'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCheckNickname } from '@/api/member'
@@ -15,8 +15,12 @@ import { ApiResponse } from '@/types/common'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function BasicInfo() {
-  const { watch } = useFormContext<ProfileEditFormData>()
-  const nickname = watch('nickname')
+  const { control } = useFormContext<ProfileEditFormData>()
+
+  const nickname = useWatch({
+    control,
+    name: 'nickname',
+  })
 
   const { mutate: checkNickname, isPending } = useCheckNickname()
 
@@ -46,7 +50,7 @@ export default function BasicInfo() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="w-inherit">
       <FormInput
         label="닉네임"
         name="nickname"
@@ -54,14 +58,14 @@ export default function BasicInfo() {
         placeholder="닉네임"
         maxLength={NICKNAME_MAX_LENGTH}
         required
-        className="w-100"
+        className=""
         rightElement={
           <Button
             type="button"
             onClick={handleCheckDuplicate}
             disabled={isPending || !nickname}
             variant="secondary"
-            size="sm"
+            size="md"
             className="whitespace-nowrap"
           >
             {isPending ? '확인 중' : '중복확인'}
