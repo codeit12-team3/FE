@@ -108,7 +108,7 @@ export default function ProfileImageEdit() {
 
   return (
     <div className="relative group">
-      <div className="relative w-[173px] h-[173px] rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
+      <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
         <Image
           fill
           src={
@@ -131,9 +131,9 @@ export default function ProfileImageEdit() {
         type="button"
         onClick={handleEditClick}
         disabled={isUploading}
-        className="absolute bottom-0 right-0 w-12 h-12 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute bottom-0 -right-2.5 w-8 h-8 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <Pencil size={24} className="text-gray-700" />
+        <Pencil size={18} className="text-gray-700" />
       </button>
 
       <input
