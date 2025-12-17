@@ -39,7 +39,6 @@ export default function Info({
   period,
   content,
   conditions,
-  stats,
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
@@ -67,14 +66,14 @@ export default function Info({
             <div className="flex  gap-2">
               <span className={TEXT_STYLE}>모집 정원</span>
               <span className="text-sm text-text-base">
-                {stats.maxMembers}명
+                {conditions.ageCondition}
               </span>
             </div>
           </div>
           <div className="flex  gap-2">
             <span className={TEXT_STYLE}>모집 조건</span>
             <span className="text-sm text-text-base">
-              {conditions.ageCondition}
+              {conditions.genderCondition}
             </span>
           </div>
         </div>

@@ -72,24 +72,45 @@ export const usePatchPost = () => {
 }
 
 export const useCreatePost = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (payload: PostCreatePayload) => createPost(payload),
     retry: 0,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      })
+    },
   })
 }
 
 export const useUpdatePost = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ postId, payload }: UpdateArgs) =>
       updatePost(postId, payload),
     retry: 0,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      })
+    },
   })
 }
 
 export const useDeletePost = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (postId: string) => deletePost(postId),
     retry: 0,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      })
+    },
   })
 }
 

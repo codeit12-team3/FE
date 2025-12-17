@@ -12,20 +12,23 @@ import { getImageUrl } from '@/lib/common'
 import type { PostFormValues } from '@/types/posts/schema'
 
 const MAX_IMAGES = 3
+const MAX_FILE_SIZE = 5 * 1024 * 1024
+
+type ImageItem = {
+  kind: 'existing' | 'new'
+  url: string
+}
 
 export default function ImageUpload() {
   const { setValue, register, control } = useFormContext<PostFormValues>()
-
   const formImages = useWatch({ control, name: 'images' })
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const initializedRef = useRef(false)
 
   const [existingUrls, setExistingUrls] = useState<string[]>([])
-
   const [newPreviews, setNewPreviews] = useState<string[]>([])
   const [newUploadedUrls, setNewUploadedUrls] = useState<string[]>([])
-
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
@@ -34,20 +37,25 @@ export default function ImageUpload() {
 
   useEffect(() => {
     if (initializedRef.current) return
-    if (!Array.isArray(formImages) || formImages.length === 0) return
+    if (!formImages?.length) return
+
+    if (newPreviews.length > 0 || newUploadedUrls.length > 0) return
 
     setExistingUrls(formImages)
-
-    setValue('images', formImages, { shouldValidate: true, shouldDirty: false })
     initializedRef.current = true
-  }, [formImages, setValue])
+  }, [formImages, newPreviews.length, newUploadedUrls.length])
+
+  const totalImages = existingUrls.length + newUploadedUrls.length
+  const canAddMore = totalImages < MAX_IMAGES
 
   const openPicker = () => {
-    if (!isUploading) fileInputRef.current?.click()
+    if (!isUploading && canAddMore) {
+      fileInputRef.current?.click()
+    }
   }
 
-  const validateFile = (file: File) => {
-    if (file.size > 5 * 1024 * 1024) {
+  const validateFile = (file: File): boolean => {
+    if (file.size > MAX_FILE_SIZE) {
       toast.error(`${file.name}은(는) 5MB를 초과합니다.`)
       return false
     }
@@ -58,25 +66,20 @@ export default function ImageUpload() {
     return true
   }
 
-  const syncFormImages = (
-    nextExisting: string[],
-    nextNewUploaded: string[],
-  ) => {
-    const next = [...nextExisting, ...nextNewUploaded]
-    setValue('images', next, { shouldValidate: true, shouldDirty: true })
+  const syncFormImages = (existing: string[], newUploaded: string[]) => {
+    const allImages = [...existing, ...newUploaded]
+    setValue('images', allImages, { shouldValidate: true, shouldDirty: true })
   }
 
-  const resolveSrc = (src: string) => {
-    if (src.startsWith('blob:')) return src
-    return getImageUrl(src)
+  const getImageSrc = (src: string): string => {
+    return src.startsWith('blob:') ? src : getImageUrl(src)
   }
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files
     if (!fileList) return
 
-    const remaining =
-      MAX_IMAGES - (existingUrls.length + newUploadedUrls.length)
+    const remaining = MAX_IMAGES - totalImages
 
     if (remaining <= 0) {
       toast.error(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있습니다.`)
@@ -84,9 +87,11 @@ export default function ImageUpload() {
       return
     }
 
-    const files = Array.from(fileList).filter(validateFile).slice(0, remaining)
+    const validFiles = Array.from(fileList)
+      .filter(validateFile)
+      .slice(0, remaining)
 
-    if (files.length === 0) {
+    if (validFiles.length === 0) {
       e.target.value = ''
       return
     }
@@ -94,151 +99,135 @@ export default function ImageUpload() {
     setIsUploading(true)
 
     try {
-      const uploadedImagePaths = await uploadPostImages(files, 'POST')
+      const uploadedPaths = await uploadPostImages(validFiles, 'POST')
+      const blobUrls = validFiles.map((file) => URL.createObjectURL(file))
 
-      const previews = files.map((file) => URL.createObjectURL(file))
+      const updatedNewUploaded = [...newUploadedUrls, ...uploadedPaths]
 
-      const nextNewPreviews = [...newPreviews, ...previews]
-      const nextNewUploaded = [...newUploadedUrls, ...uploadedImagePaths]
+      setNewPreviews((prev) => [...prev, ...blobUrls])
+      setNewUploadedUrls(updatedNewUploaded)
 
-      setNewPreviews(nextNewPreviews)
-      setNewUploadedUrls(nextNewUploaded)
+      syncFormImages(existingUrls, updatedNewUploaded)
 
-      syncFormImages(existingUrls, nextNewUploaded)
-
-      toast.success(`${uploadedImagePaths.length}개 업로드 완료`)
+      toast.success(`${uploadedPaths.length}개 업로드 완료`)
     } catch (error) {
       console.error('이미지 업로드 에러:', error)
+      toast.error('이미지 업로드에 실패했습니다.')
     } finally {
       setIsUploading(false)
       e.target.value = ''
     }
   }
 
-  const removeExisting = (existingIdx: number) => {
-    const nextExisting = [...existingUrls]
-    nextExisting.splice(existingIdx, 1)
-
-    setExistingUrls(nextExisting)
-    syncFormImages(nextExisting, newUploadedUrls)
+  const removeExisting = (index: number) => {
+    const updated = existingUrls.filter((_, i) => i !== index)
+    setExistingUrls(updated)
+    syncFormImages(updated, newUploadedUrls)
   }
 
-  const removeNew = (newIdx: number) => {
-    const nextPreviews = [...newPreviews]
-    const nextNewUploaded = [...newUploadedUrls]
+  const removeNew = (index: number) => {
+    const blobUrl = newPreviews[index]
+    if (blobUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(blobUrl)
+    }
 
-    const previewUrl = nextPreviews[newIdx]
-    if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
-
-    nextPreviews.splice(newIdx, 1)
-    nextNewUploaded.splice(newIdx, 1)
-
-    setNewPreviews(nextPreviews)
-    setNewUploadedUrls(nextNewUploaded)
-
-    syncFormImages(existingUrls, nextNewUploaded)
+    setNewPreviews((prev) => prev.filter((_, i) => i !== index))
+    setNewUploadedUrls((prev) => {
+      const updated = prev.filter((_, i) => i !== index)
+      syncFormImages(existingUrls, updated)
+      return updated
+    })
   }
 
   useEffect(() => {
     return () => {
       newPreviews.forEach((url) => {
-        if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url)
+        }
       })
     }
   }, [newPreviews])
 
-  const combined = [
+  const combinedImages: ImageItem[] = [
     ...existingUrls.map((url) => ({ kind: 'existing' as const, url })),
     ...newPreviews.map((url) => ({ kind: 'new' as const, url })),
   ]
 
-  const canAddMore = combined.length < MAX_IMAGES
+  const emptySlotMessages = [
+    '대표 이미지를\n올려주세요',
+    '여행 분위기를\n보여주세요',
+    '여행을 한눈에\n보여줄 사진',
+  ]
+
+  const renderImageSlot = (index: number) => {
+    const image = combinedImages[index]
+
+    if (image) {
+      return (
+        <>
+          <Image
+            src={getImageSrc(image.url)}
+            alt={`${index === 0 ? '대표 이미지' : `preview-${index + 1}`}`}
+            fill
+            className="object-cover rounded-xl"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (image.kind === 'existing') {
+                removeExisting(index)
+              } else {
+                removeNew(index - existingUrls.length)
+              }
+            }}
+            className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10"
+            aria-label="이미지 삭제"
+          >
+            <X className="size-3 text-white stroke-3" />
+          </button>
+        </>
+      )
+    }
+
+    return (
+      <div
+        className="w-full h-full hover:bg-bg-hover disabled:opacity-50 transition-colors flex items-center justify-center"
+        aria-label="이미지 추가"
+      >
+        <span className="text-xs text-center leading-tight text-text-input whitespace-pre-line">
+          {emptySlotMessages[index]}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div className="mb-6">
-      <Label className="mb-2">이미지</Label>
+      <Label className="mb-2">
+        이미지{' '}
+        <span className="text-text-input text-xs">(첫 번째가 대표 이미지)</span>
+      </Label>
 
       <div className="flex gap-3">
         <button
           type="button"
           onClick={openPicker}
           disabled={isUploading || !canAddMore}
-          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50"
+          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50 transition-colors"
+          aria-label="이미지 업로드"
         >
           <ImagePlus className="size-8 text-text-input" />
         </button>
 
-        {Array.from({ length: MAX_IMAGES }).map((_, idx) => {
-          const item = combined[idx]
-
-          return (
-            <div
-              key={idx}
-              className="relative bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center"
-            >
-              {item ? (
-                <>
-                  <Image
-                    src={resolveSrc(item.url)}
-                    alt={`preview-${idx + 1}`}
-                    fill
-                    className="object-cover rounded-xl"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (item.kind === 'existing') {
-                        removeExisting(idx)
-                      } else {
-                        removeNew(idx - existingUrls.length)
-                      }
-                    }}
-                    className="absolute -top-1 -right-1 bg-black/50 size-5 rounded-full flex items-center justify-center"
-                  >
-                    <X className="size-3 text-white" />
-                  </button>
-                </>
-              ) : idx === 0 ? (
-                <button
-                  type="button"
-                  onClick={openPicker}
-                  disabled={isUploading || !canAddMore}
-                  className="hover:bg-bg-hover disabled:opacity-50"
-                >
-                  <span className="text-xs text-center leading-tight text-text-input">
-                    여행 이미지를
-                    <br />
-                    추천해요
-                  </span>
-                </button>
-              ) : idx === 1 ? (
-                <button
-                  type="button"
-                  onClick={openPicker}
-                  disabled={isUploading || !canAddMore}
-                  className="hover:bg-bg-hover disabled:opacity-50"
-                >
-                  <span className="text-xs text-center leading-tight text-text-input">
-                    여행 분위기를 <br />
-                    보여주세요
-                  </span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={openPicker}
-                  disabled={isUploading || !canAddMore}
-                  className="hover:bg-bg-hover disabled:opacity-50"
-                >
-                  <span className="text-xs text-center leading-tight text-text-input">
-                    여행을 한눈에 <br /> 보여줄 사진
-                  </span>
-                </button>
-              )}
-            </div>
-          )
-        })}
+        {Array.from({ length: MAX_IMAGES }).map((_, index) => (
+          <div
+            key={index}
+            className="relative bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center overflow-hidden"
+          >
+            {renderImageSlot(index)}
+          </div>
+        ))}
       </div>
 
       <input
@@ -250,9 +239,9 @@ export default function ImageUpload() {
         onChange={handleChange}
       />
 
-      <span className="text-muted-foreground font-medium text-sm">
+      <p className="text-muted-foreground font-medium text-sm mt-2">
         최대 3장, 5MB 제한
-      </span>
+      </p>
     </div>
   )
 }

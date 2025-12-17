@@ -52,8 +52,8 @@ export default function Header() {
         <FormInput<PostFormWithTagValues>
           label=""
           name="tag"
-          placeholder="여행 테마를 입력하세요. (Enter로 추가)"
-          className="-mb-6"
+          placeholder="여행 테마를 입력 후 Enter를 눌러주세요."
+          className={tags.length > 0 ? '-mb-6' : ''}
           onKeyDown={(e) => {
             if (e.key !== 'Enter') return
             const v = (e.currentTarget.value ?? '').trim()
