@@ -3,11 +3,12 @@ import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 import { useCommentMutations } from '@/api/comments'
+import { useReplyMutations } from '@/api/comments/replies.mutations'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentWriteForm from '../../Form'
 import Comment from '../Comment'
-import ReplyList from '../ReplyList'
+import Replies from '../Replies/Replies'
 
 interface CommentThreadProps {
   comment: CommentContent
@@ -15,13 +16,15 @@ interface CommentThreadProps {
 
 export default function CommentThread({ comment }: CommentThreadProps) {
   const params = useParams<{ postId: string }>()
-  const postId = params.postId
+  const postId = Number(params.postId)
+  const parentId = comment.commentId
+  const { remove } = useCommentMutations(postId)
+
   const [isRepliesOpen, setIsRepliesOpen] = useState(false)
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(false)
   const { data: session } = useSession()
   const currentUserId = Number(session?.user.memberId)
-  const { createReply } = useCommentMutations()
-  const parentId = comment.commentId
+  const { create } = useReplyMutations(postId, parentId)
   const toggleReplies = () => {
     setIsRepliesOpen((prev) => !prev)
     if (isRepliesOpen) {
@@ -36,11 +39,14 @@ export default function CommentThread({ comment }: CommentThreadProps) {
     setIsReplyFormOpen((prev) => !prev)
   }
   const handleSubmit = (text: string) => {
-    createReply.mutate({
+    create.mutate({
       postId,
       parentId,
       content: text,
     })
+  }
+  const handleDeleteComments = () => {
+    remove.mutate({ commentId: comment.commentId })
   }
   const isDeleted = comment.content === '삭제된 댓글입니다'
   return (
@@ -52,6 +58,7 @@ export default function CommentThread({ comment }: CommentThreadProps) {
         toggleReplyForm={toggleReplyForm}
         isRepliesOpen={isRepliesOpen}
         isReplyFormOpen={isReplyFormOpen}
+        onConfirm={handleDeleteComments}
       />
       <div>
         {!isDeleted && (
@@ -72,7 +79,7 @@ export default function CommentThread({ comment }: CommentThreadProps) {
           </div>
         )}
       </div>
-      <ReplyList commentId={parentId} currentUserId={currentUserId} />
+      <Replies commentId={parentId} currentUserId={currentUserId} />
     </div>
   )
 }

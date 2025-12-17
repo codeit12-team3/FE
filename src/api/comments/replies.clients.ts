@@ -1,19 +1,19 @@
-// api/comments/comments.clients.ts
-import { CommentType } from '@/types/comments/comments.type'
+// api/comments/replies.clients.ts
+import { ReplyType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
 import { axios } from '../common'
 
-export const fetchComments = async (params: {
-  postId: number
-  lastCommentId?: number
+export const fetchReplies = async (params: {
+  commentId: number
+  lastReplyId?: number
   size?: number
-}): Promise<ApiResponse<CommentType>> => {
-  const { data } = await axios.get<ApiResponse<CommentType>>(
-    `/v1/posts/${params.postId}/comments`,
+}): Promise<ApiResponse<ReplyType>> => {
+  const { data } = await axios.get<ApiResponse<ReplyType>>(
+    `/v1/comments/${params.commentId}/replies`,
     {
       params: {
-        lastCommentId: params.lastCommentId,
+        lastReplyId: params.lastReplyId,
         size: params.size,
       },
     },
@@ -21,19 +21,20 @@ export const fetchComments = async (params: {
   return data
 }
 
-export const createComment = async (params: {
-  postId: string
+export const createReply = async (params: {
+  postId: number
+  parentId: number
   content: string
 }): Promise<ApiResponse<{ commentId: number }>> => {
-  const { postId, content } = params
+  const { postId, parentId, content } = params
   const { data } = await axios.post<ApiResponse<{ commentId: number }>>(
     `/v1/posts/${postId}/comments`,
-    { content },
+    { content, parentId },
   )
   return data
 }
 
-export const updateComment = async (params: {
+export const updateReply = async (params: {
   commentId: number
   content: string
 }): Promise<ApiResponse<{ updated: true }>> => {
@@ -44,7 +45,7 @@ export const updateComment = async (params: {
   return data
 }
 
-export const deleteComment = async (params: {
+export const deleteReply = async (params: {
   commentId: number
 }): Promise<ApiResponse<{ deleted: true }>> => {
   const { data } = await axios.delete<ApiResponse<{ deleted: true }>>(

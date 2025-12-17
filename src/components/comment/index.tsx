@@ -16,7 +16,7 @@ export default function CommentContainer({
 }: CommentContainerProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
-  const { createComment } = useCommentMutations()
+  const { create } = useCommentMutations(postId)
   const {
     comments,
     isLoading,
@@ -26,7 +26,7 @@ export default function CommentContainer({
   } = useComments(postId)
 
   const handleSubmit = (text: string) => {
-    createComment.mutate({
+    create.mutate({
       postId: String(postId),
       content: text,
     })

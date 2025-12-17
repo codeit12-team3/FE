@@ -1,14 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react' // 💡 useState 추가
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
 
 import { IconDotsVertical } from '@/assets/svgr'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui'
 import { formatRelativeTime, getImageUrl } from '@/lib/common'
 import { CommentContent, ReplyContent } from '@/types/comments/comments.type'
 
-import CommentDelete from './CommentDelete'
+import CommentDeleteDialog from './CommentDelete/CommentDeleteDialog'
 
 interface CommentProps {
   comment: CommentContent | ReplyContent
@@ -18,14 +19,22 @@ interface CommentProps {
   toggleReplyForm?: () => void
   isRepliesOpen?: boolean
   isReplyFormOpen?: boolean
+  onConfirm: () => void
 }
 
 export default function Comment({
   comment,
   currentUserId,
-  // ... 나머지 props
+  replyCount,
+  toggleReplies,
+  toggleReplyForm,
+  isRepliesOpen,
+  isReplyFormOpen,
+  onConfirm,
 }: CommentProps) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false) // 💡 상태 추가
+  const params = useParams<{ postId: string }>()
+  const postId = Number(params.postId)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   const {
     commentId,
@@ -82,10 +91,10 @@ export default function Comment({
 
       <p className="w-full text-wrap">{content}</p>
 
-      <CommentDelete
-        commentId={commentId}
+      <CommentDeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={onConfirm}
       />
     </div>
   )

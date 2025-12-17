@@ -1,0 +1,29 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+
+import { CommentType } from '@/types/comments/comments.type'
+import { ApiResponse } from '@/types/common'
+
+import { fetchComments } from './comments.clients'
+
+export const useComments = (postId: number) => {
+  const query = useInfiniteQuery<ApiResponse<CommentType>>({
+    queryKey: ['comments', postId],
+    queryFn: ({ pageParam }) =>
+      fetchComments({ postId, lastCommentId: pageParam as number, size: 10 }),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.success || lastPage.data.isLast) return undefined
+      const content = lastPage.data.content
+      return content.length > 0
+        ? content[content.length - 1].commentId
+        : undefined
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+
+  return {
+    ...query,
+    comments:
+      query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? [],
+  }
+}

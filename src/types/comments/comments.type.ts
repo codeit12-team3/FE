@@ -11,7 +11,7 @@ export interface CommentContent {
 }
 export interface ReplyContent {
   commentId: number
-  parentId: number | null
+  parentId: number
   memberId: number
   imageUrl: string | null
   nickname: string
