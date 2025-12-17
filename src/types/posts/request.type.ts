@@ -12,7 +12,7 @@ export interface PostParams {
 
 export interface PostFilterParams {
   nation?: string
-  date?: string
+  startDate?: string
   ageType?: AgeType
   gender?: GenderType
   keyword?: string

@@ -1,8 +1,12 @@
 'use client'
 
+import dayjs from 'dayjs'
 import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import DatePicker from 'react-datepicker'
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 import { IconArrowDown } from '@/assets/svgr'
 import {
@@ -33,12 +37,14 @@ export default function FilterBar({
 
   const [filters, setFilters] = useState<Omit<PostFilterParams, 'keyword'>>({
     nation: '',
-    date: '',
+    startDate: '',
     ageType: undefined,
     gender: undefined,
   })
 
   const [keyword, setKeyword] = useState('')
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
+  const [tempDate, setTempDate] = useState<Date | undefined>(undefined)
 
   const applyImmediately = (
     next: Partial<Omit<PostFilterParams, 'keyword'>>,
@@ -144,25 +150,68 @@ export default function FilterBar({
           </SelectContent>
         </Select>
         {/* 날짜 */}
-        <Popover>
+        <Popover
+          open={isDatePickerOpen}
+          onOpenChange={(open) => {
+            setIsDatePickerOpen(open)
+            if (open) {
+              // Popover가 열릴 때 현재 선택된 날짜를 tempDate에 설정
+              setTempDate(
+                filters.startDate ? new Date(filters.startDate) : undefined,
+              )
+            }
+          }}
+        >
           <PopoverTrigger asChild>
             <button
               className="flex w-fit items-center justify-between gap-2 rounded-xl bg-input px-4 py-3 text-base font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring h-12"
               type="button"
             >
-              <span className={!filters.date ? 'text-text-input' : ''}>
-                {filters.date || '날짜'}
+              <span className={!filters.startDate ? 'text-text-input' : ''}>
+                {filters.startDate
+                  ? dayjs(filters.startDate).format('YYYY년 MM월 DD일')
+                  : '날짜'}
               </span>
               <IconArrowDown className="size-6 text-muted-foreground" />
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <input
-              type="date"
-              value={filters.date}
-              onChange={(e) => applyImmediately({ date: e.target.value })}
-              className="px-3 py-2 border-none outline-none text-sm"
-            />
+            <div className="p-3">
+              <DatePicker
+                selected={tempDate}
+                onChange={(date) => {
+                  setTempDate(date || undefined)
+                }}
+                inline
+                locale="ko"
+              />
+              <div className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    applyImmediately({ startDate: '' })
+                    setTempDate(undefined)
+                    setIsDatePickerOpen(false)
+                  }}
+                  className="flex-1 h-10"
+                >
+                  초기화
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (tempDate) {
+                      applyImmediately({
+                        startDate: dayjs(tempDate).format('YYYY-MM-DD'),
+                      })
+                    }
+                    setIsDatePickerOpen(false)
+                  }}
+                  className="flex-1 h-10"
+                >
+                  확인
+                </Button>
+              </div>
+            </div>
           </PopoverContent>
         </Popover>
       </div>
