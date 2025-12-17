@@ -1,6 +1,5 @@
 'use client'
 
-import { Heart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -8,9 +7,9 @@ import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/ui'
-import { cn } from '@/lib/common'
 
-import PostDetailSkeleton from './PostDetailSkeleton'
+import { PostDetailSkeleton } from '..'
+import PostActions from './PostActions'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
 import PostInfo from './PostInfo'
@@ -61,7 +60,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
   const applyCompanionMutation = useApplyCompanion()
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
 
   if (isLoading) {
@@ -94,7 +93,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
       applyMessage,
     })
     console.log('동행 신청 성공')
-    setIsApplyModalOpen(false)
+    setIsModalOpen(false)
     setApplyMessage('')
   }
 
@@ -149,37 +148,22 @@ export default function PostDetail({ postId }: PostDetailProps) {
                   onChangeStatus={() => {}}
                 />
               ) : (
-                <div className="flex gap-3 justify-center">
-                  <Button size="md" onClick={() => setIsApplyModalOpen(true)}>
-                    동행 참여하기
-                  </Button>
-
-                  <button
-                    onClick={handleToggleBookmark}
-                    className="hover:scale-110 transition-transform rounded-full border p-2"
-                    aria-label={
-                      postDetail.isBookmarked ? '북마크 취소' : '북마크 추가'
-                    }
-                  >
-                    <Heart
-                      className={cn(
-                        'size-8 text-text-input',
-                        postDetail.isBookmarked && 'fill-main text-main',
-                      )}
-                    />
-                  </button>
-                </div>
+                <PostActions
+                  isBookmarked={postDetail.isBookmarked}
+                  onApply={() => setIsModalOpen}
+                  onToggleBookmark={handleToggleBookmark}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {isApplyModalOpen && (
+      {isModalOpen && (
         <ApplyCompanionModal
           message={applyMessage}
           onChangeMessage={setApplyMessage}
-          onClose={() => setIsApplyModalOpen(false)}
+          onClose={() => setIsModalOpen(false)}
           onSubmit={handleApplyCompanion}
         />
       )}

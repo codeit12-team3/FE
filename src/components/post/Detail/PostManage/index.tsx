@@ -1,14 +1,14 @@
 import { useRouter } from 'next/navigation'
 
 import { RecruitStatus, useDeletePost, usePatchPost } from '@/api/posts'
-import { Button } from '@/components/ui'
 import {
+  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui'
 
 export default function OwnerPostManageManageCard({
   postId,
@@ -17,15 +17,17 @@ export default function OwnerPostManageManageCard({
   onChangeStatus,
 }: {
   postId: string
-  status: 'RECRUITING' | 'COMPLETED'
+  status: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   onEdit: () => void
-  onChangeStatus: (v: 'RECRUITING' | 'COMPLETED') => void
+  onChangeStatus: (v: 'RECRUITING' | 'COMPLETED' | 'FINISH') => void
 }) {
   const deletePost = useDeletePost()
   const patchPost = usePatchPost()
   const router = useRouter()
 
-  const handleStatusChange = (newStatus: 'RECRUITING' | 'COMPLETED') => {
+  const handleStatusChange = (
+    newStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH',
+  ) => {
     patchPost.mutate(
       {
         postId,
@@ -51,7 +53,7 @@ export default function OwnerPostManageManageCard({
         <Select
           value={status}
           onValueChange={(value) =>
-            handleStatusChange(value as 'RECRUITING' | 'COMPLETED')
+            handleStatusChange(value as 'RECRUITING' | 'COMPLETED' | 'FINISH')
           }
           disabled={patchPost.isPending}
         >
@@ -61,6 +63,7 @@ export default function OwnerPostManageManageCard({
           <SelectContent>
             <SelectItem value="RECRUITING">모집중</SelectItem>
             <SelectItem value="COMPLETED">모집마감</SelectItem>
+            <SelectItem value="FINISH">여행종료</SelectItem>
           </SelectContent>
         </Select>
       </div>

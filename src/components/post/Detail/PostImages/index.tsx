@@ -1,6 +1,5 @@
 'use client'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -10,7 +9,7 @@ import { cn, getImageUrl } from '@/lib/common'
 interface PostImagesProps {
   images: string[]
 }
-const DEFAULT_IMAGE = '/images/default-thumbnail.png'
+const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -41,14 +40,6 @@ export default function PostImages({ images }: PostImagesProps) {
   const imageList = images && images.length > 0 ? images : [DEFAULT_IMAGE]
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? imageList.length - 1 : prev - 1))
-  }
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev === imageList.length - 1 ? 0 : prev + 1))
-  }
-
   const goToSlide = (index: number) => {
     setCurrentIndex(index)
   }
@@ -64,22 +55,6 @@ export default function PostImages({ images }: PostImagesProps) {
   return (
     <div className="mb-6 relative group">
       <PostImageItem src={imageList[currentIndex]} idx={currentIndex} />
-
-      <button
-        onClick={goToPrevious}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="이전 이미지"
-      >
-        <ChevronLeft className="size-6" />
-      </button>
-
-      <button
-        onClick={goToNext}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="다음 이미지"
-      >
-        <ChevronRight className="size-6" />
-      </button>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {imageList.map((_, index) => (

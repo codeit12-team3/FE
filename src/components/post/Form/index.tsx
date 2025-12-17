@@ -138,20 +138,21 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="max-w-xl w-full px-4">
-        <h1 className="text-2xl font-semibold mb-6 text-left">
-          {isEdit ? '게시글 수정' : '게시글 작성'}
-        </h1>
-      </div>
-      <div className="max-w-7xl flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            className="max-w-[475px]"
+          >
+            <h1 className="text-lg font-semibold text-left mb-8">
+              {isEdit ? '게시글 수정' : '게시글 작성'}
+            </h1>
             <Header />
             <ImageUpload />
             <Info />
             <DateSection />
             <Description />
-            <div className="flex items-center gap-8 justify-center my-3">
+            <div className="flex items-center gap-8 justify-center my-8">
               {isEdit && postId ? (
                 <Button
                   type="button"
