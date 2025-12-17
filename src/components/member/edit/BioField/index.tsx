@@ -1,5 +1,3 @@
-'use client'
-
 import FormTextarea from '@/components/form/FormTextarea'
 
 export default function BioField() {
