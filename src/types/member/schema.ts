@@ -1,9 +1,9 @@
-import { email, z } from 'zod'
+import { z } from 'zod'
 
 import { NICKNAME_MAX_LENGTH, NICKNAME_REGEX } from '@/constants/member'
 
 export const profileEditSchema = z.object({
-  email: email().optional(),
+  email: z.string().optional(),
   image: z.string().optional(),
   nickname: z
     .string()

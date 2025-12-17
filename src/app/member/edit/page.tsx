@@ -59,8 +59,6 @@ export default function ProfileEditPage() {
     )
   }
 
-  console.log(data)
-
   return (
     <FormProvider {...methods}>
       <div className="w-119 mx-auto">
