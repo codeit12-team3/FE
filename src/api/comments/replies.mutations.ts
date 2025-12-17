@@ -1,22 +1,29 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 
-import { CommentType } from '@/types/comments/comments.type'
+import { ReplyType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
 import {
-  createComment,
-  deleteComment,
-  fetchComments,
-  updateComment,
-} from './comments.clients'
+  createReply,
+  deleteReply,
+  fetchReplies,
+  updateReply,
+} from './replies.clients'
 
-export const useComments = (postId: number) => {
-  const query = useInfiniteQuery<ApiResponse<CommentType>>({
-    queryKey: ['comments', postId],
+export const useReplies = ({
+  postId,
+  parentId,
+}: {
+  postId: number
+  parentId: number
+}) => {
+  const query = useInfiniteQuery<ApiResponse<ReplyType>>({
+    queryKey: ['replies', postId],
     queryFn: ({ pageParam }) =>
-      fetchComments({
+      fetchReplies({
         postId: postId,
-        lastCommentId: pageParam as number,
+        parentId: parentId,
+        lastReplyId: pageParam as number,
         size: 10,
       }),
     initialPageParam: 0,
@@ -24,54 +31,54 @@ export const useComments = (postId: number) => {
       if (!lastPage.success) return undefined
       if (lastPage.data.isLast) return undefined
 
-      const comments = lastPage.data.content
-      return comments.length > 0
-        ? comments[comments.length - 1].commentId
+      const replies = lastPage.data.content
+      return replies.length > 0
+        ? replies[replies.length - 1].commentId
         : undefined
     },
     staleTime: 5 * 60 * 1000,
   })
 
-  const comments =
+  const replies =
     query.data?.pages.flatMap((page) =>
       page.success ? page.data.content : [],
     ) ?? []
 
   return {
     ...query,
-    comments,
+    replies,
   }
 }
 
-export const useCreateComment = () => {
+export const useCreateReply = () => {
   return useMutation<
     ApiResponse<{ commentId: number }>,
     Error,
-    { postId: string; parentId: number; content: string }
+    { postId: string; parentId: number | null; content: string }
   >({
-    mutationFn: (params) => createComment(params),
+    mutationFn: (params) => createReply(params),
     retry: 0,
   })
 }
 
-export const useUpdateComment = () => {
+export const useUpdateReply = () => {
   return useMutation<
     ApiResponse<{ updated: true }>,
     Error,
     { commentId: number; content: string }
   >({
-    mutationFn: (params) => updateComment(params),
+    mutationFn: (params) => updateReply(params),
     retry: 0,
   })
 }
 
-export const useDeleteComment = () => {
+export const useDeleteReply = () => {
   return useMutation<
     ApiResponse<{ deleted: true }>,
     Error,
     { commentId: number }
   >({
-    mutationFn: (params) => deleteComment(params),
+    mutationFn: (params) => deleteReply(params),
     retry: 0,
   })
 }

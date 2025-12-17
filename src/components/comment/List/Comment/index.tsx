@@ -2,6 +2,8 @@ import { MoreVertical, User } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
+import { IconDotsVertical } from '@/assets/svgr'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui'
 import { formatRelativeTime } from '@/lib/common'
 import { CommentContent } from '@/types/comments/comments.type'
 
@@ -34,66 +36,41 @@ export default function Comment({
   const isOwner = currentUserId === memberId
 
   return (
-    <div className="flex gap-4 pt-8">
-      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+    <div className="flex flex-col gap-4 pt-8">
+      <div className="flex items-center">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt="사용자 이미지"
-            fill
-            className="object-cover"
-          />
+          <Image src={imageUrl} alt="사용자 이미지" sizes="40px" className="" />
         ) : (
-          <User className="w-6 h-6 text-gray-400" />
+          <User className="w-10 h-10 text-gray-400" />
         )}
+        <div className="flex-1 flex flex-col pl-[15px] pr-10">
+          <p className="text-base -tracking-[0.32px]">
+            {nickname ?? '탈퇴한 사용자'}
+          </p>
+          <p className="text-xs text-text-disabled">
+            {createdAt && formatRelativeTime(createdAt)}
+            {updatedAt && formatRelativeTime(updatedAt)}
+          </p>
+        </div>
+        <Popover>
+          <PopoverTrigger>
+            <IconDotsVertical className="w-6 h-6" />
+          </PopoverTrigger>
+          <PopoverContent className="p-1 flex flex-col">
+            <button value="" className="p-2.5">
+              댓글 수정
+            </button>
+            <button value="" className="p-2.5">
+              댓글 삭제
+            </button>
+          </PopoverContent>
+        </Popover>
       </div>
-
-      <div className="flex-1">
-        <div className="flex items-center justify-between ">
-          <div className="flex flex-col">
-            <span className="font-semibold text-gray-900 text-sm">
-              {nickname ?? '탈퇴한 사용자'}
-            </span>
-
-            {createdAt && (
-              <span className="text-xs text-gray-400">
-                {formatRelativeTime(createdAt)}
-              </span>
-            )}
-
-            {updatedAt && (
-              <span className="text-xs text-gray-400">
-                {formatRelativeTime(updatedAt)}
-              </span>
-            )}
-
-            {isUpdated && (
-              <span className="text-xs text-gray-400">(수정됨)</span>
-            )}
-          </div>
-
-          {isOwner && (
-            <button
-              className="text-gray-500 hover:text-gray-900"
-              onClick={() => setOpenMenu(!openMenu)}
-            >
-              <MoreVertical size={16} />
-            </button>
-          )}
-        </div>
-
-        <p className="text-sm text-gray-900 py-2">{content}</p>
-        <div className="flex gap-2 text-sm">
-          <button className="text-main">답글달기</button>
-          {replyCount > 0 && (
-            <button
-              onClick={onToggleReplies}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              {isRepliesOpen ? '답글 접기' : `답글 ${replyCount}개`}
-            </button>
-          )}
-        </div>
+      <p className="w-full text-wrap">{content}</p>
+      <div>
+        <button className="text-sm -tracking-[0.28px] font-normal text-main">
+          답글달기
+        </button>
       </div>
     </div>
   )

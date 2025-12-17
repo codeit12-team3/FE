@@ -1,57 +1,47 @@
-import { useEffect, useRef } from 'react'
+import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
 
-import { useCommentData } from '@/hooks/comment/useCommentData'
+import { fetchComments, useComments } from '@/api/comments'
+import { Spinner } from '@/components/ui/spinner'
+import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
 
 import CommentSkeleton from './Comment/CommentSkeleton'
 import CommentThread from './CommentThread'
 
-interface CommentListProps {
-  postId: string
-}
-
-export default function CommentList({ postId }: CommentListProps) {
+export default function CommentList() {
+  const params = useParams<{ postId: string }>()
+  const postId = Number(params.postId)
   const {
-    parents,
-    replies,
+    comments,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useCommentData(postId)
-  const observerRef = useRef<HTMLDivElement>(null)
+  } = useComments(postId)
 
-  useEffect(() => {
-    if (!observerRef.current || !hasNextPage) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isFetchingNextPage) {
-          fetchNextPage()
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    observer.observe(observerRef.current)
-    return () => observer.disconnect()
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+  console.log(comments)
+  const observerRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    threshold: 0.1,
+  })
   if (isLoading) {
     return <CommentSkeleton />
   }
 
   return (
     <div className="space-y-6">
-      {parents.map((parent) => (
-        <CommentThread
-          key={parent.commentId}
-          parent={parent}
-          replies={replies}
-        />
+      {comments.map((comment) => (
+        <CommentThread key={comment.commentId} comment={comment} />
       ))}
       {hasNextPage && (
         <div ref={observerRef} className="py-4 text-center">
           {isFetchingNextPage ? (
-            <span className="text-sm text-gray-500">댓글 불러오는 중...</span>
+            <div className="text-sm text-gray-500 flex items-center gap-2">
+              <Spinner />
+              <p>댓글 불러오는 중...</p>
+            </div>
           ) : (
             <div className="h-4" />
           )}

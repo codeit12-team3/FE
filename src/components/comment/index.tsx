@@ -1,21 +1,19 @@
 'use client'
 
+import { useParams } from 'next/navigation'
+
 import { createComment } from '@/api/comments'
 
 import CommentWriteForm from './Form'
 import CommentList from './List'
 
-interface CommentContainerProps {
-  postId: string
-}
-
-export default function CommentContainer({ postId }: CommentContainerProps) {
-  const handleSubmit = (text: string, parentId?: number | null) => {
-    const finalParentId =
-      parentId && typeof parentId === 'number' && parentId > 0 ? parentId : null
+export default function CommentContainer() {
+  const params = useParams<{ postId: string }>()
+  const postId = params.postId
+  const handleSubmit = (text: string) => {
     createComment({
       postId,
-      parentId: finalParentId,
+      parentId: null,
       content: text,
     })
   }
@@ -26,7 +24,7 @@ export default function CommentContainer({ postId }: CommentContainerProps) {
 
       <CommentWriteForm onSubmit={handleSubmit} />
 
-      <CommentList postId={postId} />
+      <CommentList />
     </div>
   )
 }

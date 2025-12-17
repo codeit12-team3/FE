@@ -1,25 +1,21 @@
-import { CommentContent } from '@/types/comments/comments.type'
+import { useParams } from 'next/navigation'
+
+import { useReplies } from '@/api/comments/replies.mutations'
 
 import Comment from '../Comment'
 
 interface ReplyListProps {
   parentId: number
-  replies: CommentContent[]
   currentUserId: number
 }
 
-export default function ReplyList({
-  parentId,
-  replies,
-  currentUserId,
-}: ReplyListProps) {
-  const filtered = replies.filter((r) => r.parentId === parentId)
-
-  if (filtered.length === 0) return null
-
+export default function ReplyList({ parentId, currentUserId }: ReplyListProps) {
+  const params = useParams<{ postId: string }>()
+  const postId = Number(params.postId)
+  const { replies } = useReplies({ postId, parentId })
   return (
     <div className="ml-16  space-y-4">
-      {filtered.map((reply) => (
+      {replies.map((reply) => (
         <Comment
           key={reply.commentId}
           comment={reply}

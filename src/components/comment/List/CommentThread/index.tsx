@@ -1,42 +1,32 @@
 import { useState } from 'react'
 
+import { useMyProfileQuery } from '@/api/member/member.queries'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import Comment from '../Comment'
 import ReplyList from '../ReplyList'
 
 interface CommentThreadProps {
-  parent: CommentContent
-  replies: CommentContent[]
+  comment: CommentContent
 }
 
-export default function CommentThread({ parent, replies }: CommentThreadProps) {
+export default function CommentThread({ comment }: CommentThreadProps) {
   const [isOpen, setIsOpen] = useState(false)
-
+  const { data } = useMyProfileQuery()
+  const currentUserId = Number(data?.memberId)
   const toggleReplies = () => setIsOpen((prev) => !prev)
-
-  const replyCount = replies.filter(
-    (reply) => reply.parentId === parent.commentId,
-  ).length
-
+  const parentId = comment.commentId
   return (
     <div className="space-y-3">
       <Comment
-        comment={parent}
-        // 임시 값, session에서 받아와야함
-        currentUserId={123}
-        replyCount={replyCount}
+        comment={comment}
+        currentUserId={currentUserId}
         onToggleReplies={toggleReplies}
         isRepliesOpen={isOpen}
       />
 
       {isOpen && (
-        <ReplyList
-          parentId={parent.commentId}
-          replies={replies}
-          // 임시 값, session에서 받아와야함
-          currentUserId={123}
-        />
+        <ReplyList parentId={parentId} currentUserId={currentUserId} />
       )}
     </div>
   )
