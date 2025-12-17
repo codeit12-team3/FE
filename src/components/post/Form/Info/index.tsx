@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
@@ -15,8 +15,8 @@ import {
 import { PostFormValues } from '@/types/posts/schema'
 
 export default function Info() {
-  const { control, watch } = useFormContext<PostFormValues>()
-  const selectedNation = watch('nation')
+  const { control } = useFormContext<PostFormValues>()
+  const selectedNation = useWatch({ control, name: 'nation' })
   const cityOptions = useMemo(() => {
     if (!selectedNation) return []
     return (

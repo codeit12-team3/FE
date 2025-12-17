@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCreatePost, useUpdatePost } from '@/api/posts'
-import { Button } from '@/components/ui'
 import {
   AGE_LABEL_TO_ENUM,
   GENDER_LABEL_TO_ENUM,
@@ -18,6 +17,7 @@ import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
 import DateSection from './Date'
 import Description from './Description'
+import FormAction from './FormAction'
 import Header from './Header'
 import ImageUpload from './ImageUpload'
 import Info from './Info'
@@ -74,8 +74,6 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
           tag: '',
         },
   })
-
-  const { formState } = methods
 
   const isEdit = mode === 'edit'
   const isPending = isEdit ? updatePost.isPending : createPost.isPending
@@ -152,44 +150,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
             <Info />
             <DateSection />
             <Description />
-            <div className="flex items-center gap-8 justify-center my-8">
-              {isEdit && postId ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => {
-                    router.push(`/posts/${postId}`)
-                  }}
-                  className="flex-1"
-                >
-                  뒤로가기
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => router.push('/')}
-                  className="flex-1 border border-text-disabled "
-                >
-                  나가기
-                </Button>
-              )}
-
-              <Button
-                type="submit"
-                size="sm"
-                disabled={!formState.isValid || isPending}
-                className="flex-1"
-              >
-                {isPending
-                  ? isEdit
-                    ? '수정 중...'
-                    : '등록 중...'
-                  : isEdit
-                    ? '수정하기'
-                    : '등록하기'}
-              </Button>
-            </div>
+            <FormAction mode={mode} postId={postId} isPending={isPending} />
           </form>
         </FormProvider>
       </div>
