@@ -22,7 +22,9 @@
   --text-3xl: 30px;
   --text-3xl--line-height: 36px;
   --color-gray-200: #f0f1f2;
+  --color-gray-300: #dbdee5;
   --color-gray-500: #868d9d;
+  --color-gray-600: #646d7b;
   --color-main: #498cf8; /* Main Color */
   --color-main-from: #498cf8; /* Gradient from */
   --color-main-to: #003c9d; /* Gradient to */

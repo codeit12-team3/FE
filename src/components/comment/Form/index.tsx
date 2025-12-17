@@ -15,23 +15,29 @@ interface CommentWriteFormProps {
 }
 
 export default function CommentWriteForm({
-  parentId = null,
+  parentId,
   onSubmit,
   onCancel,
 }: CommentWriteFormProps) {
   const { data } = useMyProfileQuery()
-
   const [text, setText] = useState('')
+
+  const isReply = !!parentId
+  const config = {
+    placeholder: isReply ? '답글을 입력해주세요' : '댓글을 입력해주세요',
+    submitText: isReply ? '답글 작성' : '댓글 작성',
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!text.trim()) return
     onSubmit(text, parentId)
     setText('')
+    onCancel?.()
   }
 
   return (
-    <form className="w-full flex flex-col gap-[15px]" onSubmit={handleSubmit}>
+    <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
       <div className="flex items-start gap-[15px]">
         <Image
           src={
@@ -47,14 +53,25 @@ export default function CommentWriteForm({
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="댓글을 입력해주세요"
+          placeholder={config.placeholder}
           className="flex-1 h-[106px] border border-gray-200 resize-none p-4 placeholder:text-gray-500 bg-white text-base"
         />
       </div>
 
-      <div className="w-full flex items-center justify-end gap-2 mt-3">
-        <Button className="w-26 h-10 rounded-2xl" type="submit">
-          댓글 작성
+      <div className="w-full flex items-center justify-end gap-2">
+        {/* 답글 작성시 취소 버튼 렌더링 */}
+        {isReply && (
+          <Button
+            type="button"
+            onClick={onCancel}
+            className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600"
+          >
+            취소
+          </Button>
+        )}
+
+        <Button className="w-26 h-10 rounded-[12px]" type="submit">
+          {config.submitText}
         </Button>
       </div>
     </form>

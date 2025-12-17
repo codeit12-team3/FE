@@ -1,40 +1,42 @@
-import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
-
-import { fetchComments, useComments } from '@/api/comments'
 import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
+import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentSkeleton from './Comment/CommentSkeleton'
 import CommentThread from './CommentThread'
 
-export default function CommentList() {
-  const params = useParams<{ postId: string }>()
-  const postId = Number(params.postId)
-  const {
-    comments,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useComments(postId)
+interface CommentListProps {
+  comments: CommentContent[]
+  isLoading: boolean
+  fetchNextPage: () => void
+  hasNextPage: boolean
+  isFetchingNextPage: boolean
+}
 
-  console.log(comments)
+export default function CommentList({
+  comments,
+  isLoading,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: CommentListProps) {
   const observerRef = useInfiniteScroll({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     threshold: 0.1,
   })
+
   if (isLoading) {
     return <CommentSkeleton />
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {comments.map((comment) => (
         <CommentThread key={comment.commentId} comment={comment} />
       ))}
+
       {hasNextPage && (
         <div ref={observerRef} className="py-4 text-center">
           {isFetchingNextPage ? (

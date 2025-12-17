@@ -135,7 +135,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
             <PostHeader {...headerProps} />
             <PostImages images={postDetail.images} />
             <PostInfo {...infoProps} />
-            <Comment />
+            <Comment commentCount={postDetail.commentCount} />
           </div>
 
           <div className="col-span-4 sticky  space-y-6">
