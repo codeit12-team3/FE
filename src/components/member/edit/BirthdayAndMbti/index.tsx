@@ -17,33 +17,23 @@ const MBTI_OPTIONS = [
   })),
 ]
 export default function BirthdayAndMbti() {
-  const {
-    watch,
-    formState: { errors },
-  } = useFormContext<ProfileEditFormData>()
+  const { watch } = useFormContext<ProfileEditFormData>()
 
   const mbti = watch('mbti')
 
   return (
-    <div className="flex mt-6 gap-6">
-      <div className="flex flex-col gap-3">
-        <Label>
-          생일 <span className="text-danger">*</span>
-        </Label>
+    <div className="flex mt-6 gap-4">
+      <div className="flex-1">
         <BirthdaySelect />
-        {errors.birth && (
-          <p className="text-danger text-sm">{errors.birth.message}</p>
-        )}
       </div>
-
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-1">
         <Label htmlFor="mbti">MBTI</Label>
         <FormSelect
           key={`mbti-${mbti}`}
           name="mbti"
+          className="w-full"
           options={MBTI_OPTIONS}
-          placeholder="MBTI"
-          className="w-42"
+          placeholder="MBTI를 선택해주세요"
         />
       </div>
     </div>

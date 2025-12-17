@@ -1,156 +1,54 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { ko } from 'date-fns/locale'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import DatePicker from 'react-datepicker'
+import { Controller, useFormContext } from 'react-hook-form'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 import { ProfileEditFormData } from '@/types/member/schema'
 
-const years = Array.from(
-  { length: 100 },
-  (_, i) => new Date().getFullYear() - i,
-)
-const months = Array.from({ length: 12 }, (_, i) => i + 1)
+import 'react-datepicker/dist/react-datepicker.css'
 
 export default function BirthdaySelect() {
-  const { setValue, watch } = useFormContext<ProfileEditFormData>()
-  const birthValue = watch('birth')
-
-  const parseBirthDate = (birth: string) => {
-    if (!birth || birth === '') {
-      return { year: '', month: '', day: '' }
-    }
-    const [y, m, d] = birth.split('-')
-    const monthNum = parseInt(m)
-    const dayNum = parseInt(d)
-
-    return {
-      year: y || '',
-      month: !isNaN(monthNum) ? String(monthNum) : '',
-      day: !isNaN(dayNum) ? String(dayNum) : '',
-    }
-  }
-
-  const [selected, setSelected] = useState({ year: '', month: '', day: '' })
-
-  useEffect(() => {
-    const syncBirthValue = () => {
-      const current = parseBirthDate(birthValue)
-      setSelected(current)
-    }
-    syncBirthValue()
-  }, [birthValue])
-
-  const getDaysInMonth = (y: string, m: string) => {
-    const year = parseInt(y)
-    const month = parseInt(m)
-    if (!year || !month || isNaN(year) || isNaN(month)) return []
-    return Array.from(
-      { length: new Date(year, month, 0).getDate() },
-      (_, i) => i + 1,
-    )
-  }
-
-  const days = getDaysInMonth(selected.year, selected.month)
-
-  const handleYearChange = (year: string) => {
-    if (year === 'none') {
-      setSelected({ year: '', month: '', day: '' })
-      setValue('birth', '', { shouldDirty: true })
-    } else {
-      setSelected({ year, month: '', day: '' })
-    }
-  }
-
-  const handleMonthChange = (month: string) => {
-    if (month === 'none') {
-      setSelected((prev) => ({ ...prev, month: '', day: '' }))
-      setValue('birth', '', { shouldDirty: true })
-    } else {
-      setSelected((prev) => ({ ...prev, month, day: '' }))
-    }
-  }
-
-  const handleDayChange = (day: string) => {
-    if (day === 'none') {
-      setSelected((prev) => ({ ...prev, day: '' }))
-      setValue('birth', '', { shouldDirty: true })
-    } else {
-      const year = parseInt(selected.year)
-      const month = parseInt(selected.month)
-      const dayNum = parseInt(day)
-
-      if (!isNaN(year) && !isNaN(month) && !isNaN(dayNum)) {
-        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`
-        setSelected((prev) => ({ ...prev, day }))
-        setValue('birth', dateStr, { shouldDirty: true })
-      }
-    }
-  }
+  const { control } = useFormContext<ProfileEditFormData>()
 
   return (
-    <div className="flex gap-3">
-      <Select
-        key={`year-${selected.year}`}
-        value={selected.year || 'none'}
-        onValueChange={handleYearChange}
-      >
-        <SelectTrigger className="min-w-[135px]">
-          <SelectValue placeholder="년" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">년</SelectItem>
-          {years.map((y) => (
-            <SelectItem key={y} value={String(y)}>
-              {y}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select
-        key={`month-${selected.month}`}
-        value={selected.month || 'none'}
-        onValueChange={handleMonthChange}
-        disabled={!selected.year}
-      >
-        <SelectTrigger className="min-w-25">
-          <SelectValue placeholder="월" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">월</SelectItem>
-          {months.map((m) => (
-            <SelectItem key={m} value={String(m)}>
-              {m}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select
-        key={`day-${selected.day}`}
-        value={selected.day || 'none'}
-        onValueChange={handleDayChange}
-        disabled={!selected.year || !selected.month}
-      >
-        <SelectTrigger className="min-w-25">
-          <SelectValue placeholder="일" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">일</SelectItem>
-          {days.map((d) => (
-            <SelectItem key={d} value={String(d)}>
-              {d}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="space-y-2">
+      <Label>생년월일</Label>
+      <Controller
+        name="birth"
+        control={control}
+        render={({ field }) => (
+          <div className="relative">
+            <DatePicker
+              selected={field.value ? new Date(field.value) : null}
+              onChange={(date: Date | null) => {
+                if (date) {
+                  const year = date.getFullYear()
+                  const month = String(date.getMonth() + 1).padStart(2, '0')
+                  const day = String(date.getDate()).padStart(2, '0')
+                  field.onChange(`${year}-${month}-${day}`)
+                } else {
+                  field.onChange('')
+                }
+              }}
+              locale={ko}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="생년월일을 선택해주세요"
+              maxDate={new Date()}
+              minDate={new Date('1900-01-01')}
+              openToDate={new Date('2000-01-01')}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              yearDropdownItemNumber={100}
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-base outline-none"
+            />
+            <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+          </div>
+        )}
+      />
     </div>
   )
 }

@@ -63,7 +63,7 @@ export default function ProfileEditPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="max-w-119 mx-auto ">
+      <div className="w-119 mx-auto ">
         <h1 className="font-semibold text-[32px] text-center mb-12">
           내 프로필
         </h1>
