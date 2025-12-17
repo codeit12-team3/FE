@@ -131,7 +131,7 @@ export default function ProfileImageEdit() {
 
       <input
         type="file"
-        accept="image/jpeg,image/jpg,image/png,image/svg+xml,image/webp"
+        accept="image/jpeg,image/jpg,image/png,image/webp"
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"

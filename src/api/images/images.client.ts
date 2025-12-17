@@ -50,7 +50,6 @@ export const uploadToS3 = async (
  */
 const getContentType = (imageType: string): string => {
   const typeMap: Record<string, string> = {
-    JPG: 'image/jpeg',
     JPEG: 'image/jpeg',
     PNG: 'image/png',
     WEBP: 'image/webp',
