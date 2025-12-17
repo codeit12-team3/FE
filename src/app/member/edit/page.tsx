@@ -63,11 +63,9 @@ export default function ProfileEditPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-119 mx-auto ">
-        <h1 className="font-semibold text-[32px] text-center mb-12">
-          내 프로필
-        </h1>
-        <div className="flex justify-center mb-12">
+      <div className="w-119 mx-auto">
+        <h1 className="font-bold text-lg mb-6">프로필 수정</h1>
+        <div className="flex justify-center mb-6">
           <ProfileImageEdit />
         </div>
         <div className="w-inherit">

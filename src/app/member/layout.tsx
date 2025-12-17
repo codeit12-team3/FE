@@ -12,7 +12,7 @@ export default function MemberLayout({
   const pathname = usePathname()
 
   if (pathname === '/member/edit') {
-    return <div className="max-w-7xl mx-auto mt-17">{children}</div>
+    return <div className="max-w-7xl mx-auto mt-10">{children}</div>
   }
 
   return (
