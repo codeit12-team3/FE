@@ -1,9 +1,9 @@
-import { PostDetailSkeleton, PostList } from '@/components/post'
+import { PostList } from '@/components/post'
 
 export default function Home() {
   return (
     <div>
-      <PostDetailSkeleton />
+      <PostList />
     </div>
   )
 }
