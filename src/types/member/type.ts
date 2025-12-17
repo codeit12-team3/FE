@@ -41,7 +41,7 @@ export interface MyProfile {
 export interface PresignedUrlRequest {
   images: Array<{
     imageId: string
-    imageType: 'JPG' | 'JPEG' | 'PNG' | 'SVG'
+    imageType: 'JPG' | 'JPEG' | 'PNG' | 'WEBP'
     imageDirectory: 'MEMBER' | 'POST'
   }>
 }
