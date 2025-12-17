@@ -4,10 +4,14 @@ import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import { IconArrowDown } from '@/assets/svgr'
 import {
   Button,
   InputGroup,
   InputGroupInput,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   SelectContent,
   SelectItem,
@@ -131,7 +135,6 @@ export default function FilterBar({
                 : '성별'}
             </span>
           </SelectTrigger>
-
           <SelectContent>
             {GENDER_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
@@ -140,6 +143,28 @@ export default function FilterBar({
             ))}
           </SelectContent>
         </Select>
+        {/* 날짜 */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              className="flex w-fit items-center justify-between gap-2 rounded-xl bg-input px-4 py-3 text-base font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring h-12"
+              type="button"
+            >
+              <span className={!filters.date ? 'text-text-input' : ''}>
+                {filters.date || '날짜'}
+              </span>
+              <IconArrowDown className="size-6 text-muted-foreground" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <input
+              type="date"
+              value={filters.date}
+              onChange={(e) => applyImmediately({ date: e.target.value })}
+              className="px-3 py-2 border-none outline-none text-sm"
+            />
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* 검색 */}

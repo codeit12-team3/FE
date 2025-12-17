@@ -36,10 +36,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const INFO_ROW = 'flex items-center gap-1'
 
   return (
-    <div
-      className={CARD_BASE}
-      onClick={() => router.push(`/posts/${post.postId}`)}
-    >
+    <div className={CARD_BASE}>
       <div className="flex gap-4">
         {post.recruitStatus === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
@@ -72,7 +69,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
             ))}
           </div>
 
-          <h3 className="text-lg font-semibold text-text-base mb-1">
+          <h3
+            className="text-lg font-semibold text-text-base mb-1"
+            onClick={() => router.push(`/posts/${post.postId}`)}
+          >
             {post.title}
           </h3>
 
