@@ -150,7 +150,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
               ) : (
                 <PostActions
                   isBookmarked={postDetail.isBookmarked}
-                  onApply={() => setIsModalOpen}
+                  onApply={() => setIsModalOpen(true)}
                   onToggleBookmark={handleToggleBookmark}
                 />
               )}
