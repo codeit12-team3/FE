@@ -24,7 +24,7 @@ export default function PostHeader({
   onToggleBookmark,
 }: PostHeaderProps) {
   return (
-    <div className="flex flex-col items-start gap-4">
+    <div className="flex flex-col items-start gap-4 pl-2">
       <div className="flex gap-3 justify-between w-full items-center">
         <div className="flex gap-3">
           {tags.map((tag) => (
