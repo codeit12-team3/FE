@@ -4,13 +4,25 @@ import { Heart, User } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-import { Button } from '@/components/common/Button'
+import { useAddBookmark, useRemoveBookmark } from '@/api/posts/posts.mutations'
+import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
 import { PostListItem } from '@/types/posts'
 
 export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
+  const addBookmark = useAddBookmark()
+  const removeBookmark = useRemoveBookmark()
+
+  const handleToggleBookmark = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (post.isBookmarked) {
+      await removeBookmark.mutateAsync(String(post.postId))
+    } else {
+      await addBookmark.mutateAsync(String(post.postId))
+    }
+  }
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const CARD_BASE =
@@ -20,16 +32,14 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const INFO_ROW = 'flex items-center gap-1'
 
   return (
-    <div
-      className={CARD_BASE}
-      onClick={() => router.push(`/posts/${post.postId}`)}
-    >
-      <div className="flex gap-4">
+    <div className={CARD_BASE}>
+      <div className="flex gap-6">
         {post.recruitStatus === 'CLOSED' ? (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-black/60 flex items-center justify-center">
             <p className="text-white">모집이 마감되었어요.</p>
 
             <Image
+              key={post.thumbnail}
               src={getImageUrl(post.thumbnail)}
               alt={post.title}
               fill
@@ -39,6 +49,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
         ) : (
           <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
             <Image
+              key={post.thumbnail}
               src={getImageUrl(post.thumbnail)}
               alt={post.title}
               fill
@@ -47,8 +58,8 @@ export default function PostCard({ post }: { post: PostListItem }) {
           </div>
         )}
 
-        <div className="flex-1 ml-3">
-          <div className="flex gap-2 mb-2">
+        <div className="flex-1 flex flex-col gap-3">
+          <div className="flex gap-2">
             {post.tags.map((tag) => (
               <span key={tag} className={TAG_STYLE}>
                 {tag}
@@ -56,16 +67,19 @@ export default function PostCard({ post }: { post: PostListItem }) {
             ))}
           </div>
 
-          <h3 className="text-lg font-semibold text-text-base mb-1">
+          <h3
+            className="text-lg font-semibold text-text-base cursor-pointer"
+            onClick={() => router.push(`/posts/${post.postId}`)}
+          >
             {post.title}
           </h3>
 
           <div className="flex gap-1">
-            <p className="text-sm text-text-disabled mb-3">작성자</p>
+            <p className="text-sm text-text-disabled">작성자</p>
             <p className="text-sm text-text-input">{post.nickname}</p>
           </div>
 
-          <div className="flex text-sm mb-2 gap-1 mt-8">
+          <div className="flex text-sm gap-1 mt-6">
             <User className="w-4 h-4" />
             <span>{post.currentMembers}명 신청</span>
           </div>
@@ -106,11 +120,15 @@ export default function PostCard({ post }: { post: PostListItem }) {
         </div>
 
         <div className="flex flex-col items-end justify-between">
-          <button className="w-10 h-10 flex items-center justify-center rounded-full transition-colors">
+          <button
+            onClick={handleToggleBookmark}
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-50"
+          >
             <Heart
-              className={`w-6 h-6 ${
-                post.isBookmarked ? 'fill-main text-main' : 'text-text-input'
+              className={`size-6 ${
+                post.isBookmarked ? 'fill-main text-main' : 'fill-gray-300'
               }`}
+              strokeWidth={0}
             />
           </button>
 

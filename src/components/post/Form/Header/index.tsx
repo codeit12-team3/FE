@@ -41,12 +41,19 @@ export default function Header() {
         className="mb-0"
       />
 
-      <div>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <label className="font-semibold">
+            여행 태그 <span className="text-main">*</span>
+          </label>
+          <p className="text-xs text-text-muted">최대 5개</p>
+        </div>
+
         <FormInput<PostFormWithTagValues>
-          label="여행 태그"
+          label=""
           name="tag"
-          placeholder="여행 테마를 작성해주세요. 최대 5개"
-          className="mb-0"
+          placeholder="여행 테마를 입력 후 Enter를 클릭하세요"
+          className={tags.length > 0 ? '-mb-6' : ''}
           onKeyDown={(e) => {
             if (e.key !== 'Enter') return
             const v = (e.currentTarget.value ?? '').trim()
@@ -60,7 +67,7 @@ export default function Header() {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="flex items-center gap-1 p-2  text-main rounded-full bg-sub mb-3"
+              className="flex items-center gap-1 px-2 py-1  text-main rounded-full bg-sub my-2"
             >
               <span className="text-xs">{tag}</span>
               <button

@@ -1,6 +1,10 @@
-import PostWriterRow from './PostWriterRow'
+import Image from 'next/image'
 
-interface Props {
+interface RowProps {
+  label: string
+  children: React.ReactNode
+}
+interface WriterProps {
   writer: {
     nickname: string
     age: number
@@ -10,13 +14,33 @@ interface Props {
   }
 }
 
-export default function PostWriter({ writer }: Props) {
+const LABEL_STYLE = 'text-text-disabled w-10'
+const VALUE_STYLE = 'text-text-base'
+const ROW_STYLE = 'flex gap-1.5'
+
+function PostWriterRow({ label, children }: RowProps) {
+  return (
+    <div className={ROW_STYLE}>
+      <span className={LABEL_STYLE}>{label}</span>
+      <span className={VALUE_STYLE}>{children}</span>
+    </div>
+  )
+}
+
+export default function PostWriter({ writer }: WriterProps) {
   const { nickname, age, gender, mbti, birth } = writer
 
   return (
     <div className="flex flex-col p-8 border-2 border-gray-200 rounded-2xl gap-10">
-      <div className="flex gap-5">
-        <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center shrink-0" />
+      <div className="flex gap-6">
+        <Image
+          src="/images/profile-default.png"
+          alt="프로필"
+          width={80}
+          height={80}
+          className="object-cover"
+        />
+
         <div className="flex flex-col gap-2 mt-1">
           <div className="flex flex-col items-center">
             <span className="font-semibold  bg-sub text-main p-1 rounded-full text-sm">

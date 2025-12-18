@@ -1,6 +1,6 @@
 'use client'
 
-import { Skeleton } from '@/components/common'
+import { Skeleton } from '@/components/ui'
 
 export default function PostCardSkeleton() {
   return (
@@ -23,13 +23,13 @@ export default function PostCardSkeleton() {
 
           <div className="flex gap-2 flex-wrap mt-8">
             {[1, 2, 3, 4].map((num) => (
-              <Skeleton key={num} size="sm" />
+              <Skeleton key={num} className="h-4 w-20 rounded-md" />
             ))}
           </div>
         </div>
 
         <div className="flex flex-col items-end justify-between">
-          <Skeleton size="circle" />
+          <Skeleton className="size-10 rounded-full" />
 
           <Skeleton className="w-24 h-10  rounded-md" />
         </div>

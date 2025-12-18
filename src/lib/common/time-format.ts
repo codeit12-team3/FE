@@ -31,15 +31,18 @@ export const formatTimer = (seconds: number) => {
 /**
  * 날짜를 yyyy.mm.dd 형태로 변환
  **/
-export const formatDay = (date?: string | number | Date | null): string => {
+export const formatDay = (
+  date?: string | number | Date | null,
+  format: string = 'YYYY.MM.DD',
+): string => {
   if (!date) return ''
 
   const d = dayjs(date)
-
   if (!d.isValid()) return ''
 
-  return d.format('YYYY.MM.DD')
+  return d.format(format)
 }
+
 /**
  * 날짜 → 상대시간 반환
  * 예: 방금 전, 3분 전, 1시간 전, 2일 전

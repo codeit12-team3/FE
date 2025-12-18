@@ -3,17 +3,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
-import type { Resolver } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { useCreatePost, useUpdatePost } from '@/api/posts'
-import { Button } from '@/components/ui'
-import { NATION_CODE_TO_LABEL, NATION_LABEL_TO_CODE } from '@/constants/posts'
+import {
+  AGE_LABEL_TO_ENUM,
+  GENDER_LABEL_TO_ENUM,
+  NATION_CODE_TO_LABEL,
+  NATION_LABEL_TO_CODE,
+} from '@/constants/posts'
 import { AgeType, GenderType, PostContent } from '@/types/posts'
 import { PostFormWithTagValues, postSchema } from '@/types/posts/schema'
 
 import DateSection from './Date'
 import Description from './Description'
+import FormAction from './FormAction'
 import Header from './Header'
 import ImageUpload from './ImageUpload'
 import Info from './Info'
@@ -29,9 +33,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
 
-  const resolver = zodResolver(
-    postSchema,
-  ) as unknown as Resolver<PostFormWithTagValues>
+  const resolver = zodResolver(postSchema)
 
   const methods = useForm<PostFormWithTagValues>({
     resolver,
@@ -43,8 +45,14 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
           nation: NATION_CODE_TO_LABEL[initialData.nation],
           region: initialData.region,
           maxMembers: initialData.stats.maxMembers,
-          ageType: initialData.conditions.ageCondition,
-          gender: initialData.conditions.genderCondition,
+          ageType:
+            typeof initialData.conditions.ageCondition === 'string'
+              ? AGE_LABEL_TO_ENUM[initialData.conditions.ageCondition]
+              : initialData.conditions.ageCondition,
+          gender:
+            typeof initialData.conditions.genderCondition === 'string'
+              ? GENDER_LABEL_TO_ENUM[initialData.conditions.genderCondition]
+              : initialData.conditions.genderCondition,
           startDate: initialData.period.startDate,
           endDate: initialData.period.endDate,
           tags: initialData.tags,
@@ -67,8 +75,6 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         },
   })
 
-  const { formState } = methods
-
   const isEdit = mode === 'edit'
   const isPending = isEdit ? updatePost.isPending : createPost.isPending
 
@@ -85,6 +91,8 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         },
         maxMembers: Number(data.maxMembers),
         tags: data.tags,
+        ageType: data.ageType,
+        genderType: data.gender,
         images: {
           add: data.images.filter((img) => !initialData.images.includes(img)),
           delete: initialData.images.filter(
@@ -128,58 +136,21 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="max-w-xl w-full px-4">
-        <h1 className="text-2xl font-semibold mb-6 text-left">
-          {isEdit ? '게시글 수정' : '게시글 작성'}
-        </h1>
-      </div>
-      <div className="max-w-7xl flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            className="max-w-[475px]"
+          >
+            <h1 className="text-lg font-semibold text-left mb-8">
+              {isEdit ? '게시글 수정' : '게시글 작성'}
+            </h1>
             <Header />
-
             <ImageUpload />
             <Info />
             <DateSection />
             <Description />
-
-            <div className="flex items-center gap-8 justify-center my-3">
-              {isEdit && postId ? (
-                <Button
-                  type="button"
-                  size="md"
-                  variant="destructive"
-                  onClick={() => {
-                    router.push(`/posts/${postId}`)
-                  }}
-                >
-                  뒤로가기
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  size="md"
-                  variant="secondary"
-                  onClick={() => router.push('/')}
-                >
-                  나가기
-                </Button>
-              )}
-
-              <Button
-                type="submit"
-                size="md"
-                disabled={!formState.isValid || isPending}
-              >
-                {isPending
-                  ? isEdit
-                    ? '수정 중...'
-                    : '등록 중...'
-                  : isEdit
-                    ? '게시글 수정'
-                    : '게시글 등록'}
-              </Button>
-            </div>
+            <FormAction mode={mode} postId={postId} isPending={isPending} />
           </form>
         </FormProvider>
       </div>

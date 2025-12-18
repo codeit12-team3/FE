@@ -17,8 +17,9 @@ export const useInfinitePosts = (filters: PostFilterParams) => {
     initialPageParam: undefined,
 
     getNextPageParam: (lastPage) => {
-      if (!lastPage.success) return undefined
-      return String(lastPage.data.content.at(-1)?.postId)
+      if (!lastPage.success || lastPage.data.isLast) return undefined
+      const lastPost = lastPage.data.content.at(-1)
+      return lastPost ? String(lastPost.postId) : undefined
     },
   })
 }

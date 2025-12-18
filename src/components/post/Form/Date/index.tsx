@@ -20,7 +20,7 @@ export default function DateSection() {
       <FormInput<PostFormValues>
         label="여행 시작 일시"
         name="startDate"
-        type="datetime-local"
+        type="date"
         required
         className="w-1/2"
         max={end || undefined}
@@ -29,7 +29,7 @@ export default function DateSection() {
       <FormInput<PostFormValues>
         label="여행 종료 일시"
         name="endDate"
-        type="datetime-local"
+        type="date"
         required
         className="w-1/2"
         min={start || undefined}

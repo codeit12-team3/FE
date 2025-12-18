@@ -10,9 +10,9 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="bg-bg-base">
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="flex items-center justify-between h-[86px]">
+    <header className=" border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-8 py-3 ">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-10">
             <Link href="/">
               <Image

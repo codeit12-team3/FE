@@ -53,12 +53,7 @@ const FormSelect = memo(
 
     return (
       <Select value={field.value || ''} onValueChange={field.onChange}>
-        <SelectTrigger
-          ref={ref}
-          aria-invalid={!!error}
-          className={className}
-          suppressHydrationWarning
-        >
+        <SelectTrigger ref={ref} aria-invalid={!!error} className={className}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent className="max-h-60">
