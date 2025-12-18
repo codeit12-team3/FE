@@ -18,9 +18,9 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const handleToggleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (post.isBookmarked) {
-      await removeBookmark.mutateAsync(post.postId)
+      await removeBookmark.mutateAsync(String(post.postId))
     } else {
-      await addBookmark.mutateAsync(post.postId)
+      await addBookmark.mutateAsync(String(post.postId))
     }
   }
 

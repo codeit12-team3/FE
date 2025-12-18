@@ -56,7 +56,7 @@ interface Writer {
   mbti: MBTIType
 }
 export interface PostListItem {
-  postId: string
+  postId: number
   title: string
   nation: NationCode
   region: string
