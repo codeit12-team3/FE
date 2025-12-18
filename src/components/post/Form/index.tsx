@@ -106,7 +106,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         {
           onSuccess: () => {
             toast.success('게시글이 수정되었습니다.')
-            window.location.href = `/posts/${postId}`
+            router.push(`/posts/${postId}`)
           },
         },
       )

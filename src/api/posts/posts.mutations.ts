@@ -60,20 +60,7 @@ export const usePatchPost = () => {
       recruitStatus: RecruitStatus
     }) => patchPost(postId, recruitStatus),
 
-    onSuccess: (_, { postId, recruitStatus }) => {
-      queryClient.setQueryData<ApiResponse<PostContent>>(
-        ['postDetail', postId],
-        (old) => {
-          if (!old || !old.success) return old
-          return {
-            ...old,
-            data: {
-              ...old.data,
-              recruitStatus,
-            },
-          }
-        },
-      )
+    onSuccess: (_, { postId }) => {
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
@@ -101,9 +88,12 @@ export const useUpdatePost = () => {
     mutationFn: ({ postId, payload }: UpdateArgs) =>
       updatePost(postId, payload),
     retry: 0,
-    onSuccess: () => {
+    onSuccess: (_, { postId }) => {
       queryClient.invalidateQueries({
         queryKey: ['posts'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['postDetail', postId],
       })
     },
   })
@@ -129,21 +119,7 @@ export const useAddBookmark = () => {
     mutationFn: (postId: string) => addBookmark(postId),
     retry: 0,
     onSuccess: (_, postId) => {
-      queryClient.setQueryData<ApiResponse<PostContent>>(
-        ['postDetail', postId],
-        (old) => {
-          if (!old || !old.success) return old
-          return {
-            success: true,
-            status: old.status,
-            timestamp: old.timestamp,
-            data: {
-              ...old.data,
-              isBookmarked: true,
-            },
-          }
-        },
-      )
+      queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
@@ -154,21 +130,7 @@ export const useRemoveBookmark = () => {
     mutationFn: (postId: string) => removeBookmark(postId),
     retry: 0,
     onSuccess: (_, postId) => {
-      queryClient.setQueryData<ApiResponse<PostContent>>(
-        ['postDetail', postId],
-        (old) => {
-          if (!old || !old.success) return old
-          return {
-            success: true,
-            status: old.status,
-            timestamp: old.timestamp,
-            data: {
-              ...old.data,
-              isBookmarked: false,
-            },
-          }
-        },
-      )
+      queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
