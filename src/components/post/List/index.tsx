@@ -10,7 +10,7 @@ import PostContainer from './PostContatiner'
 export default function PostList() {
   const [appliedFilters, setAppliedFilters] = useState<PostFilterParams>({
     nation: '',
-    startDate: '',
+    date: '',
     ageType: undefined,
     gender: undefined,
     keyword: '',

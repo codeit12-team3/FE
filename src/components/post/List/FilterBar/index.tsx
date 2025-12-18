@@ -37,7 +37,7 @@ export default function FilterBar({
 
   const [filters, setFilters] = useState<Omit<PostFilterParams, 'keyword'>>({
     nation: '',
-    startDate: '',
+    date: '',
     ageType: undefined,
     gender: undefined,
   })
@@ -156,9 +156,7 @@ export default function FilterBar({
             setIsDatePickerOpen(open)
             if (open) {
               // Popover가 열릴 때 현재 선택된 날짜를 tempDate에 설정
-              setTempDate(
-                filters.startDate ? new Date(filters.startDate) : undefined,
-              )
+              setTempDate(filters.date ? new Date(filters.date) : undefined)
             }
           }}
         >
@@ -167,9 +165,9 @@ export default function FilterBar({
               className="flex w-fit items-center justify-between gap-2 rounded-xl bg-input px-4 py-3 text-base font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring h-12"
               type="button"
             >
-              <span className={!filters.startDate ? 'text-text-input' : ''}>
-                {filters.startDate
-                  ? dayjs(filters.startDate).format('YYYY년 MM월 DD일')
+              <span className={!filters.date ? 'text-text-input' : ''}>
+                {filters.date
+                  ? dayjs(filters.date).format('YYYY년 MM월 DD일')
                   : '날짜'}
               </span>
               <IconArrowDown className="size-6 text-muted-foreground" />
@@ -189,7 +187,7 @@ export default function FilterBar({
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    applyImmediately({ startDate: '' })
+                    applyImmediately({ date: '' })
                     setTempDate(undefined)
                     setIsDatePickerOpen(false)
                   }}
@@ -201,7 +199,7 @@ export default function FilterBar({
                   onClick={() => {
                     if (tempDate) {
                       applyImmediately({
-                        startDate: dayjs(tempDate).format('YYYY-MM-DD'),
+                        date: dayjs(tempDate).format('YYYY-MM-DD'),
                       })
                     }
                     setIsDatePickerOpen(false)
