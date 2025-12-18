@@ -1,5 +1,6 @@
 export interface ApplyCompanionRes {
-  companionId: number
+  postId: number
+  status: 'PENDING'
 }
 
 export interface UpdateCompanionRes {
