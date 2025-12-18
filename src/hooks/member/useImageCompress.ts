@@ -11,10 +11,10 @@ const COMPRESSION_PRESETS: Record<PresetType, Options> = {
     initialQuality: 0.85,
   },
   post: {
-    maxSizeMB: 2,
+    maxSizeMB: 1.5,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
-    initialQuality: 0.9,
+    initialQuality: 0.85,
   },
 }
 
