@@ -33,7 +33,7 @@ export const formatTimer = (seconds: number) => {
  **/
 export const formatDay = (
   date?: string | number | Date | null,
-  format: string = 'YYYY-MM-DD',
+  format: string = 'YYYY.MM.DD',
 ): string => {
   if (!date) return ''
 

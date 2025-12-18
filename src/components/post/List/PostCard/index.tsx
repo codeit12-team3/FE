@@ -129,9 +129,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
             className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-50"
           >
             <Heart
-              className={`w-6 h-6 ${
-                post.isBookmarked ? 'fill-main text-main' : 'text-text-input'
+              className={`size-6 ${
+                post.isBookmarked ? 'fill-main text-main' : 'fill-gray-300'
               }`}
+              strokeWidth={0}
             />
           </button>
 

@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { Skeleton } from '@/components/ui'
 import { cn, getImageUrl } from '@/lib/common'
 
 interface PostImagesProps {
@@ -12,14 +11,8 @@ interface PostImagesProps {
 const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
-  const [isLoading, setIsLoading] = useState(true)
-
   return (
-    <div className="relative w-full h-96 rounded-3xl overflow-hidden bg-gray-100">
-      {isLoading && (
-        <Skeleton className="absolute inset-0 bg-gray-200 animate-pulse z-10" />
-      )}
-
+    <div className="relative w-full h-87 rounded-3xl overflow-hidden">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
@@ -27,10 +20,15 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
         quality={100}
         sizes="(max-width: 768px) 100vw, 800px"
         className={cn(
-          'object-cover transition-opacity duration-300',
-          isLoading ? 'opacity-0' : 'opacity-100',
+          'object-cover transition-opacity duration-300 rounded-3xl',
         )}
-        onLoad={() => setIsLoading(false)}
+      />
+      <div
+        className="absolute inset-0 rounded-3xl pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 61.99%, rgba(0, 0, 0, 0.50) 100%)',
+        }}
       />
     </div>
   )
@@ -46,7 +44,7 @@ export default function PostImages({ images }: PostImagesProps) {
 
   if (imageList.length === 1) {
     return (
-      <div className="mb-6">
+      <div className="my-8">
         <PostImageItem src={imageList[0]} idx={0} />
       </div>
     )
@@ -54,7 +52,18 @@ export default function PostImages({ images }: PostImagesProps) {
 
   return (
     <div className="mb-6 relative group">
-      <PostImageItem src={imageList[currentIndex]} idx={currentIndex} />
+      <div className="relative w-full h-87 rounded-3xl overflow-hidden">
+        <div
+          className="flex transition-transform duration-200 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {imageList.map((img, idx) => (
+            <div key={idx} className="min-w-full">
+              <PostImageItem src={img} idx={idx} />
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {imageList.map((_, index) => (

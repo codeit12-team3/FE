@@ -18,7 +18,10 @@ interface Props {
   }
 }
 
-const TEXT_STYLE = 'text-sm text-text-input'
+const LABEL_STYLE = 'text-sm text-text-input w-16'
+const VALUE_STYLE = 'text-sm text-text-base'
+const GRID_ROW_STYLE = 'grid grid-cols-2 gap-7'
+const FLEX_ROW_STYLE = 'flex gap-1.5'
 
 const InfoSection = ({
   title,
@@ -28,8 +31,23 @@ const InfoSection = ({
   children: React.ReactNode
 }) => (
   <div>
-    <h3 className="font-semibold mb-2 text-text-base text-lg">{title}</h3>
+    <h3 className="font-semibold pb-2 px-2 text-text-base text-lg">{title}</h3>
     {children}
+  </div>
+)
+
+const InfoRow = ({
+  label,
+  children,
+  className = '',
+}: {
+  label: string
+  children: React.ReactNode
+  className?: string
+}) => (
+  <div className={`${FLEX_ROW_STYLE} ${className}`}>
+    <span className={LABEL_STYLE}>{label}</span>
+    <span className={VALUE_STYLE}>{children}</span>
   </div>
 )
 
@@ -41,41 +59,25 @@ export default function Info({
   conditions,
 }: Props) {
   return (
-    <div className="flex flex-col gap-4">
-      <span>{content}</span>
+    <div className="flex flex-col gap-6">
+      <span className="pl-2">{content}</span>
       <InfoSection title="여행 정보">
-        <div className="bg-bg-disabled rounded-3xl p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>여행 시작</span>
-              <span className="text-sm text-text-base">{period.startDate}</span>
-            </div>
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>여행 종료</span>
-              <span className="text-sm text-text-base">{period.endDate}</span>
-            </div>
+        <div className="bg-bg-disabled rounded-3xl p-6 space-y-3">
+          <div className={GRID_ROW_STYLE}>
+            <InfoRow label="여행 시작">{period.startDate}</InfoRow>
+            <InfoRow label="여행 종료">{period.endDate}</InfoRow>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex  gap-1">
-              <span className={TEXT_STYLE}>여행지</span>
+          <div className={GRID_ROW_STYLE}>
+            <div className="flex gap-1">
+              <span className={LABEL_STYLE}>여행지</span>
               <span className="text-sm pl-1">
                 {NATION_CODE_TO_LABEL[nation] ?? nation}
               </span>
-              <span className="text-sm text-text-base">{region}</span>
+              <span className={VALUE_STYLE}>{region}</span>
             </div>
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>모집 정원</span>
-              <span className="text-sm text-text-base">
-                {conditions.ageCondition}
-              </span>
-            </div>
+            <InfoRow label="모집 정원">{conditions.ageCondition}</InfoRow>
           </div>
-          <div className="flex  gap-2">
-            <span className={TEXT_STYLE}>모집 조건</span>
-            <span className="text-sm text-text-base">
-              {conditions.genderCondition}
-            </span>
-          </div>
+          <InfoRow label="모집 조건">{conditions.genderCondition}</InfoRow>
         </div>
       </InfoSection>
     </div>

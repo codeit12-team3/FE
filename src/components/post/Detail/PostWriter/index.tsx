@@ -14,9 +14,9 @@ interface WriterProps {
   }
 }
 
-const LABEL_STYLE = 'text-text-disabled w-20'
+const LABEL_STYLE = 'text-text-disabled w-10'
 const VALUE_STYLE = 'text-text-base'
-const ROW_STYLE = 'flex gap-3'
+const ROW_STYLE = 'flex gap-1.5'
 
 function PostWriterRow({ label, children }: RowProps) {
   return (
@@ -32,7 +32,7 @@ export default function PostWriter({ writer }: WriterProps) {
 
   return (
     <div className="flex flex-col p-8 border-2 border-gray-200 rounded-2xl gap-10">
-      <div className="flex gap-5">
+      <div className="flex gap-6">
         <Image
           src="/images/profile-default.png"
           alt="프로필"
