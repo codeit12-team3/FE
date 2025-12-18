@@ -23,13 +23,7 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
           'object-cover transition-opacity duration-300 rounded-3xl',
         )}
       />
-      <div
-        className="absolute inset-0 rounded-3xl pointer-events-none"
-        style={{
-          background:
-            'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 61.99%, rgba(0, 0, 0, 0.50) 100%)',
-        }}
-      />
+      <div className="absolute inset-0 rounded-3xl pointer-events-none" />
     </div>
   )
 }

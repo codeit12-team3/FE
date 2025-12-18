@@ -65,17 +65,12 @@ export default function PostDetail({ postId }: PostDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
 
-  const handleToggleBookmark = async () => {
+  const handleToggleBookmark = () => {
     if (!postDetail) return
-
-    try {
-      if (postDetail.isBookmarked) {
-        await removeBookmark.mutateAsync(postId)
-      } else {
-        await addBookmark.mutateAsync(postId)
-      }
-    } catch {
-      throw new Error('북마크 등록 실패')
+    if (postDetail.isBookmarked) {
+      removeBookmark.mutate(postId)
+    } else {
+      addBookmark.mutate(postId)
     }
   }
 
