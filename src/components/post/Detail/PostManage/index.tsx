@@ -37,8 +37,7 @@ export default function OwnerPostManageManageCard({
         onSuccess: () => {
           onChangeStatus(newStatus)
         },
-        onError: (error) => {
-          console.error('모집 상태 변경 실패:', error)
+        onError: () => {
           alert('모집 상태 변경에 실패했습니다.')
         },
       },

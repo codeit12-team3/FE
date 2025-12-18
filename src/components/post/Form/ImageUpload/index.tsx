@@ -110,8 +110,7 @@ export default function ImageUpload() {
       syncFormImages(existingUrls, updatedNewUploaded)
 
       toast.success(`${uploadedPaths.length}개 업로드 완료`)
-    } catch (error) {
-      console.error('이미지 업로드 에러:', error)
+    } catch {
       toast.error('이미지 업로드에 실패했습니다.')
     } finally {
       setIsUploading(false)

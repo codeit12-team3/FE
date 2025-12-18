@@ -34,7 +34,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   const updatePost = useUpdatePost()
 
   const resolver = zodResolver(postSchema)
-  console.log('initialData:', initialData)
+
   const methods = useForm<PostFormWithTagValues>({
     resolver,
     mode: 'onChange',
