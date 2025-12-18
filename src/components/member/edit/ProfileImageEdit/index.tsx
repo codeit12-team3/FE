@@ -22,7 +22,7 @@ export default function ProfileImageEdit() {
   const [profileImg, setProfileImg] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { compress } = useImageCompress()
+  const { compress } = useImageCompress('profile')
 
   // 폼의 image 값이 변경되면 프로필 이미지 상태 업데이트
   useEffect(() => {
