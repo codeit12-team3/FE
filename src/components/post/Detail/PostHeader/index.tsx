@@ -14,17 +14,6 @@ interface PostHeaderProps {
   onToggleBookmark: () => void
 }
 
-const STAT_LABEL_STYLE = 'text-gray-500'
-const STAT_VALUE_STYLE = 'text-gray-600'
-
-function StatItem({ label, value }: { label: string; value: string | number }) {
-  return (
-    <p className={STAT_LABEL_STYLE}>
-      {label} <span className={STAT_VALUE_STYLE}>{value}</span>
-    </p>
-  )
-}
-
 export default function PostHeader({
   tags,
   title,
@@ -64,11 +53,17 @@ export default function PostHeader({
       <h1 className="text-3xl font-bold text-text-base">{title}</h1>
 
       <div className="flex gap-3 text-sm items-center">
-        <StatItem label="게시날짜" value={formatDay(timestamp)} />
+        <p className="text-gray-500">
+          게시날짜 <span className="text-gray-600">{formatDay(timestamp)}</span>
+        </p>
         <span className="text-text-disabled">|</span>
-        <StatItem label="조회수" value={stats.viewCount} />
+        <p className="text-gray-500">
+          조회수 <span className="text-gray-600">{stats.viewCount}</span>
+        </p>
         <span className="text-text-disabled">|</span>
-        <StatItem label="댓글" value={commentCount} />
+        <p className="text-gray-500">
+          댓글 <span className="text-gray-600">{commentCount}</span>
+        </p>
       </div>
     </div>
   )
