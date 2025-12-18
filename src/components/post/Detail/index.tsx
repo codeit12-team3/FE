@@ -131,7 +131,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
     <div className="min-h-screen bg-bg-input py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-12 gap-8 items-start">
-          <div className="col-span-8  rounded-lg p-8 ">
+          <div className="col-span-8 rounded-lg p-8 ">
             <PostHeader {...headerProps} />
             <PostImages images={postDetail.images} />
             <PostInfo {...infoProps} />

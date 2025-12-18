@@ -27,14 +27,14 @@ export default function CommentContainer({
 
   const handleSubmit = (text: string) => {
     create.mutate({
-      postId: String(postId),
+      postId: postId,
       content: text,
     })
   }
   console.log(comments)
   return (
-    <div className="max-w-4xl mr-auto p-4 flex flex-col gap-6">
-      <h2 className="text-xl font-bold text-gray-900 pt-8">
+    <div className="max-w-4xl mr-auto flex flex-col border-t border-gray-300">
+      <h2 className="text-xl font-bold text-gray-900 py-4">
         댓글 <span className="text-blue-500">{commentCount}</span>
       </h2>
 

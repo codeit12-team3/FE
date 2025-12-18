@@ -1,3 +1,4 @@
+import { CommentEditProvider } from '@/components/comment/List/CommentItem/CommentEditContext'
 import PostDetail from '@/components/post/Detail'
 
 export default async function PostDetailPage({
@@ -7,5 +8,9 @@ export default async function PostDetailPage({
 }) {
   const { postId } = await params
 
-  return <PostDetail postId={postId} />
+  return (
+    <CommentEditProvider>
+      <PostDetail postId={postId} />
+    </CommentEditProvider>
+  )
 }

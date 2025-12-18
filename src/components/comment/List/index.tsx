@@ -2,7 +2,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
 import { CommentContent } from '@/types/comments/comments.type'
 
-import CommentSkeleton from './Comment/CommentSkeleton'
+import CommentSkeleton from './CommentItem/CommentSkeleton'
 import CommentThread from './CommentThread'
 
 interface CommentListProps {

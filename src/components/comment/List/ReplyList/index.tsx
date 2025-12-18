@@ -1,10 +1,6 @@
-import { useParams } from 'next/navigation'
-
 import { useReplies } from '@/api/comments'
-import { useReplyMutations } from '@/api/comments/replies.mutations'
 
-import Comment from '../Comment'
-import Reply from '../Reply'
+import CommentItem from '../CommentItem'
 
 interface ReplyListProps {
   commentId: number
@@ -21,12 +17,13 @@ export default function ReplyList({
   if (replies.length === 0 && !isFetchingNextPage) return null
 
   return (
-    <div className="pl-10 pt-4 flex flex-col gap-6">
+    <div className="pl-10 pt-6 flex flex-col gap-6">
       {replies.map((reply) => (
-        <Reply
+        <CommentItem
           key={reply.commentId}
-          reply={reply}
+          comment={reply}
           currentUserId={currentUserId}
+          isReply={true}
         />
       ))}
       {hasNextPage && (

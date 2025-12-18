@@ -37,7 +37,10 @@ export default function CommentWriteForm({
   }
 
   return (
-    <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
+    <form
+      className="w-full flex flex-col gap-2 pb-[34px]"
+      onSubmit={handleSubmit}
+    >
       <div className="flex items-start gap-[15px]">
         <Image
           src={
@@ -54,12 +57,11 @@ export default function CommentWriteForm({
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={config.placeholder}
-          className="flex-1 h-[106px] border border-gray-200 resize-none p-4 placeholder:text-gray-500 bg-white text-base"
+          className="flex-1 h-[106px] ring-gray-200 resize-none ring-1 focus-visible:ring-1 focus-visible:ring-blue-500 focus p-4 placeholder:text-gray-500 bg-white text-base"
         />
       </div>
 
       <div className="w-full flex items-center justify-end gap-2">
-        {/* 답글 작성시 취소 버튼 렌더링 */}
         {isReply && (
           <Button
             type="button"

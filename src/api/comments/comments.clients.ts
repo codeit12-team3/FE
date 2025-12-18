@@ -22,7 +22,7 @@ export const fetchComments = async (params: {
 }
 
 export const createComment = async (params: {
-  postId: string
+  postId: number
   content: string
 }): Promise<ApiResponse<{ commentId: number }>> => {
   const { postId, content } = params
