@@ -6,7 +6,7 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-//테스트 환경에서 next-auth 모킹
+//테스트 환경에서 next-auth 모킹하기 위해 설정
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(() => ({
     data: {
