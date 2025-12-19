@@ -1,25 +1,28 @@
-// components/CommentThread.tsx (대폭 간소화!)
 import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
 
 import { useReplyMutations } from '@/api/comments/replies.mutations'
 import { CommentContent } from '@/types/comments/comments.type'
 
-import CommentWriteForm from '../../Form'
-import Comment from '../CommentItem'
+import CommentWriteForm from '../../CommentForm'
+import { useCommentInteraction } from '../../CommentInteractionContext'
+import CommentItem from '../CommentItem'
 import ReplyList from '../ReplyList'
 
 interface CommentThreadProps {
   comment: CommentContent
 }
 
-export default function CommentThread({ comment }: CommentThreadProps) {
+export default function CommentWithReplies({ comment }: CommentThreadProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
   const parentId = comment.commentId
 
-  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false)
+  const { isReplyFormOpen, openReplyForm, closeReplyForm, cancelEdit } =
+    useCommentInteraction()
+
+  const isThisReplyFormOpen = isReplyFormOpen(parentId)
+
   const { data: session } = useSession()
   const currentUserId = Number(session?.user.memberId)
 
@@ -31,31 +34,45 @@ export default function CommentThread({ comment }: CommentThreadProps) {
       parentId,
       content: text,
     })
-    setIsReplyFormOpen(false)
+    closeReplyForm()
   }
 
-  const isDeleted = comment.content === '삭제된 댓글입니다'
+  const handleReplyButtonClick = () => {
+    cancelEdit()
+    openReplyForm(parentId)
+  }
+
+  const DELETED_COMMENT_TEXT = '삭제된 댓글입니다'
+  const isDeleted = comment.content === DELETED_COMMENT_TEXT
 
   return (
     <div>
-      <Comment comment={comment} currentUserId={currentUserId} />
+      <CommentItem
+        variant="comment"
+        comment={comment}
+        currentUserId={currentUserId}
+      />
+
       {!isDeleted && (
         <button
-          onClick={() => setIsReplyFormOpen((prev) => !prev)}
+          onClick={handleReplyButtonClick}
           className="text-sm -tracking-[0.28px] font-normal text-main ml-0 mt-2"
         >
           답글달기
         </button>
       )}
-      {isReplyFormOpen && (
+
+      {isThisReplyFormOpen && (
         <div className="pl-10 pt-6">
           <CommentWriteForm
             parentId={parentId}
-            onCancel={() => setIsReplyFormOpen(false)}
+            onCancel={closeReplyForm}
             onSubmit={handleSubmit}
+            isSubmitting={create.isPending}
           />
         </div>
       )}
+
       <ReplyList commentId={parentId} currentUserId={currentUserId} />
     </div>
   )

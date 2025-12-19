@@ -42,7 +42,7 @@ export default function Info({
   stats,
 }: Props) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-12">
       <span>{content}</span>
       <InfoSection title="여행 정보">
         <div className="bg-bg-disabled rounded-3xl p-6 space-y-4">

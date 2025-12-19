@@ -23,7 +23,7 @@ export default function ReplyList({
           key={reply.commentId}
           comment={reply}
           currentUserId={currentUserId}
-          isReply={true}
+          variant="reply"
         />
       ))}
       {hasNextPage && (

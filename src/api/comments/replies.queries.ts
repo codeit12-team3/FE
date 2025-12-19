@@ -9,7 +9,11 @@ export const useReplies = ({ commentId }: { commentId: number }) => {
   const query = useInfiniteQuery<ApiResponse<ReplyType>>({
     queryKey: ['replies', commentId],
     queryFn: ({ pageParam }) =>
-      fetchReplies({ commentId, lastReplyId: pageParam as number, size: 10 }),
+      fetchReplies({
+        commentId,
+        lastReplyId: pageParam as number,
+        size: 10,
+      }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => {
       if (!lastPage.success || lastPage.data.isLast) return undefined
@@ -20,10 +24,12 @@ export const useReplies = ({ commentId }: { commentId: number }) => {
     },
     staleTime: 5 * 60 * 1000,
   })
+  console.log(query.data)
+  const replies =
+    query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? []
 
   return {
     ...query,
-    replies:
-      query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? [],
+    replies,
   }
 }

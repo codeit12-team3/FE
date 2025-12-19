@@ -3,7 +3,7 @@ import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentSkeleton from './CommentItem/CommentSkeleton'
-import CommentThread from './CommentThread'
+import CommentWithReplies from './CommentWithReplies'
 
 interface CommentListProps {
   comments: CommentContent[]
@@ -34,13 +34,13 @@ export default function CommentList({
   return (
     <div className="flex flex-col gap-6">
       {comments.map((comment) => (
-        <CommentThread key={comment.commentId} comment={comment} />
+        <CommentWithReplies key={comment.commentId} comment={comment} />
       ))}
 
       {hasNextPage && (
         <div ref={observerRef} className="py-4 text-center">
           {isFetchingNextPage ? (
-            <div className="text-sm text-gray-500 flex items-center gap-2">
+            <div className="text-sm text-gray-500 flex items-center justify-center gap-2">
               <Spinner />
               <p>댓글 불러오는 중...</p>
             </div>

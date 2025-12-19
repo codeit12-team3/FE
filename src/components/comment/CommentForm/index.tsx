@@ -12,25 +12,37 @@ interface CommentWriteFormProps {
   parentId?: number | null
   onSubmit: (value: string, parentId?: number | null) => void
   onCancel?: () => void
+  isSubmitting: boolean
 }
 
-export default function CommentWriteForm({
+const FORM_CONFIG = {
+  comment: {
+    placeholder: '댓글을 입력해주세요',
+    submitText: '댓글 작성',
+  },
+  reply: {
+    placeholder: '답글을 입력해주세요',
+    submitText: '답글 작성',
+  },
+} as const
+
+export default function CommentForm({
   parentId,
   onSubmit,
   onCancel,
+  isSubmitting,
 }: CommentWriteFormProps) {
   const { data } = useMyProfileQuery()
   const [text, setText] = useState('')
 
   const isReply = !!parentId
-  const config = {
-    placeholder: isReply ? '답글을 입력해주세요' : '댓글을 입력해주세요',
-    submitText: isReply ? '답글 작성' : '댓글 작성',
-  }
+  const formType = isReply ? 'reply' : 'comment'
+  const config = FORM_CONFIG[formType]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!text.trim()) return
+
     onSubmit(text, parentId)
     setText('')
     onCancel?.()
@@ -45,7 +57,7 @@ export default function CommentWriteForm({
         <Image
           src={
             data?.image?.startsWith('blob:')
-              ? data?.image
+              ? data.image
               : getImageUrl(data?.image)
           }
           alt="userprofile"
@@ -53,6 +65,7 @@ export default function CommentWriteForm({
           height={40}
           className="rounded-full border border-gray-200 bg-white"
         />
+
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -66,6 +79,7 @@ export default function CommentWriteForm({
           <Button
             type="button"
             onClick={onCancel}
+            disabled={isSubmitting}
             className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600"
           >
             취소

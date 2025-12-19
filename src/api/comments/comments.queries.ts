@@ -20,10 +20,10 @@ export const useComments = (postId: number) => {
     },
     staleTime: 5 * 60 * 1000,
   })
-
+  const comments =
+    query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? []
   return {
     ...query,
-    comments:
-      query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? [],
+    comments,
   }
 }

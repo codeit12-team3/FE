@@ -4,7 +4,8 @@ import { useParams } from 'next/navigation'
 
 import { useCommentMutations, useComments } from '@/api/comments'
 
-import CommentWriteForm from './Form'
+import CommentForm from './CommentForm'
+import { CommentInteractionProvider } from './CommentInteractionContext'
 import CommentList from './List'
 
 interface CommentContainerProps {
@@ -16,6 +17,7 @@ export default function CommentContainer({
 }: CommentContainerProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
+
   const { create } = useCommentMutations(postId)
   const {
     comments,
@@ -27,26 +29,28 @@ export default function CommentContainer({
 
   const handleSubmit = (text: string) => {
     create.mutate({
-      postId: postId,
+      postId,
       content: text,
     })
   }
-  console.log(comments)
+
   return (
-    <div className="max-w-4xl mr-auto flex flex-col border-t border-gray-300">
-      <h2 className="text-xl font-bold text-gray-900 py-4">
-        댓글 <span className="text-blue-500">{commentCount}</span>
-      </h2>
+    <CommentInteractionProvider>
+      <div className="max-w-4xl mr-auto flex flex-col border-t border-gray-300">
+        <h2 className="text-xl font-bold text-gray-900 py-4">
+          댓글 <span className="text-blue-500">{commentCount}</span>
+        </h2>
 
-      <CommentWriteForm onSubmit={handleSubmit} />
+        <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
 
-      <CommentList
-        comments={comments}
-        isLoading={isLoading}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-      />
-    </div>
+        <CommentList
+          comments={comments}
+          isLoading={isLoading}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        />
+      </div>
+    </CommentInteractionProvider>
   )
 }
