@@ -11,7 +11,7 @@ interface PostActionsProps {
 export default function PostActions({
   onApply,
   onCancel,
-  hasApplied,
+  hasApplied, // TODO: 백엔드 작업 후 부모 컴포넌트에서 postDetail.isApplied || hasApplied 값 전달
 }: PostActionsProps) {
   return (
     <div className="flex gap-3 justify-center">

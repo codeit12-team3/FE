@@ -83,7 +83,7 @@ export interface PostContent {
   region: string
   period: Period
   stats: Stats
-  recruitStatus: 'RECRUITING' | 'COMPLETED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   tags: string[]
   nickname: string
   isOwner: boolean
@@ -107,7 +107,7 @@ export interface MyPosts {
     startDate: string
     endDate: string
   }
-  recruitStatus: 'RECRUITING' | 'CLOSED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   tags: string[]
   currentMembers: number
   maxMembers: number
