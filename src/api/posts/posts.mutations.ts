@@ -14,6 +14,7 @@ import {
   PostCreatePayload,
   PostParams,
   PostUpdatePayload,
+  RecruitStatus,
 } from '@/types/posts'
 
 import {
@@ -25,7 +26,6 @@ import {
   fetchPosts,
   fetchPostsDetail,
   patchPost,
-  RecruitStatus,
   removeBookmark,
   updatePost,
 } from './posts.clients'

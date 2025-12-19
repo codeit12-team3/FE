@@ -6,11 +6,10 @@ import {
   PostCreatePayload,
   PostParams,
   PostUpdatePayload,
+  RecruitStatus,
 } from '@/types/posts'
 
 import { axios } from '../common'
-
-export type RecruitStatus = 'RECRUITING' | 'COMPLETED'
 
 export const fetchPosts = async (
   params: PostParams,

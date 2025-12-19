@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
 
-import { RecruitStatus, useDeletePost, usePatchPost } from '@/api/posts'
+import { useDeletePost, usePatchPost } from '@/api/posts'
 import {
   Button,
   Select,
@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
+import { RecruitStatus } from '@/types/posts'
 
 export default function OwnerPostManageManageCard({
   postId,

@@ -31,6 +31,7 @@ export type MBTIType =
   | 'ISFP'
   | 'ESTP'
   | 'ESFP'
+export type RecruitStatus = 'RECRUITING' | 'COMPLETED' | 'FINISH'
 
 export interface Period {
   startDate: string
