@@ -6,9 +6,9 @@ import { useState } from 'react'
 import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
-import { Button } from '@/components/ui'
 
 import { PostDetailSkeleton } from '..'
+import ApplyModal from './ApplyModal'
 import PostActions from './PostActions'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
@@ -20,50 +20,18 @@ interface PostDetailProps {
   postId: string
 }
 
-interface ApplyCompanionModalProps {
-  message: string
-  onChangeMessage: (v: string) => void
-  onClose: () => void
-  onSubmit: () => void
-}
-
-function ApplyCompanionModal({
-  message,
-  onChangeMessage,
-  onClose,
-  onSubmit,
-}: ApplyCompanionModalProps) {
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-9999">
-      <div className="bg-white rounded-xl p-6 w-96">
-        <h2 className="text-lg font-semibold mb-4">동행 신청 메시지</h2>
-
-        <textarea
-          value={message}
-          onChange={(e) => onChangeMessage(e.target.value)}
-          className="w-full border rounded-md p-2 mb-4"
-          placeholder="신청 메시지를 입력해주세요"
-        />
-
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onClick={onClose}>
-            취소
-          </Button>
-          <Button onClick={onSubmit}>신청하기</Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function PostDetail({ postId }: PostDetailProps) {
   const { data: response, isLoading } = usePostDetail({ postId })
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
-  const applyCompanionMutation = useApplyCompanion()
+  const applyCompanion = useApplyCompanion()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
+  // TODO: 백엔드에 PostDetail API에 isApplied 필드 추가 요청 완료
+  // 백엔드 작업 완료 후 postDetail.isApplied로 초기값 설정 필요
+  const [hasApplied, setHasApplied] = useState(false)
 
   const handleToggleBookmark = () => {
     if (!postDetail) return
@@ -75,12 +43,20 @@ export default function PostDetail({ postId }: PostDetailProps) {
   }
 
   const handleApplyCompanion = () => {
-    applyCompanionMutation.mutate({
-      postId,
-      applyMessage,
-    })
-    setIsModalOpen(false)
-    setApplyMessage('')
+    applyCompanion.mutate(
+      {
+        postId,
+        applyMessage,
+      },
+      {
+        onSuccess: () => {
+          setHasApplied(true)
+          alert('동행 신청이 완료되었습니다!')
+          setIsModalOpen(false)
+          setApplyMessage('')
+        },
+      },
+    )
   }
 
   const handleCloseModal = () => {
@@ -153,14 +129,17 @@ export default function PostDetail({ postId }: PostDetailProps) {
                 onChangeStatus={() => {}}
               />
             ) : (
-              <PostActions onApply={() => setIsModalOpen(true)} />
+              <PostActions
+                onApply={() => setIsModalOpen(true)}
+                hasApplied={hasApplied}
+              />
             )}
           </div>
         </div>
       </div>
 
       {isModalOpen && (
-        <ApplyCompanionModal
+        <ApplyModal
           message={applyMessage}
           onChangeMessage={setApplyMessage}
           onClose={handleCloseModal}

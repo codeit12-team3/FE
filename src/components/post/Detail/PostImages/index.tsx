@@ -37,16 +37,12 @@ export default function PostImages({ images }: PostImagesProps) {
   }
 
   if (imageList.length === 1) {
-    return (
-      <div className="my-8">
-        <PostImageItem src={imageList[0]} idx={0} />
-      </div>
-    )
+    return <PostImageItem src={imageList[0]} idx={0} />
   }
 
   return (
     <div className="mb-6 relative group">
-      <div className="relative w-full h-87 rounded-3xl overflow-hidden">
+      <div className="relative w-full h-87 rounded-3xl overflow-hidden my-8">
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}

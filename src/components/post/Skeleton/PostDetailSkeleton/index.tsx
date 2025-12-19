@@ -5,10 +5,10 @@ import { Skeleton } from '@/components/ui'
 
 export default function PostDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-bg-input py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-12 gap-8 items-start">
-          <div className="col-span-8 rounded-lg p-8">
+    <div className="min-h-screen bg-bg-input p-8 flex items-center justify-center">
+      <div className="max-w-7xl w-full">
+        <div className="flex gap-6 items-start justify-center">
+          <div className="w-full max-w-2xl rounded-lg py-8">
             <div className="flex flex-col items-start mb-6 gap-4">
               <div className="flex gap-4 flex-wrap">
                 {Array.from({ length: 3 }).map((_, index) => (
@@ -46,10 +46,11 @@ export default function PostDetailSkeleton() {
               </div>
             </div>
 
+            <div className="bg-gray-300 w-full h-px mt-12" />
             <CommentSkeleton />
           </div>
 
-          <div className="col-span-4 sticky space-y-6">
+          <div className="w-80 sticky space-y-6 py-8">
             <div className="flex flex-col p-8 border-2 border-gray-200 rounded-2xl gap-10">
               <div className="flex gap-5">
                 <Skeleton className="h-20 w-20 rounded-full" />

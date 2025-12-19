@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
 
-import { RecruitStatus, useDeletePost, usePatchPost } from '@/api/posts'
+import { useDeletePost, usePatchPost } from '@/api/posts'
 import {
   Button,
   Select,
@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
+import { RecruitStatus } from '@/types/posts'
 
 export default function OwnerPostManageManageCard({
   postId,
@@ -58,8 +59,8 @@ export default function OwnerPostManageManageCard({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="RECRUITING">모집중</SelectItem>
-            <SelectItem value="COMPLETED">모집마감</SelectItem>
-            <SelectItem value="FINISH">여행종료</SelectItem>
+            <SelectItem value="COMPLETED">멤버 확정</SelectItem>
+            <SelectItem value="FINISH">여행 종료</SelectItem>
           </SelectContent>
         </Select>
       </div>
