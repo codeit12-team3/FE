@@ -23,20 +23,20 @@ function InputGroup({
         data-slot="input-group"
         role="group"
         className={cn(
-          'group/input-group overflow-hidden dark:bg-input/30 relative bg-input flex w-full items-center rounded-xl transition-[color,box-shadow] outline-none',
-          'h-12 min-w-0 has-[>textarea]:h-auto',
+          'group/input-group overflow-hidden relative bg-white border border-gray-200 flex w-full items-center rounded-2xl transition-[color,box-shadow] outline-none',
+          'h-14 min-w-0 has-[>textarea]:h-auto',
 
           // Variants based on alignment.
-          'has-[>[data-align=inline-start]]:[&>input]:pl-2',
-          'has-[>[data-align=inline-end]]:[&>input]:pr-2',
+          'has-[>[data-align=inline-start]]:[&>input]:pl-4',
+          'has-[>[data-align=inline-end]]:[&>input]:pr-4',
           'has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3',
           'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
           // Focus state.
-          'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
+          'has-[[data-slot=input-group-control]:focus-visible]:border-blue-500 has-[[data-slot=input-group-control]:focus-visible]:ring-blue-500/40 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
 
           // Error state.
-          'has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40',
+          'has-[[data-slot][aria-invalid=true]]:ring-red/40 has-[[data-slot][aria-invalid=true]]:border-red',
 
           disabled && 'bg-muted text-muted-foreground',
 
@@ -49,14 +49,14 @@ function InputGroup({
 }
 
 const inputGroupAddonVariants = cva(
-  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50",
+  "text-gray-500 flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-base font-normal select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50",
   {
     variants: {
       align: {
         'inline-start':
-          'order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]',
+          'order-first pl-4 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]',
         'inline-end':
-          'order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]',
+          'order-last pr-4 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]',
         'block-start':
           'order-first w-full justify-start px-3 pt-3 [.border-b]:pb-3 group-has-[>input]/input-group:pt-2.5',
         'block-end':
@@ -154,7 +154,7 @@ function InputGroupInput({
       data-slot="input-group-control"
       disabled={groupDisabled || disabled}
       className={cn(
-        'flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent',
+        'flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0',
         'aria-invalid:ring-0 aria-invalid:border-0',
         className,
       )}
@@ -174,7 +174,7 @@ function InputGroupTextarea({
       data-slot="input-group-control"
       disabled={groupDisabled || disabled}
       className={cn(
-        'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent',
+        'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0',
         className,
       )}
       {...props}
