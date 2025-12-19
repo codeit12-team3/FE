@@ -58,8 +58,8 @@ export default function OwnerPostManageManageCard({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="RECRUITING">모집중</SelectItem>
-            <SelectItem value="COMPLETED">모집 확정</SelectItem>
-            <SelectItem value="FINISH">모집 종료</SelectItem>
+            <SelectItem value="COMPLETED">멤버 확정</SelectItem>
+            <SelectItem value="FINISH">여행 종료</SelectItem>
           </SelectContent>
         </Select>
       </div>

@@ -59,7 +59,7 @@ export default function PostsCard() {
           모집상태
         </span>
         <span className="text-text-input text-sm font-medium">
-          {post.recruitStatus === 'RECRUITING' ? '모집중' : '모집완료'}
+          {post.recruitStatus === 'RECRUITING' ? '모집중' : '모집 완료'}
         </span>
 
         <div className="flex justify-between items-end mt-10">
