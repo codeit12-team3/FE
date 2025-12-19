@@ -98,3 +98,18 @@ export interface PostContent {
   updatedAt: string
   timestamp: string
 }
+export interface MyPosts {
+  postId: number
+  title: string
+  nation: NationCode
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  recruitStatus: 'RECRUITING' | 'CLOSED'
+  tags: string[]
+  currentMembers: number
+  maxMembers: number
+  thumbnail: string
+}

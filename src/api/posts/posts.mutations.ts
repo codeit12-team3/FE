@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 
 import { ApiResponse } from '@/types/common'
 import {
+  FetchMyPosts,
   FetchPostsResponse,
   PostContent,
   PostCreatePayload,
@@ -19,6 +20,8 @@ import {
   addBookmark,
   createPost,
   deletePost,
+  fetchMyBookmarkPosts,
+  fetchMyPosts,
   fetchPosts,
   fetchPostsDetail,
   patchPost,
@@ -157,5 +160,18 @@ export const useRemoveBookmark = () => {
     onError: () => {
       toast.error('북마크 제거에 실패했습니다.')
     },
+  })
+}
+export const useMyPosts = () => {
+  return useQuery<ApiResponse<FetchMyPosts>>({
+    queryKey: ['posts'],
+    queryFn: () => fetchMyPosts(),
+  })
+}
+
+export const useMyBookmarkPosts = () => {
+  return useQuery<ApiResponse<FetchPostsResponse>>({
+    queryKey: ['posts'],
+    queryFn: () => fetchMyBookmarkPosts(),
   })
 }

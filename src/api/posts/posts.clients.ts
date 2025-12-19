@@ -1,5 +1,6 @@
 import { ApiResponse } from '@/types/common'
 import {
+  FetchMyPosts,
   FetchPostsResponse,
   PostContent,
   PostCreatePayload,
@@ -10,6 +11,7 @@ import {
 import { axios } from '../common'
 
 export type RecruitStatus = 'RECRUITING' | 'COMPLETED'
+
 export const fetchPosts = async (
   params: PostParams,
 ): Promise<ApiResponse<FetchPostsResponse>> => {
@@ -93,5 +95,16 @@ export const removeBookmark = async (
     `/v1/posts/${postId}/bookmark`,
   )
 
+  return data
+}
+export const fetchMyPosts = async (): Promise<ApiResponse<FetchMyPosts>> => {
+  const { data } = await axios.get<ApiResponse<FetchMyPosts>>(`v1/posts/me`)
+  return data
+}
+export const fetchMyBookmarkPosts = async (): Promise<
+  ApiResponse<FetchPostsResponse>
+> => {
+  const { data } =
+    await axios.get<ApiResponse<FetchPostsResponse>>(`v1/posts/bookmark`)
   return data
 }
