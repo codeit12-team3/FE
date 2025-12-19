@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import { useApplyCompanion, useCancelCompanion } from '@/api/companions'
+import { useApplyCompanion } from '@/api/companions'
 import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import Comment from '@/components/comment'
 import { Button } from '@/components/ui'
@@ -62,13 +62,10 @@ export default function PostDetail({ postId }: PostDetailProps) {
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
   const applyCompanionMutation = useApplyCompanion()
-  // const cancelCompanionMutation = useCancelCompanion()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
   const [hasApplied, setHasApplied] = useState(false)
-  const [appliedCompanionId, setAppliedCompanionId] = useState<number | null>(
-    null,
-  )
 
   const handleToggleBookmark = () => {
     if (!postDetail) return
@@ -88,10 +85,6 @@ export default function PostDetail({ postId }: PostDetailProps) {
       {
         onSuccess: () => {
           setHasApplied(true)
-          // TODO: 백엔드 응답에 companionId가 없어서 저장 불가
-          // 현재 Response: { postId, status: "PENDING" }
-          // 필요한 Response: { companionId, postId, status: "PENDING" }
-          setAppliedCompanionId(null)
           alert('동행 신청이 완료되었습니다!')
           setIsModalOpen(false)
           setApplyMessage('')
@@ -102,26 +95,6 @@ export default function PostDetail({ postId }: PostDetailProps) {
       },
     )
   }
-
-  // const handleCancelCompanion = () => {
-  //   if (!appliedCompanionId) {
-  //     // TODO: 취소 로직 구현
-  //     return
-  //   }
-
-  //   if (!confirm('동행 신청을 취소하시겠습니까?')) return
-
-  //   cancelCompanionMutation.mutate(appliedCompanionId, {
-  //     onSuccess: () => {
-  //       setHasApplied(false)
-  //       setAppliedCompanionId(null)
-  //       alert('동행 신청이 취소되었습니다.')
-  //     },
-  //     onError: (error) => {
-  //       alert(`취소 실패: ${error.message}`)
-  //     },
-  //   })
-  // }
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
