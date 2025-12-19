@@ -64,7 +64,7 @@ export interface PostListItem {
     startDate: string
     endDate: string
   }
-  recruitStatus: 'RECRUITING' | 'CLOSED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   tags: string[]
   nickname: string
   currentMembers: number
