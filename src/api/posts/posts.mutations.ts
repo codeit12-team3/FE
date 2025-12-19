@@ -164,14 +164,14 @@ export const useRemoveBookmark = () => {
 }
 export const useMyPosts = () => {
   return useQuery<ApiResponse<FetchMyPosts>>({
-    queryKey: ['posts'],
+    queryKey: ['myPosts'],
     queryFn: () => fetchMyPosts(),
   })
 }
 
 export const useMyBookmarkPosts = () => {
   return useQuery<ApiResponse<FetchPostsResponse>>({
-    queryKey: ['posts'],
+    queryKey: ['myBookmarkPosts'],
     queryFn: () => fetchMyBookmarkPosts(),
   })
 }
