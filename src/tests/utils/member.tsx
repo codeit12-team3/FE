@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { ProfileEditFormData } from '@/types/member/schema'
 
-const createTestQueryClient = () =>
+export const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: { retry: false },
@@ -16,13 +16,15 @@ const createTestQueryClient = () =>
 interface MemberTestWrapperProps {
   children: ReactNode
   defaultValues?: Partial<ProfileEditFormData>
+  queryClient?: QueryClient
 }
 
 function MemberTestWrapper({
   children,
   defaultValues,
+  queryClient,
 }: MemberTestWrapperProps) {
-  const queryClient = createTestQueryClient()
+  const client = queryClient ?? createTestQueryClient()
   const methods = useForm<ProfileEditFormData>({
     defaultValues: {
       email: 'test@example.com',
@@ -39,7 +41,7 @@ function MemberTestWrapper({
   })
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={client}>
       <FormProvider {...methods}>{children}</FormProvider>
     </QueryClientProvider>
   )
@@ -47,15 +49,19 @@ function MemberTestWrapper({
 
 interface MemberRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   defaultValues?: Partial<ProfileEditFormData>
+  queryClient?: QueryClient
 }
 
 export function renderMember(
   ui: ReactElement,
-  { defaultValues, ...options }: MemberRenderOptions = {},
+  { defaultValues, queryClient, ...options }: MemberRenderOptions = {},
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
-      <MemberTestWrapper defaultValues={defaultValues}>
+      <MemberTestWrapper
+        defaultValues={defaultValues}
+        queryClient={queryClient}
+      >
         {children}
       </MemberTestWrapper>
     )
