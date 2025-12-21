@@ -108,7 +108,7 @@ describe('BasicInfo', () => {
         () => {
           expect(button).not.toBeDisabled()
         },
-        { timeout: 3000 },
+        { timeout: 100 },
       )
     })
   })
@@ -192,7 +192,7 @@ describe('BasicInfo', () => {
         () => {
           expect(mockToast.error).toHaveBeenCalled()
         },
-        { timeout: 1000 },
+        { timeout: 100 },
       )
     })
   })

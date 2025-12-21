@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react' // ✅ fireEvent 제거
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
