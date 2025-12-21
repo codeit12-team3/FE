@@ -6,6 +6,7 @@ import { useCommentMutations, useComments } from '@/api/comments'
 
 import CommentForm from './CommentForm'
 import { CommentInteractionProvider } from './CommentInteractionContext'
+import ErrorFallback from './ErrorFallback'
 import CommentList from './List'
 
 interface CommentContainerProps {
@@ -25,6 +26,8 @@ export default function CommentContainer({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isError,
+    refetch,
   } = useComments(postId)
 
   const handleSubmit = (text: string) => {
@@ -42,14 +45,21 @@ export default function CommentContainer({
         </h2>
 
         <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
-
-        <CommentList
-          comments={comments}
-          isLoading={isLoading}
-          fetchNextPage={fetchNextPage}
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-        />
+        {isError && comments.length === 0 ? (
+          <ErrorFallback
+            message="댓글을 불러오는데 실패했습니다."
+            onRetry={refetch}
+          />
+        ) : (
+          <CommentList
+            comments={comments}
+            isLoading={isLoading}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            isError={isError}
+          />
+        )}
       </div>
     </CommentInteractionProvider>
   )
