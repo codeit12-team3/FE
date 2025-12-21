@@ -1,7 +1,6 @@
 export { default as BasicInfo } from './BasicInfo'
 export { default as BioField } from './BioField'
 export { default as BirthdayAndMbti } from './BirthdayAndMbti'
-export { default as BirthdaySelect } from './BirthdaySelect'
 export { default as FormActionBtn } from './FormActionBtn'
 export { default as GenderField } from './GenderField'
 export { default as PreferenceInfo } from './PreferenceInfo'
