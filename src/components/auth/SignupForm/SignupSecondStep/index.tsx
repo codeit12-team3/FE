@@ -30,8 +30,8 @@ export default function SignupSecondStep({
   const { isChecked: isNicknameChecked } = nicknameVerification
 
   return (
-    <div className="space-y-[11px]">
-      <section>
+    <div className="space-y-6">
+      <section className="space-y-4">
         <NicknameFieldset verification={nicknameVerification} idx={0} />
         <BirthFieldset idx={1} />
         <MBTIFieldset idx={2} className="flex-1" />
@@ -41,9 +41,9 @@ export default function SignupSecondStep({
       <div className="flex items-center justify-between gap-4">
         <Button
           type="button"
-          variant={'outline'}
+          variant={'secondary'}
           className="flex-1"
-          size={'lg'}
+          size={'md'}
           onClick={onPrev}
         >
           뒤로가기
@@ -57,7 +57,7 @@ export default function SignupSecondStep({
           }
           className="flex-1"
           type="submit"
-          size={'lg'}
+          size={'md'}
         >
           {isPending ? <Loader className="size-7 animate-spin" /> : '회원가입'}
         </Button>

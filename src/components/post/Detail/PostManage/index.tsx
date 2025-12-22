@@ -66,12 +66,18 @@ export default function OwnerPostManageManageCard({
       </div>
 
       <div className="flex gap-3 ">
-        <Button size="md" className="flex-1" onClick={onEdit}>
+        <Button
+          variant="secondary"
+          size="md"
+          className="flex-1"
+          onClick={onEdit}
+        >
           게시글 수정
         </Button>
         <Button
           type="button"
           size="md"
+          variant="tertiary"
           className="flex-1"
           onClick={() => {
             if (!confirm('정말 삭제하시겠어요?')) return

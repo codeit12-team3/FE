@@ -59,18 +59,22 @@ export default function SignupFirstStep({ emailVerification, onNext }: Props) {
   }
 
   return (
-    <div className="space-y-[11px]">
-      <section>
-        <EmailFieldset idx={0} verification={emailVerification} />
-        <PasswordFieldset idx={1} />
+    <div className="space-y-6">
+      <section className="space-y-4">
+        <EmailFieldset
+          idx={0}
+          verification={emailVerification}
+          className="space-y-4"
+        />
+        <PasswordFieldset idx={1} className="space-y-4" />
       </section>
 
       <div className="flex items-center justify-between gap-4">
         <Button
           type="button"
-          variant={'outline'}
+          variant={'secondary'}
           className="flex-1"
-          size={'lg'}
+          size={'md'}
           onClick={() => router.back()}
         >
           나가기
@@ -80,7 +84,7 @@ export default function SignupFirstStep({ emailVerification, onNext }: Props) {
           onClick={handleNextClick}
           className="flex-1"
           disabled={!isValid}
-          size={'lg'}
+          size={'md'}
         >
           다음
         </Button>

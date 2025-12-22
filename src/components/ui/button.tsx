@@ -5,25 +5,37 @@ import * as React from 'react'
 import { cn } from '@/lib/common/index'
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none disabled:bg-muted disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center cursor-pointer gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-blue-500 focus-visible:ring-blue-500/40 focus-visible:ring-[3px] aria-invalid:ring-red aria-invalid:border-red",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline:
-          'border bg-background text-primary shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 disabled:border-none',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+        default: [
+          'bg-blue-500 text-white',
+          'hover:bg-blue-600',
+          'active:bg-blue-700',
+          'disabled:bg-gray-200 disabled:text-gray-600 ',
+        ],
+        tertiary: [
+          'bg-white text-gray-600 border border-gray-300',
+          'hover:bg-gray-100',
+          'active:bg-gray-200 active:text-gray-700',
+          'disabled:text-gray-400',
+        ],
+        secondary: [
+          'bg-white text-blue-500 border border-blue-500',
+          'hover:bg-gray-100 hover:text-blue-600',
+          'active:bg-gray-200 active:text-blue-600 border-blue-600',
+        ],
+        ghost: ['text-gray-500', 'hover:text-gray-600', 'active:text-gray-600'],
+        link: [
+          'text-blue-500 underline-offset-4',
+          'hover:text-blue-600 hover:underline',
+          'active:text-blue-700 active:underline',
+        ],
       },
       size: {
-        'sm': 'h-10 rounded-[10px] gap-1.5 px-3 py-2.5 text-sm has-[>svg]:px-2.5',
-        'md': 'h-12 rounded-xl px-6 py-2 text-base has-[>svg]:px-3',
-        'lg': 'h-14 rounded-2xl px-7.5 py-4 text-xl has-[>svg]:px-4',
+        'md': 'h-10 rounded-xl px-6 py-[10px] text-sm has-[>svg]:px-3',
+        'lg': 'h-14 rounded-2xl px-7.5 py-4 text-base has-[>svg]:px-4',
         'icon': 'size-9',
         'icon-sm': 'size-8',
         'icon-lg': 'size-10',

@@ -1,4 +1,5 @@
 import axios, {
+  AxiosError,
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
@@ -6,6 +7,7 @@ import axios, {
 import { getSession, signOut } from 'next-auth/react'
 
 import { BASE_URL, TIMEOUT_LIMIT } from '@/constants/common'
+import { ApiResponse } from '@/types/common'
 
 const client: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -40,11 +42,19 @@ client.interceptors.response.use(
   (res: AxiosResponse) => {
     return res
   },
-  async (error) => {
-    const status = error.response?.status
+  async (error: AxiosError<ApiResponse>) => {
+    const res = error.response
 
-    if (status === 401 && typeof window !== 'undefined') {
-      signOut({ callbackUrl: '/signin' })
+    if (res && res.status === 401) {
+      const apiRes = res.data
+
+      if (apiRes.success === false) {
+        const errCode = apiRes.data.code
+
+        if (errCode !== 'AUTH_011' && typeof window !== 'undefined') {
+          signOut({ callbackUrl: '/signin' })
+        }
+      }
     }
 
     return Promise.reject(error)
