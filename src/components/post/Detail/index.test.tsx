@@ -14,12 +14,45 @@ jest.mock('uuid', () => ({
 
 jest.mock('../Detail/PostManage', () => ({
   __esModule: true,
-  default: () => <div>게시글 관리</div>,
+  default: ({ onEdit }: { onEdit: () => void }) => (
+    <div>
+      <div>게시글 관리</div>
+      <button onClick={onEdit}>게시글 수정</button>
+      <button
+        onClick={() => {
+          const { useDeletePost } = jest.requireMock('@/api/posts')
+          const deletePost = useDeletePost()
+          deletePost.mutate()
+        }}
+      >
+        게시글 삭제
+      </button>
+    </div>
+  ),
 }))
 
 jest.mock('../Detail/PostActions', () => ({
   __esModule: true,
-  default: () => <button>동행 신청하기</button>,
+  default: ({ onApply }: { onApply: () => void }) => (
+    <button onClick={onApply}>동행 신청하기</button>
+  ),
+}))
+
+jest.mock('../Detail/ApplyModal', () => ({
+  __esModule: true,
+  default: ({
+    onClose,
+    onSubmit,
+  }: {
+    onClose: () => void
+    onSubmit: () => void
+  }) => (
+    <div data-testid="apply-modal">
+      <div>동행 신청 모달</div>
+      <button onClick={onClose}>닫기</button>
+      <button onClick={onSubmit}>신청하기</button>
+    </div>
+  ),
 }))
 
 jest.mock('@/api/posts', () => ({
@@ -31,9 +64,7 @@ jest.mock('@/api/posts', () => ({
 }))
 
 jest.mock('@/api/companions', () => ({
-  useApplyCompanion: () => ({
-    mutate: jest.fn(),
-  }),
+  useApplyCompanion: jest.fn(),
 }))
 
 const mockPush = jest.fn()
@@ -105,7 +136,7 @@ const renderPostDetail = (postId: string = '1') => {
   )
 }
 describe('게시글 상세 조회 테스트', () => {
-  test('postId로 접근하면 게시글 상세가 렌더링 되는지 테스트', () => {
+  test('올바른 postId로 접근하면 게시글 상세가 렌더링된다', () => {
     usePostDetail.mockReturnValue({
       data: {
         success: true,
@@ -119,7 +150,7 @@ describe('게시글 상세 조회 테스트', () => {
       screen.getByText('함께 일본 여행 가실 분 구합니다'),
     ).toBeInTheDocument()
   })
-  test('잘못된 게시글로 접근하면 에러 메세지가 노출 되는지테스트', () => {
+  test('잘못된 게시글로 접근하면 에러 메세지가 노출된다', () => {
     usePostDetail.mockReturnValue({
       data: {
         success: false,
@@ -138,7 +169,7 @@ describe('게시글 상세 조회 테스트', () => {
   })
 })
 describe('북마크 토글 테스트', () => {
-  test('북마크 버튼 클릭시 북마크가 추가 되는지 테스트', async () => {
+  test('북마크 버튼 클릭시 북마크가 추가 된다', async () => {
     const mockAddBookmark = jest.fn()
     const { useAddBookmark } = jest.requireMock('@/api/posts')
 
@@ -162,7 +193,7 @@ describe('북마크 토글 테스트', () => {
     expect(mockAddBookmark).toHaveBeenCalledWith('1')
   })
 
-  test('북마크 버튼 클릭시 북마크가 삭제 되는지 테스트', async () => {
+  test('북마크 버튼 클릭시 북마크가 삭제 된다', async () => {
     const mockRemoveBookmark = jest.fn()
     const { useRemoveBookmark } = jest.requireMock('@/api/posts')
 
@@ -187,26 +218,109 @@ describe('북마크 토글 테스트', () => {
   })
 })
 describe('게시글 권한 테스트', () => {
-  test('작성자일 경우 게시글 관리 섹션이 노출되는지 테스트', () => {
-    usePostDetail.mockReturnValue({
-      data: {
-        success: true,
-        data: { ...mockPostDetail, isOwner: true },
-      },
-      isLoading: false,
+  describe('내가 작성자 일 경우 ', () => {
+    test('작성자일 경우 게시글 관리 섹션이 보인다', () => {
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isOwner: true },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+      expect(screen.getByText('게시글 관리')).toBeInTheDocument()
     })
-    renderPostDetail()
-    expect(screen.getByText('게시글 관리')).toBeInTheDocument()
+    test('게시글 삭제 버튼을 누르면 게시글이 삭제된다', async () => {
+      const mockDeletePost = jest.fn()
+      const { useDeletePost } = jest.requireMock('@/api/posts')
+
+      useDeletePost.mockReturnValue({
+        mutate: mockDeletePost,
+        isPending: false,
+      })
+
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isOwner: true },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+
+      const deleteButton = screen.getByRole('button', { name: '게시글 삭제' })
+      await userEvent.click(deleteButton)
+
+      expect(mockDeletePost).toHaveBeenCalled()
+    })
+    test('게시글 수정 버튼을 누르면 posts/postId/edit으로 이동된다', async () => {
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isOwner: true },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+
+      const editButton = screen.getByRole('button', { name: '게시글 수정' })
+      await userEvent.click(editButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/posts/1/edit')
+    })
   })
-  test('작성자가 아닐 경우 동행신청 버튼이 노출되는지 테스트', () => {
-    usePostDetail.mockReturnValue({
-      data: {
-        success: true,
-        data: { ...mockPostDetail },
-      },
-      isLoading: false,
+  describe('내가 작성자가 아닐 경우', () => {
+    test('작성자가 아닐 경우 동행신청 버튼이 보인다', () => {
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+      expect(screen.getByText('동행 신청하기')).toBeInTheDocument()
     })
-    renderPostDetail()
-    expect(screen.getByText('동행 신청하기')).toBeInTheDocument()
+    test('동행신청 버튼을 누르면 동행 신청 모달이 보인다', async () => {
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+      const applyButton = screen.getByRole('button', { name: '동행 신청하기' })
+      await userEvent.click(applyButton)
+
+      expect(screen.getByTestId('apply-modal')).toBeInTheDocument()
+      expect(screen.getByText('동행 신청 모달')).toBeInTheDocument()
+    })
+    test('신청하기 버튼을 누르면 동행이 신청된다.', async () => {
+      const mockApply = jest.fn()
+      const { useApplyCompanion } = jest.requireMock('@/api/companions')
+
+      useApplyCompanion.mockReturnValue({
+        mutate: mockApply,
+        isPending: false,
+      })
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isOwner: false },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+
+      const openModalButton = screen.getByRole('button', {
+        name: '동행 신청하기',
+      })
+      await userEvent.click(openModalButton)
+
+      const applyButton = screen.getByRole('button', { name: '신청하기' })
+      await userEvent.click(applyButton)
+      expect(mockApply).toHaveBeenCalled()
+    })
   })
 })
