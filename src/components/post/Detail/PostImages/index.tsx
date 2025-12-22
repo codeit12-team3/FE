@@ -20,7 +20,7 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
         quality={100}
         sizes="(max-width: 768px) 100vw, 800px"
         className={cn(
-          'object-cover transition-opacity duration-300 rounded-3xl',
+          'object-cover transition-opacity duration-300 rounded-3xl ',
         )}
       />
       <div className="absolute inset-0 rounded-3xl pointer-events-none" />
@@ -41,8 +41,8 @@ export default function PostImages({ images }: PostImagesProps) {
   }
 
   return (
-    <div className="mb-6 relative group">
-      <div className="relative w-full h-87 rounded-3xl overflow-hidden my-8">
+    <div className="mb-6 relative group ">
+      <div className="relative w-full h-87 rounded-3xl overflow-hidden ">
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}

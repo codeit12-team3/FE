@@ -53,6 +53,7 @@ export default function FilterBar({
     setFilters(updated)
     onApply({ ...updated, keyword })
   }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onApply({ ...filters, keyword })
@@ -149,13 +150,13 @@ export default function FilterBar({
             ))}
           </SelectContent>
         </Select>
+
         {/* 날짜 */}
         <Popover
           open={isDatePickerOpen}
           onOpenChange={(open) => {
             setIsDatePickerOpen(open)
             if (open) {
-              // Popover가 열릴 때 현재 선택된 날짜를 tempDate에 설정
               setTempDate(filters.date ? new Date(filters.date) : undefined)
             }
           }}

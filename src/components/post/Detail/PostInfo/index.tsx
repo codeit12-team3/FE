@@ -59,7 +59,7 @@ export default function Info({
   conditions,
 }: Props) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 mt-8">
       <span className="pl-2">{content}</span>
       <InfoSection title="여행 정보">
         <div className="bg-bg-disabled rounded-3xl p-6 space-y-3">
