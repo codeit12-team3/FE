@@ -16,17 +16,12 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       throw new Error('Refresh Failed')
     }
 
-    const newTokenRes = res.data.tokenResponse
+    const newTokenRes = res.data
 
     return {
       ...token,
       tokenResponse: {
-        ...token.tokenResponse,
-        accessToken: newTokenRes.accessToken,
-        refreshToken:
-          newTokenRes.refreshToken ?? token.tokenResponse.refreshToken,
-        accessTokenExpiration: newTokenRes.accessTokenExpiration,
-        refreshTokenExpiration: newTokenRes.refreshTokenExpiration,
+        ...newTokenRes,
       },
       expiresAt: Date.now() + newTokenRes.accessTokenExpiration,
     }
@@ -72,17 +67,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
+        token.memberId = user.memberId
         token.email = user.email
         token.nickname = user.nickname
         token.birth = user.birth
         token.gender = user.gender
         token.mbti = user.mbti
+        token.image = user.image ? user.image : null
         token.tokenResponse = user.tokenResponse
         token.expiresAt = Date.now() + user.tokenResponse.accessTokenExpiration
 
         return token
+      }
+
+      if (trigger === 'update' && session.user) {
+        if (session.user.image) token.image = session.user.image
+        if (session.user.nickname) token.nickname = session.user.nickname
+        if (session.user.mbti) token.mbti = session.user.mbti
+        if (session.user.birth) token.birth = session.user.birth
+        if (session.user.gender) token.gender = session.user.gender
       }
 
       if (Date.now() < token.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
@@ -93,11 +98,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (token && session.user) {
+        session.user.memberId = token.memberId
         session.user.email = token.email
         session.user.nickname = token.nickname
         session.user.birth = token.birth
         session.user.gender = token.gender
         session.user.mbti = token.mbti
+        session.user.image = token.image
         session.user.accessToken = token.tokenResponse.accessToken
       }
 

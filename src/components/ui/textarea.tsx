@@ -14,7 +14,7 @@ function Textarea({
       placeholder={disabled ? undefined : placeholder}
       disabled={disabled}
       className={cn(
-        'placeholder:text-muted-foreground border border-gray-200 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-xl px-4 py-3 text-base transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground',
+        'font-normal border border-gray-200 placeholder:text-gray-500 focus-visible:border-blue-500 focus-visible:ring-blue-500/40 aria-invalid:ring-red/40 aria-invalid:border-red flex field-sizing-content min-h-30 w-full rounded-xl bg-white p-4 text-base transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500',
         className,
       )}
       {...props}

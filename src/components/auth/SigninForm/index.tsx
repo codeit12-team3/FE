@@ -67,7 +67,7 @@ export default function SigninForm() {
             disabled={!formState.isValid || isPending}
             className="w-full"
             type="submit"
-            size={'lg'}
+            size={'md'}
           >
             {isPending ? <Loader className="size-7 animate-spin" /> : '로그인'}
           </Button>

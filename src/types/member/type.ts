@@ -6,11 +6,13 @@ import {
 } from '@/constants/member'
 
 export interface Member {
+  memberId: number
   email: string
   nickname: string
   birth: string
   gender: Gender
   mbti: MBTI
+  image: string | null
 }
 
 export interface UpdateMyProfileReq {
