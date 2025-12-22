@@ -38,7 +38,7 @@ function InputGroup({
           // Error state.
           'has-[[data-slot][aria-invalid=true]]:ring-red/40 has-[[data-slot][aria-invalid=true]]:border-red',
 
-          disabled && 'bg-muted text-muted-foreground',
+          disabled && 'bg-gray-200 text-gray-500',
 
           className,
         )}
@@ -49,7 +49,7 @@ function InputGroup({
 }
 
 const inputGroupAddonVariants = cva(
-  "text-gray-500 flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-base font-normal select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50",
+  "bg-transparent flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-base font-normal select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)]",
   {
     variants: {
       align: {
