@@ -227,7 +227,7 @@ export default function FilterBar({
       </div>
 
       <Button
-        size="sm"
+        size="md"
         className="gap-2 w-36"
         onClick={() => router.push('/posts/add')}
       >

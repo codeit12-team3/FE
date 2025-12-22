@@ -27,7 +27,7 @@ export default function FormAction({
       {isEdit && postId ? (
         <Button
           type="button"
-          size="sm"
+          size="md"
           onClick={() => {
             router.push(`/posts/${postId}`)
           }}
@@ -38,7 +38,7 @@ export default function FormAction({
       ) : (
         <Button
           type="button"
-          size="sm"
+          size="md"
           onClick={() => router.push('/')}
           className="flex-1 border border-text-disabled "
         >
@@ -48,7 +48,7 @@ export default function FormAction({
 
       <Button
         type="submit"
-        size="sm"
+        size="md"
         disabled={!formState.isValid || isPending}
         className="flex-1"
       >

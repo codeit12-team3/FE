@@ -164,7 +164,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
 
           {post.recruitStatus === 'COMPLETED' ? (
             <Button
-              size="sm"
+              size="md"
               className="w-39 bg-bg-disabled text-text-disabled"
               disabled
             >
@@ -173,7 +173,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
           ) : hasApplied ? (
             // TODO: 백엔드 작업 후 post.isApplied || hasApplied 조건으로 변경
             <Button
-              size="sm"
+              size="md"
               className="w-39 bg-bg-disabled text-text-disabled"
               disabled
             >
@@ -181,7 +181,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
             </Button>
           ) : (
             <Button
-              size="sm"
+              size="md"
               className="w-39"
               onClick={(e) => {
                 e.stopPropagation()
