@@ -1,14 +1,14 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Label, Textarea } from '@/components/ui'
 import type { PostFormValues } from '@/types/posts/schema'
 
 export default function Description() {
-  const { watch, setValue } = useFormContext<PostFormValues>()
+  const { control, setValue } = useFormContext<PostFormValues>()
 
-  const content = watch('content') ?? ''
+  const content = useWatch({ control, name: 'content' }) ?? ''
 
   return (
     <div>

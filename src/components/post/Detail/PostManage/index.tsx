@@ -1,14 +1,15 @@
 import { useRouter } from 'next/navigation'
 
-import { RecruitStatus, useDeletePost, usePatchPost } from '@/api/posts'
-import { Button } from '@/components/ui'
+import { useDeletePost, usePatchPost } from '@/api/posts'
 import {
+  Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui'
+import { RecruitStatus } from '@/types/posts'
 
 export default function OwnerPostManageManageCard({
   postId,
@@ -17,15 +18,17 @@ export default function OwnerPostManageManageCard({
   onChangeStatus,
 }: {
   postId: string
-  status: 'RECRUITING' | 'COMPLETED'
+  status: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   onEdit: () => void
-  onChangeStatus: (v: 'RECRUITING' | 'COMPLETED') => void
+  onChangeStatus: (v: 'RECRUITING' | 'COMPLETED' | 'FINISH') => void
 }) {
   const deletePost = useDeletePost()
   const patchPost = usePatchPost()
   const router = useRouter()
 
-  const handleStatusChange = (newStatus: 'RECRUITING' | 'COMPLETED') => {
+  const handleStatusChange = (
+    newStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH',
+  ) => {
     patchPost.mutate(
       {
         postId,
@@ -34,10 +37,6 @@ export default function OwnerPostManageManageCard({
       {
         onSuccess: () => {
           onChangeStatus(newStatus)
-        },
-        onError: (error) => {
-          console.error('모집 상태 변경 실패:', error)
-          alert('모집 상태 변경에 실패했습니다.')
         },
       },
     )
@@ -51,7 +50,7 @@ export default function OwnerPostManageManageCard({
         <Select
           value={status}
           onValueChange={(value) =>
-            handleStatusChange(value as 'RECRUITING' | 'COMPLETED')
+            handleStatusChange(value as 'RECRUITING' | 'COMPLETED' | 'FINISH')
           }
           disabled={patchPost.isPending}
         >
@@ -60,7 +59,8 @@ export default function OwnerPostManageManageCard({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="RECRUITING">모집중</SelectItem>
-            <SelectItem value="COMPLETED">모집마감</SelectItem>
+            <SelectItem value="COMPLETED">멤버 확정</SelectItem>
+            <SelectItem value="FINISH">여행 종료</SelectItem>
           </SelectContent>
         </Select>
       </div>

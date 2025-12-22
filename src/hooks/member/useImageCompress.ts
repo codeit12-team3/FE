@@ -1,6 +1,23 @@
 import imageCompression, { Options } from 'browser-image-compression'
 import { useState } from 'react'
 
+type PresetType = 'profile' | 'post'
+
+const COMPRESSION_PRESETS: Record<PresetType, Options> = {
+  profile: {
+    maxSizeMB: 0.5,
+    maxWidthOrHeight: 512,
+    useWebWorker: true,
+    initialQuality: 0.85,
+  },
+  post: {
+    maxSizeMB: 1.5,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    initialQuality: 0.85,
+  },
+}
+
 interface CompressResult {
   file: File
   previewUrl: string
@@ -18,6 +35,7 @@ interface UseImageCompressReturn {
 }
 
 export default function useImageCompress(
+  preset: PresetType = 'profile',
   customOptions?: Partial<Options>,
 ): UseImageCompressReturn {
   const [isCompressing, setIsCompressing] = useState(false)
@@ -36,10 +54,7 @@ export default function useImageCompress(
 
     try {
       const options: Options = {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 512,
-        useWebWorker: true,
-        initialQuality: 0.85,
+        ...COMPRESSION_PRESETS[preset],
         ...customOptions,
       }
 

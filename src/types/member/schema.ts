@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { NICKNAME_MAX_LENGTH, NICKNAME_REGEX } from '@/constants/member'
 
 export const profileEditSchema = z.object({
+  email: z.string().optional(),
   image: z.string().optional(),
   nickname: z
     .string()
@@ -11,7 +12,7 @@ export const profileEditSchema = z.object({
       NICKNAME_MAX_LENGTH,
       `닉네임은 ${NICKNAME_MAX_LENGTH}자 이하여야 합니다`,
     )
-    .regex(NICKNAME_REGEX, '한글, 영문, 숫자만 가능합니다'),
+    .regex(NICKNAME_REGEX, '닉네임은 한/영, 숫자, 특수문자만 가능합니다'),
   birth: z.string().min(1, '생일을 선택해주세요'),
   gender: z.string().min(1, '성별을 선택해주세요'),
   mbti: z.string().optional(),

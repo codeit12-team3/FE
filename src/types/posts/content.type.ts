@@ -3,7 +3,7 @@ import { NationCode } from '@/constants/posts'
 export enum AgeType {
   TWENTY = 'TWENTY',
   THIRTY = 'THIRTY',
-  FOURTY = 'FOURTY',
+  FORTY = 'FORTY',
   FIFTY = 'FIFTY',
   ETC = 'ETC',
 }
@@ -31,6 +31,7 @@ export type MBTIType =
   | 'ISFP'
   | 'ESTP'
   | 'ESFP'
+export type RecruitStatus = 'RECRUITING' | 'COMPLETED' | 'FINISH'
 
 export interface Period {
   startDate: string
@@ -42,8 +43,8 @@ export interface Stats {
   viewCount: number
 }
 interface Conditions {
-  ageCondition: AgeType
-  genderCondition: GenderType
+  ageCondition: AgeType | string
+  genderCondition: GenderType | string
 }
 
 interface Writer {
@@ -64,7 +65,7 @@ export interface PostListItem {
     startDate: string
     endDate: string
   }
-  recruitStatus: 'RECRUITING' | 'CLOSED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   tags: string[]
   nickname: string
   currentMembers: number
@@ -83,7 +84,7 @@ export interface PostContent {
   region: string
   period: Period
   stats: Stats
-  recruitStatus: 'RECRUITING' | 'COMPLETED'
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
   tags: string[]
   nickname: string
   isOwner: boolean
@@ -97,4 +98,19 @@ export interface PostContent {
   createdAt: string
   updatedAt: string
   timestamp: string
+}
+export interface MyPosts {
+  postId: number
+  title: string
+  nation: NationCode
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
+  tags: string[]
+  currentMembers: number
+  maxMembers: number
+  thumbnail: string
 }

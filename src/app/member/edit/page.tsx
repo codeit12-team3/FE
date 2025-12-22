@@ -15,6 +15,7 @@ export default function ProfileEditPage() {
   const methods = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
+      email: '',
       image: '',
       nickname: '',
       birth: '',
@@ -29,6 +30,7 @@ export default function ProfileEditPage() {
   useEffect(() => {
     if (data) {
       methods.reset({
+        email: data.email || '',
         image: data.image || '',
         nickname: data.nickname || '',
         birth: data.birth || '',
@@ -59,14 +61,12 @@ export default function ProfileEditPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="max-w-4xl mx-auto py-10 px-4">
-        <h1 className="font-semibold text-[32px] text-center mb-12">
-          내 프로필
-        </h1>
-        <div className="flex justify-center mb-12">
+      <div className="w-119 mx-auto">
+        <h1 className="font-bold text-lg mb-6">프로필 수정</h1>
+        <div className="flex justify-center mb-6">
           <ProfileImageEdit />
         </div>
-        <div className="flex justify-center">
+        <div className="w-inherit">
           <ProfileEditForm />
         </div>
       </div>
