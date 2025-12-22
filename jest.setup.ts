@@ -42,8 +42,3 @@ jest.mock('next/image', () => ({
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
-
-jest.mock('@/lib/common', () => ({
-  ...jest.requireActual('@/lib/common'),
-  cn: (...inputs: string[]) => inputs.filter(Boolean).join(' '),
-}))

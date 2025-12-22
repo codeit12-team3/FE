@@ -40,6 +40,7 @@ export default function PostHeader({
         <button
           onClick={onToggleBookmark}
           className="hover:scale-90 transition-transform"
+          aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
         >
           <Heart
             className={cn(

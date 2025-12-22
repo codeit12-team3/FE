@@ -148,7 +148,7 @@ describe('북마크 토글 테스트', () => {
 
     renderPostDetail()
 
-    const bookmarkButton = screen.getByRole('button', { name: '' })
+    const bookmarkButton = screen.getByRole('button', { name: '북마크 추가' })
     await userEvent.click(bookmarkButton)
 
     expect(mockAddBookmark).toHaveBeenCalledWith('1')
@@ -172,7 +172,7 @@ describe('북마크 토글 테스트', () => {
 
     renderPostDetail()
 
-    const bookmarkButton = screen.getByRole('button', { name: '' })
+    const bookmarkButton = screen.getByRole('button', { name: '북마크 취소' })
     await userEvent.click(bookmarkButton)
 
     expect(mockRemoveBookmark).toHaveBeenCalledWith('1')
