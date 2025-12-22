@@ -99,5 +99,5 @@ export const GENDER_ENUM_TO_LABEL: Record<GenderType, string> = {
 export const GENDER_LABEL_TO_ENUM: Record<string, GenderType> = {
   남성만: GenderType.MALE,
   여성만: GenderType.FEMALE,
-  무관: GenderType.ALL,
+  모두: GenderType.ALL,
 }

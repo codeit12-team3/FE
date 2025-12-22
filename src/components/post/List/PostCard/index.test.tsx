@@ -108,7 +108,7 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
     test('성별 조건이 화면에 표시된다', () => {
       renderPostCard()
 
-      expect(screen.getByText('누구나')).toBeInTheDocument()
+      expect(screen.getByText('모두')).toBeInTheDocument()
     })
 
     test('나이 라벨이 함께 표시된다', () => {

@@ -59,7 +59,7 @@ export const mockPostFormData: PostContent = {
   nation: 'JP' as const,
   region: '도쿄',
   stats: { maxMembers: 5, currentMembers: 3, viewCount: 0 },
-  conditions: { ageCondition: '20대', genderCondition: '누구나' },
+  conditions: { ageCondition: '20대', genderCondition: '모두' },
   period: { startDate: '2025-12-15', endDate: '2025-12-17' },
   tags: ['태그1', '태그2'],
   images: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
@@ -100,7 +100,7 @@ export const mockPostListItem: PostListItem = {
   maxMembers: 5,
   conditions: {
     ageType: '20대',
-    genderCondition: '누구나',
+    genderCondition: '모두',
   },
   isBookmarked: false,
   thumbnail: 'https://example.com/thumbnail.jpg',
