@@ -4,20 +4,12 @@ import { useRouter } from 'next/navigation'
 
 import { PostListItem } from '@/types/posts'
 
+import PostCardSkeleton from '../../Skeleton/PostCardSkeleton'
 import PostCard from './index'
 
 jest.mock('@/api/companions', () => ({
   useApplyCompanion: () => ({
     mutate: jest.fn(),
-  }),
-}))
-
-jest.mock('@/api/posts/posts.mutations', () => ({
-  useAddBookmark: () => ({
-    mutateAsync: jest.fn(),
-  }),
-  useRemoveBookmark: () => ({
-    mutateAsync: jest.fn(),
   }),
 }))
 
@@ -254,5 +246,47 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
         ),
       ).toBeInTheDocument()
     })
+  })
+})
+
+describe('클릭 시 이동 테스트', () => {
+  const renderPostCard = (post: PostListItem = mockPost) => {
+    const queryClient = createTestQueryClient()
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <PostCard post={post} />
+      </QueryClientProvider>,
+    )
+  }
+
+  test('제목 클릭 시 상세 페이지로 이동한다', () => {
+    renderPostCard()
+
+    const title = screen.getByText('함께 일본 여행 가실 분 구합니다')
+    title.click()
+
+    expect(mockPush).toHaveBeenCalledWith('/posts/1')
+  })
+
+  test('다른 게시글의 제목 클릭 시 해당 게시글 상세 페이지로 이동한다', () => {
+    const differentPost = {
+      ...mockPost,
+      postId: 42,
+      title: '새로운 여행 게시글',
+    }
+    renderPostCard(differentPost)
+
+    const title = screen.getByText('새로운 여행 게시글')
+    title.click()
+
+    expect(mockPush).toHaveBeenCalledWith('/posts/42')
+  })
+})
+
+describe('로딩 상태 테스트', () => {
+  test('데이터 요청 중일때 스켈레톤 UI가 출력된다', () => {
+    const { container } = render(<PostCardSkeleton />)
+    const skeleton = container.querySelector('.bg-white.rounded-2xl')
+    expect(skeleton).toBeInTheDocument()
   })
 })
