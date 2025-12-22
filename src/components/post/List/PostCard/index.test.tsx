@@ -49,8 +49,8 @@ const mockPost: PostListItem = {
   nation: 'JP',
   region: '도쿄',
   period: {
-    startDate: '2024-05-01',
-    endDate: '2024-05-07',
+    startDate: '2025-12-15',
+    endDate: '2025-12-17',
   },
   recruitStatus: 'RECRUITING',
   tags: ['맛집투어', '카페', '사진'],
@@ -110,14 +110,14 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
     test('여행 시작 날짜가 화면에 표시된다', () => {
       renderPostCard()
 
-      expect(screen.getByText(/5월/)).toBeInTheDocument()
-      expect(screen.getByText(/1일/)).toBeInTheDocument()
+      expect(screen.getByText(/12월/)).toBeInTheDocument()
+      expect(screen.getByText(/15일/)).toBeInTheDocument()
     })
 
     test('날짜가 한국어 형식으로 표시된다', () => {
       renderPostCard()
 
-      const dateElement = screen.getByText(/5월/)
+      const dateElement = screen.getByText(/12월/)
       expect(dateElement).toBeInTheDocument()
     })
   })
