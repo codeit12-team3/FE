@@ -1,8 +1,11 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 
-import { PostListItem } from '@/types/posts'
+import {
+  mockPostListItem,
+  render,
+  renderPost,
+  screen,
+} from '@/tests/utils/post'
 
 import PostCardSkeleton from '../../Skeleton/PostCardSkeleton'
 import PostCard from './index'
@@ -11,14 +14,6 @@ jest.mock('@/lib/common', () => ({
   ...jest.requireActual('@/lib/common'),
   getImageUrl: jest.fn((url: string | null) => url || '/default-thumbnail.png'),
 }))
-
-const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  })
 
 const mockPush = jest.fn()
 
@@ -29,36 +24,11 @@ beforeEach(() => {
   })
 })
 
-const mockPost: PostListItem = {
-  postId: 1,
-  title: '함께 일본 여행 가실 분 구합니다',
-  nation: 'JP',
-  region: '도쿄',
-  period: {
-    startDate: '2025-12-15',
-    endDate: '2025-12-17',
-  },
-  recruitStatus: 'RECRUITING',
-  tags: ['맛집투어', '카페', '사진'],
-  nickname: '여행러버',
-  currentMembers: 3,
-  maxMembers: 5,
-  conditions: {
-    ageType: '20대',
-    genderCondition: '누구나',
-  },
-  isBookmarked: false,
-  thumbnail: 'https://example.com/thumbnail.jpg',
-}
+const mockPost = mockPostListItem
 
 describe('PostCard - 주요 정보 렌더링 테스트', () => {
-  const renderPostCard = (post: PostListItem = mockPost) => {
-    const queryClient = createTestQueryClient()
-    return render(
-      <QueryClientProvider client={queryClient}>
-        <PostCard post={post} />
-      </QueryClientProvider>,
-    )
+  const renderPostCard = (post = mockPost) => {
+    return renderPost(<PostCard post={post} />)
   }
 
   describe('게시글 제목 렌더링 테스트', () => {
@@ -244,13 +214,8 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
 })
 
 describe('클릭 시 이동 테스트', () => {
-  const renderPostCard = (post: PostListItem = mockPost) => {
-    const queryClient = createTestQueryClient()
-    return render(
-      <QueryClientProvider client={queryClient}>
-        <PostCard post={post} />
-      </QueryClientProvider>,
-    )
+  const renderPostCard = (post = mockPost) => {
+    return renderPost(<PostCard post={post} />)
   }
 
   test('제목 클릭 시 상세 페이지로 이동한다', () => {

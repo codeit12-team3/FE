@@ -1,9 +1,12 @@
-import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useRouter } from 'next/navigation'
 
-import { QueryProvider } from '@/providers'
-import { GenderType, PostContent } from '@/types/posts'
+import {
+  mockPostDetail as mockPostData,
+  render,
+  renderPost,
+  screen,
+} from '@/tests/utils/post'
 
 import PostDetail from '.'
 import PostDetailSkeleton from '../Skeleton/PostDetailSkeleton'
@@ -88,52 +91,10 @@ beforeEach(() => {
 
 const { usePostDetail } = jest.requireMock('@/api/posts')
 
-const mockPostDetail: PostContent = {
-  title: '함께 일본 여행 가실 분 구합니다',
-  content: '12월에 도쿄에서 맛집 투어와 사진 촬영 같이 하실 분 구해요!',
-  nation: 'JP',
-  region: '도쿄',
-  period: {
-    startDate: '2025-12-15',
-    endDate: '2025-12-17',
-  },
-  stats: {
-    maxMembers: 10,
-    currentMembers: 1,
-    viewCount: 42,
-  },
-  recruitStatus: 'RECRUITING',
-  tags: ['맛집투어', '카페', '사진'],
-  nickname: '여행러버',
-  isOwner: false,
-  conditions: {
-    ageCondition: 'TWENTY',
-    genderCondition: 'MALE',
-  },
-  isBookmarked: false,
-  bookmarkCount: 12,
-  commentCount: 3,
-  images: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
-  writer: {
-    memberId: 1,
-    nickname: '여행러버',
-    profileImage: null,
-    birth: 1998,
-    age: 27,
-    gender: GenderType.MALE,
-    mbti: 'ENFP',
-  },
-  thumbnail: ['https://example.com/thumb.jpg'],
-  createdAt: '2025-12-01T10:00:00Z',
-  updatedAt: '2025-12-05T12:00:00Z',
-  timestamp: '2025-12-05T12:00:00Z',
-}
+const mockPostDetail = mockPostData
+
 const renderPostDetail = (postId: string = '1') => {
-  return render(
-    <QueryProvider>
-      <PostDetail postId={postId} />
-    </QueryProvider>,
-  )
+  return renderPost(<PostDetail postId={postId} />)
 }
 describe('게시글 상세 조회 테스트', () => {
   test('올바른 postId로 접근하면 게시글 상세가 렌더링된다', () => {

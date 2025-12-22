@@ -180,7 +180,6 @@ describe('필터링 테스트', () => {
 })
 
 describe('무한 스크롤 테스트', () => {
-  // 1. IntersectionObserver를 mock해야 합니다
   let mockObserve: jest.Mock
   let mockUnobserve: jest.Mock
   let mockDisconnect: jest.Mock
@@ -191,7 +190,6 @@ describe('무한 스크롤 테스트', () => {
     mockUnobserve = jest.fn()
     mockDisconnect = jest.fn()
 
-    // IntersectionObserver를 mock
     global.IntersectionObserver = jest.fn((callback) => {
       intersectionCallback = callback
       return {
@@ -242,7 +240,6 @@ describe('무한 스크롤 테스트', () => {
 
     renderWithClient(<PostContainer filters={{}} />)
 
-    // IntersectionObserver 콜백을 수동으로 트리거
     intersectionCallback(
       [
         {
@@ -258,7 +255,6 @@ describe('무한 스크롤 테스트', () => {
       {} as IntersectionObserver,
     )
 
-    // fetchNextPage가 호출되었는지 확인
     expect(mockFetchNextPage).toHaveBeenCalled()
   })
 
@@ -277,7 +273,6 @@ describe('무한 스크롤 테스트', () => {
 
     renderWithClient(<PostContainer filters={{}} />)
 
-    // "로딩 중..." 텍스트가 없어야 함
     expect(screen.queryByText('로딩 중...')).not.toBeInTheDocument()
   })
 
