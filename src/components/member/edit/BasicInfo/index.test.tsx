@@ -121,19 +121,14 @@ describe('BasicInfo', () => {
         expectedError: '닉네임은 2자 이상 입력해주세요',
       },
       {
-        description: '특수문자 포함',
-        value: '닉네임!',
-        expectedError: '한글, 영문, 숫자만 사용 가능합니다',
-      },
-      {
         description: '이모지 포함',
         value: '닉네임😀',
-        expectedError: '한글, 영문, 숫자만 사용 가능합니다',
+        expectedError: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
       },
       {
         description: '공백 포함',
         value: '닉 네 임',
-        expectedError: '한글, 영문, 숫자만 사용 가능합니다',
+        expectedError: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
       },
     ]
 

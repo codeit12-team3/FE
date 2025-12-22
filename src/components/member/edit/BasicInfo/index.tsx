@@ -32,7 +32,7 @@ export default function BasicInfo() {
       return
     }
     if (!NICKNAME_REGEX.test(trimmed)) {
-      toast.error('한글, 영문, 숫자만 사용 가능합니다')
+      toast.error('닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다')
       return
     }
 

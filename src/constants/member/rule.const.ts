@@ -1,4 +1,5 @@
-export const NICKNAME_REGEX = /^[a-zA-Z0-9가-힣]+$/
+export const NICKNAME_REGEX =
+  /^[a-zA-Z0-9가-힣!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/
 
 export const NICKNAME_MAX_LENGTH = 15
 
