@@ -90,10 +90,11 @@ export default function EmailFieldset({
         type="email"
         name="email"
         placeholder="이메일을 입력해주세요"
+        disabled={isChecked || isChecking || isSending}
         rightElement={
           <Button
             onClick={handleSendEmailCode}
-            className="w-[158px]"
+            className="w-24"
             type="button"
             size={'md'}
             disabled={isSendEmailCodeDisabled}
@@ -116,7 +117,7 @@ export default function EmailFieldset({
         rightElement={
           <Button
             onClick={handleCheckEmailCode}
-            className="w-[158px]"
+            className="w-24"
             type="button"
             size={'md'}
             disabled={isCheckEmailCodeDisabled}
@@ -130,7 +131,7 @@ export default function EmailFieldset({
         }
         rightContent={formattedTimer}
         autoComplete="one-time-code"
-        disabled={timer === 0}
+        disabled={isChecked || isChecking || isSending || timer === 0}
         required
       />
     </AnimateFieldset>
