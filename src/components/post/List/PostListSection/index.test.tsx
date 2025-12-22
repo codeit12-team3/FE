@@ -7,12 +7,6 @@ import { PostListItem } from '@/types/posts'
 import PostListSection from '.'
 import PostListSkeleton from '../../Skeleton/PostListSkeleton'
 
-jest.mock('@/api/companions', () => ({
-  useApplyCompanion: () => ({
-    mutate: jest.fn(),
-  }),
-}))
-
 jest.mock('@/api/posts/posts.mutations', () => ({
   useAddBookmark: () => ({
     mutateAsync: jest.fn(),

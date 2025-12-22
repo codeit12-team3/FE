@@ -7,12 +7,6 @@ import { PostListItem } from '@/types/posts'
 import PostCardSkeleton from '../../Skeleton/PostCardSkeleton'
 import PostCard from './index'
 
-jest.mock('@/api/companions', () => ({
-  useApplyCompanion: () => ({
-    mutate: jest.fn(),
-  }),
-}))
-
 jest.mock('@/lib/common', () => ({
   ...jest.requireActual('@/lib/common'),
   getImageUrl: jest.fn((url: string | null) => url || '/default-thumbnail.png'),
