@@ -3,11 +3,10 @@
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { FormSelect } from '@/components/form'
+import FormDatePicker from '@/components/form/FormDatePicker'
 import { Label } from '@/components/ui/label'
 import { MBTI_LIST } from '@/constants/member/rule.const'
 import { ProfileEditFormData } from '@/types/member/schema'
-
-import BirthdaySelect from '../BirthdaySelect'
 
 const MBTI_OPTIONS = [
   { value: 'NONE', label: '선택 안함' },
@@ -27,7 +26,12 @@ export default function BirthdayAndMbti() {
   return (
     <div className="flex mt-6 gap-4">
       <div className="flex-1">
-        <BirthdaySelect />
+        <FormDatePicker<ProfileEditFormData>
+          name="birth"
+          label="생년월일"
+          placeholder="생년월일을 선택해주세요"
+          maxDate={new Date()}
+        />
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <Label htmlFor="mbti">MBTI</Label>
