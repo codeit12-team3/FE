@@ -60,8 +60,8 @@ const mockPost: PostListItem = {
   thumbnail: 'https://example.com/thumbnail.jpg',
 }
 
-describe('PostListSection', () => {
-  describe('빈 상태 렌더링', () => {
+describe('PostListSection 테스트', () => {
+  describe('빈 상태 렌더링 테스트', () => {
     test('게시글이 없을 때 "게시글이 없습니다" 메시지가 표시된다', () => {
       render(<PostListSection posts={[]} />)
 
@@ -74,7 +74,7 @@ describe('PostListSection', () => {
       ).toBeInTheDocument()
     })
   })
-  describe('게시글이 있을때', () => {
+  describe('게시글이 존재할때 테스트', () => {
     test('게시글이 랜더링 된다', () => {
       const queryClient = createTestQueryClient()
       render(

@@ -49,7 +49,7 @@ jest.mock('@/api/posts', () => ({
   useCreatePost: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
   useUpdatePost: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
 }))
-describe('PostForm', () => {
+describe('PostForm 작성, 수정 테스트', () => {
   test('add 모드일 때 "게시글 작성" 제목이 보인다', () => {
     render(
       <QueryProvider>
