@@ -61,7 +61,7 @@ export default function BasicInfo() {
             onClick={handleCheckDuplicate}
             disabled={isPending || !nickname}
             variant="secondary"
-            size="sm"
+            size="md"
             className="whitespace-nowrap"
           >
             {isPending ? '확인 중' : '중복확인'}

@@ -148,7 +148,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
                 <Button
                   type="button"
                   size="md"
-                  variant="destructive"
+                  variant="tertiary"
                   onClick={() => {
                     router.push(`/posts/${postId}`)
                   }}
