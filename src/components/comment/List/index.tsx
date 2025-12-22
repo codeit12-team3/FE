@@ -2,7 +2,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
 import { CommentContent } from '@/types/comments/comments.type'
 
-import ErrorFallback from '../ErrorFallback'
+import ErrorFallback from '../Error/ErrorFallback'
 import CommentSkeleton from './CommentItem/CommentSkeleton'
 import CommentWithReplies from './CommentWithReplies'
 

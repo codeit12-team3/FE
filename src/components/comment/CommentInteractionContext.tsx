@@ -88,7 +88,7 @@ export const useCommentInteraction = () => {
   const context = useContext(CommentInteractionContext)
   if (!context) {
     throw new Error(
-      'useCommentInteraction must be used within CommentInteractionProvider',
+      'useCommentInteraction은 CommentInteractionProvider 내부에서만 사용할 수 있습니다.',
     )
   }
   return context

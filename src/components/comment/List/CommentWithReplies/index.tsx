@@ -25,7 +25,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
 
   const { data: session } = useSession()
   const currentUserId = Number(session?.user.memberId)
-
+  console.log(session)
   const { create } = useReplyMutations(postId, parentId)
 
   const handleSubmit = (text: string) => {
@@ -56,6 +56,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
       {!isDeleted && (
         <button
           onClick={handleReplyButtonClick}
+          disabled={isThisReplyFormOpen}
           className="text-sm -tracking-[0.28px] font-normal text-main ml-0 mt-2"
         >
           답글달기

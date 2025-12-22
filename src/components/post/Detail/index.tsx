@@ -93,7 +93,6 @@ export default function PostDetail({ postId }: PostDetailProps) {
       postId,
       applyMessage,
     })
-    console.log('동행 신청 성공')
     setIsApplyModalOpen(false)
     setApplyMessage('')
   }

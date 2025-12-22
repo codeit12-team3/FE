@@ -70,6 +70,7 @@ export default function CommentForm({
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={config.placeholder}
+          disabled={isSubmitting}
           className="flex-1 h-[106px] ring-gray-200 resize-none ring-1 focus-visible:ring-1 focus-visible:ring-blue-500 focus p-4 placeholder:text-gray-500 bg-white text-base"
         />
       </div>

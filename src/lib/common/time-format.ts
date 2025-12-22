@@ -52,8 +52,13 @@ export const formatRelativeTime = (
   if (!date) return ''
 
   const d = dayjs(date)
-
   if (!d.isValid()) return ''
+
+  const now = dayjs()
+
+  if (d.isAfter(now)) {
+    return '방금 전'
+  }
 
   return d.fromNow()
 }

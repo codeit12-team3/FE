@@ -1,6 +1,6 @@
 import { useReplies } from '@/api/comments'
 
-import ErrorFallback from '../../ErrorFallback'
+import ErrorFallback from '../../Error/ErrorFallback'
 import CommentItem from '../CommentItem'
 import CommentItemSkeleton from '../CommentItem/CommentSkeleton'
 

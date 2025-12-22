@@ -35,12 +35,18 @@ export const useCommentActions = (
         commentId: comment.commentId,
         content: editText,
       })
-    } else {
-      commentMutations.update.mutate({
-        commentId: comment.commentId,
-        content: editText,
-      })
     }
+    if (editText === comment.content) {
+      // 내용이 변경되지 않았으면 그냥 취소
+      cancelEdit()
+      return
+    }
+
+    commentMutations.update.mutate({
+      commentId: comment.commentId,
+      content: editText,
+    })
+
     cancelEdit()
   }
 
@@ -53,5 +59,9 @@ export const useCommentActions = (
     handleDelete,
     handleSave,
     handleStartEdit,
+    commentUpdating: commentMutations.update.isPending,
+    commentDeleting: commentMutations.remove.isPending,
+    replyUpdating: replyMutations.update.isPending,
+    replyDeleting: replyMutations.remove.isPending,
   }
 }

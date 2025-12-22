@@ -1,13 +1,11 @@
-import Image from 'next/image'
 import { useParams } from 'next/navigation'
 
-import { Button } from '@/components/common'
-import { Textarea } from '@/components/ui'
-import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
+import { cn } from '@/lib/common'
 import { CommentContent, ReplyContent } from '@/types/comments/comments.type'
 
 import { useCommentInteraction } from '../../CommentInteractionContext'
-import CommentMenu from '../CommentMenu'
+import CommentEditForm from './CommentEditForm'
+import CommentHeader from './CommentHeader'
 import { useCommentActions } from './useCommentActions'
 
 type CommentItemProps = {
@@ -29,66 +27,40 @@ export default function CommentItem({
   const { editText, updateText, cancelEdit, isEditing } =
     useCommentInteraction()
 
-  const { handleDelete, handleSave, handleStartEdit } = useCommentActions(
-    comment,
-    isReply,
-    postId,
-  )
-
+  const {
+    handleDelete,
+    handleSave,
+    handleStartEdit,
+    commentUpdating,
+    replyUpdating,
+  } = useCommentActions(comment, isReply, postId)
+  const isUpdating = isReply ? replyUpdating : commentUpdating
   const editing = isEditing(comment.commentId)
 
-  const { imageUrl, content, updatedAt, createdAt, nickname } = comment
+  const { content } = comment
 
   return (
     <div className={cn('flex flex-col gap-4', editing ? 'p-0' : 'pb-4')}>
-      <div className="flex items-center">
-        <div className="w-10 aspect-square rounded-full overflow-hidden relative">
-          <Image
-            src={
-              imageUrl?.startsWith('blob:') ? imageUrl : getImageUrl(imageUrl)
-            }
-            alt="사용자 이미지"
-            fill
-            className="rounded-full"
-          />
-        </div>
-
-        <div className="flex-1 flex flex-col pl-[15px]">
-          <p className="text-base -tracking-[0.32px]">{nickname}</p>
-          <p className="text-xs text-text-disabled">
-            {formatRelativeTime(updatedAt ?? createdAt)}
-          </p>
-        </div>
-
-        {!editing && (
-          <div className="pr-10">
-            <CommentMenu onConfirm={handleDelete} startEdit={handleStartEdit} />
-          </div>
-        )}
-      </div>
+      <CommentHeader
+        comment={comment}
+        editing={editing}
+        currentUserId={currentUserId}
+        onDelete={handleDelete}
+        onStartEdit={handleStartEdit}
+      />
 
       {editing ? (
-        <>
-          <Textarea
-            value={editText}
-            onChange={(e) => updateText(e.target.value)}
-            className="w-full h-[106px] ring-gray-200 resize-none ring-1 focus-visible:ring-1 focus-visible:ring-blue-500 p-4 bg-white text-base"
-          />
-
-          <div className="w-full flex items-center justify-end gap-2 text-sm">
-            <Button
-              onClick={cancelEdit}
-              className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600"
-            >
-              취소
-            </Button>
-            <Button onClick={handleSave} className="w-26 h-10 rounded-[12px]">
-              수정하기
-            </Button>
-          </div>
-        </>
+        <CommentEditForm
+          editText={editText}
+          onTextChange={updateText}
+          onCancel={cancelEdit}
+          onSave={handleSave}
+          isUpdating={isUpdating}
+        />
       ) : (
-        <p className="w-full text-wrap">{content}</p>
+        <p className="w-full text-wrap whitespace-pre-wrap wrap-break-words">
+          {content}
+        </p>
       )}
     </div>
   )
