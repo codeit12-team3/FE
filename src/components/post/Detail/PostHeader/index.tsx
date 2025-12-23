@@ -30,7 +30,7 @@ export default function PostHeader({
           {tags.map((tag) => (
             <button
               key={tag}
-              className="px-3 py-1.5 bg-blue-50 text-main rounded-full text-xs"
+              className="px-3 py-1.5 bg-blue-50 text-main rounded-full text-xs text-blue-500"
             >
               {tag}
             </button>

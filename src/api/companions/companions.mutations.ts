@@ -21,7 +21,8 @@ export const useApplyCompanion = () => {
   >({
     mutationFn: ({ postId, applyMessage }) =>
       applyCompanion(postId, applyMessage),
-    onSuccess: () => {
+    onSuccess: (_, { postId }) => {
+      queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['companions'] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },

@@ -75,6 +75,7 @@ export interface PostListItem {
     genderCondition: string
   }
   isBookmarked: boolean
+  isApplied: boolean
   thumbnail: string
 }
 export interface PostContent {
@@ -98,6 +99,7 @@ export interface PostContent {
   createdAt: string
   updatedAt: string
   timestamp: string
+  isApplied: boolean
 }
 export interface MyPosts {
   postId: number

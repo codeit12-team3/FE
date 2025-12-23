@@ -21,9 +21,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const applyCompanion = useApplyCompanion()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
-  // TODO: 백엔드에 PostList API에 isApplied 필드 추가 요청 완료
-  // 백엔드 작업 완료 후 post.isApplied로 초기값 설정 필요
-  const [hasApplied, setHasApplied] = useState(false)
+
   const handleToggleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (post.isBookmarked) {
@@ -40,10 +38,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
       },
       {
         onSuccess: () => {
-          setHasApplied(true)
-          alert('동행 신청이 완료되었습니다!')
           setIsModalOpen(false)
-          setApplyMessage('')
         },
       },
     )
@@ -53,7 +48,8 @@ export default function PostCard({ post }: { post: PostListItem }) {
     setIsModalOpen(false)
   }
 
-  const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
+  const TAG_STYLE =
+    'px-3 py-1 bg-blue-50 text-main rounded-full text-xs text-blue-500'
   const CARD_BASE =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow '
 
@@ -163,9 +159,8 @@ export default function PostCard({ post }: { post: PostListItem }) {
             <Button size="md" disabled className="w-34">
               모집종료
             </Button>
-          ) : hasApplied ? (
-            // TODO: 백엔드 작업 후 post.isApplied || hasApplied 조건으로 변경
-            <Button size="md" disabled className="w-34">
+          ) : post.isApplied ? (
+            <Button size="md" variant="secondary" className="w-34">
               신청 취소
             </Button>
           ) : (

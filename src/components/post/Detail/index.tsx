@@ -29,9 +29,6 @@ export default function PostDetail({ postId }: PostDetailProps) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
-  // TODO: 백엔드에 PostDetail API에 isApplied 필드 추가 요청 완료
-  // 백엔드 작업 완료 후 postDetail.isApplied로 초기값 설정 필요
-  const [hasApplied, setHasApplied] = useState(false)
 
   const handleToggleBookmark = () => {
     if (!postDetail) return
@@ -50,10 +47,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
       },
       {
         onSuccess: () => {
-          setHasApplied(true)
-          alert('동행 신청이 완료되었습니다!')
           setIsModalOpen(false)
-          setApplyMessage('')
         },
       },
     )
@@ -83,6 +77,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
     timestamp: postDetail.createdAt,
     stats: { viewCount: postDetail.stats.viewCount },
     commentCount: postDetail.commentCount,
+    isApplied: postDetail.isApplied,
     isBookmarked: postDetail.isBookmarked,
     onToggleBookmark: handleToggleBookmark,
   }
@@ -131,7 +126,7 @@ export default function PostDetail({ postId }: PostDetailProps) {
             ) : (
               <PostActions
                 onApply={() => setIsModalOpen(true)}
-                hasApplied={hasApplied}
+                hasApplied={postDetail.isApplied}
               />
             )}
           </div>
