@@ -57,8 +57,6 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const CARD_BASE =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow '
 
-  const INFO_ROW = 'flex items-center gap-1'
-
   return (
     <div className={CARD_BASE}>
       <div className="flex gap-6">
