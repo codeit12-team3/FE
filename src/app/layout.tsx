@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import 'react-datepicker/dist/react-datepicker.css'
 import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
