@@ -40,6 +40,7 @@ export default function PostHeader({
         <button
           onClick={onToggleBookmark}
           className="hover:scale-90 transition-transform"
+          aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
         >
           <Heart
             className={cn(
@@ -52,7 +53,7 @@ export default function PostHeader({
       </div>
       <h1 className="text-3xl font-bold text-text-base">{title}</h1>
 
-      <div className="flex gap-3 text-sm items-center">
+      <div className="flex gap-3 text-sm items-center mb-8">
         <p className="text-gray-500">
           게시날짜 <span className="text-gray-600">{formatDay(timestamp)}</span>
         </p>
