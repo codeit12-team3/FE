@@ -55,9 +55,8 @@ export default function PostCard({ post }: { post: PostListItem }) {
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 text-main rounded-full text-xs'
   const CARD_BASE =
-    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-input'
-  const LABEL = 'text-text-disabled'
-  const VALUE = 'text-text-base'
+    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow '
+
   const INFO_ROW = 'flex items-center gap-1'
 
   return (
@@ -73,7 +72,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-              <p className="text-white">모집이 마감되었어요.</p>
+              <p className="text-white text-xl font-bold">모집 마감</p>
             </div>
           </div>
         ) : (
@@ -88,63 +87,63 @@ export default function PostCard({ post }: { post: PostListItem }) {
           </div>
         )}
 
-        <div className="flex-1 flex flex-col gap-3">
-          <div className="flex gap-2">
+        <div className="flex-1 flex flex-col ">
+          <div className="flex gap-2.5 mb-3.5">
             {post.tags.map((tag) => (
               <span key={tag} className={TAG_STYLE}>
                 {tag}
               </span>
             ))}
           </div>
+          <div className="px-1">
+            <h3
+              className="text-xl font-bold cursor-pointer mb-1.5"
+              onClick={() => router.push(`/posts/${post.postId}`)}
+            >
+              {post.title}
+            </h3>
 
-          <h3
-            className="text-lg font-semibold text-text-base cursor-pointer"
-            onClick={() => router.push(`/posts/${post.postId}`)}
-          >
-            {post.title}
-          </h3>
-
-          <div className="flex gap-1">
-            <p className="text-sm text-text-disabled">작성자</p>
-            <p className="text-sm text-text-input">{post.nickname}</p>
-          </div>
-
-          <div className="flex text-sm gap-1 mt-6">
-            <User className="w-4 h-4" />
-            <span>{post.currentMembers}명 신청</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-sm text-text-input">
-            <div className={INFO_ROW}>
-              <span className={LABEL}>위치</span>
-              <span className={VALUE}>{NATION_CODE_TO_LABEL[post.nation]}</span>
-              <span className={VALUE}>{post.region}</span>
+            <div className="flex gap-1.5 text-sm">
+              <p className="text-gray-400">작성자</p>
+              <p className="text-gray-600">{post.nickname}</p>
             </div>
+            <div className="flex flex-col gap-2.5 mt-8">
+              <div className="flex text-sm gap-1 ">
+                <User className="w-4 h-4 fill-black" />
+                <span>
+                  <span className="text-blue-500">{post.currentMembers}</span>명
+                  신청
+                </span>
+              </div>
 
-            <span className={LABEL}>|</span>
+              <div className="flex items-center gap-1.5 text-sm text-text-input">
+                <span className="text-gray-400">위치</span>
+                <span className="text-gray-600">
+                  {NATION_CODE_TO_LABEL[post.nation]}
+                </span>
 
-            <div className={INFO_ROW}>
-              <span className={LABEL}>날짜</span>
-              <span className={VALUE}>
-                {new Date(post.period.startDate).toLocaleDateString('ko-KR', {
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </span>
-            </div>
+                <span className="text-gray-300">|</span>
 
-            <span className={LABEL}>|</span>
+                <span className="text-gray-400">날짜</span>
+                <span className="text-gray-600">
+                  {new Date(post.period.startDate).toLocaleDateString('ko-KR', {
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </span>
 
-            <div className={INFO_ROW}>
-              <span className={LABEL}>나이</span>
-              <span className={VALUE}>{post.conditions.ageType}</span>
-            </div>
+                <span className="text-gray-300">|</span>
 
-            <span className={LABEL}>|</span>
+                <span className="text-gray-400">나이</span>
+                <span className="text-gray-600">{post.conditions.ageType}</span>
 
-            <div className={INFO_ROW}>
-              <span className={LABEL}>성별</span>
-              <span className={VALUE}>{post.conditions.genderCondition}</span>
+                <span className="text-gray-300">|</span>
+
+                <span className="text-gray-400">성별</span>
+                <span className="text-gray-600">
+                  {post.conditions.genderCondition}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -152,7 +151,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
         <div className="flex flex-col items-end justify-between">
           <button
             onClick={handleToggleBookmark}
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-50"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
           >
             <Heart
               className={`size-6 ${
@@ -163,26 +162,18 @@ export default function PostCard({ post }: { post: PostListItem }) {
           </button>
 
           {post.recruitStatus === 'COMPLETED' ? (
-            <Button
-              size="md"
-              className="w-39 bg-bg-disabled text-text-disabled"
-              disabled
-            >
+            <Button size="md" disabled className="w-34">
               모집종료
             </Button>
           ) : hasApplied ? (
             // TODO: 백엔드 작업 후 post.isApplied || hasApplied 조건으로 변경
-            <Button
-              size="md"
-              className="w-39 bg-bg-disabled text-text-disabled"
-              disabled
-            >
+            <Button size="md" disabled className="w-34">
               신청 취소
             </Button>
           ) : (
             <Button
               size="md"
-              className="w-39"
+              className="w-34"
               onClick={(e) => {
                 e.stopPropagation()
                 setIsModalOpen(true)
