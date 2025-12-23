@@ -1,9 +1,5 @@
 import Image from 'next/image'
 
-interface RowProps {
-  label: string
-  children: React.ReactNode
-}
 interface WriterProps {
   writer: {
     nickname: string
@@ -14,57 +10,50 @@ interface WriterProps {
   }
 }
 
-const LABEL_STYLE = 'text-text-disabled w-10'
-const VALUE_STYLE = 'text-text-base'
-const ROW_STYLE = 'flex gap-1.5'
-
-function PostWriterRow({ label, children }: RowProps) {
-  return (
-    <div className={ROW_STYLE}>
-      <span className={LABEL_STYLE}>{label}</span>
-      <span className={VALUE_STYLE}>{children}</span>
-    </div>
-  )
-}
-
 export default function PostWriter({ writer }: WriterProps) {
   const { nickname, age, gender, mbti, birth } = writer
 
   return (
-    <div className="flex flex-col p-8 border-2 border-gray-200 rounded-2xl gap-10">
-      <div className="flex gap-6">
-        <Image
-          src="/images/profile-default.png"
-          alt="프로필"
-          width={80}
-          height={80}
-          className="object-cover"
-        />
+    <>
+      <p className="font-semibold mt-10 mb-2 pl-2">여행장</p>
+      <div className="flex flex-col p-8 border border-slate-100 bg-gray-200 rounded-2xl gap-10">
+        <div className="flex gap-5">
+          <Image
+            src="/images/profile-default.png"
+            alt="프로필"
+            width={48}
+            height={48}
+            className="object-cover"
+          />
 
-        <div className="flex flex-col gap-2 mt-1">
-          <div className="flex flex-col items-center">
-            <span className="font-semibold  bg-sub text-main p-1 rounded-full text-sm">
+          <div className="flex flex-col gap-2 items-center mr-14">
+            <span className="font-semibold bg-blue-50 text-blue-500 py-1.5 px-2.5 rounded-full text-xs">
               작성자
             </span>
-            <span className="font-semibold text-text-base text-lg">
-              {nickname}
-            </span>
+            <span className="font-semibold">{nickname}</span>
+          </div>
+          <div className="flex flex-col gap-2 justify-center text-sm">
+            <div className="flex gap-1.5">
+              <span className="w-10 text-gray-600">나이</span>
+              <span className="text-gray-800">
+                {birth}년생 / {age}살
+              </span>
+            </div>
+
+            <div className="flex gap-1.5">
+              <span className="w-10 text-gray-600">성별</span>
+              <span className="text-gray-800">
+                {gender === 'MALE' ? '남성' : '여성'}
+              </span>
+            </div>
+
+            <div className="flex gap-1.5">
+              <span className="w-10 text-gray-600">MBTI</span>
+              <span className="text-gray-800">{mbti}</span>
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex gap-2 text-sm">
-        <div className="flex-col gap-2 justify-center items-center">
-          <PostWriterRow label="나이">
-            {birth}년생 / {age}살
-          </PostWriterRow>
-
-          <PostWriterRow label="성별">
-            {gender === 'MALE' ? '남성' : '여성'}
-          </PostWriterRow>
-
-          <PostWriterRow label="MBTI">{mbti}</PostWriterRow>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }

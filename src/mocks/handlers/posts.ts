@@ -77,6 +77,7 @@ export const postsHandlers = [
             genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
           },
           isApplied: false,
+          isOwner: false,
           isBookmarked: false,
           thumbnail: '/mock.png',
         }

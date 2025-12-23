@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { useApplyCompanion } from '@/api/companions'
@@ -9,11 +8,9 @@ import Comment from '@/components/comment'
 
 import { PostDetailSkeleton } from '..'
 import ApplyModal from './ApplyModal'
-import PostActions from './PostActions'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
 import PostInfo from './PostInfo'
-import PostManage from './PostManage'
 import PostWriter from './PostWriter'
 
 interface PostDetailProps {
@@ -22,7 +19,7 @@ interface PostDetailProps {
 
 export default function PostDetail({ postId }: PostDetailProps) {
   const { data: response, isLoading } = usePostDetail({ postId })
-  const router = useRouter()
+
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
   const applyCompanion = useApplyCompanion()
@@ -80,6 +77,10 @@ export default function PostDetail({ postId }: PostDetailProps) {
     isApplied: postDetail.isApplied,
     isBookmarked: postDetail.isBookmarked,
     onToggleBookmark: handleToggleBookmark,
+    postId,
+    isOwner: postDetail.isOwner,
+    recruitStatus: postDetail.recruitStatus,
+    onOpenApplyModal: () => setIsModalOpen(true),
   }
 
   const infoProps = {
@@ -102,33 +103,16 @@ export default function PostDetail({ postId }: PostDetailProps) {
     birth: postDetail.writer.birth,
   }
   return (
-    <div className="min-h-screen bg-bg-input p-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50  flex items-center justify-center pt-14">
       <div className="max-w-7xl w-full">
         <div className="flex gap-6 items-start justify-center">
-          <div className="w-full max-w-2xl rounded-lg py-8">
+          <div className="w-full max-w-7xl rounded-lg py-8">
             <PostHeader {...headerProps} />
             <PostImages images={postDetail.images} />
             <PostInfo {...infoProps} />
+            <PostWriter writer={writerProps} />
             <div className="bg-gray-300 w-full h-px mt-12" />
             <Comment postId={postId} />
-          </div>
-
-          <div className="w-80 sticky space-y-6 py-8">
-            <PostWriter writer={writerProps} />
-
-            {postDetail.isOwner ? (
-              <PostManage
-                postId={postId}
-                status={postDetail.recruitStatus}
-                onEdit={() => router.push(`/posts/${postId}/edit`)}
-                onChangeStatus={() => {}}
-              />
-            ) : (
-              <PostActions
-                onApply={() => setIsModalOpen(true)}
-                hasApplied={postDetail.isApplied}
-              />
-            )}
           </div>
         </div>
       </div>

@@ -43,9 +43,9 @@ export default function PostManage({
   }
 
   return (
-    <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 space-y-4">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">게시글 관리</h3>
+        <h3 className="text-base font-semibold text-gray-900">게시글 관리</h3>
 
         <Select
           value={status}
@@ -65,7 +65,7 @@ export default function PostManage({
         </Select>
       </div>
 
-      <div className="flex gap-3 ">
+      <div className="flex gap-3">
         <Button
           variant="secondary"
           size="md"

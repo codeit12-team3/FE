@@ -18,23 +18,9 @@ interface Props {
   }
 }
 
-const LABEL_STYLE = 'text-sm text-text-input w-16'
-const VALUE_STYLE = 'text-sm text-text-base'
-const GRID_ROW_STYLE = 'grid grid-cols-2 gap-7'
+const LABEL_STYLE = 'text-sm text-gray-600 w-16'
+const VALUE_STYLE = 'text-sm text-gray-800 font-semibold'
 const FLEX_ROW_STYLE = 'flex gap-1.5'
-
-const InfoSection = ({
-  title,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-}) => (
-  <div>
-    <h3 className="font-semibold pb-2 px-2 text-text-base text-lg">{title}</h3>
-    {children}
-  </div>
-)
 
 const InfoRow = ({
   label,
@@ -59,27 +45,40 @@ export default function Info({
   conditions,
 }: Props) {
   return (
-    <div className="flex flex-col gap-6">
-      <span className="pl-2">{content}</span>
-      <InfoSection title="여행 정보">
-        <div className="bg-bg-disabled rounded-3xl p-6 space-y-3">
-          <div className={GRID_ROW_STYLE}>
-            <InfoRow label="여행 시작">{period.startDate}</InfoRow>
-            <InfoRow label="여행 종료">{period.endDate}</InfoRow>
-          </div>
-          <div className={GRID_ROW_STYLE}>
-            <div className="flex gap-1">
-              <span className={LABEL_STYLE}>여행지</span>
-              <span className="text-sm pl-1">
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 ">여행 정보</h3>
+        <div className=" rounded-3xl p-6  bg-gray-200 ">
+          <div className="flex flex-col gap-2">
+            <InfoRow label="여행 일정">
+              <span className={VALUE_STYLE}>
+                {period.startDate} - {period.endDate}
+              </span>
+            </InfoRow>
+            <InfoRow label="여행지">
+              <span className={VALUE_STYLE}>
                 {NATION_CODE_TO_LABEL[nation] ?? nation}
               </span>
               <span className={VALUE_STYLE}>{region}</span>
-            </div>
-            <InfoRow label="모집 정원">{conditions.ageCondition}</InfoRow>
+            </InfoRow>
           </div>
-          <InfoRow label="모집 조건">{conditions.genderCondition}</InfoRow>
         </div>
-      </InfoSection>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 ">여행 소개</h3>
+        <span className="pl-2 text-sm text-gray-600">{content}</span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 ">동행조건</h3>
+        <div className="pl-2 flex gap-2.5">
+          <span className="px-2.5 py-1.5 text-sm text-gray-600 rounded-lg bg-gray-200">
+            {conditions.genderCondition}
+          </span>
+          <span className="px-2.5 py-1.5 text-sm text-gray-600 rounded-lg bg-gray-200">
+            {conditions.ageCondition}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
