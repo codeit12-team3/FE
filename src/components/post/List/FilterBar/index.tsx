@@ -177,7 +177,7 @@ export default function FilterBar({
             <div className="p-3">
               <DatePicker
                 selected={tempDate}
-                onChange={(date) => {
+                onChange={(date: Date | null) => {
                   setTempDate(date || undefined)
                 }}
                 inline
