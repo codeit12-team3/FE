@@ -57,7 +57,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
         <button
           onClick={handleReplyButtonClick}
           disabled={isThisReplyFormOpen}
-          className="text-sm -tracking-[0.28px] font-normal text-main ml-0 mt-2"
+          className="text-sm -tracking-[0.28px] font-semibold text-gray-500"
         >
           답글달기
         </button>

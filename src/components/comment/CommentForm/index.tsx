@@ -55,15 +55,11 @@ export default function CommentForm({
     >
       <div className="flex items-start gap-[15px]">
         <Image
-          src={
-            data?.image?.startsWith('blob:')
-              ? data.image
-              : getImageUrl(data?.image)
-          }
+          src={getImageUrl(data?.image, true)}
           alt="userprofile"
           width={40}
           height={40}
-          className="rounded-full border border-gray-200 bg-white"
+          className="rounded-full border border-black/5 bg-white"
         />
 
         <Textarea

@@ -12,7 +12,7 @@ export const useReplies = ({ commentId }: { commentId: number }) => {
       fetchReplies({
         commentId,
         lastReplyId: pageParam as number,
-        size: 10,
+        size: 5,
       }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => {

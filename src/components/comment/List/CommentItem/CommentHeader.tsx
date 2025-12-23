@@ -34,7 +34,7 @@ export default function CommentHeader({
     <div className="flex items-center">
       <div className="w-10 aspect-square rounded-full overflow-hidden relative shrink-0">
         <Image
-          src={getImageUrl(imageUrl)}
+          src={getImageUrl(imageUrl, true)}
           alt={`${nickname}의 프로필 이미지`}
           fill
           className="rounded-full object-cover"

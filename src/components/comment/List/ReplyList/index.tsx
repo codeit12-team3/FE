@@ -1,4 +1,7 @@
+import { useState } from 'react'
+
 import { useReplies } from '@/api/comments'
+import ChevronDown from '@/assets/svgr/chevron-down.svg'
 
 import ErrorFallback from '../../Error/ErrorFallback'
 import CommentItem from '../CommentItem'
@@ -13,6 +16,8 @@ export default function ReplyList({
   commentId,
   currentUserId,
 }: ReplyListProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
   const {
     replies,
     fetchNextPage,
@@ -33,33 +38,67 @@ export default function ReplyList({
   }
   if (isLoading) return <CommentItemSkeleton />
 
+  const initialReplies = replies.slice(0, 5)
+  const additionalReplies = replies.slice(5)
+
   return (
-    <div className="pl-10 pt-6 flex flex-col gap-6">
-      {replies.map((reply) => (
-        <CommentItem
-          key={reply.commentId}
-          comment={reply}
-          currentUserId={currentUserId}
-          variant="reply"
-        />
-      ))}
-      {hasNextPage && (
-        <div className="pt-2">
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            className="text-xs font-semibold text-gray-500 hover:text-main flex items-center gap-1 disabled:opacity-50"
-          >
-            <span className="text-[10px]">──</span>
-            {isFetchingNextPage ? '불러오는 중...' : '답글 더보기'}
-          </button>
-          {isError && replies.length > 0 && (
-            <ErrorFallback
-              onRetry={fetchNextPage}
-              message="답글을 불러오는데 실패했습니다."
+    <div className="pl-10 flex flex-col">
+      <div className="pt-6 flex flex-col gap-6">
+        {initialReplies.map((reply) => (
+          <CommentItem
+            key={reply.commentId}
+            comment={reply}
+            currentUserId={currentUserId}
+            variant="reply"
+          />
+        ))}
+      </div>
+
+      {!isCollapsed && (
+        <>
+          {additionalReplies.map((reply) => (
+            <CommentItem
+              key={reply.commentId}
+              comment={reply}
+              currentUserId={currentUserId}
+              variant="reply"
             />
+          ))}
+          {hasNextPage && (
+            <>
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="text-sm font-semibold text-blue-500 flex items-center gap-0.5 disabled:opacity-50"
+              >
+                {isFetchingNextPage ? (
+                  <span>불러오는 중...</span>
+                ) : (
+                  <>
+                    <span>답글 더보기</span>
+                    <ChevronDown />
+                  </>
+                )}
+              </button>
+              {isError && replies.length > 0 && (
+                <ErrorFallback
+                  onRetry={fetchNextPage}
+                  message="답글을 불러오는데 실패했습니다."
+                />
+              )}
+            </>
           )}
-        </div>
+        </>
+      )}
+
+      {!hasNextPage && additionalReplies.length > 0 && (
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="text-sm font-semibold text-blue-500 flex items-center gap-0.5"
+        >
+          <span>{isCollapsed ? '답글 펼치기' : '답글 접기'}</span>
+          <ChevronDown className={isCollapsed ? '' : 'rotate-180'} />
+        </button>
       )}
     </div>
   )
