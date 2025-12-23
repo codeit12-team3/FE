@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { useApplyCompanion } from '@/api/companions'
-import { useAddBookmark, useRemoveBookmark } from '@/api/posts/posts.mutations'
+import {
+  useAddBookmark,
+  useDeletePost,
+  useRemoveBookmark,
+} from '@/api/posts/posts.mutations'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
@@ -21,7 +25,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const applyCompanion = useApplyCompanion()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
-
+  const deletePost = useDeletePost()
   const handleToggleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (post.isBookmarked) {
@@ -155,7 +159,34 @@ export default function PostCard({ post }: { post: PostListItem }) {
             />
           </button>
 
-          {post.recruitStatus === 'COMPLETED' ? (
+          {post.isOwner ? (
+            <div className="flex gap-2">
+              <Button
+                size="md"
+                variant="secondary"
+                className="w-34"
+                onClick={() => router.push(`/posts/${post.postId}/edit`)}
+              >
+                수정하기
+              </Button>
+
+              <Button
+                size="md"
+                variant="tertiary"
+                className="w-34"
+                onClick={() => {
+                  if (!confirm('정말 삭제하시겠어요?')) return
+                  deletePost.mutate(String(post.postId), {
+                    onSuccess: () => {
+                      router.push('/')
+                    },
+                  })
+                }}
+              >
+                삭제하기
+              </Button>
+            </div>
+          ) : post.recruitStatus === 'COMPLETED' ? (
             <Button size="md" disabled className="w-34">
               모집종료
             </Button>

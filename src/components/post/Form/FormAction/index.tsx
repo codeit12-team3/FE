@@ -30,7 +30,7 @@ export default function FormAction({
           variant="tertiary"
           size="md"
           onClick={() => {
-            router.push(`/posts/${postId}`)
+            router.back()
           }}
           className="flex-1"
         >

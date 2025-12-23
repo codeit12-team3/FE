@@ -11,7 +11,7 @@ import {
 } from '@/components/ui'
 import { RecruitStatus } from '@/types/posts'
 
-export default function OwnerPostManageManageCard({
+export default function PostManage({
   postId,
   status,
   onEdit,
