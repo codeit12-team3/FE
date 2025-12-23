@@ -43,10 +43,10 @@ export default function Header() {
 
       <div className="space-y-1">
         <div className="flex items-center justify-between">
-          <label className="font-semibold">
-            여행 태그 <span className="text-main">*</span>
+          <label className="font-semibold text-sm">
+            여행 태그 <span className="text-blue-500">*</span>
           </label>
-          <p className="text-xs text-text-muted">최대 5개</p>
+          <p className="text-sm text-gray-400">최대 5개</p>
         </div>
 
         <FormInput<PostFormWithTagValues>
@@ -67,13 +67,13 @@ export default function Header() {
           {tags.map((tag) => (
             <div
               key={tag}
-              className="flex items-center gap-1 px-2 py-1  text-main rounded-full bg-sub my-2"
+              className="flex items-center gap-1 px-2 py-1  text-blue-500 rounded-full bg-blue-50 my-2"
             >
               <span className="text-xs">{tag}</span>
               <button
                 type="button"
                 onClick={() => void removeTag(tag)}
-                className="text-main hover:text-danger"
+                className="text-blue-500 cursor-pointer"
               >
                 <X className="size-4" />
               </button>
