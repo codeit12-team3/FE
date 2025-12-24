@@ -61,12 +61,12 @@ export default function PostCard({
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500'
   const CARD_BASE =
-    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow max-[744px]:p-0'
+    'bg-white rounded-2xl sm:p-6 shadow-sm hover:shadow-md transition-shadow '
 
   return (
     <div className={CARD_BASE}>
-      <div className="flex gap-6 max-[744px]:flex-col max-[744px]:gap-0">
-        <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-gray-200 max-[744px]:w-full max-[744px]:h-auto max-[744px]:rounded-b-none ">
+      <div className="flex sm:gap-6 sm:flex-row flex-col gap-0">
+        <div className="relative sm:w-[188px] h-[188px] sm:rounded-2xl overflow-hidden shrink-0 bg-gray-200 w-full  rounded-t-2xl ">
           <Image
             key={post.thumbnail}
             src={getImageUrl(post.thumbnail)}
@@ -75,7 +75,7 @@ export default function PostCard({
             height={188}
             priority={priority}
             style={{ width: '100%', height: '100%' }}
-            className="object-cover max-[744px]:aspect-video"
+            className="object-cover aspect-video"
           />
           {post.recruitStatus === 'COMPLETED' && (
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -84,8 +84,8 @@ export default function PostCard({
           )}
         </div>
 
-        <div className="flex-1 flex flex-col max-[744px]:p-4">
-          <div className="flex gap-2.5 mb-3.5 max-[744px]:justify-between max-[744px]:items-center  max-[744px]:mb-4">
+        <div className="flex-1 flex flex-col p-4 sm:p-0">
+          <div className="flex gap-2.5 mb-4 justify-between items-center  ">
             <div className="flex gap-2.5  flex-wrap">
               {post.tags.map((tag) => (
                 <span key={tag} className={TAG_STYLE}>
@@ -95,7 +95,7 @@ export default function PostCard({
             </div>
             <button
               onClick={handleToggleBookmark}
-              className="w-10 h-10 hidden max-[744px]:flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
+              className="w-10 h-10 sm:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
             >
               <Heart
                 className={`size-6 ${
@@ -121,7 +121,7 @@ export default function PostCard({
               <p className="text-gray-400">작성자</p>
               <p className="text-gray-600">{post.nickname}</p>
             </div>
-            <div className="flex flex-col gap-2.5 mt-8 max-[1279px]:mt-6.5  ">
+            <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5  ">
               <div className="flex text-sm gap-1 ">
                 <IconUser className="size-4" />
                 <span>
@@ -130,7 +130,7 @@ export default function PostCard({
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-sm flex-wrap max-[1279px]:text-xs">
+              <div className="flex items-center gap-1.5 xl:text-sm flex-wrap text-xs">
                 <span className="text-gray-400">위치</span>
                 <span className="text-gray-600">
                   {NATION_CODE_TO_LABEL[post.nation]}
@@ -149,7 +149,7 @@ export default function PostCard({
                 <span className="text-gray-300 min-[744px]:max-[1279px]:hidden">
                   |
                 </span>
-                <span className="min-[745px]:max-[1279px]:basis-full min-[744px]:max-[1279px]:w-10" />
+                <span className="min-[744px]:max-[1279px]:basis-full min-[744px]:max-[1279px]:w-10" />
                 <span className="text-gray-400">나이</span>
                 <span className="text-gray-600">{post.conditions.ageType}</span>
 
@@ -164,10 +164,10 @@ export default function PostCard({
           </div>
         </div>
 
-        <div className="flex flex-col items-end justify-between max-[744px]:flex-row max-[744px]:items-center max-[744px]:w-full max-[744px]:px-4 max-[744px]:pb-4 max-[1279px]:gap-2">
+        <div className="flex sm:flex-col sm:items-end sm:p-0 sm:justify-between flex-row items-center px-4 pb-4 gap-2">
           <button
             onClick={handleToggleBookmark}
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer max-[744px]:hidden"
+            className="w-10 h-10 sm:flex items-center justify-center  transition-colors hover:bg-gray-100 cursor-pointer hidden"
           >
             <Heart
               className={`size-6 ${
@@ -178,11 +178,11 @@ export default function PostCard({
           </button>
 
           {post.isOwner ? (
-            <div className="flex gap-2 max-[744px]:order-1 max-[744px]:flex-1 max-[1279px]:gap-1.5">
+            <div className="flex gap-2 sm:flex-none flex-1 ">
               <Button
                 size="md"
                 variant="secondary"
-                className="w-34 max-[744px]:flex-1 max-[1279px]:w-28"
+                className="xl:w-34 flex-1 w-28"
                 onClick={() => router.push(`/posts/${post.postId}/edit`)}
               >
                 수정하기
@@ -191,7 +191,7 @@ export default function PostCard({
               <Button
                 size="md"
                 variant="tertiary"
-                className="w-34 max-[744px]:flex-1 max-[1279px]:w-28"
+                className="xl:w-34 flex-1  w-28"
                 onClick={() => {
                   if (!confirm('정말 삭제하시겠어요?')) return
                   deletePost.mutate(String(post.postId), {
@@ -208,7 +208,7 @@ export default function PostCard({
             <Button
               size="md"
               disabled
-              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
+              className="xl:w-34 flex-1 sm:flex-none w-28"
             >
               모집종료
             </Button>
@@ -216,14 +216,14 @@ export default function PostCard({
             <Button
               size="md"
               variant="secondary"
-              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
+              className="xl:w-34 flex-1 sm:flex-none w-28"
             >
               신청 취소
             </Button>
           ) : (
             <Button
               size="md"
-              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
+              className="xl:w-34 flex-1 sm:flex-none w-28"
               onClick={(e) => {
                 e.stopPropagation()
                 setIsModalOpen(true)
