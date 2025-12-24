@@ -30,7 +30,13 @@ export default function Header() {
     setValue('tags', next, { shouldValidate: true, shouldDirty: true })
     await trigger('tags')
   }
-
+  const handleTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return
+    const v = (e.currentTarget.value ?? '').trim()
+    if (!v) return
+    e.preventDefault()
+    addTag()
+  }
   return (
     <>
       <FormInput<PostFormWithTagValues>
@@ -54,13 +60,7 @@ export default function Header() {
           name="tag"
           placeholder="여행 테마를 입력 후 Enter를 클릭하세요"
           className={tags.length > 0 ? '-mb-6' : ''}
-          onKeyDown={(e) => {
-            if (e.key !== 'Enter') return
-            const v = (e.currentTarget.value ?? '').trim()
-            if (!v) return
-            e.preventDefault()
-            void addTag()
-          }}
+          onKeyDown={handleTag}
         />
 
         <div className="flex flex-wrap gap-2">
@@ -72,7 +72,7 @@ export default function Header() {
               <span className="text-xs">{tag}</span>
               <button
                 type="button"
-                onClick={() => void removeTag(tag)}
+                onClick={() => removeTag(tag)}
                 className="text-blue-500 cursor-pointer"
               >
                 <X className="size-4" />

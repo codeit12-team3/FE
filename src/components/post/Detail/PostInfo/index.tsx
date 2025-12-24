@@ -1,22 +1,5 @@
-import { NATION_CODE_TO_LABEL, NationCode } from '@/constants/posts'
-
-interface Props {
-  nation: NationCode
-  region: string
-  period: {
-    startDate: string
-    endDate: string
-  }
-  content: string
-  stats: {
-    maxMembers: number
-    currentMembers: number
-  }
-  conditions: {
-    ageCondition: string
-    genderCondition: string
-  }
-}
+import { usePostDetail } from '@/api/posts'
+import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 
 const LABEL_STYLE = 'text-sm text-gray-600 w-16'
 const VALUE_STYLE = 'text-sm text-gray-800 font-semibold'
@@ -37,13 +20,12 @@ const InfoRow = ({
   </div>
 )
 
-export default function Info({
-  nation,
-  region,
-  period,
-  content,
-  conditions,
-}: Props) {
+export default function Info({ postId }: { postId: string }) {
+  const { data: post } = usePostDetail({ postId })
+
+  if (!post || !post.success) return null
+
+  const { nation, region, period, content, conditions } = post.data
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">

@@ -1,43 +1,47 @@
 import { Heart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
+import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
 import { cn, formatDay } from '@/lib/common'
 
 import PostActions from '../PostActions'
 import PostManage from '../PostManage'
 
 interface PostHeaderProps {
-  tags: string[]
-  title: string
-  timestamp: string
-  stats: {
-    viewCount: number
-  }
-  commentCount: number
-  isBookmarked: boolean
-  onToggleBookmark: () => void
   postId: string
-  isOwner: boolean
-  isApplied: boolean
-  recruitStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH'
+
   onOpenApplyModal: () => void
 }
 
 export default function PostHeader({
-  tags,
-  title,
-  timestamp,
-  stats,
-  isBookmarked,
-  commentCount,
-  onToggleBookmark,
   postId,
-  isOwner,
-  isApplied,
-  recruitStatus,
   onOpenApplyModal,
 }: PostHeaderProps) {
   const router = useRouter()
+  const { data: post } = usePostDetail({ postId })
+  const addBookmark = useAddBookmark()
+  const removeBookmark = useRemoveBookmark()
+  if (!post || !post.success) return null
+
+  const {
+    tags,
+    title,
+    isOwner,
+    isApplied,
+    isBookmarked,
+    createdAt,
+    stats,
+    recruitStatus,
+    commentCount,
+  } = post.data
+  const handleToggleBookmark = () => {
+    if (isBookmarked) {
+      removeBookmark.mutate(postId)
+    } else {
+      addBookmark.mutate(postId)
+    }
+  }
+
   return (
     <div className="flex flex-col items-start gap-4 pl-2">
       <div className="flex gap-3 justify-between w-full items-center">
@@ -54,7 +58,7 @@ export default function PostHeader({
 
         <div className="flex gap-5">
           <button
-            onClick={onToggleBookmark}
+            onClick={handleToggleBookmark}
             className="hover:scale-90 transition-transform"
             aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
           >
@@ -82,7 +86,7 @@ export default function PostHeader({
 
       <div className="flex gap-3 text-sm items-center mb-8">
         <p className="text-gray-500">
-          게시날짜 <span className="text-gray-600">{formatDay(timestamp)}</span>
+          게시날짜 <span className="text-gray-600">{formatDay(createdAt)}</span>
         </p>
         <span className="text-text-disabled">|</span>
         <p className="text-gray-500">

@@ -1,17 +1,14 @@
 import Image from 'next/image'
 
-interface WriterProps {
-  writer: {
-    nickname: string
-    age: number
-    gender: 'MALE' | 'FEMALE'
-    mbti: string
-    birth: number
-  }
-}
+import { usePostDetail } from '@/api/posts'
 
-export default function PostWriter({ writer }: WriterProps) {
-  const { nickname, age, gender, mbti, birth } = writer
+export default function PostWriter({ postId }: { postId: string }) {
+  const { data: post } = usePostDetail({ postId })
+  if (!post || !post.success) return null
+  const {
+    nickname,
+    writer: { age, gender, mbti, birth },
+  } = post.data
 
   return (
     <>
