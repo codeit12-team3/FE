@@ -1,13 +1,15 @@
+// queries/comments/comments.queries.ts
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { CommentType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
 import { fetchComments } from './comments.clients'
+import { commentKeys } from './comments.keys'
 
 export const useComments = (postId: number) => {
   const query = useInfiniteQuery<ApiResponse<CommentType>>({
-    queryKey: ['comments', postId],
+    queryKey: commentKeys.list(postId),
     queryFn: ({ pageParam }) =>
       fetchComments({ postId, lastCommentId: pageParam as number, size: 10 }),
     initialPageParam: undefined,

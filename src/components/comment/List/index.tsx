@@ -53,7 +53,7 @@ export default function CommentList({
           </div>
         </div>
       )}
-      {isError && comments.length > 0 && (
+      {isError && (
         <ErrorFallback
           message="댓글을 불러오는데 실패했습니다."
           onRetry={() => fetchNextPage}

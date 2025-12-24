@@ -1,11 +1,11 @@
 export interface CommentContent {
   commentId: number
   memberId: number
-  imageUrl: string | null
+  imageUrl: string
   nickname: string
   content: string
-  createdAt: number
-  updatedAt: number | null
+  createdAt: string
+  updatedAt: string
   isUpdated: boolean
   depth: number
 }
@@ -13,11 +13,11 @@ export interface ReplyContent {
   commentId: number
   parentId: number
   memberId: number
-  imageUrl: string | null
+  imageUrl: string
   nickname: string
   content: string
-  createdAt: number
-  updatedAt: number | null
+  createdAt: string
+  updatedAt: string
   isUpdated: boolean
   depth: number
 }

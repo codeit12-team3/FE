@@ -4,8 +4,8 @@ import { useReplies } from '@/api/comments'
 import ChevronDown from '@/assets/svgr/chevron-down.svg'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import CommentItem from '../CommentItem'
 import CommentItemSkeleton from '../CommentItem/CommentSkeleton'
+import ReplyItem from '../CommentItem/ReplyItem'
 
 interface ReplyListProps {
   commentId: number
@@ -45,11 +45,11 @@ export default function ReplyList({
     <div className="pl-10 flex flex-col">
       <div className="pt-6 flex flex-col gap-6">
         {initialReplies.map((reply) => (
-          <CommentItem
+          <ReplyItem
             key={reply.commentId}
-            comment={reply}
+            reply={reply} // ✅ 변경: comment → reply
             currentUserId={currentUserId}
-            variant="reply"
+            // ❌ 제거: variant prop
           />
         ))}
       </div>
@@ -57,11 +57,10 @@ export default function ReplyList({
       {!isCollapsed && (
         <>
           {additionalReplies.map((reply) => (
-            <CommentItem
+            <ReplyItem
               key={reply.commentId}
-              comment={reply}
+              reply={reply}
               currentUserId={currentUserId}
-              variant="reply"
             />
           ))}
           {hasNextPage && (

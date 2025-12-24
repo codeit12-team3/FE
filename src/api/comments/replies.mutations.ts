@@ -1,7 +1,10 @@
+// queries/replies/replies.mutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
+import { commentKeys } from './comments.keys'
 import { createReply, deleteReply, updateReply } from './replies.clients'
+import { replyKeys } from './replies.keys'
 
 export const useReplyMutations = (postId: number, parentId: number) => {
   const queryClient = useQueryClient()
@@ -9,9 +12,9 @@ export const useReplyMutations = (postId: number, parentId: number) => {
   const create = useMutation({
     mutationFn: createReply,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['replies', parentId] })
+      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
       // 부모 댓글의 replyCount 업데이트를 위함
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
     },
     onError: (error) => {
       const message = error?.message || '답글 작성에 실패했습니다'
@@ -22,7 +25,7 @@ export const useReplyMutations = (postId: number, parentId: number) => {
   const update = useMutation({
     mutationFn: updateReply,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['replies', parentId] })
+      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
     },
     onError: (error) => {
       const message = error?.message || '답글 수정에 실패했습니다'
@@ -33,8 +36,8 @@ export const useReplyMutations = (postId: number, parentId: number) => {
   const remove = useMutation({
     mutationFn: deleteReply,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['replies', parentId] })
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
     },
     onError: (error) => {
       const message = error?.message || '답글 삭제에 실패했습니다'

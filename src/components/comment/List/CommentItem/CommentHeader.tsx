@@ -47,7 +47,7 @@ export default function CommentHeader({
         </p>
         <p className="text-xs text-text-disabled">{editTime}</p>
       </div>
-      {isOwner && editing && (
+      {isOwner && (
         <div className="pr-10">
           <CommentMenu onConfirm={onDelete} startEdit={onStartEdit} />
         </div>

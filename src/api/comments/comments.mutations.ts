@@ -1,18 +1,17 @@
+// queries/comments/comments.mutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { useCommentInteraction } from '@/components/comment/CommentInteractionContext'
-
 import { createComment, deleteComment, updateComment } from './comments.clients'
+import { commentKeys } from './comments.keys'
 
 export const useCommentMutations = (postId: number) => {
   const queryClient = useQueryClient()
-  const { cancelEdit } = useCommentInteraction()
 
   const create = useMutation({
     mutationFn: createComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
       toast.success('댓글이 작성되었습니다')
     },
     onError: (error) => {
@@ -24,8 +23,7 @@ export const useCommentMutations = (postId: number) => {
   const update = useMutation({
     mutationFn: updateComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
-      cancelEdit()
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
     },
     onError: (error) => {
       const message = error?.message || '댓글 수정에 실패했습니다'
@@ -36,7 +34,7 @@ export const useCommentMutations = (postId: number) => {
   const remove = useMutation({
     mutationFn: deleteComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
       toast.success('댓글이 삭제되었습니다')
     },
     onError: (error) => {

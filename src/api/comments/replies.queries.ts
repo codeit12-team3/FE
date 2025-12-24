@@ -1,13 +1,15 @@
+// queries/replies/replies.queries.ts
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { ReplyType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
 import { fetchReplies } from './replies.clients'
+import { replyKeys } from './replies.keys'
 
 export const useReplies = ({ commentId }: { commentId: number }) => {
   const query = useInfiniteQuery<ApiResponse<ReplyType>>({
-    queryKey: ['replies', commentId],
+    queryKey: replyKeys.list(commentId),
     queryFn: ({ pageParam }) =>
       fetchReplies({
         commentId,

@@ -6,7 +6,6 @@ import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
 
-import { CommentInteractionProvider } from '@/components/comment/CommentInteractionContext'
 import { Header } from '@/components/common'
 import { Toaster } from '@/components/ui'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
@@ -37,10 +36,8 @@ export default function RootLayout({
           <QueryProvider>
             <SessionProvider refetchOnWindowFocus={false}>
               <LazyMotionProvider>
-                <CommentInteractionProvider>
-                  <Header />
-                  {children}
-                </CommentInteractionProvider>
+                <Header />
+                {children}
               </LazyMotionProvider>
             </SessionProvider>
           </QueryProvider>
