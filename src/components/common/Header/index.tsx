@@ -20,6 +20,8 @@ export default function Header() {
                 alt="Trip us"
                 width={110}
                 height={39}
+                style={{ width: '100%', height: '100%' }}
+                priority
               />
             </Link>
             <nav className="flex gap-8">

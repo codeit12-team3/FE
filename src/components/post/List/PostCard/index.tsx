@@ -19,7 +19,13 @@ import { PostListItem } from '@/types/posts'
 
 import ApplyModal from '../../Detail/ApplyModal'
 
-export default function PostCard({ post }: { post: PostListItem }) {
+export default function PostCard({
+  post,
+  priority = false,
+}: {
+  post: PostListItem
+  priority?: boolean
+}) {
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
@@ -66,7 +72,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
               key={post.thumbnail}
               src={getImageUrl(post.thumbnail)}
               alt={post.title}
-              fill
+              width={188}
+              height={188}
+              priority={priority}
+              style={{ width: '100%', height: '100%' }}
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -79,7 +88,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
               key={post.thumbnail}
               src={getImageUrl(post.thumbnail)}
               alt={post.title}
-              fill
+              width={188}
+              height={188}
+              priority={priority}
+              style={{ width: '100%', height: '100%' }}
               className="object-cover"
             />
           </div>
@@ -101,7 +113,9 @@ export default function PostCard({ post }: { post: PostListItem }) {
               >
                 {post.title}
               </h3>
-              {post.isOwner && <IconCrownSolid className="text-blue-500" />}
+              {post.isOwner && (
+                <IconCrownSolid className="size-6 text-blue-500" />
+              )}
             </div>
             <div className="flex gap-1.5 text-sm">
               <p className="text-gray-400">작성자</p>
@@ -109,7 +123,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
             </div>
             <div className="flex flex-col gap-2.5 mt-8">
               <div className="flex text-sm gap-1 ">
-                <IconUser />
+                <IconUser className="size-4" />
                 <span>
                   <span className="text-blue-500">{post.currentMembers}</span>명
                   신청

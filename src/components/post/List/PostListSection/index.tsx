@@ -16,8 +16,8 @@ export default function PostListSection({ posts }: { posts: PostListItem[] }) {
         </div>
       ) : (
         <div className="space-y-4">
-          {posts.map((post) => (
-            <PostCard key={post.postId} post={post} />
+          {posts.map((post, index) => (
+            <PostCard key={post.postId} post={post} priority={index === 0} />
           ))}
         </div>
       )}

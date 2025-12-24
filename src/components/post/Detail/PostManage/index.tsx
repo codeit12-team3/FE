@@ -68,7 +68,7 @@ export default function PostManage({ postId }: { postId: string }) {
           className="cursor-pointer"
           aria-label="게시글 수정"
         >
-          <IconPencil className="text-gray-400" />
+          <IconPencil className="text-gray-400 size-6" />
         </button>
 
         <button
@@ -76,7 +76,7 @@ export default function PostManage({ postId }: { postId: string }) {
           className="cursor-pointer"
           aria-label="게시글 삭제"
         >
-          <IconTrashLight className="text-gray-400" />
+          <IconTrashLight className="text-gray-400 size-6" />
         </button>
       </div>
     </div>
