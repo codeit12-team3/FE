@@ -14,7 +14,7 @@ export interface ApplyCompanionRes {
 
 export interface UpdateCompanionReq {
   companionId: string
-  status: 'APPROVE' | 'DENIED'
+  status: Exclude<CompanionState, 'PENDING'>
 }
 
 export interface ReceivedCompanionRes {
