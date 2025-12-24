@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
 import { usePostDetail } from '@/api/posts'
@@ -6,14 +5,11 @@ import { getImageUrl } from '@/lib/common'
 
 export default function PostWriter({ postId }: { postId: string }) {
   const { data: post } = usePostDetail({ postId })
-  const { data: session } = useSession()
-
   if (!post || !post.success) return null
   const {
-    writer: { age, gender, mbti, birth, nickname },
+    writer: { age, gender, mbti, birth, nickname, profileImage },
   } = post.data
-  const user = session?.user
-  if (!user) return null
+
   return (
     <>
       <p className="font-semibold mt-10 mb-2 pl-2 text-lg">여행장</p>
@@ -21,7 +17,7 @@ export default function PostWriter({ postId }: { postId: string }) {
         <div className="flex gap-5">
           <div className="w-12 h-12 relative rounded-full overflow-hidden border border-gray-100 shrink-0">
             <Image
-              src={getImageUrl(user.image)}
+              src={getImageUrl(profileImage)}
               alt="user profile"
               fill
               className="object-cover"

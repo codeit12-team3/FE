@@ -158,6 +158,13 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
       expect(image.src).toContain('thumbnail.jpg')
     })
   })
+  describe('신청 인원 렌더링 테스트', () => {
+    test('신청 인원이 화면에 표시된다', () => {
+      renderPostCard()
+      expect(screen.getByText('3', { exact: false })).toBeInTheDocument()
+      expect(screen.getByText('명 신청')).toBeInTheDocument()
+    })
+  })
 
   describe('다양한 데이터로 렌더링 테스트', () => {
     test('긴 제목도 올바르게 표시된다', () => {
