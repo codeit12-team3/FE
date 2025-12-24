@@ -19,9 +19,7 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
         fill
         quality={100}
         sizes="(max-width: 768px) 100vw, 800px"
-        className={cn(
-          'object-cover transition-opacity duration-300 rounded-3xl ',
-        )}
+        className="object-cover transition-opacity duration-300 rounded-3xl "
       />
       <div className="absolute inset-0 rounded-3xl pointer-events-none" />
     </div>
@@ -65,7 +63,7 @@ export default function PostImages({ images }: PostImagesProps) {
             key={index}
             onClick={() => goToSlide(index)}
             className={cn(
-              'w-2 h-2 rounded-full transition-all',
+              'w-2 h-2 rounded-full transition-all cursor-pointer',
               currentIndex === index
                 ? 'bg-white w-2'
                 : 'bg-white/50 hover:bg-white/75',

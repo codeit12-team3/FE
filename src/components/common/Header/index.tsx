@@ -27,18 +27,18 @@ export default function Header() {
                 href="/"
                 className={`text-base transition-colors ${
                   pathname === '/'
-                    ? 'text-main '
-                    : 'text-text-input hover:text-main'
+                    ? 'text-blue-500 '
+                    : 'text-gray-500 hover:text-blue-500'
                 }`}
               >
                 게시판
               </Link>
               <Link
                 href="/chatting"
-                className={`text-base transition-colors ${
+                className={`transition-colors ${
                   pathname === '/chatting'
-                    ? 'text-main font-semibold'
-                    : 'text-text-input hover:text-main'
+                    ? 'text-blue-500 font-semibold'
+                    : 'text-gray-500 hover:text-blue-500'
                 }`}
               >
                 채팅방

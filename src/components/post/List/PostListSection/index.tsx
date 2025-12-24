@@ -10,7 +10,7 @@ export default function PostListSection({ posts }: { posts: PostListItem[] }) {
       {isEmpty ? (
         <div className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2">
           <span className="text-lg font-medium">게시글이 없습니다</span>
-          <span className="text-sm text-text-input">
+          <span className="text-sm text-gray-500">
             새로운 동행 게시글을 작성해보세요!
           </span>
         </div>

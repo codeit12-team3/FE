@@ -1,6 +1,6 @@
 'use client'
 
-import { Heart, User } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -11,6 +11,7 @@ import {
   useDeletePost,
   useRemoveBookmark,
 } from '@/api/posts/posts.mutations'
+import { IconCrownSolid, IconUser } from '@/assets/svgr'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
@@ -52,8 +53,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
     setIsModalOpen(false)
   }
 
-  const TAG_STYLE =
-    'px-3 py-1 bg-blue-50 text-main rounded-full text-xs text-blue-500'
+  const TAG_STYLE = 'px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500'
   const CARD_BASE =
     'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow '
 
@@ -74,7 +74,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
             </div>
           </div>
         ) : (
-          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-bg-disabled">
+          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-gray-200">
             <Image
               key={post.thumbnail}
               src={getImageUrl(post.thumbnail)}
@@ -94,27 +94,29 @@ export default function PostCard({ post }: { post: PostListItem }) {
             ))}
           </div>
           <div className="px-1">
-            <h3
-              className="text-xl font-bold cursor-pointer mb-1.5"
-              onClick={() => router.push(`/posts/${post.postId}`)}
-            >
-              {post.title}
-            </h3>
-
+            <div className="flex gap-1.5">
+              <h3
+                className="text-xl font-bold cursor-pointer mb-1.5"
+                onClick={() => router.push(`/posts/${post.postId}`)}
+              >
+                {post.title}
+              </h3>
+              {post.isOwner && <IconCrownSolid className="text-blue-500" />}
+            </div>
             <div className="flex gap-1.5 text-sm">
               <p className="text-gray-400">작성자</p>
               <p className="text-gray-600">{post.nickname}</p>
             </div>
             <div className="flex flex-col gap-2.5 mt-8">
               <div className="flex text-sm gap-1 ">
-                <User className="w-4 h-4 fill-black" />
+                <IconUser />
                 <span>
                   <span className="text-blue-500">{post.currentMembers}</span>명
                   신청
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-sm text-text-input">
+              <div className="flex items-center gap-1.5 text-sm ">
                 <span className="text-gray-400">위치</span>
                 <span className="text-gray-600">
                   {NATION_CODE_TO_LABEL[post.nation]}
@@ -153,7 +155,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
           >
             <Heart
               className={`size-6 ${
-                post.isBookmarked ? 'fill-main text-main' : 'fill-gray-300'
+                post.isBookmarked ? 'fill-blue-500' : 'fill-gray-300'
               }`}
               strokeWidth={0}
             />

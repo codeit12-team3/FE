@@ -1,14 +1,13 @@
 'use client'
 
 import dayjs from 'dayjs'
-import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { IconArrowDown } from '@/assets/svgr'
+import { IconArrowDown, IconSearch } from '@/assets/svgr'
 import {
   Button,
   InputGroup,
@@ -93,7 +92,7 @@ const FilterDatePicker = ({
       <PopoverTrigger className={triggerClassName}>
         <div className="flex items-center justify-center gap-2 bg-white border border-gray-200 px-3 font-medium rounded-xl h-10 text-sm text-gray-800">
           <span className="text-gray-800">
-            {date ? dayjs(date).format('YYYY년 MM월 DD일') : '날짜'}
+            {date ? `${dayjs(date).format('YYYY년 MM월 DD일')}` : '날짜'}
           </span>
           <IconArrowDown />
         </div>
@@ -168,7 +167,9 @@ export default function FilterBar({
     }, 500)
     return () => clearTimeout(timer)
   }, [keyword, filters, onApply])
+
   const TRIGGER = 'w-22 text-sm text-gray-800 font-medium'
+
   return (
     <div className="max-w-7xl mx-auto p-4 flex gap-2 justify-between">
       <div className="flex gap-2 ">
@@ -215,7 +216,7 @@ export default function FilterBar({
         <FilterDatePicker
           date={filters.date}
           onApply={(date) => applyImmediately({ date })}
-          triggerClassName={TRIGGER}
+          triggerClassName="w-auto min-w-22 text-sm text-gray-800 font-medium"
         />
       </div>
 
@@ -227,7 +228,7 @@ export default function FilterBar({
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
           />
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-input pointer-events-none" />
+          <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
         </InputGroup>
       </div>
 
@@ -236,7 +237,6 @@ export default function FilterBar({
         className="gap-2 w-36"
         onClick={() => router.push('/posts/add')}
       >
-        <Plus className="w-5 h-5" />
         동행 구하기
       </Button>
     </div>

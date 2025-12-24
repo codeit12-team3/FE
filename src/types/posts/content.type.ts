@@ -5,7 +5,6 @@ export enum AgeType {
   THIRTY = 'THIRTY',
   FORTY = 'FORTY',
   FIFTY = 'FIFTY',
-  ETC = 'ETC',
 }
 
 export enum GenderType {

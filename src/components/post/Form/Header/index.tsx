@@ -1,8 +1,8 @@
 'use client'
 
-import { X } from 'lucide-react'
 import { useController, useFormContext } from 'react-hook-form'
 
+import { IconX } from '@/assets/svgr'
 import FormInput from '@/components/form/FormInput'
 import type { PostFormWithTagValues } from '@/types/posts/schema'
 
@@ -75,7 +75,7 @@ export default function Header() {
                 onClick={() => removeTag(tag)}
                 className="text-blue-500 cursor-pointer"
               >
-                <X className="size-4" />
+                <IconX className="size-4" />
               </button>
             </div>
           ))}

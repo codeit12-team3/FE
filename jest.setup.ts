@@ -42,3 +42,18 @@ jest.mock('next/image', () => ({
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
+
+jest.mock('@/assets/svgr', () => {
+  const mockSvg = React.forwardRef<
+    SVGSVGElement,
+    React.SVGProps<SVGSVGElement>
+  >((props, ref) => React.createElement('svg', { ...props, ref }))
+  mockSvg.displayName = 'MockSvg'
+
+  return new Proxy(
+    {},
+    {
+      get: () => mockSvg,
+    },
+  )
+})

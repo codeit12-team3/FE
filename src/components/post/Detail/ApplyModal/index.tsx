@@ -23,7 +23,7 @@ export default function ApplyModal({
         <textarea
           value={message}
           onChange={(e) => onChangeMessage(e.target.value)}
-          className="w-full border border-gray-200 rounded-lg p-3 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full border border-gray-500 rounded-lg p-3 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           placeholder="신청 메시지를 입력해주세요"
           rows={4}
         />

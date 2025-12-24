@@ -15,24 +15,34 @@ jest.mock('uuid', () => ({
   v4: jest.fn(() => 'test-uuid'),
 }))
 
-jest.mock('../Detail/PostManage', () => ({
-  __esModule: true,
-  default: ({ onEdit }: { onEdit: () => void }) => (
-    <div>
-      <div>게시글 관리</div>
-      <button onClick={onEdit}>게시글 수정</button>
-      <button
-        onClick={() => {
-          const { useDeletePost } = jest.requireMock('@/api/posts')
-          const deletePost = useDeletePost()
-          deletePost.mutate()
-        }}
-      >
-        게시글 삭제
-      </button>
-    </div>
-  ),
-}))
+jest.mock('../Detail/PostManage', () => {
+  const MockPostManage = ({ postId }: { postId: string }) => {
+    const { useRouter } = jest.requireMock('next/navigation')
+    const router = useRouter()
+    const { useDeletePost } = jest.requireMock('@/api/posts')
+    const deletePost = useDeletePost()
+
+    return (
+      <div>
+        <div>게시글 관리</div>
+        <button
+          onClick={() => router.push(`/posts/${postId}/edit`)}
+          aria-label="게시글 수정"
+        >
+          게시글 수정
+        </button>
+        <button onClick={() => deletePost.mutate()} aria-label="게시글 삭제">
+          게시글 삭제
+        </button>
+      </div>
+    )
+  }
+
+  return {
+    __esModule: true,
+    default: MockPostManage,
+  }
+})
 
 jest.mock('../Detail/PostActions', () => ({
   __esModule: true,
