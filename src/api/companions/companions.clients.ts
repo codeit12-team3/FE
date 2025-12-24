@@ -43,15 +43,7 @@ export const updateCompanionStatus = async ({
 }
 
 export const cancelCompanion = async (companionId: string) => {
-  const { data } = await axios.delete<ApiResponse<null>>(
-    `/v1/companions/${companionId}`,
-  )
-
-  if (!data.success) {
-    throw new Error(data.data.message)
-  }
-
-  return data
+  await axios.delete(`/v1/companions/${companionId}`)
 }
 
 export const getReceivedCompanion = async (
