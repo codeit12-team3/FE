@@ -26,7 +26,7 @@ export default function RecievedCard({ data, idx }: Props) {
 
   const handleUpdateCompanion = async (
     companionId: string,
-    status: Exclude<CompanionState, 'PENDING'>,
+    status: 'APPROVE' | 'DENIED',
   ) => {
     mutate(
       {

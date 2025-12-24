@@ -1,6 +1,6 @@
 import { NationCode } from '@/constants/posts'
 
-export type CompanionState = 'PENDING' | 'APPROVE' | 'DENIED'
+export type CompanionState = 'PENDING' | 'APPROVED' | 'DENIED'
 
 export interface ApplyCompanionReq {
   postId: string
@@ -9,12 +9,12 @@ export interface ApplyCompanionReq {
 
 export interface ApplyCompanionRes {
   postId: number
-  status: Extract<CompanionState, 'PENDING'>
+  status: 'PENDING'
 }
 
 export interface UpdateCompanionReq {
   companionId: string
-  status: Exclude<CompanionState, 'PENDING'>
+  status: 'APPROVE' | 'DENIED'
 }
 
 export interface ReceivedCompanionRes {
