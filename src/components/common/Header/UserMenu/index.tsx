@@ -1,12 +1,12 @@
 'use client'
 
 import { PopoverClose } from '@radix-ui/react-popover'
-import { LogIn, LogOut, User } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { IconArrowFromShapeRightLight, IconUser } from '@/assets/svgr'
 import {
   Button,
   Popover,
@@ -22,11 +22,7 @@ export default function UserMenu() {
   return session ? (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={'ghost'}
-          size={'icon'}
-          className="flex size-[54px] border-2 border-popover-border rounded-full items-center justify-center"
-        >
+        <button className="flex size-10 shrink-0 border border-gray-300 rounded-full items-center justify-center cursor-pointer">
           <Image
             src={getImageUrl(session?.user.image, true)}
             alt="프로필 이미지"
@@ -34,7 +30,7 @@ export default function UserMenu() {
             height={50}
             className="size-full object-cover rounded-full"
           />
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="max-w-[120px]">
         <div className="flex flex-col">
@@ -45,7 +41,7 @@ export default function UserMenu() {
               className="flex items-center w-full text-xs font-medium justify-between"
               onClick={() => router.push('/member')}
             >
-              내 프로필 <User className="size-4" />
+              내 프로필 <IconUser className="size-4" />
             </Button>
           </PopoverClose>
 
@@ -56,7 +52,7 @@ export default function UserMenu() {
               className="flex items-center w-full text-xs font-medium justify-between"
               onClick={() => signOut()}
             >
-              로그아웃 <LogOut className="size-4" />
+              로그아웃 <IconArrowFromShapeRightLight className="size-4" />
             </Button>
           </PopoverClose>
         </div>
