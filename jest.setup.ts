@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom'
 
+import React from 'react'
+
 import { server } from '@/mocks/server'
 
 beforeAll(() => server.listen())
@@ -19,4 +21,24 @@ jest.mock('next-auth/react', () => ({
   })),
   signIn: jest.fn(),
   signOut: jest.fn(),
+}))
+
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (
+    props: React.ImgHTMLAttributes<HTMLImageElement> & {
+      fill?: boolean
+      priority?: boolean
+      loading?: string
+      quality?: number
+    },
+  ) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { fill, priority, loading, quality, ...imgProps } = props
+    return React.createElement('img', imgProps)
+  },
+}))
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
 }))

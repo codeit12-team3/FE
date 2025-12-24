@@ -161,6 +161,7 @@ export default function FilterBar({
     setFilters(updated)
     onApply({ ...updated, keyword })
   }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onApply({ ...filters, keyword })
