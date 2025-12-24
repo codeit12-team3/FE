@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { PostFilterParams } from '@/types/posts'
 
 import FilterBar from './FilterBar'
-import PostContainer from './PostContatiner'
+import PostContainer from './PostContainer'
 
 export default function PostList() {
   const [appliedFilters, setAppliedFilters] = useState<PostFilterParams>({

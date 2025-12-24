@@ -29,52 +29,58 @@ export default function Info() {
       <div className="flex gap-4 mb-6">
         <div className="w-1/2">
           <Label htmlFor="nation" className="mb-2">
-            국가 <span className="text-destructive">*</span>
+            국가<span className="text-blue-500">*</span>
           </Label>
           <FormSelect
             name="nation"
             options={NATION_OPTIONS}
             placeholder="국가를 선택해주세요"
-            className="w-full"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
 
         <div className="w-1/2">
           <Label htmlFor="region" className="mb-2">
-            도시 <span className="text-destructive">*</span>
+            도시 <span className="text-blue-500">*</span>
           </Label>
           <FormSelect
             name="region"
             options={cityOptions}
             placeholder="도시를 선택해주세요"
-            className="w-full"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
       </div>
 
       <div className="flex gap-4">
-        <FormInput
-          label="모집 정원"
-          type="number"
+        <Controller
           name="maxMembers"
-          placeholder="인원을 입력해주세요"
-          className="w-1/2"
-          onFocus={(e) => {
-            if (e.currentTarget.value === '0') {
-              e.currentTarget.value = ''
-            }
-          }}
-          required
+          control={control}
+          render={({ field }) => (
+            <FormInput
+              label="모집 정원"
+              type="number"
+              name="maxMembers"
+              placeholder="인원을 입력해주세요"
+              className="w-1/2"
+              value={field.value || ''}
+              onChange={(e) => {
+                const value = e.target.value === '' ? 0 : Number(e.target.value)
+                field.onChange(value)
+              }}
+              required
+            />
+          )}
         />
         <div className="w-1/2">
           <Label htmlFor="ageType" className="mb-2">
-            나이 <span className="text-destructive">*</span>
+            나이 <span className="text-blue-500">*</span>
           </Label>
           <FormSelect
             name="ageType"
             options={AGE_OPTIONS}
             placeholder="나이를 선택해주세요"
-            className="w-full"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
       </div>

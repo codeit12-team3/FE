@@ -19,9 +19,7 @@ function PostImageItem({ src, idx }: { src: string; idx: number }) {
         fill
         quality={100}
         sizes="(max-width: 768px) 100vw, 800px"
-        className={cn(
-          'object-cover transition-opacity duration-300 rounded-3xl',
-        )}
+        className="object-cover transition-opacity duration-300 rounded-3xl "
       />
       <div className="absolute inset-0 rounded-3xl pointer-events-none" />
     </div>
@@ -37,12 +35,16 @@ export default function PostImages({ images }: PostImagesProps) {
   }
 
   if (imageList.length === 1) {
-    return <PostImageItem src={imageList[0]} idx={0} />
+    return (
+      <div className="my-8">
+        <PostImageItem src={imageList[0]} idx={0} />
+      </div>
+    )
   }
 
   return (
-    <div className="mb-6 relative group">
-      <div className="relative w-full h-87 rounded-3xl overflow-hidden my-8">
+    <div className="mb-6 relative group ">
+      <div className="relative w-full h-87 rounded-3xl overflow-hidden ">
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -61,7 +63,7 @@ export default function PostImages({ images }: PostImagesProps) {
             key={index}
             onClick={() => goToSlide(index)}
             className={cn(
-              'w-2 h-2 rounded-full transition-all',
+              'w-2 h-2 rounded-full transition-all cursor-pointer',
               currentIndex === index
                 ? 'bg-white w-2'
                 : 'bg-white/50 hover:bg-white/75',

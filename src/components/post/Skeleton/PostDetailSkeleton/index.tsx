@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui'
 
 export default function PostDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-bg-input p-8 flex items-center justify-center">
+    <div className="min-h-screen p-8 flex items-center justify-center">
       <div className="max-w-7xl w-full">
         <div className="flex gap-6 items-start justify-center">
           <div className="w-full max-w-2xl rounded-lg py-8">
@@ -32,7 +32,7 @@ export default function PostDetailSkeleton() {
 
               <div className="mt-4">
                 <Skeleton className="h-6 w-24 mb-2" />
-                <div className="bg-gray-50 rounded-3xl p-6 space-y-4">
+                <div className=" rounded-3xl p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
