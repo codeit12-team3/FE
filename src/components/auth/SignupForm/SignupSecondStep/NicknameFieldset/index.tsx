@@ -52,9 +52,10 @@ export default function NicknameFieldset({
         type="text"
         name="nickname"
         placeholder="닉네임을 입력하세요"
+        disabled={isChecked || isChecking}
         rightElement={
           <Button
-            className="w-[158px]"
+            className="w-24"
             type="button"
             size={'md'}
             disabled={!nickname || !!errors.nickname}

@@ -1,18 +1,19 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Label, Textarea } from '@/components/ui'
 import type { PostFormValues } from '@/types/posts/schema'
 
 export default function Description() {
-  const { watch, setValue } = useFormContext<PostFormValues>()
+  const { control, setValue } = useFormContext<PostFormValues>()
 
-  const content = watch('content') ?? ''
+  const content = useWatch({ control, name: 'content' }) ?? ''
 
   return (
     <div>
-      <Label className="mb-2">모집 설명</Label>
+      <Label>모집 설명</Label>
+
       <Textarea
         value={content}
         onChange={(e) =>
@@ -23,7 +24,11 @@ export default function Description() {
         }
         rows={4}
         placeholder="모집 설명을 입력해주세요"
+        maxLength={500}
       />
+      <div className="flex justify-end pt-1">
+        <span className="text-xs  text-gray-500">({content.length}/500)</span>
+      </div>
     </div>
   )
 }

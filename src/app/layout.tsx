@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} font-sans antialiased text-text-base bg-bg-base min-h-dvh flex flex-col`}
+        className={`${pretendard.variable} font-sans antialiased min-h-dvh flex flex-col`}
       >
         <MSWProvider>
           <QueryProvider>

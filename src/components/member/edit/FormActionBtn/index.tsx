@@ -48,26 +48,26 @@ export default function FormActionBtn() {
   }
 
   return (
-    <div className="flex justify-center gap-7 my-20">
+    <div className="flex justify-center gap-4 mb-10">
       <Button
         type="button"
         variant="secondary"
         size="md"
-        className="w-[185px] text-lg font-extrabold"
+        className="flex-1 text-lg font-extrabold"
         onClick={() => {
           router.back()
         }}
       >
-        나가기
+        취소
       </Button>
       <Button
         type="button"
         size="md"
-        className="w-[185px] text-lg font-extrabold"
+        className="flex-1 text-lg font-extrabold"
         onClick={handleSubmit(onSubmit)}
         disabled={!isDirty || isLoading}
       >
-        프로필 수정하기
+        수정하기
       </Button>
     </div>
   )

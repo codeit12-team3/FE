@@ -10,16 +10,18 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="bg-bg-base">
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="flex items-center justify-between h-[86px]">
-          <div className="flex items-center gap-10">
+    <header className=" border-b border-gray-200 bg-white">
+      <div className="max-w-7xl mx-auto px-8 py-3 ">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-10 ">
             <Link href="/">
               <Image
                 src="/images/logo.png"
                 alt="Trip us"
                 width={110}
                 height={39}
+                style={{ width: '100%', height: '100%' }}
+                priority
               />
             </Link>
             <nav className="flex gap-8">
@@ -27,18 +29,18 @@ export default function Header() {
                 href="/"
                 className={`text-base transition-colors ${
                   pathname === '/'
-                    ? 'text-main '
-                    : 'text-text-input hover:text-main'
+                    ? 'text-blue-500 '
+                    : 'text-gray-500 hover:text-blue-500'
                 }`}
               >
                 게시판
               </Link>
               <Link
                 href="/chatting"
-                className={`text-base transition-colors ${
+                className={`transition-colors ${
                   pathname === '/chatting'
-                    ? 'text-main font-semibold'
-                    : 'text-text-input hover:text-main'
+                    ? 'text-blue-500 font-semibold'
+                    : 'text-gray-500 hover:text-blue-500'
                 }`}
               >
                 채팅방

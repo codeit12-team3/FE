@@ -1,84 +1,66 @@
-import { NATION_CODE_TO_LABEL, NationCode } from '@/constants/posts'
+import { usePostDetail } from '@/api/posts'
+import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 
-interface Props {
-  nation: NationCode
-  region: string
-  period: {
-    startDate: string
-    endDate: string
-  }
-  content: string
-  stats: {
-    maxMembers: number
-    currentMembers: number
-  }
-  conditions: {
-    ageCondition: string
-    genderCondition: string
-  }
-}
+const LABEL_STYLE = 'text-sm text-gray-600 w-16'
+const VALUE_STYLE = 'text-sm text-gray-800 font-semibold'
+const FLEX_ROW_STYLE = 'flex gap-1.5'
 
-const TEXT_STYLE = 'text-sm text-text-input'
-
-const InfoSection = ({
-  title,
+const InfoRow = ({
+  label,
   children,
+  className = '',
 }: {
-  title: string
+  label: string
   children: React.ReactNode
+  className?: string
 }) => (
-  <div>
-    <h3 className="font-semibold mb-2 text-text-base text-lg">{title}</h3>
-    {children}
+  <div className={`${FLEX_ROW_STYLE} ${className}`}>
+    <span className={LABEL_STYLE}>{label}</span>
+    <span className={VALUE_STYLE}>{children}</span>
   </div>
 )
 
-export default function Info({
-  nation,
-  region,
-  period,
-  content,
-  conditions,
-  stats,
-}: Props) {
+export default function Info({ postId }: { postId: string }) {
+  const { data: post } = usePostDetail({ postId })
+
+  if (!post || !post.success) return null
+
+  const { nation, region, period, content, conditions } = post.data
   return (
-    <div className="flex flex-col gap-4 pb-12">
-      <span>{content}</span>
-      <InfoSection title="여행 정보">
-        <div className="bg-bg-disabled rounded-3xl p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>여행 시작</span>
-              <span className="text-sm text-text-base">{period.startDate}</span>
-            </div>
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>여행 종료</span>
-              <span className="text-sm text-text-base">{period.endDate}</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex  gap-1">
-              <span className={TEXT_STYLE}>여행지</span>
-              <span className="text-sm pl-1">
-                {NATION_CODE_TO_LABEL[nation] ?? nation}
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 text-lg">여행 정보</h3>
+        <div className=" rounded-3xl p-6  bg-gray-200 ">
+          <div className="flex flex-col gap-2">
+            <InfoRow label="여행 일정">
+              <span className={VALUE_STYLE}>
+                {period.startDate} - {period.endDate}
               </span>
-              <span className="text-sm text-text-base">{region}</span>
-            </div>
-            <div className="flex  gap-2">
-              <span className={TEXT_STYLE}>모집 정원</span>
-              <span className="text-sm text-text-base">
-                {stats.maxMembers}명
+            </InfoRow>
+            <InfoRow label="여행지">
+              <span className={VALUE_STYLE}>
+                {NATION_CODE_TO_LABEL[nation] ?? nation},
               </span>
-            </div>
-          </div>
-          <div className="flex  gap-2">
-            <span className={TEXT_STYLE}>모집 조건</span>
-            <span className="text-sm text-text-base">
-              {conditions.ageCondition}
-            </span>
+              <span className={VALUE_STYLE}> {region}</span>
+            </InfoRow>
           </div>
         </div>
-      </InfoSection>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 text-lg">여행 소개</h3>
+        <span className="pl-2 text-sm text-gray-600">{content}</span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h3 className="font-semibold pl-2 text-gray-800 text-lg">동행조건</h3>
+        <div className="pl-2 flex gap-2.5">
+          <span className="px-2.5 py-1.5 text-sm text-gray-600 rounded-lg bg-gray-200">
+            {conditions.genderCondition}
+          </span>
+          <span className="px-2.5 py-1.5 text-sm text-gray-600 rounded-lg bg-gray-200">
+            {conditions.ageCondition}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

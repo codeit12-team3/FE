@@ -16,10 +16,13 @@ function Input({
       placeholder={disabled ? undefined : placeholder}
       disabled={disabled}
       className={cn(
-        'file:text-foreground font-medium placeholder:font-medium placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-12 w-full min-w-0 rounded-xl bg-input px-4 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:bg-transparent file:text-sm file:font-medium',
-        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground',
-        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border aria-invalid:border-destructive',
+        'h-14 w-full min-w-0 font-normal border border-gray-200 rounded-2xl bg-white text-gray-800 p-4 text-base transition-[color,box-shadow] outline-none',
+        'placeholder:font-normal placeholder:text-gray-500',
+        'file:text-gray-800 file:inline-flex file:h-7 file:bg-transparent file:text-base file:font-normal',
+        'selection:bg-blue-500 selection:text-gray-800',
+        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500',
+        'focus-visible:border-blue-500 focus-visible:ring-blue-500/40 focus-visible:ring-[3px]',
+        'aria-invalid:ring-red/40 aria-invalid:border-red',
         className,
       )}
       {...props}
