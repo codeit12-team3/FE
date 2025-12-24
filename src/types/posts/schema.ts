@@ -11,7 +11,7 @@ export const postSchema = z
     nation: z.enum(NATION_OPTIONS),
     region: z.string().min(1, '도시를 선택해주세요'),
 
-    maxMembers: z.coerce
+    maxMembers: z
       .number('숫자만 입력 가능합니다')
       .min(1, '모집 정원을 1명 이상 입력해주세요'),
 
