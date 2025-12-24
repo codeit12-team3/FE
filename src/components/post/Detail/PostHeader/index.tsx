@@ -28,6 +28,7 @@ export default function PostHeader({
     isApplied,
     isBookmarked,
     createdAt,
+
     stats,
     commentCount,
   } = post.data
@@ -57,7 +58,11 @@ export default function PostHeader({
           {isOwner ? (
             <PostManage postId={postId} />
           ) : (
-            <PostActions onApply={onOpenApplyModal} hasApplied={isApplied} />
+            <PostActions
+              onApply={onOpenApplyModal}
+              hasApplied={isApplied}
+              postId={postId}
+            />
           )}
           <button
             onClick={handleToggleBookmark}
