@@ -61,67 +61,67 @@ export default function PostCard({
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500'
   const CARD_BASE =
-    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow '
+    'bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow max-[744px]:p-0'
 
   return (
     <div className={CARD_BASE}>
-      <div className="flex gap-6">
-        {post.recruitStatus === 'COMPLETED' ? (
-          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0">
-            <Image
-              key={post.thumbnail}
-              src={getImageUrl(post.thumbnail)}
-              alt={post.title}
-              width={188}
-              height={188}
-              priority={priority}
-              style={{ width: '100%', height: '100%' }}
-              className="object-cover"
-            />
+      <div className="flex gap-6 max-[744px]:flex-col max-[744px]:gap-0">
+        <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-gray-200 max-[744px]:w-full max-[744px]:h-auto max-[744px]:rounded-b-none ">
+          <Image
+            key={post.thumbnail}
+            src={getImageUrl(post.thumbnail)}
+            alt={post.title}
+            width={188}
+            height={188}
+            priority={priority}
+            style={{ width: '100%', height: '100%' }}
+            className="object-cover max-[744px]:aspect-video"
+          />
+          {post.recruitStatus === 'COMPLETED' && (
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
               <p className="text-white text-xl font-bold">모집 마감</p>
             </div>
-          </div>
-        ) : (
-          <div className="relative w-[188px] h-[188px] rounded-2xl overflow-hidden shrink-0 bg-gray-200">
-            <Image
-              key={post.thumbnail}
-              src={getImageUrl(post.thumbnail)}
-              alt={post.title}
-              width={188}
-              height={188}
-              priority={priority}
-              style={{ width: '100%', height: '100%' }}
-              className="object-cover"
-            />
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="flex-1 flex flex-col ">
-          <div className="flex gap-2.5 mb-3.5">
-            {post.tags.map((tag) => (
-              <span key={tag} className={TAG_STYLE}>
-                {tag}
-              </span>
-            ))}
+        <div className="flex-1 flex flex-col max-[744px]:p-4">
+          <div className="flex gap-2.5 mb-3.5 max-[744px]:justify-between max-[744px]:items-center  max-[744px]:mb-4">
+            <div className="flex gap-2.5  flex-wrap">
+              {post.tags.map((tag) => (
+                <span key={tag} className={TAG_STYLE}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <button
+              onClick={handleToggleBookmark}
+              className="w-10 h-10 hidden max-[744px]:flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
+            >
+              <Heart
+                className={`size-6 ${
+                  post.isBookmarked ? 'fill-blue-500' : 'fill-gray-300'
+                }`}
+                strokeWidth={0}
+              />
+            </button>
           </div>
-          <div className="px-1">
+          <div className="px-1 ">
             <div className="flex gap-1.5">
               <h3
-                className="text-xl font-bold cursor-pointer mb-1.5"
+                className="text-xl font-bold cursor-pointer mb-1.5 "
                 onClick={() => router.push(`/posts/${post.postId}`)}
               >
                 {post.title}
               </h3>
               {post.isOwner && (
-                <IconCrownSolid className="size-6 text-blue-500" />
+                <IconCrownSolid className="size-6 text-blue-500 " />
               )}
             </div>
             <div className="flex gap-1.5 text-sm">
               <p className="text-gray-400">작성자</p>
               <p className="text-gray-600">{post.nickname}</p>
             </div>
-            <div className="flex flex-col gap-2.5 mt-8">
+            <div className="flex flex-col gap-2.5 mt-8 max-[1279px]:mt-6.5  ">
               <div className="flex text-sm gap-1 ">
                 <IconUser className="size-4" />
                 <span>
@@ -130,13 +130,13 @@ export default function PostCard({
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-sm ">
+              <div className="flex items-center gap-1.5 text-sm flex-wrap max-[1279px]:text-xs">
                 <span className="text-gray-400">위치</span>
                 <span className="text-gray-600">
                   {NATION_CODE_TO_LABEL[post.nation]}
                 </span>
 
-                <span className="text-gray-300">|</span>
+                <span className="text-gray-300 ">|</span>
 
                 <span className="text-gray-400">날짜</span>
                 <span className="text-gray-600">
@@ -146,8 +146,10 @@ export default function PostCard({
                   })}
                 </span>
 
-                <span className="text-gray-300">|</span>
-
+                <span className="text-gray-300 min-[744px]:max-[1279px]:hidden">
+                  |
+                </span>
+                <span className="min-[745px]:max-[1279px]:basis-full min-[744px]:max-[1279px]:w-10" />
                 <span className="text-gray-400">나이</span>
                 <span className="text-gray-600">{post.conditions.ageType}</span>
 
@@ -162,10 +164,10 @@ export default function PostCard({
           </div>
         </div>
 
-        <div className="flex flex-col items-end justify-between">
+        <div className="flex flex-col items-end justify-between max-[744px]:flex-row max-[744px]:items-center max-[744px]:w-full max-[744px]:px-4 max-[744px]:pb-4 max-[1279px]:gap-2">
           <button
             onClick={handleToggleBookmark}
-            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
+            className="w-10 h-10 flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer max-[744px]:hidden"
           >
             <Heart
               className={`size-6 ${
@@ -176,11 +178,11 @@ export default function PostCard({
           </button>
 
           {post.isOwner ? (
-            <div className="flex gap-2">
+            <div className="flex gap-2 max-[744px]:order-1 max-[744px]:flex-1 max-[1279px]:gap-1.5">
               <Button
                 size="md"
                 variant="secondary"
-                className="w-34"
+                className="w-34 max-[744px]:flex-1 max-[1279px]:w-28"
                 onClick={() => router.push(`/posts/${post.postId}/edit`)}
               >
                 수정하기
@@ -189,7 +191,7 @@ export default function PostCard({
               <Button
                 size="md"
                 variant="tertiary"
-                className="w-34"
+                className="w-34 max-[744px]:flex-1 max-[1279px]:w-28"
                 onClick={() => {
                   if (!confirm('정말 삭제하시겠어요?')) return
                   deletePost.mutate(String(post.postId), {
@@ -203,17 +205,25 @@ export default function PostCard({
               </Button>
             </div>
           ) : post.recruitStatus === 'COMPLETED' ? (
-            <Button size="md" disabled className="w-34">
+            <Button
+              size="md"
+              disabled
+              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
+            >
               모집종료
             </Button>
           ) : post.isApplied ? (
-            <Button size="md" variant="secondary" className="w-34">
+            <Button
+              size="md"
+              variant="secondary"
+              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
+            >
               신청 취소
             </Button>
           ) : (
             <Button
               size="md"
-              className="w-34"
+              className="w-34 max-[744px]:flex-1  max-[1279px]:w-28"
               onClick={(e) => {
                 e.stopPropagation()
                 setIsModalOpen(true)
