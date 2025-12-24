@@ -69,7 +69,6 @@ export const AGE_OPTIONS = [
   { value: 'THIRTY', label: '30대' },
   { value: 'FORTY', label: '40대' },
   { value: 'FIFTY', label: '50대' },
-  { value: 'ETC', label: '기타' },
 ] as const
 
 export const GENDER_OPTIONS = [
@@ -82,14 +81,12 @@ export const AGE_ENUM_TO_LABEL: Record<AgeType, string> = {
   THIRTY: '30대',
   FORTY: '40대',
   FIFTY: '50대',
-  ETC: '기타',
 }
 export const AGE_LABEL_TO_ENUM: Record<string, AgeType> = {
   '20대': AgeType.TWENTY,
   '30대': AgeType.THIRTY,
   '40대': AgeType.FORTY,
   '50대': AgeType.FIFTY,
-  '기타': AgeType.ETC,
 }
 export const GENDER_ENUM_TO_LABEL: Record<GenderType, string> = {
   MALE: '남성만',

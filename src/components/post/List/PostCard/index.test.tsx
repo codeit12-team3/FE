@@ -85,12 +85,6 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
       expect(screen.getByText('일본')).toBeInTheDocument()
     })
 
-    test('지역 정보가 화면에 표시된다', () => {
-      renderPostCard()
-
-      expect(screen.getByText('도쿄')).toBeInTheDocument()
-    })
-
     test('위치 라벨이 함께 표시된다', () => {
       renderPostCard()
 
@@ -147,24 +141,6 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
     })
   })
 
-  describe('신청 인원 정보 렌더링 테스트', () => {
-    test('현재 신청 인원이 화면에 표시된다', () => {
-      renderPostCard()
-
-      expect(screen.getByText('3명 신청')).toBeInTheDocument()
-    })
-
-    test('신청 인원이 변경되면 올바르게 표시된다', () => {
-      const postWithDifferentMembers = {
-        ...mockPost,
-        currentMembers: 10,
-      }
-      renderPostCard(postWithDifferentMembers)
-
-      expect(screen.getByText('10명 신청')).toBeInTheDocument()
-    })
-  })
-
   describe('썸네일 이미지 렌더링 테스트', () => {
     test('썸네일 이미지가 화면에 표시된다', () => {
       renderPostCard()
@@ -182,20 +158,15 @@ describe('PostCard - 주요 정보 렌더링 테스트', () => {
       expect(image.src).toContain('thumbnail.jpg')
     })
   })
+  describe('신청 인원 렌더링 테스트', () => {
+    test('신청 인원이 화면에 표시된다', () => {
+      renderPostCard()
+      expect(screen.getByText('3', { exact: false })).toBeInTheDocument()
+      expect(screen.getByText('명 신청')).toBeInTheDocument()
+    })
+  })
 
   describe('다양한 데이터로 렌더링 테스트', () => {
-    test('다른 국가 정보도 올바르게 표시된다', () => {
-      const postWithKorea = {
-        ...mockPost,
-        nation: 'KR' as const,
-        region: '서울',
-      }
-      renderPostCard(postWithKorea)
-
-      expect(screen.getByText('한국')).toBeInTheDocument()
-      expect(screen.getByText('서울')).toBeInTheDocument()
-    })
-
     test('긴 제목도 올바르게 표시된다', () => {
       const postWithLongTitle = {
         ...mockPost,

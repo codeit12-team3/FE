@@ -1,8 +1,8 @@
 import { useRouter } from 'next/navigation'
 
-import { useDeletePost, usePatchPost } from '@/api/posts'
+import { useDeletePost, usePatchPost, usePostDetail } from '@/api/posts'
+import { IconPencil, IconTrashLight } from '@/assets/svgr'
 import {
-  Button,
   Select,
   SelectContent,
   SelectItem,
@@ -11,85 +11,73 @@ import {
 } from '@/components/ui'
 import { RecruitStatus } from '@/types/posts'
 
-export default function OwnerPostManageManageCard({
-  postId,
-  status,
-  onEdit,
-  onChangeStatus,
-}: {
-  postId: string
-  status: 'RECRUITING' | 'COMPLETED' | 'FINISH'
-  onEdit: () => void
-  onChangeStatus: (v: 'RECRUITING' | 'COMPLETED' | 'FINISH') => void
-}) {
+export default function PostManage({ postId }: { postId: string }) {
+  const { data: post } = usePostDetail({ postId })
   const deletePost = useDeletePost()
   const patchPost = usePatchPost()
   const router = useRouter()
 
+  if (!post || !post.success) return null
+
+  const { recruitStatus } = post.data
+
   const handleStatusChange = (
     newStatus: 'RECRUITING' | 'COMPLETED' | 'FINISH',
   ) => {
-    patchPost.mutate(
-      {
-        postId,
-        recruitStatus: newStatus as RecruitStatus,
+    patchPost.mutate({
+      postId,
+      recruitStatus: newStatus as RecruitStatus,
+    })
+  }
+
+  const handleEdit = () => {
+    router.push(`/posts/${postId}/edit`)
+  }
+
+  const handleDelete = () => {
+    if (!confirm('정말 삭제하시겠어요?')) return
+    deletePost.mutate(postId, {
+      onSuccess: () => {
+        router.push('/')
       },
-      {
-        onSuccess: () => {
-          onChangeStatus(newStatus)
-        },
-      },
-    )
+    })
   }
 
   return (
-    <div className="rounded-2xl border-2 border-gray-200 bg-white p-6 space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">게시글 관리</h3>
+    <div className="flex gap-5 items-center justify-between">
+      <Select
+        value={recruitStatus}
+        onValueChange={(value) =>
+          handleStatusChange(value as 'RECRUITING' | 'COMPLETED' | 'FINISH')
+        }
+        disabled={patchPost.isPending}
+      >
+        <SelectTrigger className="border border-gray-200 rounded-xl" size="sm">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="RECRUITING">모집중</SelectItem>
+          <SelectItem value="COMPLETED">멤버 확정</SelectItem>
+          <SelectItem value="FINISH">여행 종료</SelectItem>
+        </SelectContent>
+      </Select>
 
-        <Select
-          value={status}
-          onValueChange={(value) =>
-            handleStatusChange(value as 'RECRUITING' | 'COMPLETED' | 'FINISH')
-          }
-          disabled={patchPost.isPending}
+      <div className="flex gap-4">
+        <button
+          onClick={handleEdit}
+          className="cursor-pointer"
+          aria-label="게시글 수정"
         >
-          <SelectTrigger className="w-fit">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="RECRUITING">모집중</SelectItem>
-            <SelectItem value="COMPLETED">멤버 확정</SelectItem>
-            <SelectItem value="FINISH">여행 종료</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+          <IconPencil className="text-gray-400 size-6" />
+        </button>
 
-      <div className="flex gap-3 ">
-        <Button
-          variant="secondary"
-          size="md"
-          className="flex-1"
-          onClick={onEdit}
+        <button
+          onClick={handleDelete}
+          className="cursor-pointer"
+          aria-label="게시글 삭제"
         >
-          게시글 수정
-        </Button>
-        <Button
-          type="button"
-          size="md"
-          variant="tertiary"
-          className="flex-1"
-          onClick={() => {
-            if (!confirm('정말 삭제하시겠어요?')) return
-            deletePost.mutate(postId, {
-              onSuccess: () => {
-                router.push('/')
-              },
-            })
-          }}
-        >
-          게시글 삭제
-        </Button>
+          <IconTrashLight className="text-gray-400 size-6" />
+        </button>
       </div>
     </div>
   )

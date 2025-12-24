@@ -1,12 +1,12 @@
 'use client'
 
-import { ImagePlus, X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { uploadPostImages } from '@/api/images/images.client'
+import { IconImagePlus, IconX } from '@/assets/svgr'
 import { Label } from '@/components/ui'
 import { getImageUrl } from '@/lib/common'
 import type { PostFormValues } from '@/types/posts/schema'
@@ -153,12 +153,6 @@ export default function ImageUpload() {
     ...newPreviews.map((url) => ({ kind: 'new' as const, url })),
   ]
 
-  const emptySlotMessages = [
-    '대표 이미지를\n올려주세요',
-    '여행 분위기를\n보여주세요',
-    '여행을 한눈에\n보여줄 사진',
-  ]
-
   const renderImageSlot = (index: number) => {
     const image = combinedImages[index]
 
@@ -183,7 +177,7 @@ export default function ImageUpload() {
             className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10"
             aria-label="이미지 삭제"
           >
-            <X className="size-3 text-white stroke-3" />
+            <IconX className="text-white size-4" />
           </button>
         </>
       )
@@ -191,13 +185,9 @@ export default function ImageUpload() {
 
     return (
       <div
-        className="w-full h-full hover:bg-bg-hover disabled:opacity-50 transition-colors flex items-center justify-center"
+        className="w-full h-full  disabled:opacity-50 transition-colors flex items-center justify-center"
         aria-label="이미지 추가"
-      >
-        <span className="text-xs text-center leading-tight text-text-input whitespace-pre-line">
-          {emptySlotMessages[index]}
-        </span>
-      </div>
+      ></div>
     )
   }
 
@@ -205,7 +195,7 @@ export default function ImageUpload() {
     <div className="mb-6">
       <Label className="mb-2">
         이미지{' '}
-        <span className="text-text-input text-xs">(첫 번째가 대표 이미지)</span>
+        <span className="text-gray-500 text-xs">(첫 번째가 대표 이미지)</span>
       </Label>
 
       <div className="flex gap-3">
@@ -213,16 +203,16 @@ export default function ImageUpload() {
           type="button"
           onClick={openPicker}
           disabled={isUploading || !canAddMore}
-          className="bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center hover:bg-bg-hover disabled:opacity-50 transition-colors"
+          className="bg-gray-200 rounded-xl size-27.5 flex items-center justify-center disabled:opacity-50 transition-colors"
           aria-label="이미지 업로드"
         >
-          <ImagePlus className="size-8 text-text-input" />
+          <IconImagePlus className="size-7 text-gray-500" />
         </button>
 
         {Array.from({ length: MAX_IMAGES }).map((_, index) => (
           <div
             key={index}
-            className="relative bg-bg-disabled rounded-xl size-27.5 flex items-center justify-center overflow-hidden"
+            className="relative  size-27.5 flex items-center justify-center overflow-hidden"
           >
             {renderImageSlot(index)}
           </div>
@@ -238,7 +228,7 @@ export default function ImageUpload() {
         onChange={handleChange}
       />
 
-      <p className="text-muted-foreground font-medium text-sm mt-2">
+      <p className="text-gray-400 font-medium text-sm mt-2">
         최대 3장, 5MB 제한
       </p>
     </div>

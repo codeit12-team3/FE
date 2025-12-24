@@ -5,7 +5,6 @@ export enum AgeType {
   THIRTY = 'THIRTY',
   FORTY = 'FORTY',
   FIFTY = 'FIFTY',
-  ETC = 'ETC',
 }
 
 export enum GenderType {
@@ -74,7 +73,9 @@ export interface PostListItem {
     ageType: string
     genderCondition: string
   }
+  isOwner: boolean
   isBookmarked: boolean
+  isApplied: boolean
   thumbnail: string
 }
 export interface PostContent {
@@ -98,6 +99,7 @@ export interface PostContent {
   createdAt: string
   updatedAt: string
   timestamp: string
+  isApplied: boolean
 }
 export interface MyPosts {
   postId: number

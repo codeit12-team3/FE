@@ -12,7 +12,8 @@ export default function Description() {
 
   return (
     <div>
-      <Label className="mb-2">모집 설명</Label>
+      <Label>모집 설명</Label>
+
       <Textarea
         value={content}
         onChange={(e) =>
@@ -23,7 +24,11 @@ export default function Description() {
         }
         rows={4}
         placeholder="모집 설명을 입력해주세요"
+        maxLength={500}
       />
+      <div className="flex justify-end pt-1">
+        <span className="text-xs  text-gray-500">({content.length}/500)</span>
+      </div>
     </div>
   )
 }

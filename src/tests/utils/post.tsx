@@ -51,6 +51,7 @@ export const mockPostDetail: PostContent = {
   createdAt: '2025-12-01T10:00:00Z',
   updatedAt: '2025-12-05T12:00:00Z',
   timestamp: '2025-12-05T12:00:00Z',
+  isApplied: false,
 }
 
 export const mockPostFormData: PostContent = {
@@ -82,6 +83,7 @@ export const mockPostFormData: PostContent = {
   createdAt: '2025-12-22T00:00:00Z',
   updatedAt: '2025-12-22T00:00:00Z',
   timestamp: '2025-12-22T00:00:00Z',
+  isApplied: false,
 }
 
 export const mockPostListItem: PostListItem = {
@@ -104,6 +106,8 @@ export const mockPostListItem: PostListItem = {
   },
   isBookmarked: false,
   thumbnail: 'https://example.com/thumbnail.jpg',
+  isOwner: false,
+  isApplied: false,
 }
 
 interface PostTestWrapperProps {

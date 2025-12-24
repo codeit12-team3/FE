@@ -17,6 +17,15 @@ jest.mock('@/api/posts/posts.mutations', () => ({
   useRemoveBookmark: () => ({
     mutateAsync: jest.fn(),
   }),
+  useDeletePost: () => ({
+    mutate: jest.fn(),
+  }),
+}))
+
+jest.mock('@/api/companions', () => ({
+  useApplyCompanion: () => ({
+    mutate: jest.fn(),
+  }),
 }))
 
 jest.mock('@/lib/common', () => ({
