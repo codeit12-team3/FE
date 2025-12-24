@@ -26,7 +26,7 @@ export default function RecievedCard({ data, idx }: Props) {
 
   const handleUpdateCompanion = async (
     companionId: string,
-    status: 'APPROVE' | 'DENIED',
+    status: Exclude<CompanionState, 'PENDING'>,
   ) => {
     mutate(
       {
@@ -109,7 +109,7 @@ export default function RecievedCard({ data, idx }: Props) {
           {status === 'PENDING' && (
             <div className="flex items-end gap-2">
               <Button
-                onClick={() => handleUpdateCompanion(companionId, 'APPROVE')}
+                onClick={() => handleUpdateCompanion(companionId, 'APPROVED')}
                 className="md:w-28"
                 size={'md'}
                 disabled={isPending}
