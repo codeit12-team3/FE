@@ -30,16 +30,7 @@ export const updateCompanionStatus = async ({
   companionId,
   status,
 }: UpdateCompanionReq) => {
-  const { data } = await axios.patch<ApiResponse<null>>(
-    `/v1/companions/${companionId}`,
-    { status },
-  )
-
-  if (!data.success) {
-    throw new Error(data.data.message)
-  }
-
-  return data
+  await axios.patch(`/v1/companions/${companionId}`, { status })
 }
 
 export const cancelCompanion = async (companionId: string) => {
