@@ -58,3 +58,16 @@ export const formatRelativeTime = (
 
   return d.fromNow()
 }
+
+/**
+ * xxxx-xx-xx 형식을 xx월 xx일 형식으로 변환
+ * @param dateStr - '2024-05-20' 형태의 문자열
+ * @returns '05월 20일' 또는 '5월 20일'
+ */
+export const formatDateToKorean = (dateStr: string | undefined | null) => {
+  if (!dateStr) return '-'
+
+  // 'M월 D일'은 5월 5일 (한자리 허용)
+  // 'MM월 DD일'은 05월 05일 (두자리 고정)
+  return dayjs(dateStr).format('M월 D일')
+}
