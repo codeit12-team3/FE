@@ -37,7 +37,7 @@ export default function CommentContainer({
   }
 
   return (
-    <div className="max-w-4xl mr-auto flex flex-col border-t border-gray-300">
+    <div className="w-full  flex flex-col">
       <h2 className="text-xl font-bold text-gray-900 py-4">
         댓글 <span className="text-blue-500">{commentCount}</span>
       </h2>

@@ -47,9 +47,8 @@ export default function ReplyList({
         {initialReplies.map((reply) => (
           <ReplyItem
             key={reply.commentId}
-            reply={reply} // ✅ 변경: comment → reply
+            reply={reply}
             currentUserId={currentUserId}
-            // ❌ 제거: variant prop
           />
         ))}
       </div>

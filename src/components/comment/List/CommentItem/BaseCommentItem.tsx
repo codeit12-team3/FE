@@ -1,12 +1,13 @@
 import Image from 'next/image'
-import { useState } from 'react'
 
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
+import { useCommentEdit } from '../../useCommentEdit'
 import CommentMenu from '../CommentMenu'
 import CommentEditForm from './CommentEditForm'
 
 type BaseCommentItemProps = {
+  commentId: number
   imageUrl: string
   nickname: string
   createdAt: string
@@ -20,6 +21,7 @@ type BaseCommentItemProps = {
 }
 
 export default function BaseCommentItem({
+  commentId,
   imageUrl,
   nickname,
   createdAt,
@@ -31,24 +33,9 @@ export default function BaseCommentItem({
   onDelete,
   onSave,
 }: BaseCommentItemProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editText, setEditText] = useState(content)
+  const { isEditing, editText, setEditText, startEdit, cancelEdit, saveEdit } =
+    useCommentEdit(commentId, content, onSave)
 
-  const handleStartEdit = () => {
-    setIsEditing(true)
-    setEditText(content)
-  }
-
-  const handleCancelEdit = () => {
-    setIsEditing(false)
-    setEditText(content)
-  }
-
-  const handleSaveEdit = async () => {
-    await onSave(editText)
-    setIsEditing(false)
-  }
-  console.log(currentUserId)
   const isOwner = memberId === currentUserId
   const editTime =
     createdAt === updatedAt
@@ -76,7 +63,7 @@ export default function BaseCommentItem({
 
         {isOwner && (
           <div className="pr-10">
-            <CommentMenu onConfirm={onDelete} startEdit={handleStartEdit} />
+            <CommentMenu onConfirm={onDelete} startEdit={startEdit} />
           </div>
         )}
       </div>
@@ -85,8 +72,8 @@ export default function BaseCommentItem({
         <CommentEditForm
           editText={editText}
           onTextChange={setEditText}
-          onCancel={handleCancelEdit}
-          onSave={handleSaveEdit}
+          onCancel={cancelEdit}
+          onSave={saveEdit}
           isUpdating={isUpdating}
         />
       ) : (

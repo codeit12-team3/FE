@@ -1,11 +1,11 @@
 import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
 
 import { useReplyMutations } from '@/api/comments'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentWriteForm from '../../CommentForm'
+import { useCommentReply } from '../../useCommentReply'
 import CommentItem from '../CommentItem/CommentItem'
 import ReplyList from '../ReplyList'
 
@@ -20,7 +20,9 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
   const postId = Number(params.postId)
   const parentId = comment.commentId
 
-  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false)
+  const { isReplying, startReply, cancelReply } = useCommentReply(
+    comment.commentId,
+  )
 
   const { data: session } = useSession()
   const currentUserId = Number(session?.user.memberId)
@@ -32,15 +34,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
       parentId,
       content: text,
     })
-    setIsReplyFormOpen(false)
-  }
-
-  const handleReplyButtonClick = () => {
-    setIsReplyFormOpen(true)
-  }
-
-  const handleCancel = () => {
-    setIsReplyFormOpen(false)
+    cancelReply()
   }
 
   const isDeleted = comment.content === DELETED_COMMENT_TEXT
@@ -51,19 +45,19 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
 
       {!isDeleted && (
         <button
-          onClick={handleReplyButtonClick}
-          disabled={isReplyFormOpen}
+          onClick={startReply}
+          disabled={isReplying}
           className="text-sm -tracking-[0.28px] font-semibold text-gray-500 disabled:opacity-50"
         >
           답글달기
         </button>
       )}
 
-      {isReplyFormOpen && (
+      {isReplying && (
         <div className="pl-10 pt-6">
           <CommentWriteForm
             parentId={parentId}
-            onCancel={handleCancel}
+            onCancel={cancelReply}
             onSubmit={handleSubmit}
             isSubmitting={create.isPending}
           />

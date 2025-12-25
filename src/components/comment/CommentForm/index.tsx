@@ -77,13 +77,18 @@ export default function CommentForm({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
+            variant="secondary"
             className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600"
           >
             취소
           </Button>
         )}
 
-        <Button className="w-26 h-10 rounded-[12px]" type="submit">
+        <Button
+          variant="default"
+          className="w-26 h-10 rounded-[12px] bg-blue-500"
+          type="submit"
+        >
           {config.submitText}
         </Button>
       </div>

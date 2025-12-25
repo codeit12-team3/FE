@@ -50,7 +50,7 @@ export default function CommentEditForm({
         <Button
           onClick={onSave}
           disabled={isSaveDisabled}
-          className="w-26 h-10 rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-26 h-10 rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500"
         >
           {isUpdating ? '수정 중...' : '수정하기'}
         </Button>
