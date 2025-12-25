@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
-import { useCommentEdit } from '../../useCommentEdit'
+import { useCommentInteractionStore } from '../../useCommentInteractionStore'
 import CommentMenu from '../CommentMenu'
 import CommentEditForm from './CommentEditForm'
 
@@ -33,14 +33,22 @@ export default function BaseCommentItem({
   onDelete,
   onSave,
 }: BaseCommentItemProps) {
-  const { isEditing, editText, setEditText, startEdit, cancelEdit, saveEdit } =
-    useCommentEdit(commentId, content, onSave)
+  const isEditing = useCommentInteractionStore((state) =>
+    state.isEditing(commentId),
+  )
+  const openInteraction = useCommentInteractionStore((state) => state.open)
+  const closeInteraction = useCommentInteractionStore((state) => state.close)
 
   const isOwner = memberId === currentUserId
   const editTime =
     createdAt === updatedAt
       ? formatRelativeTime(createdAt)
-      : formatRelativeTime(updatedAt) + ` (수정됨)`
+      : formatRelativeTime(updatedAt) + ` • 수정됨`
+
+  const handleSaveEdit = async (text: string) => {
+    await onSave(text)
+    closeInteraction()
+  }
 
   return (
     <div className={cn('flex flex-col gap-4', isEditing ? 'p-0' : 'pb-4')}>
@@ -58,22 +66,26 @@ export default function BaseCommentItem({
           <p className="text-base -tracking-[0.32px] font-medium truncate">
             {nickname}
           </p>
-          <p className="text-xs text-text-disabled">{editTime}</p>
+          <p className="text-xs text-text-disabled text-[#a4a4a4]">
+            {editTime}
+          </p>
         </div>
 
         {isOwner && (
           <div className="pr-10">
-            <CommentMenu onConfirm={onDelete} startEdit={startEdit} />
+            <CommentMenu
+              onConfirm={onDelete}
+              startEdit={() => openInteraction(commentId, 'EDIT')}
+            />
           </div>
         )}
       </div>
 
       {isEditing ? (
         <CommentEditForm
-          editText={editText}
-          onTextChange={setEditText}
-          onCancel={cancelEdit}
-          onSave={saveEdit}
+          initialContent={content}
+          onCancel={closeInteraction}
+          onSave={handleSaveEdit}
           isUpdating={isUpdating}
         />
       ) : (

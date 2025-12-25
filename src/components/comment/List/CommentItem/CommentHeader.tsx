@@ -22,7 +22,6 @@ export default function CommentHeader({
 }: CommentHeaderProps) {
   const { imageUrl, nickname, updatedAt, createdAt, memberId } = comment
 
-  // 본인 댓글만 수정/삭제 가능
   const isOwner = memberId === currentUserId
   const editTime =
     createdAt === updatedAt

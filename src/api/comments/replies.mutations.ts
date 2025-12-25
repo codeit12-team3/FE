@@ -1,10 +1,9 @@
-// queries/replies/replies.mutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { commentKeys } from './comments.keys'
+import { commentKeys } from './key/comments.keys'
+import { replyKeys } from './key/replies.keys'
 import { createReply, deleteReply, updateReply } from './replies.clients'
-import { replyKeys } from './replies.keys'
 
 export const useReplyMutations = (postId: number, parentId: number) => {
   const queryClient = useQueryClient()

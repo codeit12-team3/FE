@@ -1,4 +1,3 @@
-// api/comments/replies.clients.ts
 import { ReplyType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 

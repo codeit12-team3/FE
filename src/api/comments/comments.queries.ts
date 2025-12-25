@@ -5,7 +5,7 @@ import { CommentType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
 import { fetchComments } from './comments.clients'
-import { commentKeys } from './comments.keys'
+import { commentKeys } from './key/comments.keys'
 
 export const useComments = (postId: number) => {
   const query = useInfiniteQuery<ApiResponse<CommentType>>({

@@ -1,9 +1,8 @@
-// queries/comments/comments.mutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { createComment, deleteComment, updateComment } from './comments.clients'
-import { commentKeys } from './comments.keys'
+import { commentKeys } from './key/comments.keys'
 
 export const useCommentMutations = (postId: number) => {
   const queryClient = useQueryClient()

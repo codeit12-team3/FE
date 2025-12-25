@@ -1,37 +1,39 @@
+import { useState } from 'react'
+
 import { Button } from '@/components/common'
 import { Textarea } from '@/components/ui'
 
 interface CommentEditFormProps {
-  editText: string
-  onTextChange: (text: string) => void
+  initialContent: string
   onCancel: () => void
-  onSave: () => void
+  onSave: (text: string) => void
   isUpdating: boolean
 }
 
 export default function CommentEditForm({
-  editText,
-  onTextChange,
+  initialContent,
   onCancel,
   onSave,
   isUpdating,
 }: CommentEditFormProps) {
+  const [text, setText] = useState(initialContent)
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault()
-      if (editText.trim() && !isUpdating) {
-        onSave()
+      if (text.trim() && !isUpdating) {
+        onSave(text)
       }
     }
   }
 
-  const isSaveDisabled = !editText.trim() || isUpdating
+  const isSaveDisabled = !text.trim() || isUpdating
 
   return (
     <>
       <Textarea
-        value={editText}
-        onChange={(e) => onTextChange(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={isUpdating}
         placeholder="댓글을 입력해주세요"
@@ -48,7 +50,7 @@ export default function CommentEditForm({
           취소
         </Button>
         <Button
-          onClick={onSave}
+          onClick={() => onSave(text)}
           disabled={isSaveDisabled}
           className="w-26 h-10 rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500"
         >

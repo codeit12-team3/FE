@@ -26,7 +26,7 @@ function DeleteDialog({
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="border-none rounded-3xl">
+      <AlertDialogContent className="border-none rounded-3xl bg-white">
         <AlertDialogHeader>
           <AlertDialogTitle>정말 삭제할까요?</AlertDialogTitle>
           <AlertDialogDescription>
