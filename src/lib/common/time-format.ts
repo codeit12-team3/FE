@@ -8,10 +8,10 @@ dayjs.extend(duration)
 dayjs.extend(relativeTime)
 dayjs.locale('ko')
 
-/**
- * 초(seconds)를 입력받아 'mm:ss' 또는 'HH:mm:ss' 형식의 문자열로 반환
- * 0 이하일 경우 빈 문자열 반환
- * @param seconds 초
+/*
+  초(seconds)를 입력받아 'mm:ss' 또는 'HH:mm:ss' 형식의 문자열로 반환
+  0 이하일 경우 빈 문자열 반환
+  @param seconds 초
  */
 export const formatTimer = (seconds: number) => {
   if (!seconds || seconds <= 0) return ''
@@ -30,9 +30,9 @@ export const formatTimer = (seconds: number) => {
 
   return `${pad(minutes)}:${pad(secs)}`
 }
-/**
- * 날짜를 yyyy.mm.dd 형태로 변환
- **/
+/*
+  날짜를 yyyy.mm.dd 형태로 변환
+ */
 export const formatDay = (
   date?: string | number | Date | null,
   format: string = 'YYYY.MM.DD',
@@ -45,9 +45,23 @@ export const formatDay = (
   return d.format(format)
 }
 
-/**
- * 날짜 → 상대시간 반환
- * 예: 방금 전, 3분 전, 1시간 전, 2일 전
+/*
+  날짜 → 'YYYY. MM. DD. HH:mm' 형식으로 변환
+ */
+export const formatDateTime = (
+  date?: string | number | Date | null,
+): string => {
+  if (!date) return ''
+
+  const d = dayjs(date)
+  if (!d.isValid()) return ''
+
+  return d.format('YYYY. MM. DD. HH:mm')
+}
+
+/*
+  날짜 → 상대시간 반환
+  예: 방금 전, 3분 전, 1시간 전, 2일 전
  */
 export const formatRelativeTime = (
   date?: string | number | Date | null,
