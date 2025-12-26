@@ -17,7 +17,7 @@ const renderToast = (message: string, type: ToastType, duration: number) => {
     (id) => (
       <div
         onClick={() => sonnerToast.dismiss(id)}
-        className="flex items-center justify-center gap-2 rounded-[12px] bg-black/60 px-10 py-2.5 text-white text-xs font-bold"
+        className="flex items-center justify-center gap-2 rounded-xl bg-black/60 px-10 py-2.5 text-white text-xs font-bold"
       >
         {TOAST_ICON_MAP[type]}
         <span className="truncate">{message}</span>
