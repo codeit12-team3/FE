@@ -1,11 +1,6 @@
 import Image from 'next/image'
 
-import {
-  cn,
-  formatDateTime,
-  formatRelativeTime,
-  getImageUrl,
-} from '@/lib/common'
+import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
 import { useCommentInteractionStore } from '../../useCommentInteractionStore'
 import CommentMenu from '../CommentMenu'
@@ -28,8 +23,6 @@ type BaseCommentItemProps = {
 }
 
 const DELETED_COMMENT_TEXT = '삭제된 댓글입니다'
-
-// ... 기존 import 생략
 
 export default function BaseCommentItem({
   commentId,
@@ -69,7 +62,7 @@ export default function BaseCommentItem({
 
   return (
     <div className={cn('flex items-start', isEditing ? 'p-0' : 'pb-4')}>
-      <div className="w-10 aspect-square rounded-full overflow-hidden relative shrink-0">
+      <div className="w-10 aspect-square rounded-full overflow-hidden relative shrink-0 text-base -tracking-[0.32px] font-normal">
         <Image
           src={getImageUrl(imageUrl, true)}
           alt={`${nickname}의 프로필 이미지`}
@@ -78,22 +71,17 @@ export default function BaseCommentItem({
         />
       </div>
 
-      <div className="w-full flex flex-col gap-4 pl-[15px]">
+      <div className="w-full flex flex-col justify-center gap-4 pl-[15px]">
         <div className="flex items-center">
           <div className="flex-1 flex flex-col min-w-0">
-            <p className="text-base -tracking-[0.32px] font-medium truncate">
-              {nickname}
-            </p>
-            <p className="text-sm text-[#a4a4a4]">{editTime}</p>
+            <p className="font-semibold truncate">{nickname}</p>
           </div>
 
           {isOwner && (
-            <div className="pr-10">
-              <CommentMenu
-                onConfirm={onDelete}
-                startEdit={() => openInteraction(commentId, 'EDIT')}
-              />
-            </div>
+            <CommentMenu
+              onConfirm={onDelete}
+              startEdit={() => openInteraction(commentId, 'EDIT')}
+            />
           )}
         </div>
         {/* 답글은 답글 영역이 열려 있을 때만 수정 가능  */}
@@ -111,8 +99,8 @@ export default function BaseCommentItem({
         )}
 
         {!isEditing && (
-          <div className="flex items-center gap-3 text-sm font-normal text-gray-500">
-            <span>{formatDateTime(createdAt)}</span>
+          <div className="flex items-center gap-3 text-sm text-gray-500">
+            <span>{editTime}</span>
             {onReply && !isDeleted && (
               <button onClick={() => openInteraction(commentId, 'REPLY')}>
                 답글 달기

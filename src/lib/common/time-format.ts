@@ -46,20 +46,6 @@ export const formatDay = (
 }
 
 /*
-  날짜 → 'YYYY. MM. DD. HH:mm' 형식으로 변환
- */
-export const formatDateTime = (
-  date?: string | number | Date | null,
-): string => {
-  if (!date) return ''
-
-  const d = dayjs(date)
-  if (!d.isValid()) return ''
-
-  return d.format('YYYY. MM. DD. HH:mm')
-}
-
-/*
   날짜 → 상대시간 반환
   예: 방금 전, 3분 전, 1시간 전, 2일 전
  */
