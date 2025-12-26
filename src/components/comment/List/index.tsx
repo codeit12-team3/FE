@@ -1,5 +1,6 @@
+import { Virtuoso } from 'react-virtuoso'
+
 import { Spinner } from '@/components/ui/spinner'
-import { useInfiniteScroll } from '@/lib/common/useInfiniteScroll'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import ErrorFallback from '../Error/ErrorFallback'
@@ -23,16 +24,15 @@ export default function CommentList({
   isFetchingNextPage,
   isError,
 }: CommentListProps) {
-  const observerRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    threshold: 0.1,
-  })
-
+  const handleEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
   if (isLoading) {
     return <CommentSkeleton />
   }
+
   if (comments.length === 0) {
     return (
       <div className="py-12 text-center text-gray-500">
@@ -40,25 +40,36 @@ export default function CommentList({
       </div>
     )
   }
+
+  if (isError) {
+    return (
+      <ErrorFallback
+        message="댓글을 불러오는데 실패했습니다."
+        onRetry={() => fetchNextPage()}
+      />
+    )
+  }
+
   return (
-    <div className="flex flex-col gap-6">
-      {comments.map((comment) => (
-        <CommentWithReplies key={comment.commentId} comment={comment} />
-      ))}
-      {hasNextPage && !isError && (
-        <div ref={observerRef} className="py-4 text-center">
-          <div className="text-sm text-gray-500 flex items-center justify-center gap-2">
-            <Spinner />
-            <p>댓글 불러오는 중...</p>
-          </div>
+    <Virtuoso
+      useWindowScroll
+      data={comments}
+      endReached={handleEndReached}
+      itemContent={(index, comment) => (
+        <div className="pb-6">
+          <CommentWithReplies key={comment.commentId} comment={comment} />
         </div>
       )}
-      {isError && (
-        <ErrorFallback
-          message="댓글을 불러오는데 실패했습니다."
-          onRetry={() => fetchNextPage}
-        />
-      )}
-    </div>
+      components={{
+        Footer: () => {
+          return isFetchingNextPage ? (
+            <div className="py-4 text-center flex items-center justify-center gap-2">
+              <Spinner />
+              <p className="text-sm text-gray-500">댓글 불러오는 중...</p>
+            </div>
+          ) : null
+        },
+      }}
+    />
   )
 }
