@@ -21,7 +21,7 @@ export const renderToast = (
     (id) => (
       <div
         onClick={() => sonnerToast.dismiss(id)}
-        className="flex items-center justify-center gap-2 rounded-[12px] bg-black/60 w-[222px] h-11 text-white text-xs font-bold"
+        className="flex items-center justify-center gap-2 rounded-[12px] bg-black/60 px-10 py-2.5 text-white text-xs font-bold"
       >
         {TOAST_ICON_MAP[type]}
         <span className="truncate">{message}</span>
@@ -48,6 +48,7 @@ export const Toaster = () => {
       }}
       offset={40}
       gap={8}
+      visibleToasts={5}
     />
   )
 }
