@@ -8,15 +8,11 @@ export type ToastType = 'default' | 'success' | 'error'
 
 const TOAST_ICON_MAP: Record<ToastType, ReactNode> = {
   default: null,
-  success: <CheckCircle className="h-6 w-6 text-green-400" />,
-  error: <ErrorCircle className="h-6 w-6 text-red-400" />,
+  success: <CheckCircle className="h-6 w-6" />,
+  error: <ErrorCircle className="h-6 w-6" />,
 }
 
-export const renderToast = (
-  message: string,
-  type: ToastType,
-  duration: number,
-) => {
+const renderToast = (message: string, type: ToastType, duration: number) => {
   sonnerToast.custom(
     (id) => (
       <div
