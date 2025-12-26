@@ -41,8 +41,9 @@ export default function CommentContainer({
       <h2 className="text-xl font-bold text-gray-900 py-4">
         댓글 <span className="text-blue-500">{commentCount}</span>
       </h2>
-
-      <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
+      <div className="pb-[34px]">
+        <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
+      </div>
       {isError ? (
         <ErrorFallback
           message="댓글을 불러오는데 실패했습니다."

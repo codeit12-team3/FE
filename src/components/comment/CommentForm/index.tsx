@@ -49,10 +49,7 @@ export default function CommentForm({
   }
 
   return (
-    <form
-      className="w-full flex flex-col gap-2 pb-[34px]"
-      onSubmit={handleSubmit}
-    >
+    <form className="w-full flex flex-col gap-2 " onSubmit={handleSubmit}>
       <div className="flex items-start gap-[15px]">
         <Image
           src={getImageUrl(data?.image, true)}
