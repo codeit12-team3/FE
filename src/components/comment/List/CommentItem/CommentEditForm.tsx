@@ -45,14 +45,14 @@ export default function CommentEditForm({
         <Button
           onClick={onCancel}
           disabled={isUpdating}
-          className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+          className="w-26 h-10 rounded-xl border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50"
         >
           취소
         </Button>
         <Button
           onClick={() => onSave(text)}
           disabled={isSaveDisabled}
-          className="w-26 h-10 rounded-[12px] disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500"
+          className="w-26 h-10 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500"
         >
           {isUpdating ? '수정 중...' : '수정하기'}
         </Button>

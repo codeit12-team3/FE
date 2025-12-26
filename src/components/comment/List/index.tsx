@@ -4,7 +4,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import ErrorFallback from '../Error/ErrorFallback'
-import CommentSkeleton from './CommentItem/CommentSkeleton'
+import BaseCommentItemSkeleton from './CommentItem/BaseCommentSkeleton'
 import CommentWithReplies from './CommentWithReplies'
 
 interface CommentListProps {
@@ -30,7 +30,13 @@ export default function CommentList({
     }
   }
   if (isLoading) {
-    return <CommentSkeleton />
+    return (
+      <div className="flex flex-col gap-6">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <BaseCommentItemSkeleton key={index} showReplies={true} />
+        ))}
+      </div>
+    )
   }
 
   if (comments.length === 0) {

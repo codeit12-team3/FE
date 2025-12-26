@@ -1,6 +1,5 @@
 'use client'
 
-import CommentItemSkeleton from '@/components/comment/List/CommentItem/CommentSkeleton'
 import { Skeleton } from '@/components/ui'
 
 export default function PostDetailSkeleton() {
@@ -47,7 +46,6 @@ export default function PostDetailSkeleton() {
             </div>
 
             <div className="bg-gray-300 w-full h-px mt-12" />
-            <CommentItemSkeleton />
           </div>
 
           <div className="w-80 sticky space-y-6 py-8">

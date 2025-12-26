@@ -34,12 +34,12 @@ function DeleteDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="border-gray-300 hover:bg-gray-100 bg-white text-gray-600 h-10 rounded-[12px] text-sm ring-1 ring-gray-300">
+          <AlertDialogCancel className="border-gray-300 hover:bg-gray-100 bg-white text-gray-600 h-10 rounded-xl text-sm ring-1 ring-gray-300">
             취소
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-red-500 hover:bg-red-600 h-10 rounded-[12px] text-sm"
+            className="bg-red-500 hover:bg-red-600 h-10 rounded-xl text-sm"
           >
             삭제
           </AlertDialogAction>
@@ -64,16 +64,16 @@ export default function CommentMenu({
         <PopoverTrigger>
           <IconDotsVertical className="w-6 h-6" />
         </PopoverTrigger>
-        <PopoverContent className="p-1 w-22 flex flex-col rounded-[12px]">
+        <PopoverContent className="p-1 w-22 flex flex-col rounded-xl">
           <button
             onClick={startEdit}
-            className="p-2.5 text-xs text-left hover:bg-blue-50 rounded-[8px]"
+            className="p-2.5 text-xs text-left hover:bg-blue-50 rounded-lg"
           >
             댓글 수정
           </button>
           <button
             onClick={() => setOpen(true)}
-            className="p-2.5 text-xs text-left text-red-500 hover:bg-red-50 rounded-[8px]"
+            className="p-2.5 text-xs text-left text-red-500 hover:bg-red-50 rounded-lg"
           >
             댓글 삭제
           </button>

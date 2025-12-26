@@ -15,7 +15,6 @@ interface CommentHeaderProps {
 
 export default function CommentHeader({
   comment,
-  editing,
   currentUserId,
   onDelete,
   onStartEdit,

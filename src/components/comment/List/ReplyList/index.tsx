@@ -2,7 +2,7 @@ import { useReplies } from '@/api/comments'
 import ChevronDown from '@/assets/svgr/chevron-down.svg'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import CommentItemSkeleton from '../CommentItem/CommentSkeleton'
+import BaseCommentItemSkeleton from '../CommentItem/BaseCommentSkeleton'
 import ReplyItem from '../CommentItem/ReplyItem'
 
 interface ReplyListProps {
@@ -34,7 +34,15 @@ export default function ReplyList({
       />
     )
   }
-  if (isLoading) return <CommentItemSkeleton />
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <BaseCommentItemSkeleton key={index} showReplies={true} />
+        ))}
+      </div>
+    )
+  }
 
   const initialReplies = replies.slice(0, 5)
   const additionalReplies = replies.slice(5)
