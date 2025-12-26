@@ -7,8 +7,8 @@ import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
 
 import 'dayjs/locale/ko'
 
-import Image from 'next/image'
-
+import { IconArrowLeft, IconArrowRight } from '@/assets/svgr'
+import { Button } from '@/components/ui'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/common/cn'
 
@@ -85,12 +85,7 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             aria-label="이전 12년"
           >
-            <Image
-              src="/images/Icon-date-left.svg"
-              alt="이전"
-              width={20}
-              height={20}
-            />
+            <IconArrowLeft width={20} height={20} />
           </button>
 
           <h2 className="text-lg font-semibold text-gray-900">
@@ -103,12 +98,7 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             aria-label="다음 12년"
           >
-            <Image
-              src="/images/Icon-date-right.svg"
-              alt="다음"
-              width={20}
-              height={20}
-            />
+            <IconArrowRight width={20} height={20} />
           </button>
         </div>
 
@@ -132,20 +122,15 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
         </div>
 
         <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="md"
             onClick={onCancel}
-            className="flex-1 w-35.2 h-10 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm cursor-pointer"
+            className="flex-1"
           >
             취소
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('date')}
-            className="flex-1 w-35.2 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm cursor-pointer"
-          >
-            확인
-          </button>
+          </Button>
         </div>
       </div>
     )
@@ -160,12 +145,7 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           aria-label="이전 달"
         >
-          <Image
-            src="/images/Icon-date-left.svg"
-            alt="이전"
-            width={20}
-            height={20}
-          />
+          <IconArrowLeft width={20} height={20} />
         </button>
 
         <button
@@ -182,12 +162,7 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           aria-label="다음 달"
         >
-          <Image
-            src="/images/Icon-date-right.svg"
-            alt="다음"
-            width={20}
-            height={20}
-          />
+          <IconArrowRight width={20} height={20} />
         </button>
       </div>
       <div className="grid grid-cols-7 mb-2">
@@ -243,20 +218,24 @@ const CalendarPopup: React.FC<CalendarPopupProps> = ({
       </div>
 
       <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
-        <button
+        <Button
           type="button"
+          variant="secondary"
+          size="md"
           onClick={onCancel}
-          className="flex-1 w-35.2 h-10 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm cursor-pointer"
+          className="flex-1"
         >
           취소
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="default"
+          size="md"
           onClick={onConfirm}
-          className="flex-1 w-35.2 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm cursor-pointer"
+          className="flex-1"
         >
           확인
-        </button>
+        </Button>
       </div>
     </div>
   )
