@@ -76,6 +76,8 @@ export const postsHandlers = [
             ageType: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
             genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
           },
+          isApplied: false,
+          isOwner: false,
           isBookmarked: false,
           thumbnail: '/mock.png',
         }
@@ -333,7 +335,7 @@ export const postsHandlers = [
       timeStamp: '2025-12-02',
     })
   }),
-  http.patch(`${MOCK_URL}/v1/posts/:postId`, async ({ params, request }) => {
+  http.patch(`${MOCK_URL}/v1/posts/:postId`, async ({ params }) => {
     await delay(2000)
 
     const { postId } = params

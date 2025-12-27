@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useCreatePost, useUpdatePost } from '@/api/posts'
 import {
@@ -105,7 +104,6 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         { postId, payload: updatePayload },
         {
           onSuccess: () => {
-            toast.success('게시글이 수정되었습니다.')
             router.push(`/posts/${postId}`)
           },
         },
@@ -127,7 +125,6 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
 
       createPost.mutate(createPayload, {
         onSuccess: () => {
-          toast.success('게시글이 등록되었습니다.')
           router.push('/')
         },
       })

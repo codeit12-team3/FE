@@ -5,16 +5,18 @@ type PresetType = 'profile' | 'post'
 
 const COMPRESSION_PRESETS: Record<PresetType, Options> = {
   profile: {
-    maxSizeMB: 0.5,
-    maxWidthOrHeight: 512,
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1024,
     useWebWorker: true,
-    initialQuality: 0.85,
+    initialQuality: 0.9,
+    alwaysKeepResolution: false,
   },
   post: {
-    maxSizeMB: 1.5,
+    maxSizeMB: 3,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
-    initialQuality: 0.85,
+    initialQuality: 0.9,
+    alwaysKeepResolution: false,
   },
 }
 
@@ -60,15 +62,26 @@ export default function useImageCompress(
 
       const compressedFile = await imageCompression(file, options)
 
-      const preview = URL.createObjectURL(compressedFile)
-      setPreviewUrl(preview)
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+
+      const newPreviewUrl = URL.createObjectURL(compressedFile)
+      setPreviewUrl(newPreviewUrl)
+
+      const originalSize = file.size
+      const compressedSize = compressedFile.size
+      const ratio =
+        originalSize > 0
+          ? Number(((1 - compressedSize / originalSize) * 100).toFixed(1))
+          : 0
 
       const result: CompressResult = {
         file: compressedFile,
-        previewUrl: preview,
-        originalSize: file.size,
-        compressedSize: compressedFile.size,
-        ratio: Number(((1 - compressedFile.size / file.size) * 100).toFixed(1)),
+        previewUrl: newPreviewUrl,
+        originalSize,
+        compressedSize,
+        ratio,
       }
 
       return result
@@ -82,7 +95,9 @@ export default function useImageCompress(
   }
 
   const reset = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
     setPreviewUrl(null)
     setError(null)
   }

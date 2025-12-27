@@ -4,8 +4,8 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
+import { toast } from '@/components/common/Toast'
 import { ApiResponse } from '@/types/common'
 import {
   FetchMyPosts,
@@ -85,6 +85,7 @@ export const useCreatePost = () => {
       queryClient.invalidateQueries({
         queryKey: ['posts'],
       })
+      toast.success('게시글이 등록되었습니다.')
     },
     onError: () => {
       toast.error('게시글 등록에 실패했습니다.')
@@ -107,6 +108,7 @@ export const useUpdatePost = () => {
       queryClient.invalidateQueries({
         queryKey: ['postDetail', postId],
       })
+      toast.success('게시글이 수정되었습니다.')
     },
     onError: () => {
       toast.error('게시글 수정에 실패했습니다.')
@@ -125,6 +127,7 @@ export const useDeletePost = () => {
       queryClient.invalidateQueries({
         queryKey: ['posts'],
       })
+      toast.success('게시글이 삭제 되었습니다.')
     },
     onError: () => {
       toast.error('게시글 삭제에 실패했습니다.')

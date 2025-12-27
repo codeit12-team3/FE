@@ -27,9 +27,10 @@ export default function FormAction({
       {isEdit && postId ? (
         <Button
           type="button"
+          variant="tertiary"
           size="md"
           onClick={() => {
-            router.push(`/posts/${postId}`)
+            router.back()
           }}
           className="flex-1"
         >
@@ -38,6 +39,7 @@ export default function FormAction({
       ) : (
         <Button
           type="button"
+          variant="tertiary"
           size="md"
           onClick={() => router.push('/')}
           className="flex-1 border border-text-disabled "
