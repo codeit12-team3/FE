@@ -12,7 +12,7 @@ const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   return (
-    <div className="relative w-full h-87 rounded-3xl overflow-hidden">
+    <div className="relative w-full h-87 rounded-3xl overflow-hidden shrink-0">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
@@ -36,7 +36,7 @@ export default function PostImages({ images }: PostImagesProps) {
 
   if (imageList.length === 1) {
     return (
-      <div className="my-8">
+      <div>
         <PostImageItem src={imageList[0]} idx={0} />
       </div>
     )
@@ -44,7 +44,7 @@ export default function PostImages({ images }: PostImagesProps) {
 
   return (
     <div className="mb-6 relative group ">
-      <div className="relative w-full h-87 rounded-3xl overflow-hidden ">
+      <div className="relative w-full  rounded-3xl overflow-hidden ">
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
