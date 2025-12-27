@@ -64,39 +64,3 @@
   /* Firefox */
   scrollbar-width: none;
 }
-
-/* 기본 토스트 컨테이너 스타일 */
-[data-sonner-toast] {
-  --radius: 12px;
-  background-color: white !important;
-  border: 1px solid #f0f1f2 !important; /* gray-200 */
-  border-radius: var(--radius) !important;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
-  padding: 16px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  color: #2b323a !important; /* gray-800 */
-  font-size: 0.875rem !important;
-  font-weight: 500 !important;
-}
-
-/* 성공(Success) 토스트 스타일 */
-[data-sonner-toast][data-type='success'] {
-  background-color: #edf4fb !important; /* blue-50 */
-  color: #498cf8 !important; /* blue-500 */
-}
-
-[data-sonner-toast][data-type='success'] [data-icon] {
-  color: #498cf8 !important;
-}
-
-/* 에러(Error) 토스트 스타일 */
-[data-sonner-toast][data-type='error'] {
-  background-color: #fef2f2 !important; /* red-50 */
-  color: #ef4444 !important; /* red-500 */
-}
-
-[data-sonner-toast][data-type='error'] [data-icon] {
-  color: #ef4444 !important;
-}
