@@ -42,7 +42,7 @@ export default function SentList() {
 
       {companions.map((item, idx) => (
         <SentCard
-          key={`${companions}-${item.myGuestCompanionResponse.companionId}`}
+          key={item.myGuestCompanionResponse.companionId}
           data={item}
           idx={idx}
         />

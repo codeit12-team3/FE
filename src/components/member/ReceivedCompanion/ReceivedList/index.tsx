@@ -42,7 +42,7 @@ export default function RecievedList() {
 
       {companions.map((item, idx) => (
         <RecievedCard
-          key={`${companions}-${item.guestCompanionResponse.companionId}`}
+          key={item.guestCompanionResponse.companionId}
           data={item}
           idx={idx}
         />
