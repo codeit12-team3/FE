@@ -23,8 +23,6 @@ export default function BirthdayAndMbti() {
     name: 'mbti',
   })
 
-  const eventDates = [new Date(1991, 8, 15), new Date(1991, 8, 6)]
-
   return (
     <div className="flex mt-6 gap-4">
       <div className="flex-1">
@@ -32,7 +30,6 @@ export default function BirthdayAndMbti() {
           name="birth"
           label="생년월일"
           placeholder="생년월일을 선택해주세요"
-          eventsOnDates={eventDates}
           maxDate={new Date()}
         />
       </div>
