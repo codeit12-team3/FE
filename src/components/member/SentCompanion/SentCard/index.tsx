@@ -81,7 +81,7 @@ export default function SentCard({ data, idx }: Props) {
                 'text-sm font-medium',
                 status === 'PENDING' && 'text-gray-700',
                 status === 'DENIED' && 'text-red',
-                status === 'APPROVE' && 'text-blue-600',
+                status === 'APPROVED' && 'text-blue-600',
               )}
             >
               {COMPANION_STATUS_LABEL[status]}
