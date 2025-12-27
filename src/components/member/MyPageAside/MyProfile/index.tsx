@@ -20,7 +20,7 @@ export default function MyProfile() {
   const { data, isPending } = useMyProfileQuery()
 
   return (
-    <section className="relative flex flex-col gap-4 rounded-4xl px-6 py-8 bg-white broder border-gray-200">
+    <section className="relative flex flex-col gap-4 rounded-4xl px-6 py-8 bg-white border border-gray-200">
       {!data || isPending ? (
         <ProfileSkeleton />
       ) : (
