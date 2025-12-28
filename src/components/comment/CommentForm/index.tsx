@@ -1,9 +1,9 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { useMyProfileQuery } from '@/api/member/member.queries'
 import { Button } from '@/components/common'
 import { Textarea } from '@/components/ui'
 import { getImageUrl } from '@/lib/common/image'
@@ -32,7 +32,7 @@ export default function CommentForm({
   onCancel,
   isSubmitting,
 }: CommentWriteFormProps) {
-  const { data } = useMyProfileQuery()
+  const { data: session } = useSession()
   const [text, setText] = useState('')
 
   const isReply = !!parentId
@@ -52,11 +52,11 @@ export default function CommentForm({
     <form className="w-full flex flex-col gap-2 " onSubmit={handleSubmit}>
       <div className="flex items-start gap-[15px]">
         <Image
-          src={getImageUrl(data?.image, true)}
+          src={getImageUrl(session?.user.image, true)}
           alt="userprofile"
           width={40}
           height={40}
-          className="rounded-full border border-black/5 bg-white"
+          className="size-10 rounded-full border border-gray-200 bg-white"
         />
 
         <Textarea
@@ -75,7 +75,7 @@ export default function CommentForm({
             onClick={onCancel}
             disabled={isSubmitting}
             variant="secondary"
-            className="w-26 h-10 rounded-[12px] border border-gray-300 bg-white text-gray-600"
+            className="w-26 h-10 rounded-xl border border-gray-300 bg-white text-gray-600"
           >
             취소
           </Button>
@@ -83,7 +83,7 @@ export default function CommentForm({
 
         <Button
           variant="default"
-          className="w-26 h-10 rounded-[12px] bg-blue-500"
+          className="w-26 h-10 rounded-xl bg-blue-500"
           type="submit"
         >
           {config.submitText}

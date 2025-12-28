@@ -11,19 +11,6 @@ import {
 import PostDetail from '.'
 import PostDetailSkeleton from '../Skeleton/PostDetailSkeleton'
 
-jest.mock('@/assets/svgr/reload.svg', () => ({
-  __esModule: true,
-  default: () => <svg data-testid="reload-icon" />,
-}))
-
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  useParams: jest.fn(),
-  useSearchParams: jest.fn(() => ({
-    get: jest.fn(),
-  })),
-}))
-
 jest.mock('uuid', () => ({
   v4: jest.fn(() => 'test-uuid'),
 }))
@@ -93,14 +80,17 @@ jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(),
 }))
 
+jest.mock('@/components/comment', () => ({
+  __esModule: true,
+  default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
+}))
+
 const mockPush = jest.fn()
 
 beforeEach(() => {
   jest.clearAllMocks()
   ;(useRouter as jest.Mock).mockReturnValue({
     push: mockPush,
-    replace: jest.fn(),
-    back: jest.fn(),
   })
   ;(useParams as jest.Mock).mockReturnValue({
     postId: '1',
@@ -124,7 +114,6 @@ const mockPostDetail = mockPostData
 const renderPostDetail = (postId: string = '1') => {
   return renderPost(<PostDetail postId={postId} />)
 }
-
 describe('게시글 상세 조회 테스트', () => {
   test('올바른 postId로 접근하면 게시글 상세가 렌더링된다', () => {
     usePostDetail.mockReturnValue({
@@ -133,7 +122,6 @@ describe('게시글 상세 조회 테스트', () => {
         data: mockPostDetail,
       },
       isLoading: false,
-      isError: false, // 명시적 추가
     })
 
     renderPostDetail()
@@ -148,7 +136,6 @@ describe('게시글 상세 조회 테스트', () => {
         data: null,
       },
       isLoading: false,
-      isError: true, // 에러 상황 가정
     })
 
     renderPostDetail()
@@ -160,7 +147,6 @@ describe('게시글 상세 조회 테스트', () => {
     expect(skeleton).toBeInTheDocument()
   })
 })
-
 describe('북마크 토글 테스트', () => {
   test('북마크 버튼 클릭시 북마크가 추가 된다', async () => {
     const mockAddBookmark = jest.fn()
@@ -176,7 +162,6 @@ describe('북마크 토글 테스트', () => {
         data: { ...mockPostDetail, isBookmarked: false },
       },
       isLoading: false,
-      isError: false,
     })
 
     renderPostDetail()
@@ -201,7 +186,6 @@ describe('북마크 토글 테스트', () => {
         data: { ...mockPostDetail, isBookmarked: true },
       },
       isLoading: false,
-      isError: false,
     })
 
     renderPostDetail()
@@ -212,7 +196,6 @@ describe('북마크 토글 테스트', () => {
     expect(mockRemoveBookmark).toHaveBeenCalledWith('1')
   })
 })
-
 describe('게시글 권한 테스트', () => {
   describe('내가 작성자 일 경우 ', () => {
     test('작성자일 경우 게시글 관리 섹션이 보인다', () => {
@@ -222,7 +205,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail, isOwner: true },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
       expect(screen.getByText('게시글 관리')).toBeInTheDocument()
@@ -242,7 +224,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail, isOwner: true },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
 
@@ -258,7 +239,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail, isOwner: true },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
 
@@ -268,7 +248,6 @@ describe('게시글 권한 테스트', () => {
       expect(mockPush).toHaveBeenCalledWith('/posts/1/edit')
     })
   })
-
   describe('내가 작성자가 아닐 경우', () => {
     test('작성자가 아닐 경우 동행신청 버튼이 보인다', () => {
       usePostDetail.mockReturnValue({
@@ -277,7 +256,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
       expect(screen.getByText('동행 신청하기')).toBeInTheDocument()
@@ -289,7 +267,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
       const applyButton = screen.getByRole('button', { name: '동행 신청하기' })
@@ -312,7 +289,6 @@ describe('게시글 권한 테스트', () => {
           data: { ...mockPostDetail, isOwner: false },
         },
         isLoading: false,
-        isError: false,
       })
       renderPostDetail()
 

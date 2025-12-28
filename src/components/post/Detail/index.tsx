@@ -66,7 +66,7 @@ export default function PostDetail({ postId }: { postId: string }) {
             <PostInfo postId={postId} />
             <PostWriter postId={postId} />
             <div className="bg-gray-300 w-full h-px mt-12" />
-            <Comment commentCount={response.data.commentCount} />
+            <Comment commentCount={postDetail.commentCount} />
           </div>
         </div>
       </div>
