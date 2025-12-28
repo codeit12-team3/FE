@@ -1,10 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import {
-  ApplyCompanionRes,
-  CancelCompanionRes,
-  UpdateCompanionRes,
-} from '@/types/companions/companions.type'
+import { ApplyCompanionReq, UpdateCompanionReq } from '@/types/companions'
 
 import {
   applyCompanion,
@@ -14,13 +10,8 @@ import {
 
 export const useApplyCompanion = () => {
   const queryClient = useQueryClient()
-  return useMutation<
-    ApplyCompanionRes,
-    Error,
-    { postId: string; applyMessage: string }
-  >({
-    mutationFn: ({ postId, applyMessage }) =>
-      applyCompanion(postId, applyMessage),
+  return useMutation({
+    mutationFn: (req: ApplyCompanionReq) => applyCompanion(req),
     onSuccess: (_, { postId }) => {
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['companions'] })
@@ -32,13 +23,8 @@ export const useApplyCompanion = () => {
 export const useUpdateCompanionStatus = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<
-    UpdateCompanionRes,
-    Error,
-    { companionId: number; status: 'APPROVE' | 'DENIED' }
-  >({
-    mutationFn: ({ companionId, status }) =>
-      updateCompanionStatus(companionId, status),
+  return useMutation({
+    mutationFn: (req: UpdateCompanionReq) => updateCompanionStatus(req),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companions'] })
@@ -50,8 +36,8 @@ export const useUpdateCompanionStatus = () => {
 export const useCancelCompanion = () => {
   const queryClient = useQueryClient()
 
-  return useMutation<CancelCompanionRes, Error, number>({
-    mutationFn: (companionId) => cancelCompanion(companionId),
+  return useMutation({
+    mutationFn: (companionId: string) => cancelCompanion(companionId),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companions'] })
