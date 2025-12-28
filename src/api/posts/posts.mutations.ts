@@ -4,8 +4,8 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
+import { toast } from '@/components/common/Toast'
 import { ApiResponse } from '@/types/common'
 import {
   FetchMyPosts,

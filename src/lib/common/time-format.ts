@@ -43,6 +43,7 @@ export const formatDay = (
   if (!d.isValid()) return ''
 
   return d.format(format)
+  return d.format(format)
 }
 
 /*

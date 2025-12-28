@@ -7,7 +7,7 @@ import './globals.css'
 import { SessionProvider } from 'next-auth/react'
 
 import { Header } from '@/components/common'
-import { Toaster } from '@/components/ui'
+import { Toaster } from '@/components/common/Toast'
 import {
   CurrentUserProvider,
   LazyMotionProvider,
@@ -49,7 +49,7 @@ export default function RootLayout({
             </SessionProvider>
           </QueryProvider>
         </MSWProvider>
-        <Toaster position="top-center" />
+        <Toaster />
       </body>
     </html>
   )
