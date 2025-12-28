@@ -171,7 +171,7 @@ export default function FilterBar({
   const TRIGGER = 'w-22 text-sm text-gray-800 font-medium'
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className=" p-4">
       {/* 데스크톱 레이아웃 */}
       <div className="hidden xl:flex gap-2 justify-between">
         <div className="flex gap-2">

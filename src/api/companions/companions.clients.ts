@@ -1,16 +1,19 @@
 import { ApiResponse } from '@/types/common'
 import {
+  ApplyCompanionReq,
   ApplyCompanionRes,
-  CancelCompanionRes,
-  UpdateCompanionRes,
-} from '@/types/companions/companions.type'
+  CompanionState,
+  ReceivedCompanionRes,
+  SentCompanionRes,
+  UpdateCompanionReq,
+} from '@/types/companions'
 
 import { axios } from '../common'
 
-export const applyCompanion = async (
-  postId: string,
-  applyMessage: string,
-): Promise<ApplyCompanionRes> => {
+export const applyCompanion = async ({
+  postId,
+  applyMessage,
+}: ApplyCompanionReq) => {
   const { data } = await axios.post<ApiResponse<ApplyCompanionRes>>(
     `/v1/companions/posts/${postId}`,
     { applyMessage },
@@ -23,13 +26,30 @@ export const applyCompanion = async (
   return data.data
 }
 
-export const updateCompanionStatus = async (
-  companionId: number,
-  status: 'APPROVE' | 'DENIED',
-): Promise<UpdateCompanionRes> => {
-  const { data } = await axios.patch<ApiResponse<UpdateCompanionRes>>(
-    `/v1/companions/${companionId}`,
-    { status },
+export const updateCompanionStatus = async ({
+  companionId,
+  status,
+}: UpdateCompanionReq) => {
+  await axios.patch(`/v1/companions/${companionId}`, { status })
+}
+
+export const cancelCompanion = async (companionId: string) => {
+  await axios.delete(`/v1/companions/${companionId}`)
+}
+
+export const getReceivedCompanion = async (
+  status: CompanionState,
+  page: number,
+) => {
+  const { data } = await axios.get<ApiResponse<ReceivedCompanionRes>>(
+    '/v1/companions/received',
+    {
+      params: {
+        status,
+        page,
+        size: 10,
+      },
+    },
   )
 
   if (!data.success) {
@@ -39,11 +59,19 @@ export const updateCompanionStatus = async (
   return data.data
 }
 
-export const cancelCompanion = async (
-  companionId: number,
-): Promise<CancelCompanionRes> => {
-  const { data } = await axios.delete<ApiResponse<CancelCompanionRes>>(
-    `/v1/companions/${companionId}`,
+export const getSentCompanion = async (
+  status: CompanionState,
+  page: number,
+) => {
+  const { data } = await axios.get<ApiResponse<SentCompanionRes>>(
+    '/v1/companions/sent',
+    {
+      params: {
+        status,
+        page,
+        size: 10,
+      },
+    },
   )
 
   if (!data.success) {

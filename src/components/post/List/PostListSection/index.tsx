@@ -6,7 +6,7 @@ export default function PostListSection({ posts }: { posts: PostListItem[] }) {
   const isEmpty = posts.length === 0
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-4">
+    <div>
       {isEmpty ? (
         <div className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2">
           <span className="text-lg font-medium">게시글이 없습니다</span>

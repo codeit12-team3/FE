@@ -1,12 +1,12 @@
 'use client'
 
 import { PopoverClose } from '@radix-ui/react-popover'
-import { LogIn, LogOut, User } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { IconArrowFromShapeRightLight, IconUser } from '@/assets/svgr'
 import {
   Button,
   Popover,
@@ -45,7 +45,7 @@ export default function UserMenu() {
               className="flex items-center w-full text-xs font-medium justify-between"
               onClick={() => router.push('/member')}
             >
-              내 프로필 <User className="size-4" />
+              내 프로필 <IconUser className="size-4" />
             </Button>
           </PopoverClose>
 
@@ -56,7 +56,7 @@ export default function UserMenu() {
               className="flex items-center w-full text-xs font-medium justify-between"
               onClick={() => signOut()}
             >
-              로그아웃 <LogOut className="size-4" />
+              로그아웃 <IconArrowFromShapeRightLight className="size-4" />
             </Button>
           </PopoverClose>
         </div>

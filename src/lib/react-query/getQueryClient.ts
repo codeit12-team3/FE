@@ -8,6 +8,7 @@ import {
 import axios from 'axios'
 import { toast } from 'sonner'
 
+import { STALE_TIME } from '@/constants/common'
 import { ApiResponse } from '@/types/common'
 
 function handleGlobalError(error: unknown, meta?: Record<string, unknown>) {
@@ -34,7 +35,7 @@ const makeQueryClient = () => {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000,
+        staleTime: STALE_TIME.MINUTE,
       },
       dehydrate: {
         shouldDehydrateQuery: (query) =>

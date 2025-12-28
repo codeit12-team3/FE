@@ -76,7 +76,7 @@ export default function PostHeader({
           </button>
         </div>
       </div>
-      <h1 className="text-3xl font-bold text-text-base">{title}</h1>
+      <h1 className="sm:text-3xl text-xl font-bold text-text-base">{title}</h1>
       <div className="flex gap-3 text-sm items-center mb-8">
         <p className="text-gray-500">
           게시날짜 <span className="text-gray-600">{formatDay(createdAt)}</span>

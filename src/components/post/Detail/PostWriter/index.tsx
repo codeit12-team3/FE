@@ -12,10 +12,10 @@ export default function PostWriter({ postId }: { postId: string }) {
 
   return (
     <>
-      <div className="flex px-8 border pt-10 py-12 bg-white border-slate-100 rounded-3xl ">
-        <div className="flex flex-col gap-5 items-center justify-center">
-          <div className="flex gap-5 mb-10">
-            <div className="w-20 h-20 relative rounded-full overflow-hidden border border-gray-100 shrink-0">
+      <div className="flex sm:px-8 px-6 border sm:pt-10 sm:pb-12 py-8 bg-white border-slate-100 rounded-3xl sm:h-auto">
+        <div className="flex sm:flex-col gap-5 items-center justify-center ">
+          <div className="flex sm:gap-5 sm:mb-10 gap-3">
+            <div className="sm:w-20 sm:h-20 relative rounded-full overflow-hidden border border-gray-100 shrink-0 size-10">
               <Image
                 src={getImageUrl(profileImage)}
                 alt="user profile"
@@ -28,7 +28,9 @@ export default function PostWriter({ postId }: { postId: string }) {
               <span className="font-semibold bg-blue-50 text-blue-500 py-1.5 px-2.5 rounded-full text-xs">
                 작성자
               </span>
-              <span className="font-semibold">{nickname}</span>
+              <span className="font-semibold text-sm sm:text-base">
+                {nickname}
+              </span>
             </div>
           </div>
           <div>

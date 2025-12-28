@@ -54,15 +54,15 @@ export default function PostDetail({ postId }: { postId: string }) {
   const postDetail = response.data
 
   return (
-    <div className="min-h-screen bg-gray-50  flex items-center justify-center pt-14">
-      <div className="max-w-7xl w-full px-34">
+    <div className="min-h-screen bg-gray-50  flex items-center justify-center xl:pt-14 sm:pt-7.5 px-4">
+      <div className="max-w-7xl w-full xl:px-34 sm:px-6">
         <div className="flex gap-6 items-start justify-center">
-          <div className="w-full max-w-7xl rounded-lg py-8">
+          <div className="w-full max-w-7xl rounded-lg ">
             <PostHeader
               postId={postId}
               onOpenApplyModal={() => setIsModalOpen(true)}
             />
-            <div className="flex flex-row gap-6 my-8 ">
+            <div className="flex sm:flex-row gap-6 sm:my-8 my-4 flex-col  ">
               <div className="flex-1 min-w-0">
                 <PostImages images={postDetail.images} />
               </div>

@@ -12,7 +12,7 @@ const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   return (
-    <div className="relative w-full h-87 rounded-3xl overflow-hidden shrink-0">
+    <div className="relative w-full sm:h-71 h-57 rounded-3xl overflow-hidden shrink-0">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
