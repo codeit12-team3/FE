@@ -6,8 +6,7 @@ import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
 
-import { Header } from '@/components/common'
-import { Toaster } from '@/components/common/Toast'
+import { Header, Toaster } from '@/components/common'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 
 const pretendard = localFont({

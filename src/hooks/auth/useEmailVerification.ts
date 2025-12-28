@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 import { useCheckEmailCode, useSendEmailCode } from '@/api/auth'
+import { toast } from '@/components/common'
 import { formatTimer } from '@/lib/common'
 
 export default function useEmailVerification() {
