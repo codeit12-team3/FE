@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -26,8 +25,6 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
   )
   const closeInteraction = useCommentInteractionStore((state) => state.close)
 
-  const { data: session } = useSession()
-  const currentUserId = Number(session?.user.memberId)
   const { create } = useReplyMutations(postId, parentId)
   const { replies } = useReplies({ commentId: parentId })
   const handleSubmit = (text: string) => {
@@ -44,11 +41,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
   }
   return (
     <div>
-      <CommentItem
-        comment={comment}
-        currentUserId={currentUserId}
-        onReply={onClickShowReplies}
-      />
+      <CommentItem comment={comment} onReply={onClickShowReplies} />
 
       {isReplying && (
         <div className="pl-10 pt-6">
@@ -72,11 +65,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
 
       {showReplies && (
         <>
-          <ReplyList
-            commentId={parentId}
-            currentUserId={currentUserId}
-            showReplies={showReplies}
-          />
+          <ReplyList commentId={parentId} showReplies={showReplies} />
           <button
             onClick={onClickShowReplies}
             className="text-base font-semibold text-blue-500 flex items-center gap-0.5 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[39px]"

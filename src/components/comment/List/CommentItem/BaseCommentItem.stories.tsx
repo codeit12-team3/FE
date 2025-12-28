@@ -1,7 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { fn } from '@storybook/test'
+import { SessionProvider } from 'next-auth/react' // 1. SessionProvider 추가
 
+import { CommentUserProvider } from '../../CommentUserContext'
 import BaseCommentItem from './BaseCommentItem'
+
+const mockSession = {
+  expires: '2099-01-01T00:00:00Z',
+  user: {
+    name: '테스트유저',
+    email: 'test@example.com',
+    image: 'https://avatars.githubusercontent.com/u/2?v=4',
+    memberId: 2,
+  },
+}
 
 const meta = {
   title: 'Comment/BaseCommentItem',
@@ -10,10 +22,20 @@ const meta = {
     layout: 'padded',
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <SessionProvider session={mockSession}>
+        <CommentUserProvider>
+          <Story />
+        </CommentUserProvider>
+      </SessionProvider>
+    ),
+  ],
   args: {
     onDelete: fn(),
     onSave: fn(),
     onReply: fn(),
+    isUpdating: false,
   },
 } satisfies Meta<typeof BaseCommentItem>
 
@@ -30,9 +52,7 @@ export const Default: Story = {
     updatedAt: '2024-12-27T10:00:00Z',
     memberId: 1,
     content: '정말 유익한 게시글이네요! 감사합니다.',
-    currentUserId: 2,
     isUpdating: false,
-    showReplies: true,
   },
 }
 
@@ -46,9 +66,7 @@ export const EditedComment: Story = {
     updatedAt: '2024-12-27T10:30:00Z',
     memberId: 3,
     content: '수정된 내용입니다. "수정됨" 표시가 나타납니다.',
-    currentUserId: 2,
     isUpdating: false,
-    showReplies: true,
   },
 }
 
@@ -62,9 +80,7 @@ export const DeletedComment: Story = {
     updatedAt: '2024-12-27T08:00:00Z',
     memberId: 4,
     content: '삭제된 댓글입니다',
-    currentUserId: 2,
     isUpdating: false,
-    showReplies: true,
   },
 }
 
@@ -84,13 +100,11 @@ export const LongComment: Story = {
 
 앞으로도 이런 좋은 글 많이 부탁드립니다.
 감사합니다!`,
-    currentUserId: 2,
     isUpdating: false,
-    showReplies: true,
   },
 }
 
-// 답글 (답글 달기 버튼 없음)
+// 답글
 export const Reply: Story = {
   args: {
     commentId: 2,
@@ -100,9 +114,7 @@ export const Reply: Story = {
     updatedAt: '2024-12-27T10:00:00Z',
     memberId: 6,
     content: '댓글에 대한 답글입니다.',
-    currentUserId: 2,
     isUpdating: false,
-    showReplies: false,
-    onReply: undefined,
+    hasReplyAction: false,
   },
 }

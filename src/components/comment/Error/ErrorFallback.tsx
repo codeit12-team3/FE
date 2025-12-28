@@ -18,7 +18,7 @@ export default function ErrorFallback({
 
   return (
     <div className="flex flex-col items-center gap-3 p-4 text-center">
-      <p className="text-sm text-red-500">{message}</p>
+      <p className="text-base text-red-500">{message}</p>
       {onRetry && (
         <Button size="md" onClick={onRetry} className="gap-2">
           <ReloadIcon />

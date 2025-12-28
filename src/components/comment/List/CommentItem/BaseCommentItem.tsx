@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
+import { useCommentUser } from '../../CommentUserContext'
 import { useCommentInteractionStore } from '../../useCommentInteractionStore'
 import CommentMenu from '../CommentMenu'
 import CommentEditForm from './CommentEditForm'
@@ -14,12 +15,11 @@ type BaseCommentItemProps = {
   updatedAt: string
   memberId: number
   content: string
-  currentUserId: number
   isUpdating: boolean
   onDelete: () => void
   onSave: (text: string) => Promise<void>
   onReply?: () => void
-  showReplies?: boolean
+  hasReplyAction?: boolean
 }
 
 const DELETED_COMMENT_TEXT = '삭제된 댓글입니다'
@@ -32,12 +32,11 @@ export default function BaseCommentItem({
   updatedAt,
   memberId,
   content,
-  currentUserId,
   isUpdating,
   onDelete,
   onSave,
   onReply,
-  showReplies, // 부모 댓글인 경우 true, 답글인 경우 false로 가정
+  hasReplyAction, // 부모 댓글인 경우 true, 답글인 경우 false로 가정
 }: BaseCommentItemProps) {
   const isEditing = useCommentInteractionStore((state) =>
     state.isEditing(commentId),
@@ -45,10 +44,15 @@ export default function BaseCommentItem({
   const openInteraction = useCommentInteractionStore((state) => state.open)
   const closeInteraction = useCommentInteractionStore((state) => state.close)
 
-  const isOwner = memberId === currentUserId
+  const { checkIsOwner } = useCommentUser()
+
+  // 내 댓글인지 확인
+  const isOwner = checkIsOwner(memberId)
   const isDeleted = content === DELETED_COMMENT_TEXT
   // 답글인 경우 true, 댓글인 경우 false로 가정
-  const isCurrentEditing = showReplies ? isEditing && showReplies : isEditing
+  const isCurrentEditing = hasReplyAction
+    ? isEditing && hasReplyAction
+    : isEditing
 
   const editTime =
     createdAt === updatedAt

@@ -7,15 +7,10 @@ import ReplyItem from '../CommentItem/ReplyItem'
 
 interface ReplyListProps {
   commentId: number
-  currentUserId: number
   showReplies: boolean
 }
 
-export default function ReplyList({
-  commentId,
-  currentUserId,
-  showReplies,
-}: ReplyListProps) {
+export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
   const {
     replies,
     fetchNextPage,
@@ -44,36 +39,24 @@ export default function ReplyList({
     )
   }
 
-  const initialReplies = replies.slice(0, 5)
-  const additionalReplies = replies.slice(5)
-
   return (
-    <div className="pl-[55px] flex flex-col">
+    <div className="pl-[55px] pb-3 flex flex-col">
       <div className="pt-6 flex flex-col gap-6">
-        {initialReplies.map((reply) => (
+        {replies.map((reply) => (
           <ReplyItem
             key={reply.commentId}
             reply={reply}
-            currentUserId={currentUserId}
             showReplies={showReplies}
           />
         ))}
       </div>
 
-      {additionalReplies.map((reply) => (
-        <ReplyItem
-          key={reply.commentId}
-          reply={reply}
-          currentUserId={currentUserId}
-          showReplies={showReplies}
-        />
-      ))}
       {hasNextPage && (
         <>
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="text-sm font-semibold text-blue-500 flex items-center gap-0.5 disabled:opacity-50"
+            className="w-fit text-base font-semibold text-blue-500 flex items-center gap-0.5 disabled:opacity-50 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[38px]"
           >
             {isFetchingNextPage ? (
               <span>불러오는 중...</span>

@@ -7,15 +7,10 @@ import { useCommentActions } from './useCommentActions'
 
 type CommentItemProps = {
   comment: CommentContent
-  currentUserId: number
   onReply: () => void
 }
 
-export default function CommentItem({
-  comment,
-  currentUserId,
-  onReply,
-}: CommentItemProps) {
+export default function CommentItem({ comment, onReply }: CommentItemProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
 
@@ -27,7 +22,6 @@ export default function CommentItem({
   return (
     <BaseCommentItem
       {...comment}
-      currentUserId={currentUserId}
       isUpdating={isUpdating}
       onDelete={handleDelete}
       onSave={handleSave}

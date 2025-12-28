@@ -7,15 +7,10 @@ import { useReplyActions } from './useReplyActions'
 
 type ReplyItemProps = {
   reply: ReplyContent
-  currentUserId: number
   showReplies: boolean
 }
 
-export default function ReplyItem({
-  reply,
-  currentUserId,
-  showReplies,
-}: ReplyItemProps) {
+export default function ReplyItem({ reply, showReplies }: ReplyItemProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
 
@@ -28,11 +23,10 @@ export default function ReplyItem({
   return (
     <BaseCommentItem
       {...reply}
-      currentUserId={currentUserId}
       isUpdating={isUpdating}
       onDelete={handleDelete}
       onSave={handleSave}
-      showReplies={showReplies}
+      hasReplyAction={showReplies}
     />
   )
 }
