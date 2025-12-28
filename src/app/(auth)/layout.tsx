@@ -6,8 +6,8 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <main className="w-full flex-1 pt-6 max-w-7xl mx-auto px-4 md:px-8 md:pt-16 lg:flex lg:items-center lg:pt-0">
-      <div className="flex gap-7 flex-col lg:flex-row items-center justify-center w-full lg:gap-[46px] md:gap-10">
+    <main className="w-full flex-1 py-6 max-w-7xl mx-auto px-4 md:px-8 md:py-16 lg:flex lg:items-center lg:py-0">
+      <div className="flex gap-7 flex-col lg:flex-row items-center justify-center w-full lg:gap-11 md:gap-10">
         <section>
           <div className="space-y-2">
             <h3 className="lg:text-3xl md:text-2xl text-xl font-bold text-center text-blue-600">
