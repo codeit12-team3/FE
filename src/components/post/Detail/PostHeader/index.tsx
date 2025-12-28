@@ -1,6 +1,13 @@
 import { Heart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-import { useAddBookmark, usePostDetail, useRemoveBookmark } from '@/api/posts'
+import {
+  useAddBookmark,
+  useDeletePost,
+  usePostDetail,
+  useRemoveBookmark,
+} from '@/api/posts'
+import { IconPencil, IconTrashLight } from '@/assets/svgr'
 import { formatDay } from '@/lib/common'
 
 import PostActions from '../PostActions'
@@ -19,6 +26,9 @@ export default function PostHeader({
   const { data: post } = usePostDetail({ postId })
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
+  const deletePost = useDeletePost()
+  const router = useRouter()
+
   if (!post || !post.success) return null
 
   const {
@@ -40,6 +50,19 @@ export default function PostHeader({
     }
   }
 
+  const handleEdit = () => {
+    router.push(`/posts/${postId}/edit`)
+  }
+
+  const handleDelete = () => {
+    if (!confirm('정말 삭제하시겠어요?')) return
+    deletePost.mutate(postId, {
+      onSuccess: () => {
+        router.push('/')
+      },
+    })
+  }
+
   return (
     <div className="flex flex-col items-start gap-4 pl-2">
       <div className="flex gap-3 justify-between w-full items-center">
@@ -54,7 +77,7 @@ export default function PostHeader({
           ))}
         </div>
 
-        <div className="flex gap-5">
+        <div className="sm:flex gap-5 hidden ">
           {isOwner ? (
             <PostManage postId={postId} />
           ) : (
@@ -77,18 +100,64 @@ export default function PostHeader({
         </div>
       </div>
       <h1 className="sm:text-3xl text-xl font-bold text-text-base">{title}</h1>
-      <div className="flex gap-3 text-sm items-center mb-8">
-        <p className="text-gray-500">
-          게시날짜 <span className="text-gray-600">{formatDay(createdAt)}</span>
-        </p>
-        <span className="text-text-disabled">|</span>
-        <p className="text-gray-500">
-          조회수 <span className="text-gray-600">{stats.viewCount}</span>
-        </p>
-        <span className="text-text-disabled">|</span>
-        <p className="text-gray-500">
-          댓글 <span className="text-gray-600">{commentCount}</span>
-        </p>
+      <div className="flex flex-col sm:flex-row gap-3 text-sm items-start sm:items-center w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <p className="text-gray-500">
+            게시날짜{' '}
+            <span className="text-gray-600">{formatDay(createdAt)}</span>
+          </p>
+          <span className="text-text-disabled">|</span>
+          <p className="text-gray-500">
+            조회수 <span className="text-gray-600">{stats.viewCount}</span>
+          </p>
+          <span className="text-text-disabled">|</span>
+          <p className="text-gray-500">
+            댓글 <span className="text-gray-600">{commentCount}</span>
+          </p>
+        </div>
+
+        <div className="flex sm:hidden gap-5 w-full justify-between items-center">
+          {isOwner ? (
+            <PostManage postId={postId} />
+          ) : (
+            <PostActions
+              onApply={onOpenApplyModal}
+              hasApplied={isApplied}
+              postId={postId}
+            />
+          )}
+          <div className="flex gap-5 items-center">
+            {isOwner && (
+              <>
+                <button
+                  onClick={handleEdit}
+                  className="cursor-pointer"
+                  aria-label="게시글 수정"
+                >
+                  <IconPencil className="text-gray-400 size-6" />
+                </button>
+
+                <button
+                  onClick={handleDelete}
+                  className="cursor-pointer"
+                  aria-label="게시글 삭제"
+                >
+                  <IconTrashLight className="text-gray-400 size-6" />
+                </button>
+              </>
+            )}
+            <button
+              onClick={handleToggleBookmark}
+              className="hover:scale-90 transition-transform cursor-pointer"
+              aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+            >
+              <Heart
+                className={`${isBookmarked ? 'fill-blue-500' : 'fill-gray-300'} size-8`}
+                strokeWidth={0}
+              />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ export default function Header() {
 
   return (
     <header className=" border-b border-gray-200 bg-white">
-      <div className="max-w-7xl mx-auto px-34 py-3 ">
+      <div className="max-w-7xl mx-auto xl:px-34 sm:px-10 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center sm:gap-10 gap-3 ">
             <Link href="/" className="sm:w-[90px] w-[72px]">
