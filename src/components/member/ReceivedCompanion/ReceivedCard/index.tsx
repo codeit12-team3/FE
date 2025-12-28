@@ -2,10 +2,10 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 
 import { useUpdateCompanionStatus } from '@/api/companions'
 import { IconUser } from '@/assets/svgr'
+import { toast } from '@/components/common'
 import { Button } from '@/components/ui'
 import { formatDateToKorean, getImageUrl } from '@/lib/common'
 import { CompanionState, ReceivedCompanionContent } from '@/types/companions'

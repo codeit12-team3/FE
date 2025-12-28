@@ -2,9 +2,9 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 
 import { useCancelCompanion } from '@/api/companions'
+import { toast } from '@/components/common'
 import { Button } from '@/components/ui'
 import { COMPANION_STATUS_LABEL } from '@/constants/companion'
 import { cn, formatDateToKorean, getImageUrl } from '@/lib/common'
