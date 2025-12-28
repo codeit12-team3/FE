@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { fn } from '@storybook/test'
-import { SessionProvider } from 'next-auth/react' // 1. SessionProvider 추가
+import { SessionProvider } from 'next-auth/react'
 
-import { CommentUserProvider } from '../../CommentUserContext'
-import BaseCommentItem from './BaseCommentItem'
+import { CurrentUserProvider } from '@/providers'
+
+import BaseCommentItem from '../BaseCommentItem'
 
 const mockSession = {
   expires: '2099-01-01T00:00:00Z',
@@ -25,9 +26,9 @@ const meta = {
   decorators: [
     (Story) => (
       <SessionProvider session={mockSession}>
-        <CommentUserProvider>
+        <CurrentUserProvider>
           <Story />
-        </CommentUserProvider>
+        </CurrentUserProvider>
       </SessionProvider>
     ),
   ],

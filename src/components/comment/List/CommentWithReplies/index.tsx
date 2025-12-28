@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 import { useReplies, useReplyMutations } from '@/api/comments'
 import ChevronDown from '@/assets/svgr/chevron-down.svg'
+import { useCommentInteractionStore } from '@/hooks/comment/useCommentInteractionStore'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import CommentWriteForm from '../../CommentForm'
-import { useCommentInteractionStore } from '../../useCommentInteractionStore'
-import CommentItem from '../CommentItem/CommentItem'
+import CommentItem from '../CommentItem'
 import ReplyList from '../ReplyList'
 
 interface CommentThreadProps {

@@ -6,7 +6,7 @@ import { useCommentMutations, useComments } from '@/api/comments'
 
 import CommentForm from './CommentForm'
 import ErrorFallback from './Error/ErrorFallback'
-import CommentList from './List'
+import CommentList from './List/CommentList'
 
 interface CommentContainerProps {
   commentCount: number

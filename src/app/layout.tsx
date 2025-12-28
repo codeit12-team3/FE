@@ -6,10 +6,14 @@ import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
 
-import { CommentUserProvider } from '@/components/comment/CommentUserContext'
 import { Header } from '@/components/common'
 import { Toaster } from '@/components/ui'
-import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
+import {
+  CurrentUserProvider,
+  LazyMotionProvider,
+  MSWProvider,
+  QueryProvider,
+} from '@/providers'
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -36,12 +40,12 @@ export default function RootLayout({
         <MSWProvider>
           <QueryProvider>
             <SessionProvider refetchOnWindowFocus={false}>
-              <CommentUserProvider>
+              <CurrentUserProvider>
                 <LazyMotionProvider>
                   <Header />
                   {children}
                 </LazyMotionProvider>
-              </CommentUserProvider>
+              </CurrentUserProvider>
             </SessionProvider>
           </QueryProvider>
         </MSWProvider>

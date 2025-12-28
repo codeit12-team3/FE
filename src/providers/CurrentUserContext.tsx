@@ -3,14 +3,14 @@
 import { useSession } from 'next-auth/react'
 import { createContext, useContext } from 'react'
 
-interface CommentUserContextType {
+interface CurrentUserContextType {
   currentUserId: number | null
   checkIsOwner: (memberId: number) => boolean
 }
 
-const CommentUserContext = createContext<CommentUserContextType | null>(null)
+const CurrentUserContext = createContext<CurrentUserContextType | null>(null)
 
-export function CommentUserProvider({
+export default function CurrentUserProvider({
   children,
 }: {
   children: React.ReactNode
@@ -30,14 +30,14 @@ export function CommentUserProvider({
   }
 
   return (
-    <CommentUserContext.Provider value={value}>
+    <CurrentUserContext.Provider value={value}>
       {children}
-    </CommentUserContext.Provider>
+    </CurrentUserContext.Provider>
   )
 }
 
-export function useCommentUser() {
-  const context = useContext(CommentUserContext)
+export function useCurrentUser() {
+  const context = useContext(CurrentUserContext)
   if (!context) {
     throw new Error('useCommentUser must be used within a CommentUserProvider')
   }

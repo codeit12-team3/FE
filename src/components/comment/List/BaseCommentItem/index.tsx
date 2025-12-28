@@ -1,11 +1,11 @@
 import Image from 'next/image'
 
+import { useCommentInteractionStore } from '@/hooks/comment/useCommentInteractionStore'
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
+import { useCurrentUser } from '@/providers/CurrentUserContext'
 
-import { useCommentUser } from '../../CommentUserContext'
-import { useCommentInteractionStore } from '../../useCommentInteractionStore'
+import CommentEditForm from '../CommentEditForm'
 import CommentMenu from '../CommentMenu'
-import CommentEditForm from './CommentEditForm'
 
 type BaseCommentItemProps = {
   commentId: number
@@ -44,7 +44,7 @@ export default function BaseCommentItem({
   const openInteraction = useCommentInteractionStore((state) => state.open)
   const closeInteraction = useCommentInteractionStore((state) => state.close)
 
-  const { checkIsOwner } = useCommentUser()
+  const { checkIsOwner } = useCurrentUser()
 
   // 내 댓글인지 확인
   const isOwner = checkIsOwner(memberId)

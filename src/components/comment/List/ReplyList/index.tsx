@@ -3,7 +3,7 @@ import ChevronDown from '@/assets/svgr/chevron-down.svg'
 
 import ErrorFallback from '../../Error/ErrorFallback'
 import BaseCommentItemSkeleton from '../CommentItem/BaseCommentSkeleton'
-import ReplyItem from '../CommentItem/ReplyItem'
+import ReplyItem from '../ReplyItem'
 
 interface ReplyListProps {
   commentId: number

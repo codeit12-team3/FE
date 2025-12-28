@@ -1,9 +1,9 @@
 import { useParams } from 'next/navigation'
 
+import { useCommentActions } from '@/hooks/comment/useCommentActions'
 import { CommentContent } from '@/types/comments/comments.type'
 
-import BaseCommentItem from './BaseCommentItem'
-import { useCommentActions } from './useCommentActions'
+import BaseCommentItem from '../BaseCommentItem'
 
 type CommentItemProps = {
   comment: CommentContent
