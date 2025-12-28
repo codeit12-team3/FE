@@ -32,20 +32,19 @@ export default function SentCard({ data, idx }: Props) {
   }
 
   return (
-    <div className="w-full flex p-6 max-h-[236px] rounded-[40px] gap-6 bg-white border border-gray-200">
+    <div className="w-full flex flex-col md:flex-row md:p-6 rounded-3xl md:rounded-[40px] gap-6 bg-white border border-gray-200">
       {/* Thumbnail */}
-      <div className="relative size-[188px] rounded-3xl overflow-hidden shrink-0">
-        <Image
-          fill
-          priority={idx < 3}
-          sizes="188px"
-          className="object-cover"
-          src={getImageUrl(thumbnail)}
-          alt={`${title} 게시글의 Thumbnail`}
-        />
-      </div>
+      <Image
+        width={744}
+        height={188}
+        priority={idx < 3}
+        sizes="188px"
+        className="relative w-full h-[188px] md:w-[188px] md:rounded-3xl rounded-t-3xl rounded-b-0 md:rounded-b-3xl overflow-hidden shrink-0 object-cover"
+        src={getImageUrl(thumbnail)}
+        alt={`${title} 게시글의 Thumbnail`}
+      />
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full px-4 pb-4 md:px-0 md:pb-0">
         {/* 여행 태그 */}
         <div className="flex items-center gap-2.5">
           {tags.map((tag) => (
@@ -70,11 +69,13 @@ export default function SentCard({ data, idx }: Props) {
             </h4>
           </button>
           {/* 신청 메시지 */}
-          <p className="text-gray-500 text-sm line-clamp-2">{applyMessage}</p>
+          <p className="text-gray-500 text-sm line-clamp-2 h-10">
+            {applyMessage}
+          </p>
         </div>
 
         {/* 하단 컨텐츠 */}
-        <div className="flex justify-between w-full">
+        <div className="flex flex-col gap-5 md:gap-0 md:flex-row md:justify-between w-full">
           <div className="flex flex-col gap-2.5">
             <span
               className={cn(
@@ -103,10 +104,10 @@ export default function SentCard({ data, idx }: Props) {
 
           {/* 버튼 영역 */}
           {status === 'PENDING' && (
-            <div className="flex items-end gap-2">
+            <div className="flex items-end gap-2 w-full md:w-auto">
               <Button
                 onClick={() => handleCancelCompanion(companionId)}
-                className="md:w-28"
+                className="w-full md:w-28"
                 variant={'secondary'}
                 size={'md'}
                 disabled={isPending}

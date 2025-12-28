@@ -10,8 +10,8 @@ interface Props {
 
 export default function MyPageAside({ className }: Props) {
   return (
-    <aside className={cn('md:max-w-60 w-full space-y-4', className)}>
-      <MyPageTitle className="md:hidden" title="마이페이지" />
+    <aside className={cn('lg:max-w-60 w-full space-y-4', className)}>
+      <MyPageTitle className="lg:hidden" title="마이페이지" />
       <MyProfile />
       <SubMenu />
     </aside>
