@@ -2,7 +2,7 @@
 
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import FormInput from '@/components/form/FormInput'
+import FormDatePicker from '@/components/form/FormDatePicker'
 import type { PostFormValues } from '@/types/posts/schema'
 
 export default function DateSection() {
@@ -17,22 +17,20 @@ export default function DateSection() {
 
   return (
     <div className="flex gap-8">
-      <FormInput<PostFormValues>
+      <FormDatePicker<PostFormValues>
         label="여행 시작 일시"
         name="startDate"
-        type="date"
         required
         className="w-1/2"
-        max={end || undefined}
+        maxDate={end ? new Date(end) : undefined}
       />
 
-      <FormInput<PostFormValues>
+      <FormDatePicker<PostFormValues>
         label="여행 종료 일시"
         name="endDate"
-        type="date"
         required
         className="w-1/2"
-        min={start || undefined}
+        minDate={start ? new Date(start) : undefined}
       />
     </div>
   )

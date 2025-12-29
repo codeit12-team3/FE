@@ -107,7 +107,6 @@ const FilterDatePicker = ({
               setTempDate(date || undefined)
             }}
             inline
-            locale="ko"
           />
           <div className="flex gap-2">
             <Button
