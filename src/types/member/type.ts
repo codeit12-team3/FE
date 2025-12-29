@@ -26,7 +26,7 @@ export interface UpdateMyProfileReq {
   introduction?: string
 }
 
-export interface MyProfile {
+export interface Profile {
   memberId: string
   nickname: string
   email: string
