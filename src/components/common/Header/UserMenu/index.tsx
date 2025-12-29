@@ -22,7 +22,7 @@ export default function UserMenu() {
   return session ? (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="flex size-10 shrink-0 border border-gray-300 rounded-full items-center justify-center cursor-pointer">
+        <button className="flex size-8 md:size-10 shrink-0 border border-gray-300 rounded-full items-center justify-center cursor-pointer">
           <Image
             src={getImageUrl(session?.user.image, true)}
             alt="프로필 이미지"
@@ -59,7 +59,10 @@ export default function UserMenu() {
       </PopoverContent>
     </Popover>
   ) : (
-    <Link href={'/signin'} className="text-sm font-semibold text-gray-500">
+    <Link
+      href={'/signin'}
+      className="text-xs md:text-sm font-semibold text-gray-500 hover:text-gray-700 active:text-gray-700"
+    >
       로그인
     </Link>
   )
