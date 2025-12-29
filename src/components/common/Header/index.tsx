@@ -4,47 +4,50 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { cn } from '@/lib/common'
+
 import UserMenu from './UserMenu'
 
 export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className=" border-b border-gray-200 bg-white">
-      <div className="max-w-7xl mx-auto xl:px-34 sm:px-10 px-4 py-3">
+    <header className="flex items-center justify-center border-b border-gray-200 bg-white h-[52px] md:h-[68px]">
+      <div className="max-w-7xl px-4 py-2 md:px-6 md:py-3 w-full">
         <div className="flex items-center justify-between">
-          <div className="flex items-center sm:gap-10 gap-3 ">
-            <Link href="/" className="sm:w-[90px] w-[72px]">
+          <div className="flex items-center gap-3 md:gap-8 ">
+            <Link href="/">
               <Image
-                src="/images/Logo.png"
-                alt="Trip us"
+                src="/images/logo.png"
+                alt="Trip us 메인 로고"
                 width={90}
-                height={30}
-                className="w-full h-auto"
-                style={{ width: '100%', height: '100%' }}
+                height={32}
+                className="w-[72px] h-[25px] md:w-[90px] md:h-8"
                 priority
               />
             </Link>
-            <nav className="flex sm:gap-2 ">
+            <nav className="flex gap-2">
               <Link
                 href="/"
-                className={`transition-colors text-xs sm:text-sm ${
+                className={cn(
+                  'transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/'
-                    ? 'text-blue-500 '
-                    : 'text-gray-500 hover:text-blue-500'
-                }`}
+                    ? 'text-blue-500'
+                    : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
+                )}
               >
                 <span className="sm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
                   게시판
                 </span>
               </Link>
               <Link
-                href="/chatting"
-                className={`transition-colors  text-xs sm:text-sm ${
+                href="/"
+                className={cn(
+                  'transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/chatting'
-                    ? 'text-blue-500 font-semibold'
-                    : 'text-gray-500 hover:text-blue-500'
-                }`}
+                    ? 'text-blue-500'
+                    : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
+                )}
               >
                 <span className="sm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
                   채팅방

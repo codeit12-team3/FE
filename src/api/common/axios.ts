@@ -1,10 +1,5 @@
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios'
-import { getSession, signOut } from 'next-auth/react'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import { signOut } from 'next-auth/react'
 
 import { BASE_URL, TIMEOUT_LIMIT } from '@/constants/common'
 import { ApiResponse } from '@/types/common'
@@ -17,25 +12,6 @@ const client: AxiosInstance = axios.create({
   timeout: TIMEOUT_LIMIT,
   withCredentials: true,
 })
-
-// 요청 인터셉터
-client.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig) => {
-    if (typeof window !== 'undefined') {
-      const session = await getSession()
-      const accessToken = session?.user.accessToken
-
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`
-      }
-    }
-
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  },
-)
 
 // 응답 인터셉터
 client.interceptors.response.use(
@@ -52,7 +28,9 @@ client.interceptors.response.use(
         const errCode = apiRes.data.code
 
         if (errCode !== 'AUTH_011' && typeof window !== 'undefined') {
-          signOut({ callbackUrl: '/signin' })
+          await signOut({ callbackUrl: '/signin' })
+
+          return new Promise(() => {})
         }
       }
     }

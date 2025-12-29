@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { toast } from 'sonner'
 
 import { useCheckNickname } from '@/api/member'
+import { toast } from '@/components/common'
 
 export default function useNicknameVerification() {
   const [isChecked, setIsChecked] = useState(false)

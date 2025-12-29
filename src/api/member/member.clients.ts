@@ -1,5 +1,5 @@
 import { ApiResponse } from '@/types/common'
-import { MyProfile, UpdateMyProfileReq } from '@/types/member'
+import { Profile, UpdateMyProfileReq } from '@/types/member'
 
 import { axios } from '../common'
 
@@ -16,14 +16,27 @@ export const checkNickname = async (nickname: string) => {
 }
 
 // 내정보 조회
-export const getMyProfile = async (): Promise<MyProfile> => {
-  const res = await axios.get<ApiResponse<MyProfile>>('/v1/members/me')
+export const getMyProfile = async () => {
+  const { data } = await axios.get<ApiResponse<Profile>>('/v1/members/me')
 
-  if (!res.data.success) {
-    throw new Error(res.data.data?.message || '프로필을 불러오지 못했습니다')
+  if (!data.success) {
+    throw new Error(data.data.message || '프로필을 불러오지 못했습니다')
   }
 
-  return res.data.data
+  return data.data
+}
+
+// 다른 멤버 정보 조회
+export const getOtherProfile = async (memberId: string) => {
+  const { data } = await axios.get<ApiResponse<Profile>>(
+    `/v1/members/${memberId}`,
+  )
+
+  if (!data.success) {
+    throw new Error(data.data.message)
+  }
+
+  return data.data
 }
 
 // 프로필 수정할때

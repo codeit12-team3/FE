@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useSigninEmail } from '@/api/auth'
+import { toast } from '@/components/common'
 import { FormInput } from '@/components/form'
 import { Button } from '@/components/ui'
 import { SigninFormValues, signinSchema } from '@/types/auth'
@@ -37,6 +37,9 @@ export default function SigninForm() {
         toast.success('로그인 되었습니다')
 
         router.push(callbackUrl)
+      },
+      onError: () => {
+        toast.error('이메일 또는 비밀번호를 확인해주세요')
       },
     })
   }

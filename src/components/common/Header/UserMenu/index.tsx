@@ -22,11 +22,7 @@ export default function UserMenu() {
   return session ? (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={'ghost'}
-          size={'icon'}
-          className="flex sm:size-10 size-8 border-2 border-popover-border rounded-full items-center justify-center"
-        >
+        <button className="flex size-8 md:size-10 shrink-0 border border-gray-300 rounded-full items-center justify-center cursor-pointer">
           <Image
             src={getImageUrl(session?.user.image, true)}
             alt="프로필 이미지"
@@ -34,7 +30,7 @@ export default function UserMenu() {
             height={40}
             className="size-full object-cover rounded-full"
           />
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="max-w-[120px]">
         <div className="flex flex-col">
@@ -54,7 +50,12 @@ export default function UserMenu() {
               variant={'ghost'}
               size={'md'}
               className="flex items-center w-full text-xs font-medium justify-between"
-              onClick={() => signOut()}
+              onClick={() =>
+                signOut({
+                  callbackUrl: '/signin',
+                  redirect: true,
+                })
+              }
             >
               로그아웃 <IconArrowFromShapeRightLight className="size-4" />
             </Button>
@@ -63,7 +64,10 @@ export default function UserMenu() {
       </PopoverContent>
     </Popover>
   ) : (
-    <Link href={'/signin'} className="text-sm font-semibold text-gray-500">
+    <Link
+      href={'/signin'}
+      className="text-xs md:text-sm font-semibold text-gray-500 hover:text-gray-700 active:text-gray-700"
+    >
       로그인
     </Link>
   )

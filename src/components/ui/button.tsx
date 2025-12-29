@@ -25,6 +25,7 @@ const buttonVariants = cva(
           'bg-white text-blue-500 border border-blue-500',
           'hover:bg-gray-100 hover:text-blue-600',
           'active:bg-gray-200 active:text-blue-600 border-blue-600',
+          'disabled:border-gray-300 disabled:text-gray-400',
         ],
         ghost: ['text-gray-500', 'hover:text-gray-600', 'active:text-gray-600'],
         link: [
