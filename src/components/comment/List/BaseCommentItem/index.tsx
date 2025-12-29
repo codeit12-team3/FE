@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
 import { useCommentInteractionStore } from '@/hooks/comment/useCommentInteractionStore'
+import { useCurrentUser } from '@/hooks/comment/useCurrentUser'
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
-import { useCurrentUser } from '@/providers/CurrentUserContext'
 
 import CommentEditForm from '../CommentEditForm'
 import CommentMenu from '../CommentMenu'

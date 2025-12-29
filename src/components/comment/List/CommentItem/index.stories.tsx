@@ -2,8 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { fn } from '@storybook/test'
 import { SessionProvider } from 'next-auth/react'
 
-import { CurrentUserProvider } from '@/providers'
-
 import BaseCommentItem from '../BaseCommentItem'
 
 const mockSession = {
@@ -26,9 +24,7 @@ const meta = {
   decorators: [
     (Story) => (
       <SessionProvider session={mockSession}>
-        <CurrentUserProvider>
-          <Story />
-        </CurrentUserProvider>
+        <Story />
       </SessionProvider>
     ),
   ],

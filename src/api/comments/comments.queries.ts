@@ -1,4 +1,3 @@
-// queries/comments/comments.queries.ts
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { CommentType } from '@/types/comments/comments.type'
