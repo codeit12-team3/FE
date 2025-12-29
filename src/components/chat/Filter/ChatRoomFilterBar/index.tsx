@@ -25,7 +25,7 @@ export default function ChatRoomFilterBar({
   }
 
   return (
-    <aside className="flex justify-between w-full">
+    <aside className="flex justify-between w-full flex-col sm:flex-row gap-3">
       <div className="flex items-center gap-2">
         <ChatRoomSelect
           label="국가"

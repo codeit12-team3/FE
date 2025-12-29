@@ -17,18 +17,15 @@ export default function CardFooter({
   onJoinChat,
 }: CardFooterProps) {
   return (
-    <div className="flex items-end justify-between gap-3">
-      <CardInfo nation={nation} region={region} startDate={startDate} />
-      <div className="flex flex-col items-end gap-2">
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onJoinChat}
-          className="bg-blue-500 w-34 rounded-xl"
-        >
-          채팅 입장하기
-        </Button>
-      </div>
+    <div className="w-full flex items-end justify-end gap-3 pt-1 sm:p-0">
+      <Button
+        variant="default"
+        size="sm"
+        onClick={onJoinChat}
+        className="bg-blue-500 w-full rounded-xl sm:w-34"
+      >
+        채팅 입장하기
+      </Button>
     </div>
   )
 }

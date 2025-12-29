@@ -1,18 +1,9 @@
-import LastMessage from '../LastMessage'
-
 interface CardTitleProps {
   postTitle: string
   unreadCount?: number
-  lastMessage: string
-  lastMessageAt: string
 }
 
-export default function CardTitle({
-  postTitle,
-  unreadCount,
-  lastMessage,
-  lastMessageAt,
-}: CardTitleProps) {
+export default function CardTitle({ postTitle, unreadCount }: CardTitleProps) {
   return (
     <div className="flex flex-col gap-1 items-start">
       <div className="flex items-center gap-1.5">
@@ -26,8 +17,6 @@ export default function CardTitle({
           </span>
         )}
       </div>
-
-      <LastMessage lastMessage={lastMessage} lastMessageAt={lastMessageAt} />
     </div>
   )
 }

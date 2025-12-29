@@ -10,8 +10,8 @@ export default function LastMessage({
   lastMessageAt,
 }: LastMessageProps) {
   return (
-    <div className="flex items-center justify-end gap-1.5 text-sm text-gray-600">
-      <span className="text-gray-400">{lastMessage}</span>
+    <div className="w-full flex items-center justify-between gap-1.5 text-base text-gray-600">
+      <span>{lastMessage}</span>
       <span>{formatRelativeTime(lastMessageAt)}</span>
     </div>
   )

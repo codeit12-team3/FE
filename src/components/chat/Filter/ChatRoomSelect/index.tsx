@@ -27,7 +27,7 @@ export function ChatRoomSelect({
   const currentLabel = options.find((opt) => opt.value === value)?.label
 
   return (
-    <SelectRoot value={value} onValueChange={onValueChange}>
+    <SelectRoot value={value} onValueChange={onValueChange} className="w-fit">
       <SelectTrigger className="w-22 h-10 bg-white text-xs pl-3 py-2.5 pr-2.5">
         <SelectValue
           placeholder={label}

@@ -6,6 +6,7 @@ export interface ChatRoomContent {
   unreadCount: number
   title: string
   thumbnail: string | null
+  tags: string[]
   nation: string
   region: string
   startDate: string // YYYY-MM-DD

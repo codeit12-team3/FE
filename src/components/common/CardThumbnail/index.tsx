@@ -20,7 +20,7 @@ export default function CardThumbnail({
   const imageSrc = imageUrl ? getImageUrl(imageUrl) : DEFAULT_THUMBNAIL
 
   return (
-    <div className="relative w-47 aspect-square rounded-3xl overflow-hidden">
+    <div className="relative w-full h-47 sm:w-47 sm:aspect-square rounded-t-3xl sm:rounded-3xl overflow-hidden">
       <Image
         fill
         src={imageSrc}

@@ -3,7 +3,9 @@
 
 @theme inline {
   --font-sans: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
-
+  /* Break Point */
+  --breakpoint-xs: 23.4375rem;
+  --breakpoint-sm: 46.5rem;
   /* Font Scale */
   --text-xs: 12px;
   --text-xs--line-height: 16px;
