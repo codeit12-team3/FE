@@ -132,12 +132,12 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-gray-100">
       <div className=" flex items-center justify-center">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="sm:max-w-[475px] max-w-[343px] sm:mt-10 mt-6"
+            className="sm:max-w-[475px] max-w-[343px] sm:mt-10 mt-6 px-4"
           >
             <h1 className="text-lg font-semibold text-left mb-8">
               {isEdit ? '게시글 수정' : '게시글 작성'}

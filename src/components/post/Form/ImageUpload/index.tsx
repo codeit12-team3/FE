@@ -3,10 +3,10 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { uploadPostImages } from '@/api/images/images.client'
 import { IconImagePlus, IconX } from '@/assets/svgr'
+import { toast } from '@/components/common/Toast'
 import { Label } from '@/components/ui'
 import { getImageUrl } from '@/lib/common'
 import type { PostFormValues } from '@/types/posts/schema'
@@ -197,16 +197,21 @@ export default function ImageUpload() {
         이미지{' '}
         <span className="text-gray-500 text-xs">(첫 번째가 대표 이미지)</span>
       </Label>
-
       <div className="flex gap-3">
         <button
           type="button"
           onClick={openPicker}
           disabled={isUploading || !canAddMore}
-          className="bg-gray-200 rounded-xl sm:size-27.5 size-20 flex items-center justify-center disabled:opacity-50 transition-colors"
+          className="bg-gray-200 rounded-xl sm:size-27.5 size-20 flex items-center justify-center disabled:opacity-50 transition-colors relative cursor-pointer"
           aria-label="이미지 업로드"
         >
-          <IconImagePlus className="size-7 text-gray-500" />
+          {isUploading ? (
+            <div className="flex flex-col items-center gap-1 ">
+              <div className="size-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <IconImagePlus className="size-7 text-gray-400" />
+          )}
         </button>
 
         {Array.from({ length: MAX_IMAGES }).map((_, index) => (
