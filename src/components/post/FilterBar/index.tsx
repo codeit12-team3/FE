@@ -1,12 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import 'dayjs/locale/ko'
 
 import { IconSearch } from '@/assets/svgr'
-import { Button, InputGroup, InputGroupInput } from '@/components/ui'
+import { InputGroup, InputGroupInput } from '@/components/ui'
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,
@@ -19,11 +18,11 @@ import FilterSelect from './FilterSelect'
 
 export default function FilterBar({
   onApply,
+  actionButton,
 }: {
   onApply: (filters: PostFilterParams) => void
+  actionButton?: React.ReactNode
 }) {
-  const router = useRouter()
-
   const [filters, setFilters] = useState<Omit<PostFilterParams, 'keyword'>>({
     nation: '',
     date: '',
@@ -54,7 +53,6 @@ export default function FilterBar({
     <div className=" py-4">
       <div className="hidden xl:flex gap-2 justify-between">
         <div className="flex gap-2">
-          {/* 국가 */}
           <FilterSelect
             value={filters.nation}
             options={NATION_ENUM_OPTIONS}
@@ -67,7 +65,6 @@ export default function FilterBar({
             className={TRIGGER}
           />
 
-          {/* 나이 */}
           <FilterSelect
             value={filters.ageType}
             options={AGE_OPTIONS}
@@ -80,7 +77,6 @@ export default function FilterBar({
             className={TRIGGER}
           />
 
-          {/* 성별 */}
           <FilterSelect
             value={filters.gender}
             options={GENDER_OPTIONS}
@@ -93,7 +89,7 @@ export default function FilterBar({
             className={TRIGGER}
             includeAllOption={false}
           />
-          {/* 날짜 */}
+
           <FilterDate
             date={filters.date}
             onApply={(date) => applyImmediately({ date })}
@@ -101,8 +97,7 @@ export default function FilterBar({
           />
         </div>
 
-        {/* 검색 */}
-        <div className="flex-1 relative w-full">
+        <div className="max-w-[536px] w-full relative flex gap-4">
           <InputGroup className="h-10">
             <InputGroupInput
               placeholder="검색어를 입력해주세요"
@@ -111,15 +106,8 @@ export default function FilterBar({
             />
             <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
           </InputGroup>
+          {actionButton}
         </div>
-
-        <Button
-          size="md"
-          className="gap-2 w-36"
-          onClick={() => router.push('/posts/add')}
-        >
-          동행 구하기
-        </Button>
       </div>
 
       <div className="flex xl:hidden flex-col gap-3">
@@ -135,17 +123,10 @@ export default function FilterBar({
             </InputGroup>
           </div>
 
-          <Button
-            size="md"
-            className="gap-2 whitespace-nowrap"
-            onClick={() => router.push('/posts/add')}
-          >
-            동행 구하기
-          </Button>
+          {actionButton}
         </div>
 
         <div className="flex gap-2 overflow-x-auto">
-          {/* 국가 */}
           <FilterSelect
             value={filters.nation}
             options={NATION_ENUM_OPTIONS}
@@ -158,7 +139,6 @@ export default function FilterBar({
             className={TRIGGER}
           />
 
-          {/* 나이 */}
           <FilterSelect
             value={filters.ageType}
             options={AGE_OPTIONS}
@@ -171,7 +151,6 @@ export default function FilterBar({
             className={TRIGGER}
           />
 
-          {/* 성별 */}
           <FilterSelect
             value={filters.gender}
             options={GENDER_OPTIONS}
@@ -185,7 +164,6 @@ export default function FilterBar({
             includeAllOption={false}
           />
 
-          {/* 날짜 */}
           <FilterDate
             date={filters.date}
             onApply={(date) => applyImmediately({ date })}
