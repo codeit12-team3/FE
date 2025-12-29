@@ -34,9 +34,9 @@ export default function Header() {
                 게시판
               </Link>
               <Link
-                href="/chatting"
+                href="/chat"
                 className={`text-base transition-colors ${
-                  pathname === '/chatting'
+                  pathname === '/chat'
                     ? 'text-main font-semibold'
                     : 'text-text-input hover:text-main'
                 }`}
