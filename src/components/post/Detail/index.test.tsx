@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import {
   mockPostDetail as mockPostData,
@@ -80,12 +80,20 @@ jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(),
 }))
 
+jest.mock('@/components/comment', () => ({
+  __esModule: true,
+  default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
+}))
+
 const mockPush = jest.fn()
 
 beforeEach(() => {
   jest.clearAllMocks()
   ;(useRouter as jest.Mock).mockReturnValue({
     push: mockPush,
+  })
+  ;(useParams as jest.Mock).mockReturnValue({
+    postId: '1',
   })
 
   const { useDeletePost, usePatchPost } = jest.requireMock('@/api/posts')

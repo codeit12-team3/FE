@@ -1,6 +1,5 @@
 'use client'
 
-import CommentSkeleton from '@/components/comment/List/CommentSkeleton'
 import { Skeleton } from '@/components/ui'
 
 export default function PostDetailSkeleton() {
@@ -71,7 +70,6 @@ export default function PostDetailSkeleton() {
             </div>
 
             <div className="bg-gray-300 w-full h-px mt-12" />
-            <CommentSkeleton />
           </div>
         </div>
       </div>

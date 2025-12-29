@@ -1,0 +1,81 @@
+import { Virtuoso } from 'react-virtuoso'
+
+import { Spinner } from '@/components/ui/spinner'
+import { CommentContent } from '@/types/comments/comments.type'
+
+import ErrorFallback from '../../Error/ErrorFallback'
+import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentSkeleton'
+import CommentWithReplies from '../CommentWithReplies'
+
+interface CommentListProps {
+  comments: CommentContent[]
+  isLoading: boolean
+  fetchNextPage: () => void
+  hasNextPage: boolean
+  isFetchingNextPage: boolean
+  isError: boolean
+}
+
+export default function CommentList({
+  comments,
+  isLoading,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isError,
+}: CommentListProps) {
+  const handleEndReached = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <BaseCommentItemSkeleton key={index} showReplies={true} />
+        ))}
+      </div>
+    )
+  }
+
+  if (comments.length === 0) {
+    return (
+      <div className="py-12 text-center text-gray-500">
+        첫 댓글을 작성해보세요!
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <ErrorFallback
+        message="댓글을 불러오는데 실패했습니다."
+        onRetry={() => fetchNextPage()}
+      />
+    )
+  }
+
+  return (
+    <Virtuoso
+      useWindowScroll
+      data={comments}
+      endReached={handleEndReached}
+      itemContent={(index, comment) => (
+        <div className="pb-6">
+          <CommentWithReplies key={comment.commentId} comment={comment} />
+        </div>
+      )}
+      components={{
+        Footer: () => {
+          return isFetchingNextPage ? (
+            <div className="py-4 text-center flex items-center justify-center gap-2">
+              <Spinner />
+              <p className="text-sm text-gray-500">댓글 불러오는 중...</p>
+            </div>
+          ) : null
+        },
+      }}
+    />
+  )
+}

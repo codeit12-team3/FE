@@ -41,6 +41,7 @@ jest.mock('next/image', () => ({
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useParams: jest.fn(),
 }))
 
 jest.mock('@/assets/svgr', () => {

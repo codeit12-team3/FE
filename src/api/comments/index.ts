@@ -1,2 +1,4 @@
 export * from './comments.mutations'
-export * from './comments.clients'
+export * from './comments.queries'
+export * from './replies.mutations'
+export * from './replies.queries'

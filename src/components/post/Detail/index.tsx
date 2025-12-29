@@ -70,7 +70,7 @@ export default function PostDetail({ postId }: { postId: string }) {
             </div>
             <PostInfo postId={postId} />
             <div className="bg-gray-300 w-full h-px mt-12" />
-            <Comment postId={postId} />
+            <Comment commentCount={postDetail.commentCount} />
           </div>
         </div>
       </div>
