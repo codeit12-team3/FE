@@ -49,7 +49,7 @@ export default function RecievedCard({ data, idx }: Props) {
         height={188}
         priority={idx < 3}
         sizes="188px"
-        className="relative w-full h-[188px] md:w-[188px] md:rounded-3xl rounded-t-3xl rounded-b-0 md:rounded-b-3xl overflow-hidden shrink-0 object-cover"
+        className="relative w-full h-[188px] md:w-[188px] rounded-3xl rounded-b-none md:rounded-b-3xl overflow-hidden shrink-0 object-cover"
         src={getImageUrl(thumbnail)}
         alt={`${title} 게시글의 Thumbnail`}
       />
