@@ -6,7 +6,7 @@ import './globals.css'
 
 import { SessionProvider } from 'next-auth/react'
 
-import { Header, Toaster } from '@/components/common'
+import { Header, Modal, Toaster } from '@/components/common'
 import { LazyMotionProvider, MSWProvider, QueryProvider } from '@/providers'
 
 const pretendard = localFont({
@@ -37,6 +37,7 @@ export default function RootLayout({
               <LazyMotionProvider>
                 <Header />
                 {children}
+                <Modal />
               </LazyMotionProvider>
             </SessionProvider>
           </QueryProvider>
