@@ -1,13 +1,17 @@
+import LastMessage from '../LastMessage'
+
 interface CardTitleProps {
   postTitle: string
-  owner: string
   unreadCount?: number
+  lastMessage: string
+  lastMessageAt: string
 }
 
 export default function CardTitle({
   postTitle,
-  owner,
   unreadCount,
+  lastMessage,
+  lastMessageAt,
 }: CardTitleProps) {
   return (
     <div className="flex flex-col gap-1 items-start">
@@ -23,10 +27,7 @@ export default function CardTitle({
         )}
       </div>
 
-      <p className="font-medium text-sm -tracking-[0.28px] text-gray-600">
-        <span className="pr-2.5 text-gray-400">작성자</span>
-        {owner}
-      </p>
+      <LastMessage lastMessage={lastMessage} lastMessageAt={lastMessageAt} />
     </div>
   )
 }

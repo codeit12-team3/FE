@@ -33,10 +33,10 @@ function InputGroup({
           'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3',
 
           // Focus state.
-          'has-[[data-slot=input-group-control]:focus-visible]:border-blue-500 has-[[data-slot=input-group-control]:focus-visible]:ring-blue-500/40 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
+          'has-[[data-slot=input-group-control]:focus-visible]:border-blue-500 has-[[data-slot=input-group-control]:focus-visible]:ring-blue-500 has-[[data-slot=input-group-control]:focus-visible]:ring-[1px]',
 
           // Error state.
-          'has-[[data-slot][aria-invalid=true]]:ring-red/40 has-[[data-slot][aria-invalid=true]]:border-red',
+          'has-[[data-slot][aria-invalid=true]]:ring-red-500 has-[[data-slot][aria-invalid=true]]:border-red-500',
 
           disabled && 'bg-gray-200 text-gray-500',
 

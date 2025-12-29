@@ -1,3 +1,9 @@
+import ChatRoomContainer from '@/components/chat'
+
 export default function Chat() {
-  return <div></div>
+  return (
+    <div className="w-full h-full">
+      <ChatRoomContainer />
+    </div>
+  )
 }

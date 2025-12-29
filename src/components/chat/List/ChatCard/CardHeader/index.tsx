@@ -1,8 +1,9 @@
 import { Badge } from '@/components/common/Badge'
+import { cn } from '@/lib/common'
+import { RecruitStatus } from '@/types/chat/chats.types'
 
 interface ChatHeaderProps {
-  tags: string[]
-  recruitStatus: 'COMPLETED' | 'RECRUITING' | 'FINISH'
+  recruitStatus: RecruitStatus
 }
 
 const RECRUIT_STATUS = [
@@ -23,18 +24,15 @@ const RECRUIT_STATUS = [
   },
 ] as const
 
-export default function CardHeader({ tags, recruitStatus }: ChatHeaderProps) {
+export default function CardHeader({ recruitStatus }: ChatHeaderProps) {
   const status = RECRUIT_STATUS.find((status) => status.key === recruitStatus)
   return (
-    <div className="flex items-start justify-between">
-      <ul>
-        {tags.map((tag, index) => (
-          <Badge key={index}>{tag}</Badge>
-        ))}
-      </ul>
-      <div className="flex items-center gap-4">
-        {status && <Badge className={status.color}>{status.label}</Badge>}
-      </div>
+    <div className="w-full flex items-center gap-4 justify-end">
+      {status && (
+        <Badge className={cn(`${status.color}`, 'border-none text-xs')}>
+          {status.label}
+        </Badge>
+      )}
     </div>
   )
 }
