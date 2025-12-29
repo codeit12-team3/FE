@@ -30,7 +30,7 @@ export default function Header() {
               <Link
                 href="/"
                 className={cn(
-                  'transition-colors text-xs font-semibold px-5 py-2.5 md:text-sm',
+                  'transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/'
                     ? 'text-blue-500'
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
@@ -43,7 +43,7 @@ export default function Header() {
               <Link
                 href="/"
                 className={cn(
-                  'transition-colors text-xs font-semibold px-5 py-2.5 md:text-sm',
+                  'transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/chatting'
                     ? 'text-blue-500'
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
