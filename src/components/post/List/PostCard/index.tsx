@@ -1,6 +1,5 @@
 'use client'
 
-import { Heart } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -11,7 +10,12 @@ import {
   useDeletePost,
   useRemoveBookmark,
 } from '@/api/posts/posts.mutations'
-import { IconCrownSolid, IconUser } from '@/assets/svgr'
+import {
+  IconCrownSolid,
+  IconHeart,
+  IconHeartSolid,
+  IconUser,
+} from '@/assets/svgr'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
@@ -97,12 +101,7 @@ export default function PostCard({
               onClick={handleToggleBookmark}
               className="w-10 h-10 sm:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
             >
-              <Heart
-                className={`size-6 ${
-                  post.isBookmarked ? 'fill-blue-500' : 'fill-gray-300'
-                }`}
-                strokeWidth={0}
-              />
+              {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
             </button>
           </div>
           <div className="px-1 ">
@@ -169,12 +168,7 @@ export default function PostCard({
             onClick={handleToggleBookmark}
             className="w-10 h-10 sm:flex items-center justify-center  transition-colors hover:bg-gray-100 cursor-pointer hidden"
           >
-            <Heart
-              className={`size-6 ${
-                post.isBookmarked ? 'fill-blue-500' : 'fill-gray-300'
-              }`}
-              strokeWidth={0}
-            />
+            {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
           </button>
 
           {post.isOwner ? (
