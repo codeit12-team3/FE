@@ -8,7 +8,10 @@ import { IconUser } from '@/assets/svgr'
 import { toast } from '@/components/common'
 import { Button } from '@/components/ui'
 import { formatDateToKorean, getImageUrl } from '@/lib/common'
+import { useModalActions } from '@/stores'
 import { CompanionState, ReceivedCompanionContent } from '@/types/companions'
+
+import OtherProfile from '../../OtherProfile'
 
 interface Props {
   data: ReceivedCompanionContent
@@ -18,8 +21,10 @@ interface Props {
 export default function RecievedCard({ data, idx }: Props) {
   const router = useRouter()
 
+  const { openModal } = useModalActions()
+
   const { id, title, thumbnail, tags, region, startDate } = data.postResponse
-  const { companionId, nickname, applyMessage, status } =
+  const { companionId, nickname, applyMessage, status, memberId } =
     data.guestCompanionResponse
 
   const { mutate, isPending } = useUpdateCompanionStatus()
@@ -39,6 +44,10 @@ export default function RecievedCard({ data, idx }: Props) {
         },
       },
     )
+  }
+
+  const handleOtherProfile = (memberId: string) => {
+    openModal(<OtherProfile memberId={memberId} />)
   }
 
   return (
@@ -87,10 +96,14 @@ export default function RecievedCard({ data, idx }: Props) {
         {/* 하단 컨텐츠 */}
         <div className="flex flex-col gap-5 md:gap-0 md:flex-row md:justify-between w-full">
           <div className="flex flex-col gap-2.5">
-            <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => handleOtherProfile(memberId)}
+              className="w-fit flex items-center gap-1 cursor-pointer hover:underline"
+            >
               <IconUser className="size-4" />
               <span className="text-sm font-medium">{nickname}</span>
-            </div>
+            </button>
             <div className="flex items-center gap-2.5">
               <div className="flex items-center gap-1.5 text-sm font-medium">
                 <span className="text-gray-400">지역</span>
