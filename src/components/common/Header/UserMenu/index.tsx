@@ -22,15 +22,19 @@ export default function UserMenu() {
   return session ? (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="flex size-10 shrink-0 border border-gray-300 rounded-full items-center justify-center cursor-pointer">
+        <Button
+          variant={'ghost'}
+          size={'icon'}
+          className="flex sm:size-10 size-8 border-2 border-popover-border rounded-full items-center justify-center"
+        >
           <Image
             src={getImageUrl(session?.user.image, true)}
             alt="프로필 이미지"
-            width={50}
-            height={50}
+            width={40}
+            height={40}
             className="size-full object-cover rounded-full"
           />
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="max-w-[120px]">
         <div className="flex flex-col">

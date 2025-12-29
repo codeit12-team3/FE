@@ -44,7 +44,7 @@ export default function PostManage({ postId }: { postId: string }) {
   }
 
   return (
-    <div className="flex gap-5 items-center justify-between">
+    <>
       <Select
         value={recruitStatus}
         onValueChange={(value) =>
@@ -62,7 +62,7 @@ export default function PostManage({ postId }: { postId: string }) {
         </SelectContent>
       </Select>
 
-      <div className="flex gap-4">
+      <div className="hidden sm:flex gap-4">
         <button
           onClick={handleEdit}
           className="cursor-pointer"
@@ -79,6 +79,6 @@ export default function PostManage({ postId }: { postId: string }) {
           <IconTrashLight className="text-gray-400 size-6" />
         </button>
       </div>
-    </div>
+    </>
   )
 }
