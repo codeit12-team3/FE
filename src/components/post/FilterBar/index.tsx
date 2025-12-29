@@ -1,25 +1,12 @@
 'use client'
 
-import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import DatePicker from 'react-datepicker'
 
-import 'react-datepicker/dist/react-datepicker.css'
+import 'dayjs/locale/ko'
 
-import { IconArrowDown, IconSearch } from '@/assets/svgr'
-import {
-  Button,
-  InputGroup,
-  InputGroupInput,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui'
+import { IconSearch } from '@/assets/svgr'
+import { Button, InputGroup, InputGroupInput } from '@/components/ui'
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,
@@ -27,116 +14,8 @@ import {
 } from '@/constants/posts'
 import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
 
-const getSelectLabel = (
-  value: string | undefined,
-  options: readonly { readonly value: string; readonly label: string }[],
-  defaultLabel: string,
-) => {
-  return value
-    ? options.find((opt) => opt.value === value)?.label
-    : defaultLabel
-}
-
-const FilterSelect = ({
-  value,
-  options,
-  placeholder,
-  onChange,
-  className,
-  includeAllOption = true,
-}: {
-  value: string | undefined
-  options: readonly { readonly value: string; readonly label: string }[]
-  placeholder: string
-  onChange: (value: string) => void
-  className?: string
-  includeAllOption?: boolean
-}) => (
-  <Select value={value || 'ALL'} onValueChange={onChange}>
-    <SelectTrigger className={className} size="sm">
-      <span className="text-xs sm:text-sm">
-        {getSelectLabel(value, options, placeholder)}
-      </span>
-    </SelectTrigger>
-    <SelectContent className="w-auto min-w-(--radix-select-trigger-width)">
-      {includeAllOption && <SelectItem value="ALL">전체</SelectItem>}
-      {options.map((opt) => (
-        <SelectItem key={opt.value} value={opt.value}>
-          {opt.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)
-
-const FilterDatePicker = ({
-  date,
-  onApply,
-  triggerClassName,
-}: {
-  date: string | undefined
-  onApply: (date: string) => void
-  triggerClassName?: string
-}) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [tempDate, setTempDate] = useState<Date | undefined>(undefined)
-
-  return (
-    <Popover
-      open={isOpen}
-      onOpenChange={(open) => {
-        setIsOpen(open)
-        if (open) {
-          setTempDate(date ? new Date(date) : undefined)
-        }
-      }}
-    >
-      <PopoverTrigger className={triggerClassName}>
-        <div className="flex items-center justify-center gap-2 bg-white border border-gray-200 px-3 font-medium rounded-xl h-10 text-sm text-gray-800">
-          <span className="text-gray-800 text-xs sm:text-sm">
-            {date ? `${dayjs(date).format('YYYY년 MM월 DD일')}` : '날짜'}
-          </span>
-          <IconArrowDown />
-        </div>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <div className="p-3">
-          <DatePicker
-            selected={tempDate}
-            onChange={(date: Date | null) => {
-              setTempDate(date || undefined)
-            }}
-            inline
-          />
-          <div className="flex gap-2">
-            <Button
-              variant="tertiary"
-              onClick={() => {
-                onApply('')
-                setTempDate(undefined)
-                setIsOpen(false)
-              }}
-              className="flex-1 h-10"
-            >
-              초기화
-            </Button>
-            <Button
-              onClick={() => {
-                if (tempDate) {
-                  onApply(dayjs(tempDate).format('YYYY-MM-DD'))
-                }
-                setIsOpen(false)
-              }}
-              className="flex-1 h-10"
-            >
-              확인
-            </Button>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
-  )
-}
+import FilterDate from './FilterDate'
+import FilterSelect from './FilterSelect'
 
 export default function FilterBar({
   onApply,
@@ -215,7 +94,7 @@ export default function FilterBar({
             includeAllOption={false}
           />
           {/* 날짜 */}
-          <FilterDatePicker
+          <FilterDate
             date={filters.date}
             onApply={(date) => applyImmediately({ date })}
             triggerClassName="w-auto min-w-22 text-sm text-gray-800 font-medium"
@@ -307,7 +186,7 @@ export default function FilterBar({
           />
 
           {/* 날짜 */}
-          <FilterDatePicker
+          <FilterDate
             date={filters.date}
             onApply={(date) => applyImmediately({ date })}
             triggerClassName="w-auto min-w-22 text-sm text-gray-800 font-medium"
