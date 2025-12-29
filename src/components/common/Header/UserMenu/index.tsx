@@ -50,7 +50,12 @@ export default function UserMenu() {
               variant={'ghost'}
               size={'md'}
               className="flex items-center w-full text-xs font-medium justify-between"
-              onClick={() => signOut()}
+              onClick={() =>
+                signOut({
+                  callbackUrl: '/signin',
+                  redirect: true,
+                })
+              }
             >
               로그아웃 <IconArrowFromShapeRightLight className="size-4" />
             </Button>
