@@ -12,8 +12,8 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="border-b border-gray-200 bg-white h-[52px] md:h-[68px]">
-      <div className="max-w-7xl mx-auto px-4 py-2 md:px-6 md:py-3 ">
+    <header className="flex items-center justify-center border-b border-gray-200 bg-white h-[52px] md:h-[68px]">
+      <div className="max-w-7xl px-4 py-2 md:px-6 md:py-3 w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 md:gap-8 ">
             <Link href="/">
