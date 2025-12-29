@@ -54,7 +54,9 @@ const FilterSelect = ({
 }) => (
   <Select value={value || 'ALL'} onValueChange={onChange}>
     <SelectTrigger className={className} size="sm">
-      <span>{getSelectLabel(value, options, placeholder)}</span>
+      <span className="text-xs sm:text-sm">
+        {getSelectLabel(value, options, placeholder)}
+      </span>
     </SelectTrigger>
     <SelectContent className="w-auto min-w-(--radix-select-trigger-width)">
       {includeAllOption && <SelectItem value="ALL">전체</SelectItem>}
@@ -91,7 +93,7 @@ const FilterDatePicker = ({
     >
       <PopoverTrigger className={triggerClassName}>
         <div className="flex items-center justify-center gap-2 bg-white border border-gray-200 px-3 font-medium rounded-xl h-10 text-sm text-gray-800">
-          <span className="text-gray-800">
+          <span className="text-gray-800 text-xs sm:text-sm">
             {date ? `${dayjs(date).format('YYYY년 MM월 DD일')}` : '날짜'}
           </span>
           <IconArrowDown />
@@ -171,8 +173,7 @@ export default function FilterBar({
   const TRIGGER = 'w-22 text-sm text-gray-800 font-medium'
 
   return (
-    <div className=" p-4">
-      {/* 데스크톱 레이아웃 */}
+    <div className=" py-4">
       <div className="hidden xl:flex gap-2 justify-between">
         <div className="flex gap-2">
           {/* 국가 */}
@@ -243,9 +244,7 @@ export default function FilterBar({
         </Button>
       </div>
 
-      {/* 모바일 레이아웃 */}
       <div className="flex xl:hidden flex-col gap-3">
-        {/* 상단: 검색과 동행 구하기 버튼 */}
         <div className="flex gap-2 justify-between">
           <div className="flex-1 relative max-w-[332px]">
             <InputGroup className="h-10">
@@ -267,7 +266,6 @@ export default function FilterBar({
           </Button>
         </div>
 
-        {/* 하단: 필터링 조건 */}
         <div className="flex gap-2 overflow-x-auto">
           {/* 국가 */}
           <FilterSelect

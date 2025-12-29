@@ -203,7 +203,7 @@ export default function ImageUpload() {
           type="button"
           onClick={openPicker}
           disabled={isUploading || !canAddMore}
-          className="bg-gray-200 rounded-xl size-27.5 flex items-center justify-center disabled:opacity-50 transition-colors"
+          className="bg-gray-200 rounded-xl sm:size-27.5 size-20 flex items-center justify-center disabled:opacity-50 transition-colors"
           aria-label="이미지 업로드"
         >
           <IconImagePlus className="size-7 text-gray-500" />
@@ -212,7 +212,7 @@ export default function ImageUpload() {
         {Array.from({ length: MAX_IMAGES }).map((_, index) => (
           <div
             key={index}
-            className="relative  size-27.5 flex items-center justify-center overflow-hidden"
+            className="relative  sm:size-27.5 size-20 flex items-center justify-center overflow-hidden"
           >
             {renderImageSlot(index)}
           </div>
