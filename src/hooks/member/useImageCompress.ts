@@ -1,6 +1,25 @@
 import imageCompression, { Options } from 'browser-image-compression'
 import { useState } from 'react'
 
+type PresetType = 'profile' | 'post'
+
+const COMPRESSION_PRESETS: Record<PresetType, Options> = {
+  profile: {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1024,
+    useWebWorker: true,
+    initialQuality: 0.9,
+    alwaysKeepResolution: false,
+  },
+  post: {
+    maxSizeMB: 3,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    initialQuality: 0.9,
+    alwaysKeepResolution: false,
+  },
+}
+
 interface CompressResult {
   file: File
   previewUrl: string
@@ -18,6 +37,7 @@ interface UseImageCompressReturn {
 }
 
 export default function useImageCompress(
+  preset: PresetType = 'profile',
   customOptions?: Partial<Options>,
 ): UseImageCompressReturn {
   const [isCompressing, setIsCompressing] = useState(false)
@@ -36,24 +56,32 @@ export default function useImageCompress(
 
     try {
       const options: Options = {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 512,
-        useWebWorker: true,
-        initialQuality: 0.85,
+        ...COMPRESSION_PRESETS[preset],
         ...customOptions,
       }
 
       const compressedFile = await imageCompression(file, options)
 
-      const preview = URL.createObjectURL(compressedFile)
-      setPreviewUrl(preview)
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+
+      const newPreviewUrl = URL.createObjectURL(compressedFile)
+      setPreviewUrl(newPreviewUrl)
+
+      const originalSize = file.size
+      const compressedSize = compressedFile.size
+      const ratio =
+        originalSize > 0
+          ? Number(((1 - compressedSize / originalSize) * 100).toFixed(1))
+          : 0
 
       const result: CompressResult = {
         file: compressedFile,
-        previewUrl: preview,
-        originalSize: file.size,
-        compressedSize: compressedFile.size,
-        ratio: Number(((1 - compressedFile.size / file.size) * 100).toFixed(1)),
+        previewUrl: newPreviewUrl,
+        originalSize,
+        compressedSize,
+        ratio,
       }
 
       return result
@@ -67,7 +95,9 @@ export default function useImageCompress(
   }
 
   const reset = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
     setPreviewUrl(null)
     setError(null)
   }

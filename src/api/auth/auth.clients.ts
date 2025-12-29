@@ -6,6 +6,7 @@ import {
   SigninEmailRes,
   SignupEmailReq,
   SignupEmailRes,
+  TokenRes,
 } from '@/types/auth'
 import { ApiResponse } from '@/types/common'
 
@@ -80,13 +81,15 @@ export const signinEmail = async (body: SigninEmailReq) => {
  * next-auth와의 순환 참조 문제로 원본 axios 사용
  */
 export const renewalToken = async (token: string) => {
-  const res = await originAxios.post<ApiResponse<SigninEmailRes>>(
+  const cookieHeader = `refreshToken=${token.trim()}`
+
+  const res = await originAxios.post<ApiResponse<TokenRes>>(
     `${BASE_URL}/v1/auth/refresh`,
-    {},
+    null,
     {
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': `refreshToken=${token}`,
+        'Cookie': cookieHeader,
       },
       timeout: TIMEOUT_LIMIT,
     },

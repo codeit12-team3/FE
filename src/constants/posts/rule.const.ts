@@ -1,3 +1,5 @@
+import { AgeType, GenderType } from '@/types/posts'
+
 export const NATION_OPTIONS = [
   '한국',
   '일본',
@@ -65,13 +67,34 @@ export const REGION_OPTIONS: Record<NationLabel, readonly string[]> = {
 export const AGE_OPTIONS = [
   { value: 'TWENTY', label: '20대' },
   { value: 'THIRTY', label: '30대' },
-  { value: 'FOURTY', label: '40대' },
+  { value: 'FORTY', label: '40대' },
   { value: 'FIFTY', label: '50대' },
-  { value: 'ETC', label: '모두' },
 ] as const
 
 export const GENDER_OPTIONS = [
+  { value: 'ALL', label: '모두' },
   { value: 'MALE', label: '남성만' },
   { value: 'FEMALE', label: '여성만' },
-  { value: 'ALL', label: '모두' },
 ] as const
+export const AGE_ENUM_TO_LABEL: Record<AgeType, string> = {
+  TWENTY: '20대',
+  THIRTY: '30대',
+  FORTY: '40대',
+  FIFTY: '50대',
+}
+export const AGE_LABEL_TO_ENUM: Record<string, AgeType> = {
+  '20대': AgeType.TWENTY,
+  '30대': AgeType.THIRTY,
+  '40대': AgeType.FORTY,
+  '50대': AgeType.FIFTY,
+}
+export const GENDER_ENUM_TO_LABEL: Record<GenderType, string> = {
+  MALE: '남성만',
+  FEMALE: '여성만',
+  ALL: '모두',
+}
+export const GENDER_LABEL_TO_ENUM: Record<string, GenderType> = {
+  남성만: GenderType.MALE,
+  여성만: GenderType.FEMALE,
+  모두: GenderType.ALL,
+}

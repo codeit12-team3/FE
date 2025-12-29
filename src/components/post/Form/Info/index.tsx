@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
@@ -15,8 +15,8 @@ import {
 import { PostFormValues } from '@/types/posts/schema'
 
 export default function Info() {
-  const { control, watch } = useFormContext<PostFormValues>()
-  const selectedNation = watch('nation')
+  const { control } = useFormContext<PostFormValues>()
+  const selectedNation = useWatch({ control, name: 'nation' })
   const cityOptions = useMemo(() => {
     if (!selectedNation) return []
     return (
@@ -26,59 +26,70 @@ export default function Info() {
   }, [selectedNation])
   return (
     <div>
-      <div className="flex justify-between mb-6">
-        <div>
+      <div className="flex gap-4 mb-6">
+        <div className="w-1/2">
           <Label htmlFor="nation" className="mb-2">
-            국가 <span className="text-destructive">*</span>
+            국가<span className="text-blue-500">*</span>
           </Label>
           <FormSelect
             name="nation"
             options={NATION_OPTIONS}
             placeholder="국가를 선택해주세요"
-            className="w-[230px]"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
 
-        <div>
-          <Label htmlFor="nation" className="mb-2">
-            도시 <span className="text-destructive">*</span>
+        <div className="w-1/2">
+          <Label htmlFor="region" className="mb-2">
+            도시 <span className="text-blue-500">*</span>
           </Label>
           <FormSelect
             name="region"
             options={cityOptions}
             placeholder="도시를 선택해주세요"
-            className="w-[230px]"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <FormInput
-          label="모집 정원"
-          type="number"
+      <div className="flex gap-4">
+        <Controller
           name="maxMembers"
-          placeholder="인원을 입력해주세요"
-          className="w-[230px]"
-          required
+          control={control}
+          render={({ field }) => (
+            <FormInput
+              label="모집 정원"
+              type="number"
+              name="maxMembers"
+              placeholder="인원을 입력해주세요"
+              className="w-1/2"
+              value={field.value || ''}
+              onChange={(e) => {
+                const value = e.target.value === '' ? 0 : Number(e.target.value)
+                field.onChange(value)
+              }}
+              required
+            />
+          )}
         />
-        <div>
-          <Label htmlFor="gender" className="mb-4">
-            성별 <span className="text-destructive">*</span>
+        <div className="w-1/2">
+          <Label htmlFor="ageType" className="mb-2">
+            나이 <span className="text-blue-500">*</span>
           </Label>
           <FormSelect
-            name="gender"
-            options={GENDER_OPTIONS}
-            placeholder="성별을 선택해주세요"
-            className="w-[230px]"
+            name="ageType"
+            options={AGE_OPTIONS}
+            placeholder="나이를 선택해주세요"
+            className="w-full data-placeholder:text-sm"
           />
         </div>
       </div>
       <div className="mb-6">
-        <Label htmlFor="nation" className="mb-2">
-          나이<span className="text-destructive">*</span>
+        <Label htmlFor="gender" className="mb-2">
+          성별<span className="text-destructive">*</span>
         </Label>
         <Controller
-          name="ageType"
+          name="gender"
           control={control}
           render={({ field }) => (
             <RadioGroup
@@ -86,8 +97,8 @@ export default function Info() {
               onValueChange={field.onChange}
               className="flex gap-3 items-center"
             >
-              {AGE_OPTIONS.map((opt) => (
-                <Label key={opt.value} className="flex items-center gap-2">
+              {GENDER_OPTIONS.map((opt) => (
+                <Label key={opt.value} className="flex items-center gap-3">
                   <RadioGroupItem value={opt.value} />
                   <span className="text-sm">{opt.label}</span>
                 </Label>

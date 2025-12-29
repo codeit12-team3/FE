@@ -6,11 +6,13 @@ import {
 } from '@/constants/member'
 
 export interface Member {
+  memberId: number
   email: string
   nickname: string
   birth: string
   gender: Gender
   mbti: MBTI
+  image: string | null
 }
 
 export interface UpdateMyProfileReq {
@@ -41,7 +43,7 @@ export interface MyProfile {
 export interface PresignedUrlRequest {
   images: Array<{
     imageId: string
-    imageType: 'JPG' | 'JPEG' | 'PNG' | 'SVG'
+    imageType: 'JPG' | 'JPEG' | 'PNG' | 'WEBP'
     imageDirectory: 'MEMBER' | 'POST'
   }>
 }

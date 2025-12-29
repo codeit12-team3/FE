@@ -4,15 +4,15 @@ import { SignupForm } from '@/components/auth'
 
 export default function Page() {
   return (
-    <section className="px-4 md:px-14 py-6 md:py-11 rounded-[40px] bg-white flex-1 w-full space-y-4">
-      <div className="space-y-[35px]">
-        <h2 className="text-2xl font-semibold text-center">회원가입</h2>
+    <section className="px-10 py-8 rounded-4xl bg-white flex-1 w-full space-y-3 border border-gray-200">
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-center">회원가입</h2>
         <SignupForm />
       </div>
-      <p className="text-center text-sm">
+      <p className="text-center text-xs font-medium">
         이미 회원이신가요?{' '}
         <Link
-          className="text-main underline underline-offset-1"
+          className="text-blue-500 underline underline-offset-1"
           href={'/signin'}
         >
           로그인
