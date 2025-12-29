@@ -56,10 +56,10 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
       {!showReplies && replies.length > 0 && (
         <button
           onClick={onClickShowReplies}
-          className="text-base font-semibold text-blue-500 flex items-center gap-0.5 hover:bg-gray-200 py-2.5 px-4 ml-[39px] rounded-full"
+          className="w-fit text-base font-semibold text-blue-500 flex items-center gap-1 hover:bg-gray-200 py-2.5 px-4 ml-[39px] rounded-full"
         >
           <span>답글 보기</span>
-          <IconChevronDown className="size-4" />
+          <IconChevronDown className="size-5" />
         </button>
       )}
 
@@ -68,10 +68,10 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
           <ReplyList commentId={parentId} showReplies={showReplies} />
           <button
             onClick={onClickShowReplies}
-            className="text-base font-semibold text-blue-500 flex items-center gap-0.5 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[39px]"
+            className="text-base font-semibold text-blue-500 flex items-center gap-1 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[39px]"
           >
             <span>답글 접기</span>
-            <IconChevronDown className="size-4 rotate-180" />
+            <IconChevronDown className="size-5 rotate-180" />
           </button>
         </>
       )}

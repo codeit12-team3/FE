@@ -1,5 +1,5 @@
 import { useReplies } from '@/api/comments'
-import ChevronDown from '@/assets/svgr/chevron-down.svg'
+import { IconChevronDown } from '@/assets/svgr'
 
 import ErrorFallback from '../../Error/ErrorFallback'
 import BaseCommentItemSkeleton from '../CommentItem/BaseCommentSkeleton'
@@ -56,14 +56,14 @@ export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="w-fit text-base font-semibold text-blue-500 flex items-center gap-0.5 disabled:opacity-50 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[38px]"
+            className="w-fit text-base font-semibold text-blue-500 flex items-center gap-1 disabled:opacity-50 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[38px]"
           >
             {isFetchingNextPage ? (
               <span>불러오는 중...</span>
             ) : (
               <>
                 <span>답글 더보기</span>
-                <ChevronDown />
+                <IconChevronDown className="size-5" />
               </>
             )}
           </button>
