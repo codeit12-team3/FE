@@ -10,7 +10,7 @@ export const useInfinitePosts = (filters: PostFilterParams) => {
     queryFn: ({ pageParam }: { pageParam?: string }) =>
       fetchPosts({
         ...filters,
-        lastItemId: pageParam,
+        lastPostId: pageParam,
         size: 20,
       }),
 
