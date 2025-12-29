@@ -77,7 +77,7 @@ export default function PostHeader({
           ))}
         </div>
 
-        <div className="sm:flex gap-5 hidden ">
+        <div className="hidden sm:flex gap-5">
           {isOwner ? (
             <PostManage postId={postId} />
           ) : (
