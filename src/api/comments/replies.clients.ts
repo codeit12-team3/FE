@@ -1,4 +1,4 @@
-import { ReplyType } from '@/types/comments/comments.type'
+import { ReplyType } from '@/types/comments'
 import { ApiResponse } from '@/types/common'
 
 import { axios } from '../common'

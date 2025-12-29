@@ -1,7 +1,7 @@
 import { useParams } from 'next/navigation'
 
 import { useReplyActions } from '@/hooks/comment/useReplyActions'
-import { ReplyContent } from '@/types/comments/comments.type'
+import { ReplyContent } from '@/types/comments'
 
 import BaseCommentItem from '../BaseCommentItem'
 

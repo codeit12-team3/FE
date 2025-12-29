@@ -4,7 +4,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { CommentContent } from '@/types/comments/comments.type'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../CommentItem/BaseCommentSkeleton'
+import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentSkeleton'
 import CommentWithReplies from '../CommentWithReplies'
 
 interface CommentListProps {

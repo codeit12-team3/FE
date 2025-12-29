@@ -1,5 +1,5 @@
 import { useReplyMutations } from '@/api/comments'
-import { ReplyContent } from '@/types/comments/comments.type'
+import { ReplyContent } from '@/types/comments'
 
 export function useReplyActions(
   reply: ReplyContent,

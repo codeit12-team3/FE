@@ -1,5 +1,10 @@
-export interface CommentContent {
+export interface ReplyType {
+  content: ReplyContent[]
+  isLast: boolean
+}
+export interface ReplyContent {
   commentId: number
+  parentId: number
   memberId: number
   imageUrl: string
   nickname: string
@@ -8,9 +13,4 @@ export interface CommentContent {
   updatedAt: string
   isUpdated: boolean
   depth: number
-}
-
-export interface CommentType {
-  content: CommentContent[]
-  isLast: boolean
 }
