@@ -38,6 +38,9 @@ export default function SigninForm() {
 
         router.push(callbackUrl)
       },
+      onError: () => {
+        toast.error('이메일 또는 비밀번호를 확인해주세요')
+      },
     })
   }
 
