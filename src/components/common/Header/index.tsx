@@ -46,7 +46,7 @@ export default function Header() {
                     : 'text-gray-500 hover:text-blue-500'
                 }`}
               >
-                <span className="ssm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
+                <span className="sm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
                   채팅방
                 </span>
               </Link>
