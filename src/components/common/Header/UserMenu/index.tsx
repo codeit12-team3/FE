@@ -26,8 +26,8 @@ export default function UserMenu() {
           <Image
             src={getImageUrl(session?.user.image, true)}
             alt="프로필 이미지"
-            width={50}
-            height={50}
+            width={40}
+            height={40}
             className="size-full object-cover rounded-full"
           />
         </button>

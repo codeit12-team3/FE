@@ -25,6 +25,7 @@ export default function Description() {
         rows={4}
         placeholder="모집 설명을 입력해주세요"
         maxLength={500}
+        className="max-h-[120px] resize-none overflow-y-auto [field-sizing:initial]"
       />
       <div className="flex justify-end pt-1">
         <span className="text-xs  text-gray-500">({content.length}/500)</span>

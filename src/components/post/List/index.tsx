@@ -21,9 +21,9 @@ export default function PostList() {
   }, [])
 
   return (
-    <>
+    <div className="max-w-7xl  mx-auto flex  flex-col xl:px-34 sm:px-12 px-4">
       <FilterBar onApply={handleApplyFilters} />
       <PostContainer filters={appliedFilters} />
-    </>
+    </div>
   )
 }

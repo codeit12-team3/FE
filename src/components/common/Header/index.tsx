@@ -36,7 +36,9 @@ export default function Header() {
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
                 )}
               >
-                게시판
+                <span className="sm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
+                  게시판
+                </span>
               </Link>
               <Link
                 href="/"
@@ -47,7 +49,9 @@ export default function Header() {
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
                 )}
               >
-                채팅방
+                <span className="sm:px-6 px-5 py-2.5 sm:py-3 font-semibold">
+                  채팅방
+                </span>
               </Link>
             </nav>
           </div>
