@@ -16,51 +16,67 @@ import {
   IconHeartSolid,
   IconUser,
 } from '@/assets/svgr'
+import { OtherProfile } from '@/components/member'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
-import { PostListItem } from '@/types/posts'
+import { useModalActions } from '@/stores'
+import { PostContent, PostListItem } from '@/types/posts'
 
 import ApplyModal from '../../Detail/ApplyModal'
 
 export default function PostCard({
   post,
+  detail,
   priority = false,
 }: {
   post: PostListItem
+  detail?: PostContent
   priority?: boolean
 }) {
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
   const applyCompanion = useApplyCompanion()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const [applyMessage, setApplyMessage] = useState('')
   const deletePost = useDeletePost()
+  const { openModal, closeModal } = useModalActions()
+
   const handleToggleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (post.isBookmarked) {
-      await removeBookmark.mutateAsync(String(post.postId))
+      await removeBookmark.mutateAsync(post.postId)
     } else {
-      await addBookmark.mutateAsync(String(post.postId))
+      await addBookmark.mutateAsync(post.postId)
     }
   }
   const handleApplyCompanion = () => {
     applyCompanion.mutate(
       {
-        postId: String(post.postId),
+        postId: post.postId,
         applyMessage,
       },
       {
         onSuccess: () => {
-          setIsModalOpen(false)
+          closeModal()
         },
       },
     )
   }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
+  const handleOtherProfile = (memberId: string) => {
+    openModal(<OtherProfile memberId={memberId} />)
+  }
+  const handleOpenApplyModal = () => {
+    openModal(
+      <ApplyModal
+        message={applyMessage}
+        onChangeMessage={setApplyMessage}
+        onClose={closeModal}
+        onSubmit={handleApplyCompanion}
+      />,
+    )
   }
 
   const TAG_STYLE = 'px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500'
@@ -107,7 +123,7 @@ export default function PostCard({
           <div className="px-1 ">
             <div className="flex gap-1.5">
               <h3
-                className="text-xl font-bold cursor-pointer mb-1.5 "
+                className="text-xl font-bold cursor-pointer mb-1.5 hover:underline"
                 onClick={() => router.push(`/posts/${post.postId}`)}
               >
                 {post.title}
@@ -118,7 +134,14 @@ export default function PostCard({
             </div>
             <div className="flex gap-1.5 text-sm">
               <p className="text-gray-400">작성자</p>
-              <p className="text-gray-600">{post.nickname}</p>
+              <p
+                className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
+                onClick={() =>
+                  detail && handleOtherProfile(String(detail.writer.memberId))
+                }
+              >
+                {post.nickname}
+              </p>
             </div>
             <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5  ">
               <div className="flex text-sm gap-1 ">
@@ -145,10 +168,8 @@ export default function PostCard({
                   })}
                 </span>
 
-                <span className="text-gray-300 min-[744px]:max-[1279px]:hidden">
-                  |
-                </span>
-                <span className="min-[744px]:max-[1279px]:basis-full min-[744px]:max-[1279px]:w-10" />
+                <span className="text-gray-300 md:max-[1279px]:hidden">|</span>
+                <span className="md:max-[1279px]:basis-full md:max-[1279px]:w-10" />
                 <span className="text-gray-400">나이</span>
                 <span className="text-gray-600">{post.conditions.ageType}</span>
 
@@ -218,24 +239,13 @@ export default function PostCard({
             <Button
               size="md"
               className="xl:w-34 flex-1 sm:flex-none w-28"
-              onClick={(e) => {
-                e.stopPropagation()
-                setIsModalOpen(true)
-              }}
+              onClick={handleOpenApplyModal}
             >
               신청하기
             </Button>
           )}
         </div>
       </div>
-      {isModalOpen && (
-        <ApplyModal
-          message={applyMessage}
-          onChangeMessage={setApplyMessage}
-          onClose={handleCloseModal}
-          onSubmit={handleApplyCompanion}
-        />
-      )}
     </div>
   )
 }

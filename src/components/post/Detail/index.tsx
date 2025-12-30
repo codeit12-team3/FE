@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useApplyCompanion } from '@/api/companions'
 import { usePostDetail } from '@/api/posts'
 import Comment from '@/components/comment'
+import { useModalActions } from '@/stores'
 
 import { PostDetailSkeleton } from '..'
 import ApplyModal from './ApplyModal'
@@ -17,8 +18,8 @@ export default function PostDetail({ postId }: { postId: string }) {
   const { data: response, isLoading } = usePostDetail({ postId })
 
   const applyCompanion = useApplyCompanion()
+  const { openModal, closeModal } = useModalActions()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [applyMessage, setApplyMessage] = useState('')
 
   const handleApplyCompanion = () => {
@@ -29,14 +30,21 @@ export default function PostDetail({ postId }: { postId: string }) {
       },
       {
         onSuccess: () => {
-          setIsModalOpen(false)
+          closeModal()
         },
       },
     )
   }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
+  const handleOpenApplyModal = () => {
+    openModal(
+      <ApplyModal
+        message={applyMessage}
+        onChangeMessage={setApplyMessage}
+        onClose={closeModal}
+        onSubmit={handleApplyCompanion}
+      />,
+    )
   }
 
   if (isLoading) {
@@ -60,7 +68,7 @@ export default function PostDetail({ postId }: { postId: string }) {
           <div className="w-full max-w-7xl rounded-lg ">
             <PostHeader
               postId={postId}
-              onOpenApplyModal={() => setIsModalOpen(true)}
+              onOpenApplyModal={handleOpenApplyModal}
             />
             <div className="flex sm:flex-row gap-6 sm:my-8 my-4 flex-col  ">
               <div className="flex-1 min-w-0">
@@ -74,15 +82,6 @@ export default function PostDetail({ postId }: { postId: string }) {
           </div>
         </div>
       </div>
-
-      {isModalOpen && (
-        <ApplyModal
-          message={applyMessage}
-          onChangeMessage={setApplyMessage}
-          onClose={handleCloseModal}
-          onSubmit={handleApplyCompanion}
-        />
-      )}
     </div>
   )
 }
