@@ -1,4 +1,3 @@
-import { Heart } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 import {
@@ -7,7 +6,12 @@ import {
   usePostDetail,
   useRemoveBookmark,
 } from '@/api/posts'
-import { IconPencil, IconTrashLight } from '@/assets/svgr'
+import {
+  IconHeart,
+  IconHeartSolid,
+  IconPencil,
+  IconTrashLight,
+} from '@/assets/svgr'
 import { formatDay } from '@/lib/common'
 
 import PostActions from '../PostActions'
@@ -92,10 +96,7 @@ export default function PostHeader({
             className="hover:scale-90 transition-transform cursor-pointer"
             aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
           >
-            <Heart
-              className={`${isBookmarked ? 'fill-blue-500' : 'fill-gray-300'} size-8`}
-              strokeWidth={0}
-            />
+            {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
           </button>
         </div>
       </div>
@@ -151,10 +152,7 @@ export default function PostHeader({
               className="hover:scale-90 transition-transform cursor-pointer"
               aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
             >
-              <Heart
-                className={`${isBookmarked ? 'fill-blue-500' : 'fill-gray-300'} size-8`}
-                strokeWidth={0}
-              />
+              {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
             </button>
           </div>
         </div>

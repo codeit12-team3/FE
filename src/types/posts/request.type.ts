@@ -7,7 +7,7 @@ export interface PostParams {
   ageType?: AgeType
   gender?: GenderType
   keyword?: string
-  lastItemId?: string
+  lastPostId?: string
 }
 
 export interface PostFilterParams {
@@ -24,7 +24,7 @@ export interface PostApiParams {
   gender?: GenderType
   keyword?: string
   size?: number
-  lastItemId?: string
+  lastPostId?: string
 }
 
 export interface PostCreatePayload {

@@ -40,9 +40,14 @@ export default function PostContainer({
   if (isLoading) return <PostListSkeleton />
   if (!data) return <div>에러가 발생했습니다.</div>
 
-  const posts = data.pages.flatMap((page) =>
+  const allPosts = data.pages.flatMap((page) =>
     page.success ? page.data.content : [],
   )
+  const posts = allPosts.filter(
+    (post, index, self) =>
+      index === self.findIndex((p) => p.postId === post.postId),
+  )
+
   return (
     <>
       <PostListSection posts={posts} />

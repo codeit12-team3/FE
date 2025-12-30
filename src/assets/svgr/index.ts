@@ -17,7 +17,11 @@ export { default as IconSearch } from './search.svg'
 export { default as IconTrashLight } from './trash-light.svg'
 export { default as IconUser } from './user.svg'
 export { default as IconX } from './x.svg'
+
 export { default as IconReload } from './reload.svg'
+
+export { default as IconHeart } from './heart.svg'
+export { default as IconHeartSolid } from './heart-solid.svg'
 
 export { default as IconEmptyCard } from './empty-card.svg'
 
