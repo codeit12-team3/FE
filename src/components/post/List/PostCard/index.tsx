@@ -103,51 +103,52 @@ export default function PostCard({
           )}
         </div>
 
-        <div className="flex-1 flex flex-col p-4 md:px-4 justify-between">
-          <div className="flex gap-2.5 items-center justify-between  ">
-            <div className="flex gap-2.5  flex-wrap">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500"
-                >
-                  {tag}
-                </span>
-              ))}
+        <div className="flex-1 flex flex-col  md:px-4 justify-between">
+          <div className="xl:pb-4">
+            <div className="flex gap-2.5 items-center justify-between  pb-3.5">
+              <div className="flex gap-2.5  flex-wrap">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <button
+                onClick={handleToggleBookmark}
+                className="w-10 h-10 md:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
+              >
+                {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
+              </button>
             </div>
-            <button
-              onClick={handleToggleBookmark}
-              className="w-10 h-10 md:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
-            >
-              {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
-            </button>
-          </div>
 
-          <div className="flex gap-1.5 px-1">
-            <h3
-              className="text-xl font-bold cursor-pointer hover:underline"
-              onClick={() => router.push(`/posts/${post.postId}`)}
-            >
-              {post.title}
-            </h3>
-            {post.isOwner && (
-              <IconCrownSolid className="size-6 text-blue-500 " />
-            )}
+            <div className="flex gap-1.5 px-1 md:pb-1">
+              <h3
+                className="text-xl font-bold cursor-pointer hover:underline"
+                onClick={() => router.push(`/posts/${post.postId}`)}
+              >
+                {post.title}
+              </h3>
+              {post.isOwner && (
+                <IconCrownSolid className="size-6 text-blue-500 " />
+              )}
+            </div>
+            <div className="flex gap-1.5 text-sm px-1">
+              <p className="text-gray-400">작성자</p>
+              <p
+                className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
+                onClick={() =>
+                  detail && handleOtherProfile(String(detail.writer.memberId))
+                }
+              >
+                {post.nickname}
+              </p>
+            </div>
           </div>
-          <div className="flex gap-1.5 text-sm px-1">
-            <p className="text-gray-400">작성자</p>
-            <p
-              className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
-              onClick={() =>
-                detail && handleOtherProfile(String(detail.writer.memberId))
-              }
-            >
-              {post.nickname}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5   px-1">
-            <div className="flex text-sm gap-1 ">
+          <div className="flex flex-col    px-1">
+            <div className="flex text-sm gap-1 md:mb-2 ">
               <IconUser className="size-4" />
               <span>
                 <span className="text-blue-500">{post.currentMembers}</span>명
@@ -172,7 +173,6 @@ export default function PostCard({
               </span>
 
               <span className="text-gray-300 md:max-[1279px]:hidden">|</span>
-              <span className="md:max-[1279px]:basis-full md:max-[1279px]:w-10" />
               <span className="text-gray-400">나이</span>
               <span className="text-gray-600">{post.conditions.ageType}</span>
 

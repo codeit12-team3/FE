@@ -120,7 +120,7 @@ export default function FilterBar({
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
-              <IconSearch className="absolute right-3 top-1/2 translate-y-20  w-5 h-5 text-gray-500 " />
+              <IconSearch className="absolute right-3 -translate-y-1/8 w-5 h-5 text-gray-500" />
             </InputGroup>
           </div>
 
