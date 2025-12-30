@@ -36,7 +36,7 @@ export default function useNotificationSSE() {
       try {
         const newNotification = JSON.parse(e.data) as Notification
 
-        toast.info('새로운 알람이 도착했습니다')
+        toast.info('새로운 알림이 도착했습니다')
         setHasNew(true)
 
         queryClient.setQueryData<InfiniteData<NotificationRes>>(
