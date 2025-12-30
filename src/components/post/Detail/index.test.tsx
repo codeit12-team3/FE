@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import {
   mockPostDetail as mockPostData,
@@ -80,12 +80,20 @@ jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(),
 }))
 
+jest.mock('@/components/comment', () => ({
+  __esModule: true,
+  default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
+}))
+
 const mockPush = jest.fn()
 
 beforeEach(() => {
   jest.clearAllMocks()
   ;(useRouter as jest.Mock).mockReturnValue({
     push: mockPush,
+  })
+  ;(useParams as jest.Mock).mockReturnValue({
+    postId: '1',
   })
 
   const { useDeletePost, usePatchPost } = jest.requireMock('@/api/posts')
@@ -158,8 +166,10 @@ describe('북마크 토글 테스트', () => {
 
     renderPostDetail()
 
-    const bookmarkButton = screen.getByRole('button', { name: '북마크 추가' })
-    await userEvent.click(bookmarkButton)
+    const bookmarkButtons = screen.getAllByRole('button', {
+      name: '북마크 추가',
+    })
+    await userEvent.click(bookmarkButtons[0])
 
     expect(mockAddBookmark).toHaveBeenCalledWith('1')
   })
@@ -182,8 +192,10 @@ describe('북마크 토글 테스트', () => {
 
     renderPostDetail()
 
-    const bookmarkButton = screen.getByRole('button', { name: '북마크 취소' })
-    await userEvent.click(bookmarkButton)
+    const bookmarkButtons = screen.getAllByRole('button', {
+      name: '북마크 취소',
+    })
+    await userEvent.click(bookmarkButtons[0])
 
     expect(mockRemoveBookmark).toHaveBeenCalledWith('1')
   })
@@ -199,7 +211,7 @@ describe('게시글 권한 테스트', () => {
         isLoading: false,
       })
       renderPostDetail()
-      expect(screen.getByText('게시글 관리')).toBeInTheDocument()
+      expect(screen.getAllByText('게시글 관리')[0]).toBeInTheDocument()
     })
     test('게시글 삭제 버튼을 누르면 게시글이 삭제된다', async () => {
       const mockDeletePost = jest.fn()
@@ -219,8 +231,10 @@ describe('게시글 권한 테스트', () => {
       })
       renderPostDetail()
 
-      const deleteButton = screen.getByRole('button', { name: '게시글 삭제' })
-      await userEvent.click(deleteButton)
+      const deleteButtons = screen.getAllByRole('button', {
+        name: '게시글 삭제',
+      })
+      await userEvent.click(deleteButtons[0])
 
       expect(mockDeletePost).toHaveBeenCalled()
     })
@@ -234,8 +248,8 @@ describe('게시글 권한 테스트', () => {
       })
       renderPostDetail()
 
-      const editButton = screen.getByRole('button', { name: '게시글 수정' })
-      await userEvent.click(editButton)
+      const editButtons = screen.getAllByRole('button', { name: '게시글 수정' })
+      await userEvent.click(editButtons[0])
 
       expect(mockPush).toHaveBeenCalledWith('/posts/1/edit')
     })
@@ -250,7 +264,7 @@ describe('게시글 권한 테스트', () => {
         isLoading: false,
       })
       renderPostDetail()
-      expect(screen.getByText('동행 신청하기')).toBeInTheDocument()
+      expect(screen.getAllByText('동행 신청하기')[0]).toBeInTheDocument()
     })
     test('동행신청 버튼을 누르면 동행 신청 모달이 보인다', async () => {
       usePostDetail.mockReturnValue({
@@ -261,8 +275,10 @@ describe('게시글 권한 테스트', () => {
         isLoading: false,
       })
       renderPostDetail()
-      const applyButton = screen.getByRole('button', { name: '동행 신청하기' })
-      await userEvent.click(applyButton)
+      const applyButtons = screen.getAllByRole('button', {
+        name: '동행 신청하기',
+      })
+      await userEvent.click(applyButtons[0])
 
       expect(screen.getByTestId('apply-modal')).toBeInTheDocument()
       expect(screen.getByText('동행 신청 모달')).toBeInTheDocument()
@@ -284,10 +300,10 @@ describe('게시글 권한 테스트', () => {
       })
       renderPostDetail()
 
-      const openModalButton = screen.getByRole('button', {
+      const openModalButtons = screen.getAllByRole('button', {
         name: '동행 신청하기',
       })
-      await userEvent.click(openModalButton)
+      await userEvent.click(openModalButtons[0])
 
       const applyButton = screen.getByRole('button', { name: '신청하기' })
       await userEvent.click(applyButton)

@@ -55,6 +55,7 @@ export default function NicknameFieldset({
         disabled={isChecked || isChecking}
         rightElement={
           <Button
+            variant={'secondary'}
             className="w-24"
             type="button"
             size={'md'}

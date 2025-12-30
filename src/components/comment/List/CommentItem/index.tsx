@@ -1,0 +1,31 @@
+import { useParams } from 'next/navigation'
+
+import { useCommentActions } from '@/hooks/comment/useCommentActions'
+import { CommentContent } from '@/types/comments/comments.type'
+
+import BaseCommentItem from '../BaseCommentItem'
+
+type CommentItemProps = {
+  comment: CommentContent
+  onReply: () => void
+}
+
+export default function CommentItem({ comment, onReply }: CommentItemProps) {
+  const params = useParams<{ postId: string }>()
+  const postId = Number(params.postId)
+
+  const { handleDelete, handleSave, isUpdating } = useCommentActions(
+    comment,
+    postId,
+  )
+
+  return (
+    <BaseCommentItem
+      {...comment}
+      isUpdating={isUpdating}
+      onDelete={handleDelete}
+      onSave={handleSave}
+      onReply={onReply}
+    />
+  )
+}

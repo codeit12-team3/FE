@@ -41,6 +41,9 @@ export const Toaster = () => {
       position="bottom-center"
       toastOptions={{
         unstyled: true,
+        classNames: {
+          toast: 'w-full flex justify-center',
+        },
       }}
       offset={40}
       gap={8}

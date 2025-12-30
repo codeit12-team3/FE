@@ -24,6 +24,7 @@ interface CalendarPopupProps {
   eventsOnDates: Date[]
   minDate?: Date
   maxDate?: Date
+  showAbove?: boolean
 }
 
 export const CalendarPopup = React.forwardRef<
@@ -41,6 +42,7 @@ export const CalendarPopup = React.forwardRef<
       eventsOnDates,
       minDate,
       maxDate,
+      showAbove = false,
     },
     ref,
   ) => {
@@ -84,7 +86,10 @@ export const CalendarPopup = React.forwardRef<
       return (
         <div
           ref={ref}
-          className="absolute top-full left-0 w-82 max-w-md bg-white rounded-lg shadow-lg px-6 pt-5 pb-4 z-50 border border-gray-200"
+          className={cn(
+            'absolute left-0 w-82 max-w-md bg-white rounded-lg shadow-lg px-6 pt-5 pb-4 z-50 border border-gray-200',
+            showAbove ? 'bottom-full mb-2' : 'top-full mt-2',
+          )}
         >
           <div className="flex items-center justify-between mb-6">
             <button
@@ -150,7 +155,10 @@ export const CalendarPopup = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="absolute top-full left-0 mt-2 w-82 px-6 pt-5 pb-4 max-w-md bg-white rounded-lg shadow-lg z-50 border border-gray-200"
+        className={cn(
+          'absolute left-0 w-82 px-6 pt-5 pb-4 max-w-md bg-white rounded-lg shadow-lg z-50 border border-gray-200',
+          showAbove ? 'bottom-full mb-2' : 'top-full mt-2',
+        )}
       >
         <div className="flex items-center justify-between mb-6">
           <button
@@ -297,16 +305,25 @@ export default function FormDatePicker<T extends FieldValues>({
   const [isOpen, setIsOpen] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(dayjs(openToDate))
   const [tempSelected, setTempSelected] = useState<Dayjs | null>(null)
+  const [showAbove, setShowAbove] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (isOpen && popupRef.current) {
+    if (isOpen && popupRef.current && inputRef.current) {
       const firstFocusable = popupRef.current.querySelector<HTMLElement>(
         'button:not([disabled])',
       )
       firstFocusable?.focus()
+
+      // Calculate if popup should show above or below
+      const inputRect = inputRef.current.getBoundingClientRect()
+      const popupHeight = 450 // Approximate popup height
+      const spaceBelow = window.innerHeight - inputRect.bottom
+      const spaceAbove = inputRect.top
+
+      setShowAbove(spaceBelow < popupHeight && spaceAbove > spaceBelow)
     }
   }, [isOpen])
 
@@ -438,6 +455,7 @@ export default function FormDatePicker<T extends FieldValues>({
                   eventsOnDates={eventsOnDates}
                   minDate={minDate}
                   maxDate={maxDate}
+                  showAbove={showAbove}
                 />
               )}
             </div>

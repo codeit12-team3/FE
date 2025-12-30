@@ -37,7 +37,7 @@ export default function SentList() {
         ))}
 
       {!isInitialLoading && companions.length === 0 && (
-        <EmptyCard comment="아직 받은 동행 정보가 없어요." />
+        <EmptyCard comment="신청한 동행 정보가 없어요" />
       )}
 
       {companions.map((item, idx) => (

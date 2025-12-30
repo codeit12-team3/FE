@@ -1,12 +1,11 @@
 export interface CommentContent {
   commentId: number
-  parentId: number | null
   memberId: number
-  imageUrl: string | null
+  imageUrl: string
   nickname: string
   content: string
-  createdAt: number
-  updatedAt: number | null
+  createdAt: string
+  updatedAt: string
   isUpdated: boolean
   depth: number
 }

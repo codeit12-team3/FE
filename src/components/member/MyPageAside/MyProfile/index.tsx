@@ -13,7 +13,7 @@ import {
   TRIP_STYLE_MAP,
 } from '@/constants/member'
 import { getImageUrl } from '@/lib/common'
-import { MyProfile as MyInfo } from '@/types/member'
+import { Profile as MyInfo } from '@/types/member'
 
 export default function MyProfile() {
   const router = useRouter()

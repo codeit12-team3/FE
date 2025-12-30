@@ -1,71 +1,46 @@
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { CommentType } from '@/types/comments/comments.type'
-import { ApiResponse } from '@/types/common'
+import { createComment, deleteComment, updateComment } from './comments.clients'
+import { commentKeys } from './key/comments.keys'
 
-import {
-  createComment,
-  deleteComment,
-  fetchComments,
-  updateComment,
-} from './comments.clients'
+export const useCommentMutations = (postId: number) => {
+  const queryClient = useQueryClient()
 
-export const useComments = (params: { postId: string }) => {
-  return useInfiniteQuery<ApiResponse<CommentType>>({
-    queryKey: ['comments', params.postId],
-
-    queryFn: ({ pageParam }) =>
-      fetchComments({
-        postId: params.postId,
-        lastCommentId: pageParam as number,
-        size: 10,
-      }),
-
-    initialPageParam: 0,
-
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.success) return undefined
-      if (lastPage.data.isLast) return undefined
-
-      const comments = lastPage.data.content
-      return comments.length > 0
-        ? comments[comments.length - 1].commentId
-        : undefined
+  const create = useMutation({
+    mutationFn: createComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
+      toast.success('댓글이 작성되었습니다')
     },
-
-    staleTime: 5 * 60 * 1000,
+    onError: (error) => {
+      const message = error?.message || '댓글 작성에 실패했습니다'
+      toast.error(message)
+    },
   })
-}
 
-export const useCreateComment = () => {
-  return useMutation<
-    ApiResponse<{ commentId: number }>,
-    Error,
-    { postId: string; parentId: number | null; content: string }
-  >({
-    mutationFn: (params) => createComment(params),
-    retry: 0,
+  const update = useMutation({
+    mutationFn: updateComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
+    },
+    onError: (error) => {
+      const message = error?.message || '댓글 수정에 실패했습니다'
+      toast.error(message)
+    },
   })
-}
 
-export const useUpdateComment = () => {
-  return useMutation<
-    ApiResponse<{ updated: true }>,
-    Error,
-    { commentId: number; content: string }
-  >({
-    mutationFn: (params) => updateComment(params),
-    retry: 0,
+  const remove = useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
+      toast.success('댓글이 삭제되었습니다')
+    },
+    onError: (error) => {
+      const message = error?.message || '댓글 삭제에 실패했습니다'
+      toast.error(message)
+    },
   })
-}
 
-export const useDeleteComment = () => {
-  return useMutation<
-    ApiResponse<{ deleted: true }>,
-    Error,
-    { commentId: number }
-  >({
-    mutationFn: (params) => deleteComment(params),
-    retry: 0,
-  })
+  return { create, update, remove }
 }

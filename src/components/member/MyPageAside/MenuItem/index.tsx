@@ -25,7 +25,7 @@ export default function MenuItem({ path, label }: Props) {
         'active:bg-gray-300 text-gray-500',
         isActive && 'bg-white! border! border-blue-500! text-blue-500!',
         isMemberParentActive &&
-          'md:bg-white! md:border! md:border-blue-500! md:text-blue-500!',
+          'lg:bg-white! lg:border! lg:border-blue-500! lg:text-blue-500!',
       )}
     >
       {label}
