@@ -12,14 +12,13 @@ const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({ src, idx }: { src: string; idx: number }) {
   return (
-    <div className="relative w-full sm:h-71 h-57 rounded-3xl overflow-hidden shrink-0">
+    <div className="relative w-full sm:h-100 h-57 rounded-3xl overflow-hidden shrink-0">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
         fill
         quality={100}
-        sizes="(max-width: 768px) 100vw, 800px"
-        className="object-cover transition-opacity duration-300 rounded-3xl "
+        className=" transition-opacity duration-300 rounded-3xl "
       />
       <div className="absolute inset-0 rounded-3xl pointer-events-none" />
     </div>

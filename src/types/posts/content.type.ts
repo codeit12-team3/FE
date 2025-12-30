@@ -77,6 +77,7 @@ export interface PostListItem {
   isBookmarked: boolean
   isApplied: boolean
   thumbnail: string
+  images?: string[]
 }
 export interface PostContent {
   title: string

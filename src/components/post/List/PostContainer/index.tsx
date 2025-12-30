@@ -6,7 +6,7 @@ import { useInfinitePosts } from '@/hooks/posts/useInfinitePosts'
 import { PostFilterParams } from '@/types/posts'
 
 import { PostListSkeleton } from '../..'
-import PostListSection from '../PostListSection'
+import PostCard from '../PostCard'
 
 export default function PostContainer({
   filters,
@@ -48,9 +48,24 @@ export default function PostContainer({
       index === self.findIndex((p) => p.postId === post.postId),
   )
 
+  const isEmpty = posts.length === 0
+
   return (
     <>
-      <PostListSection posts={posts} />
+      {isEmpty ? (
+        <div className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2">
+          <span className="text-lg font-medium">게시글이 없습니다</span>
+          <span className="text-sm text-gray-500">
+            새로운 동행 게시글을 작성해보세요!
+          </span>
+        </div>
+      ) : (
+        <div className="space-y-4 my-5">
+          {posts.map((post, index) => (
+            <PostCard key={post.postId} post={post} priority={index === 0} />
+          ))}
+        </div>
+      )}
 
       {hasNextPage && (
         <div

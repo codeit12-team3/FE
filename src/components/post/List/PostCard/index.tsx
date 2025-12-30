@@ -16,22 +16,19 @@ import {
   IconHeartSolid,
   IconUser,
 } from '@/assets/svgr'
-import { OtherProfile } from '@/components/member'
 import { Button } from '@/components/ui'
 import { NATION_CODE_TO_LABEL } from '@/constants/posts'
 import { getImageUrl } from '@/lib/common'
 import { useModalActions } from '@/stores'
-import { PostContent, PostListItem } from '@/types/posts'
+import { PostListItem } from '@/types/posts'
 
 import ApplyModal from '../../Detail/ApplyModal'
 
 export default function PostCard({
   post,
-  detail,
   priority = false,
 }: {
   post: PostListItem
-  detail?: PostContent
   priority?: boolean
 }) {
   const router = useRouter()
@@ -64,10 +61,10 @@ export default function PostCard({
       },
     )
   }
-
-  const handleOtherProfile = (memberId: string) => {
-    openModal(<OtherProfile memberId={memberId} />)
-  }
+  // PostListItem에 writer 넘겨줘서 memberId 받아야함
+  // const handleOtherProfile = (memberId: string) => {
+  //   openModal(<OtherProfile memberId={memberId} />)
+  // }
   const handleOpenApplyModal = () => {
     openModal(
       <ApplyModal
@@ -138,10 +135,10 @@ export default function PostCard({
             <div className="flex gap-1.5 text-sm px-1">
               <p className="text-gray-400">작성자</p>
               <p
-                className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
-                onClick={() =>
-                  detail && handleOtherProfile(String(detail.writer.memberId))
-                }
+                className="text-gray-600 cursor-pointer hover:underline"
+                // onClick={() =>
+                //   handleOtherProfile(String(post.writer.memberId))
+                // }
               >
                 {post.nickname}
               </p>
