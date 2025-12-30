@@ -26,7 +26,10 @@ interface CalendarPopupProps {
   maxDate?: Date
 }
 
-const CalendarPopup = React.forwardRef<HTMLDivElement, CalendarPopupProps>(
+export const CalendarPopup = React.forwardRef<
+  HTMLDivElement,
+  CalendarPopupProps
+>(
   (
     {
       currentMonth,
