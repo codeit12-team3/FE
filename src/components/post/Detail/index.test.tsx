@@ -85,6 +85,16 @@ jest.mock('@/components/comment', () => ({
   default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
 }))
 
+const mockOpenModal = jest.fn()
+const mockCloseModal = jest.fn()
+
+jest.mock('@/stores', () => ({
+  useModalActions: () => ({
+    openModal: mockOpenModal,
+    closeModal: mockCloseModal,
+  }),
+}))
+
 const mockPush = jest.fn()
 
 beforeEach(() => {
@@ -266,7 +276,7 @@ describe('게시글 권한 테스트', () => {
       renderPostDetail()
       expect(screen.getAllByText('동행 신청하기')[0]).toBeInTheDocument()
     })
-    test('동행신청 버튼을 누르면 동행 신청 모달이 보인다', async () => {
+    test('동행신청 버튼을 누르면 동행 신청 모달이 열린다', async () => {
       usePostDetail.mockReturnValue({
         data: {
           success: true,
@@ -280,8 +290,7 @@ describe('게시글 권한 테스트', () => {
       })
       await userEvent.click(applyButtons[0])
 
-      expect(screen.getByTestId('apply-modal')).toBeInTheDocument()
-      expect(screen.getByText('동행 신청 모달')).toBeInTheDocument()
+      expect(mockOpenModal).toHaveBeenCalled()
     })
     test('신청하기 버튼을 누르면 동행이 신청된다.', async () => {
       const mockApply = jest.fn()
@@ -305,9 +314,15 @@ describe('게시글 권한 테스트', () => {
       })
       await userEvent.click(openModalButtons[0])
 
-      const applyButton = screen.getByRole('button', { name: '신청하기' })
-      await userEvent.click(applyButton)
-      expect(mockApply).toHaveBeenCalled()
+      expect(mockOpenModal).toHaveBeenCalled()
+
+      const modalProps = mockOpenModal.mock.calls[0][0].props
+      modalProps.onSubmit()
+
+      expect(mockApply).toHaveBeenCalledWith(
+        { postId: '1', applyMessage: '' },
+        expect.objectContaining({ onSuccess: expect.any(Function) }),
+      )
     })
   })
 })

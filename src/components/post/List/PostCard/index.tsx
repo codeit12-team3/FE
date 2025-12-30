@@ -79,14 +79,13 @@ export default function PostCard({
     )
   }
 
-  const TAG_STYLE = 'px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500'
   const CARD_BASE =
-    'bg-white rounded-2xl sm:p-6 shadow-sm hover:shadow-md transition-shadow '
+    'bg-white rounded-2xl md:p-6  shadow-sm hover:shadow-md transition-shadow '
 
   return (
     <div className={CARD_BASE}>
-      <div className="flex sm:gap-6 sm:flex-row flex-col gap-0">
-        <div className="relative sm:w-[188px] h-[188px] sm:rounded-2xl overflow-hidden shrink-0 bg-gray-200 w-full  rounded-t-2xl ">
+      <div className="flex md:gap-6 md:flex-row flex-col gap-0 ">
+        <div className="relative md:w-[188px] h-[188px] md:rounded-2xl overflow-hidden shrink-0 bg-gray-200 w-full  rounded-t-2xl ">
           <Image
             key={post.thumbnail}
             src={getImageUrl(post.thumbnail)}
@@ -95,7 +94,7 @@ export default function PostCard({
             height={188}
             priority={priority}
             style={{ width: '100%', height: '100%' }}
-            className="object-cover aspect-video"
+            className="object-cover aspect-video flex items-center justify-center"
           />
           {post.recruitStatus === 'COMPLETED' && (
             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -104,96 +103,99 @@ export default function PostCard({
           )}
         </div>
 
-        <div className="flex-1 flex flex-col p-4 sm:p-0">
-          <div className="flex gap-2.5 mb-4 justify-between items-center  ">
+        <div className="flex-1 flex flex-col p-4 md:px-4 justify-between">
+          <div className="flex gap-2.5 items-center justify-between  ">
             <div className="flex gap-2.5  flex-wrap">
               {post.tags.map((tag) => (
-                <span key={tag} className={TAG_STYLE}>
+                <span
+                  key={tag}
+                  className="px-3 py-1 bg-blue-50 rounded-full text-xs text-blue-500"
+                >
                   {tag}
                 </span>
               ))}
             </div>
             <button
               onClick={handleToggleBookmark}
-              className="w-10 h-10 sm:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
+              className="w-10 h-10 md:hidden flex items-center justify-center rounded-full transition-colors hover:bg-gray-100 cursor-pointer"
             >
               {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
             </button>
           </div>
-          <div className="px-1 ">
-            <div className="flex gap-1.5">
-              <h3
-                className="text-xl font-bold cursor-pointer mb-1.5 hover:underline"
-                onClick={() => router.push(`/posts/${post.postId}`)}
-              >
-                {post.title}
-              </h3>
-              {post.isOwner && (
-                <IconCrownSolid className="size-6 text-blue-500 " />
-              )}
+
+          <div className="flex gap-1.5 px-1">
+            <h3
+              className="text-xl font-bold cursor-pointer hover:underline"
+              onClick={() => router.push(`/posts/${post.postId}`)}
+            >
+              {post.title}
+            </h3>
+            {post.isOwner && (
+              <IconCrownSolid className="size-6 text-blue-500 " />
+            )}
+          </div>
+          <div className="flex gap-1.5 text-sm px-1">
+            <p className="text-gray-400">작성자</p>
+            <p
+              className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
+              onClick={() =>
+                detail && handleOtherProfile(String(detail.writer.memberId))
+              }
+            >
+              {post.nickname}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5   px-1">
+            <div className="flex text-sm gap-1 ">
+              <IconUser className="size-4" />
+              <span>
+                <span className="text-blue-500">{post.currentMembers}</span>명
+                신청
+              </span>
             </div>
-            <div className="flex gap-1.5 text-sm">
-              <p className="text-gray-400">작성자</p>
-              <p
-                className={`text-gray-600 ${detail ? 'cursor-pointer' : ''}`}
-                onClick={() =>
-                  detail && handleOtherProfile(String(detail.writer.memberId))
-                }
-              >
-                {post.nickname}
-              </p>
-            </div>
-            <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5  ">
-              <div className="flex text-sm gap-1 ">
-                <IconUser className="size-4" />
-                <span>
-                  <span className="text-blue-500">{post.currentMembers}</span>명
-                  신청
-                </span>
-              </div>
 
-              <div className="flex items-center gap-1.5 xl:text-sm flex-wrap text-xs">
-                <span className="text-gray-400">위치</span>
-                <span className="text-gray-600">
-                  {NATION_CODE_TO_LABEL[post.nation]}
-                </span>
+            <div className="flex items-center gap-1.5 xl:text-sm flex-wrap text-xs px-1">
+              <span className="text-gray-400">위치</span>
+              <span className="text-gray-600">
+                {NATION_CODE_TO_LABEL[post.nation]}
+              </span>
 
-                <span className="text-gray-300 ">|</span>
+              <span className="text-gray-300 ">|</span>
 
-                <span className="text-gray-400">날짜</span>
-                <span className="text-gray-600">
-                  {new Date(post.period.startDate).toLocaleDateString('ko-KR', {
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </span>
+              <span className="text-gray-400">날짜</span>
+              <span className="text-gray-600">
+                {new Date(post.period.startDate).toLocaleDateString('ko-KR', {
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
 
-                <span className="text-gray-300 md:max-[1279px]:hidden">|</span>
-                <span className="md:max-[1279px]:basis-full md:max-[1279px]:w-10" />
-                <span className="text-gray-400">나이</span>
-                <span className="text-gray-600">{post.conditions.ageType}</span>
+              <span className="text-gray-300 md:max-[1279px]:hidden">|</span>
+              <span className="md:max-[1279px]:basis-full md:max-[1279px]:w-10" />
+              <span className="text-gray-400">나이</span>
+              <span className="text-gray-600">{post.conditions.ageType}</span>
 
-                <span className="text-gray-300">|</span>
+              <span className="text-gray-300">|</span>
 
-                <span className="text-gray-400">성별</span>
-                <span className="text-gray-600">
-                  {post.conditions.genderCondition}
-                </span>
-              </div>
+              <span className="text-gray-400">성별</span>
+              <span className="text-gray-600">
+                {post.conditions.genderCondition}
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="flex sm:flex-col sm:items-end sm:p-0 sm:justify-between flex-row items-center px-4 pb-4 gap-2">
+        <div className="flex md:flex-col md:items-end md:p-0 md:justify-between flex-row items-center px-4 pb-4 gap-2">
           <button
             onClick={handleToggleBookmark}
-            className="w-10 h-10 sm:flex items-center justify-center  transition-colors hover:bg-gray-100 cursor-pointer hidden"
+            className="w-10 h-10 md:flex items-center justify-center  transition-colors hover:bg-gray-100 cursor-pointer hidden"
           >
             {post.isBookmarked ? <IconHeartSolid /> : <IconHeart />}
           </button>
 
           {post.isOwner ? (
-            <div className="flex gap-2 sm:flex-none flex-1 ">
+            <div className="flex gap-2 md:flex-none flex-1 ">
               <Button
                 size="md"
                 variant="secondary"
@@ -223,7 +225,7 @@ export default function PostCard({
             <Button
               size="md"
               disabled
-              className="xl:w-34 flex-1 sm:flex-none w-28"
+              className="xl:w-34 flex-1 md:flex-none w-28"
             >
               모집종료
             </Button>
@@ -231,14 +233,14 @@ export default function PostCard({
             <Button
               size="md"
               variant="secondary"
-              className="xl:w-34 flex-1 sm:flex-none w-28"
+              className="xl:w-34 flex-1 md:flex-none w-28"
             >
               신청 취소
             </Button>
           ) : (
             <Button
               size="md"
-              className="xl:w-34 flex-1 sm:flex-none w-28"
+              className="xl:w-34 flex-1 md:flex-none w-28"
               onClick={handleOpenApplyModal}
             >
               신청하기

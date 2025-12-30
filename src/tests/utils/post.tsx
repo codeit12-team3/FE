@@ -87,7 +87,7 @@ export const mockPostFormData: PostContent = {
 }
 
 export const mockPostListItem: PostListItem = {
-  postId: 1,
+  postId: '1',
   title: '함께 일본 여행 가실 분 구합니다',
   nation: 'JP',
   region: '도쿄',

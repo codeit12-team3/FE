@@ -52,17 +52,17 @@ export const postsHandlers = [
     const ageType = url.searchParams.get('ageType')
     const gender = url.searchParams.get('gender')
 
-    const startId = lastItemId ? Number(lastItemId) + 1 : 1
+    const startId = lastItemId ? String(lastItemId) + 1 : 1
 
     let mockData: PostListItem[] = Array.from({ length: size }).map(
       (_, idx) => {
-        const id = startId + idx
+        const id = String(Number(startId) + idx)
 
         return {
           postId: id,
           title: `Mock title ${id}`,
-          nation: id % 2 === 0 ? 'KR' : 'JP',
-          region: id % 2 === 0 ? '서울' : '도쿄',
+          nation: Number(id) % 2 === 0 ? 'KR' : 'JP',
+          region: Number(id) % 2 === 0 ? '서울' : '도쿄',
           period: {
             startDate: '2025-01-01',
             endDate: '2025-01-02',
@@ -73,8 +73,8 @@ export const postsHandlers = [
           currentMembers: 1,
           maxMembers: 3,
           conditions: {
-            ageType: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
-            genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+            ageType: Number(id) % 2 === 0 ? 'TWENTY' : 'THIRTY',
+            genderCondition: Number(id) % 2 === 0 ? 'MALE' : 'FEMALE',
           },
           isApplied: false,
           isOwner: false,

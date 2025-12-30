@@ -71,7 +71,7 @@ describe('PostListSection 테스트', () => {
     test('여러 개의 게시글이 모두 화면에 표시된다', () => {
       const mockPost2 = {
         ...mockPost,
-        postId: 2,
+        postId: '2',
         title: '베트남 하노이 여행 동행 구합니다',
         nation: 'VN' as const,
         region: '하노이',

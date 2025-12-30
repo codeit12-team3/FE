@@ -45,7 +45,8 @@ export default function FilterBar({
       onApply({ ...filters, keyword })
     }, 500)
     return () => clearTimeout(timer)
-  }, [keyword, filters, onApply])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword])
 
   const TRIGGER = 'w-22 text-sm text-gray-800 font-medium'
 
@@ -104,7 +105,7 @@ export default function FilterBar({
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />
-            <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+            <IconSearch className="absolute right-3 -translate-y-1/16 w-5 h-5 text-gray-500 pointer-events-none" />
           </InputGroup>
           {actionButton}
         </div>
@@ -119,7 +120,7 @@ export default function FilterBar({
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
-              <IconSearch className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+              <IconSearch className="absolute right-3 top-1/2 translate-y-20  w-5 h-5 text-gray-500 " />
             </InputGroup>
           </div>
 
