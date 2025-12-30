@@ -80,7 +80,7 @@ export default function PostCard({
   }
 
   const CARD_BASE =
-    'bg-white rounded-2xl md:p-6  shadow-sm hover:shadow-md transition-shadow '
+    'bg-white rounded-2xl md:p-6   shadow-sm hover:shadow-md transition-shadow '
 
   return (
     <div className={CARD_BASE}>
@@ -103,9 +103,9 @@ export default function PostCard({
           )}
         </div>
 
-        <div className="flex-1 flex flex-col  md:px-4 justify-between">
-          <div className="xl:pb-4">
-            <div className="flex gap-2.5 items-center justify-between  pb-3.5">
+        <div className="flex-1 flex flex-col md:px-4 md:py-0 p-4 justify-between">
+          <div className="pb-4">
+            <div className="flex gap-2.5 items-center justify-between  pb-4">
               <div className="flex gap-2.5  flex-wrap">
                 {post.tags.map((tag) => (
                   <span
@@ -124,7 +124,7 @@ export default function PostCard({
               </button>
             </div>
 
-            <div className="flex gap-1.5 px-1 md:pb-1">
+            <div className="flex gap-1.5 px-1 pb-1">
               <h3
                 className="text-xl font-bold cursor-pointer hover:underline"
                 onClick={() => router.push(`/posts/${post.postId}`)}
@@ -148,7 +148,7 @@ export default function PostCard({
             </div>
           </div>
           <div className="flex flex-col    px-1">
-            <div className="flex text-sm gap-1 md:mb-2 ">
+            <div className="flex text-sm gap-1 mb-2 ">
               <IconUser className="size-4" />
               <span>
                 <span className="text-blue-500">{post.currentMembers}</span>명

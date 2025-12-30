@@ -40,6 +40,16 @@ export default function FilterBar({
     onApply({ ...updated, keyword })
   }
 
+  const handleSearch = () => {
+    onApply({ ...filters, keyword })
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onApply({ ...filters, keyword })
@@ -104,8 +114,12 @@ export default function FilterBar({
               placeholder="검색어를 입력해주세요"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <IconSearch className="absolute right-3 -translate-y-1/16 w-5 h-5 text-gray-500 pointer-events-none" />
+            <IconSearch
+              className="absolute right-3 w-6 h-6 text-gray-500 cursor-pointer"
+              onClick={handleSearch}
+            />
           </InputGroup>
           {actionButton}
         </div>
@@ -119,8 +133,12 @@ export default function FilterBar({
                 placeholder="검색어를 입력해주세요"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
-              <IconSearch className="absolute right-3 -translate-y-1/8 w-5 h-5 text-gray-500" />
+              <IconSearch
+                className="absolute right-3  w-6 h-6 text-gray-500 cursor-pointer"
+                onClick={handleSearch}
+              />
             </InputGroup>
           </div>
 
