@@ -16,16 +16,16 @@ import PostWriter from './PostWriter'
 
 export default function PostDetail({ postId }: { postId: string }) {
   const { data: response, isLoading, refetch } = usePostDetail({ postId })
-  const { applyMessage, setApplyMessage, handleApplyCompanion } =
-    useApply(postId)
+  const { handleApplyCompanion } = useApply(postId)
   const { openModal, closeModal } = useModalActions()
 
   const handleOpenApplyModal = () => {
     openModal(
       <ApplyModal
-        message={applyMessage}
-        onChangeMessage={setApplyMessage}
-        onSubmit={() => handleApplyCompanion(closeModal)}
+        onClose={closeModal}
+        onSubmit={(message) => {
+          handleApplyCompanion(message, closeModal)
+        }}
       />,
     )
   }

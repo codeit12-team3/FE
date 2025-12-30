@@ -25,7 +25,7 @@ export default function PostCardImage({
         height={188}
         priority={priority}
         style={{ width: '100%', height: '100%' }}
-        className="object-cover aspect-video flex items-center justify-center"
+        className="object-cover flex items-center justify-center"
       />
       {recruitStatus === 'COMPLETED' && (
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center">

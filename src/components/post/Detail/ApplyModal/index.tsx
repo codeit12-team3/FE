@@ -1,16 +1,26 @@
+import { useEffect, useRef, useState } from 'react'
+
 import { Button } from '@/components/ui'
 
 interface ApplyModalContentProps {
-  message: string
-  onChangeMessage: (v: string) => void
-  onSubmit: () => void
+  onClose: () => void
+  onSubmit: (message: string) => void
 }
 
 export default function ApplyModal({
-  message,
-  onChangeMessage,
+  onClose,
   onSubmit,
 }: ApplyModalContentProps) {
+  const [message, setMessage] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      textareaRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <>
       <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -18,16 +28,20 @@ export default function ApplyModal({
       </h2>
 
       <textarea
+        ref={textareaRef}
         value={message}
-        onChange={(e) => onChangeMessage(e.target.value)}
-        className="w-full border border-gray-500 rounded-lg p-3 mb-2 text-sm focus:outline-none   resize-none"
+        onChange={(e) => setMessage(e.target.value)}
+        className="w-full border border-gray-500 rounded-lg p-3 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
         placeholder="신청 메시지를 입력해주세요"
         rows={4}
       />
 
-      <Button onClick={onSubmit} className="w-full">
-        신청하기
-      </Button>
+      <div className="flex justify-end gap-2">
+        <Button variant="secondary" onClick={onClose}>
+          취소
+        </Button>
+        <Button onClick={() => onSubmit(message)}>신청하기</Button>
+      </div>
     </>
   )
 }

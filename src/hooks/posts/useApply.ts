@@ -1,16 +1,13 @@
-import { useState } from 'react'
-
 import { useApplyCompanion } from '@/api/companions'
 
 export const useApply = (postId: string) => {
   const applyCompanion = useApplyCompanion()
-  const [applyMessage, setApplyMessage] = useState('')
 
-  const handleApplyCompanion = (onSuccess?: () => void) => {
+  const handleApplyCompanion = (message: string, onSuccess?: () => void) => {
     applyCompanion.mutate(
       {
         postId,
-        applyMessage,
+        applyMessage: message,
       },
       {
         onSuccess,
@@ -19,8 +16,6 @@ export const useApply = (postId: string) => {
   }
 
   return {
-    applyMessage,
-    setApplyMessage,
     handleApplyCompanion,
     isApplying: applyCompanion.isPending,
   }

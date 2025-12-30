@@ -12,12 +12,16 @@ import PostCardActions from './CardActions'
 import PostCardImage from './CardImage'
 import PostCardInfo from './CardInfo'
 
-export default function PostCard({ post }: { post: PostListItem }) {
+export default function PostCard({
+  post,
+  priority,
+}: {
+  post: PostListItem
+  priority?: boolean
+}) {
   const router = useRouter()
-  const { openModal } = useModalActions()
-  const { applyMessage, setApplyMessage, handleApplyCompanion } = useApply(
-    post.postId,
-  )
+  const { openModal, closeModal } = useModalActions()
+  const { handleApplyCompanion } = useApply(post.postId)
 
   const { toggleBookmark: handleToggleBookmark } = useBookmarkToggle(
     post.postId,
@@ -29,9 +33,10 @@ export default function PostCard({ post }: { post: PostListItem }) {
   const handleOpenApplyModal = () => {
     openModal(
       <ApplyModal
-        message={applyMessage}
-        onChangeMessage={setApplyMessage}
-        onSubmit={handleApplyCompanion}
+        onClose={closeModal}
+        onSubmit={(message) => {
+          handleApplyCompanion(message, closeModal)
+        }}
       />,
     )
   }
@@ -50,6 +55,7 @@ export default function PostCard({ post }: { post: PostListItem }) {
           thumbnail={post.thumbnail}
           title={post.title}
           recruitStatus={post.recruitStatus}
+          priority={priority}
         />
 
         <PostCardInfo
