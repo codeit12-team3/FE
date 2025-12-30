@@ -70,18 +70,25 @@ export default function PostHeader({
   return (
     <div className="flex flex-col items-start gap-4 pl-2">
       <div className="flex gap-3 justify-between w-full items-center">
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-1">
           {tags.map((tag) => (
-            <button
+            <span
               key={tag}
               className="px-3 py-1.5 bg-blue-50 rounded-full text-xs text-blue-500"
             >
               {tag}
-            </button>
+            </span>
           ))}
         </div>
+        <button
+          onClick={handleToggleBookmark}
+          className="hover:scale-90 transition-transform cursor-pointer md:hidden flex items-end pt-1"
+          aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+        >
+          {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
+        </button>
 
-        <div className="hidden sm:flex gap-5">
+        <div className="hidden md:flex gap-5">
           {isOwner ? (
             <PostManage postId={postId} />
           ) : (
@@ -100,8 +107,8 @@ export default function PostHeader({
           </button>
         </div>
       </div>
-      <h1 className="sm:text-3xl text-xl font-bold text-text-base">{title}</h1>
-      <div className="flex flex-col sm:flex-row gap-3 text-sm items-start sm:items-center w-full justify-between">
+      <h1 className="md:text-3xl text-xl font-bold text-text-base">{title}</h1>
+      <div className="flex flex-col md:flex-row gap-3 text-sm items-start md:items-center w-full justify-between">
         <div className="flex gap-3 items-center">
           <p className="text-gray-500">
             게시날짜{' '}
@@ -117,45 +124,35 @@ export default function PostHeader({
           </p>
         </div>
 
-        <div className="flex sm:hidden gap-5 w-full justify-between items-center">
-          {isOwner ? (
+        {isOwner && (
+          <div className="flex md:hidden gap-5 w-full justify-between items-center">
             <PostManage postId={postId} />
-          ) : (
-            <PostActions
-              onApply={onOpenApplyModal}
-              hasApplied={isApplied}
-              postId={postId}
-            />
-          )}
-          <div className="flex gap-5 items-center">
-            {isOwner && (
-              <>
-                <button
-                  onClick={handleEdit}
-                  className="cursor-pointer"
-                  aria-label="게시글 수정"
-                >
-                  <IconPencil className="text-gray-400 size-6" />
-                </button>
+            <div className="flex gap-5 items-center">
+              <button
+                onClick={handleEdit}
+                className="cursor-pointer"
+                aria-label="게시글 수정"
+              >
+                <IconPencil className="text-gray-400 size-6" />
+              </button>
 
-                <button
-                  onClick={handleDelete}
-                  className="cursor-pointer"
-                  aria-label="게시글 삭제"
-                >
-                  <IconTrashLight className="text-gray-400 size-6" />
-                </button>
-              </>
-            )}
-            <button
-              onClick={handleToggleBookmark}
-              className="hover:scale-90 transition-transform cursor-pointer"
-              aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
-            >
-              {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
-            </button>
+              <button
+                onClick={handleDelete}
+                className="cursor-pointer"
+                aria-label="게시글 삭제"
+              >
+                <IconTrashLight className="text-gray-400 size-6" />
+              </button>
+              <button
+                onClick={handleToggleBookmark}
+                className="hover:scale-90 transition-transform cursor-pointer hidden md:flex"
+                aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+              >
+                {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )

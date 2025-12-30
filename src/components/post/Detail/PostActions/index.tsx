@@ -31,7 +31,7 @@ export default function PostActions({
         {recruitStatus === 'RECRUITING'
           ? hasApplied
             ? '신청 취소'
-            : '동행 신청하기'
+            : '동행 참여하기'
           : '모집종료'}
       </Button>
     </div>

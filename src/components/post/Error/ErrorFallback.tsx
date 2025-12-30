@@ -43,7 +43,7 @@ export default function ErrorFallback({
             <p className="text-sm text-gray-600">{message}</p>
           </div>
 
-          <div className="flex w-full flex-col gap-2 pt-2 sm:flex-row sm:justify-center">
+          <div className="flex w-full flex-col gap-2 pt-2 md:flex-row md:justify-center">
             {onRetry && (
               <Button
                 size="md"

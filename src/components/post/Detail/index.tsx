@@ -10,6 +10,7 @@ import { useModalActions } from '@/stores'
 import { PostDetailSkeleton } from '..'
 import ErrorFallback from '../Error/ErrorFallback'
 import ApplyModal from './ApplyModal'
+import PostActions from './PostActions'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
 import PostInfo from './PostInfo'
@@ -79,6 +80,9 @@ export default function PostDetail({ postId }: { postId: string }) {
             <div className="bg-gray-300 w-full h-px mt-12" />
             <Comment commentCount={postDetail.commentCount} />
           </div>
+        </div>
+        <div className="md:hidden flex-1 px-6 py-4 border-t border-gray-200">
+          <PostActions onApply={handleOpenApplyModal} postId={postId} />
         </div>
       </div>
     </div>

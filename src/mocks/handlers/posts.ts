@@ -1,7 +1,7 @@
 import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
-import { PostListItem } from '@/types/posts'
+import { GenderType, PostListItem } from '@/types/posts'
 
 const CURRENT_USER_ID = 999
 
@@ -79,6 +79,15 @@ export const postsHandlers = [
           isApplied: false,
           isOwner: false,
           isBookmarked: false,
+          writer: {
+            memberId: 1,
+            nickname: '여행러버',
+            profileImage: null,
+            birth: 1998,
+            age: 27,
+            gender: GenderType.MALE,
+            mbti: 'ENFP',
+          },
           thumbnail: '/mock.png',
         }
       },
@@ -254,7 +263,7 @@ export const postsHandlers = [
           profileImage: '/mock.png',
           birth: 1990,
           age: 35,
-          gender: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          gender: id % 2 === 0 ? GenderType.MALE : GenderType.FEMALE,
           mbti: 'ENFP',
         },
         thumbnail: ['/mock.png'],

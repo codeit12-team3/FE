@@ -66,7 +66,7 @@ export default function FilterDate({
       >
         <PopoverTrigger className={triggerClassName}>
           <div className="flex items-center justify-center gap-2 bg-white border border-gray-200 px-3 font-medium rounded-xl h-10 text-sm text-gray-800">
-            <span className="text-gray-800 text-xs sm:text-sm">
+            <span className="text-gray-800 text-xs md:text-sm">
               {date ? `${dayjs(date).format('YYYY.MM.DD')}` : '날짜'}
             </span>
             <IconArrowDown />

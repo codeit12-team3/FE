@@ -62,7 +62,7 @@ export default function PostManage({ postId }: { postId: string }) {
         </SelectContent>
       </Select>
 
-      <div className="hidden sm:flex gap-4">
+      <div className="hidden md:flex gap-4">
         <button
           onClick={handleEdit}
           className="cursor-pointer"

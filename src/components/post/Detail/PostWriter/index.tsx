@@ -12,7 +12,7 @@ export default function PostWriter({ postId }: { postId: string }) {
 
   return (
     <>
-      <div className="flex md:px-8 px-6 border md:pt-10 md:pb-12 py-8 bg-white border-slate-100 rounded-3xl sm:h-auto">
+      <div className="flex md:px-8 px-6 border md:pt-10 md:pb-12 py-8 bg-white border-slate-100 rounded-3x md:h-auto">
         <div className="flex md:flex-col gap-5 items-center justify-center ">
           <div className="flex md:gap-5 md:mb-10 gap-3">
             <div className="md:w-20 md:h-20 relative rounded-full overflow-hidden border border-gray-100 shrink-0 size-10">
