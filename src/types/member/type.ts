@@ -53,3 +53,5 @@ export type PresignedUrlResponse = Array<{
   presignedUrl: string
   image: string
 }>
+
+export type MyPostsState = 'RECRUITING' | 'COMPLETED' | 'FINISHED'
