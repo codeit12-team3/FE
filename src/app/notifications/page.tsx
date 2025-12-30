@@ -1,4 +1,4 @@
-import NotificationList from '@/components/notificaton/NotificationList'
+import { NotificationList } from '@/components/notificaton'
 
 export default function Page() {
   return (
