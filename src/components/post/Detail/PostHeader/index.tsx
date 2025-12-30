@@ -9,10 +9,14 @@ import PostManage from '../PostManage'
 interface PostHeaderProps {
   postId: string
   onOpenApplyModal: () => void
+  onCancel?: () => void
+  isCanceling?: boolean
 }
 
 export default function PostHeader({
   postId,
+  onCancel,
+  isCanceling,
   onOpenApplyModal,
 }: PostHeaderProps) {
   const { data: post } = usePostDetail({ postId })
@@ -63,6 +67,8 @@ export default function PostHeader({
               onApply={onOpenApplyModal}
               hasApplied={isApplied}
               postId={postId}
+              onCancel={onCancel}
+              isCanceling={isCanceling}
             />
           )}
           <button

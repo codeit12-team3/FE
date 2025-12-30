@@ -20,7 +20,7 @@ function PostImageItem({
   priority?: boolean
 }) {
   return (
-    <div className="relative  md:h-71 h-57 rounded-3xl overflow-hidden shrink-0 w-full">
+    <div className="relative md:h-71 h-57 rounded-3xl overflow-hidden shrink-0 w-full">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}

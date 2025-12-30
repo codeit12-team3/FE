@@ -8,7 +8,7 @@ export interface ApplyCompanionReq {
 }
 
 export interface ApplyCompanionRes {
-  postId: number
+  companionId: string
   status: 'PENDING'
 }
 

@@ -1,10 +1,17 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 
+import {
+  useCancelCompanion,
+  useInfiniteGetSentCompanions,
+} from '@/api/companions'
+import { toast } from '@/components/common'
 import { OtherProfile } from '@/components/member'
 import { useApply, useBookmarkToggle, usePostManage } from '@/hooks/posts'
 import { useModalActions } from '@/stores'
+import { SentCompanionContent } from '@/types/companions'
 import { PostListItem } from '@/types/posts'
 
 import ApplyModal from '../../Detail/ApplyModal'
@@ -15,21 +22,48 @@ import PostCardInfo from './CardInfo'
 export default function PostCard({
   post,
   priority,
+  data,
 }: {
   post: PostListItem
   priority?: boolean
+  data?: SentCompanionContent
 }) {
   const router = useRouter()
   const { openModal, closeModal } = useModalActions()
   const { handleApplyCompanion } = useApply(post.postId)
-
+  const { mutate, isPending } = useCancelCompanion()
   const { toggleBookmark: handleToggleBookmark } = useBookmarkToggle(
     post.postId,
     post.isBookmarked,
   )
-
   const { handleEdit, handleDelete } = usePostManage(post.postId)
+  const { data: sentCompanionsData } = useInfiniteGetSentCompanions('PENDING')
 
+  const companionId = useMemo(() => {
+    if (data?.myGuestCompanionResponse?.companionId) {
+      return data.myGuestCompanionResponse.companionId
+    }
+    if (!sentCompanionsData?.pages) return undefined
+    for (const page of sentCompanionsData.pages) {
+      const found = page.content.find(
+        (item) => String(item.postResponse.id) === String(post.postId),
+      )
+      if (found) {
+        return found.myGuestCompanionResponse.companionId
+      }
+    }
+    return undefined
+  }, [data, sentCompanionsData, post.postId])
+  const handleCancelCompanion = async (companionId: string) => {
+    mutate(companionId, {
+      onSuccess: () => {
+        toast.success('동행 요청이 취소 되었습니다')
+      },
+      onError: () => {
+        toast.error('동행 요청 취소에 실패했습니다')
+      },
+    })
+  }
   const handleOpenApplyModal = () => {
     openModal(
       <ApplyModal
@@ -83,6 +117,10 @@ export default function PostCard({
           onEditClick={handleEdit}
           onDeleteClick={handleDelete}
           onApplyClick={handleOpenApplyModal}
+          onCancel={
+            companionId ? () => handleCancelCompanion(companionId) : undefined
+          }
+          isCanceling={isPending}
         />
       </div>
     </div>

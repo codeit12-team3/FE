@@ -1,9 +1,17 @@
 'use client'
 
+import { useMemo } from 'react'
+
+import {
+  useCancelCompanion,
+  useInfiniteGetSentCompanions,
+} from '@/api/companions'
 import { usePostDetail } from '@/api/posts'
 import Comment from '@/components/comment'
+import { toast } from '@/components/common'
 import { useApply } from '@/hooks/posts'
 import { useModalActions } from '@/stores'
+import { SentCompanionContent } from '@/types/companions'
 
 import { PostDetailSkeleton } from '..'
 import ErrorFallback from '../Error/ErrorFallback'
@@ -14,11 +22,42 @@ import PostImages from './PostImages'
 import PostInfo from './PostInfo'
 import PostWriter from './PostWriter'
 
-export default function PostDetail({ postId }: { postId: string }) {
+export default function PostDetail({
+  postId,
+  data,
+}: {
+  postId: string
+  data?: SentCompanionContent
+}) {
   const { data: response, isLoading, refetch } = usePostDetail({ postId })
+  const { data: sentCompanionsData } = useInfiniteGetSentCompanions('PENDING')
+
+  const companionId = useMemo(() => {
+    if (data?.myGuestCompanionResponse?.companionId) {
+      return data.myGuestCompanionResponse.companionId
+    }
+    if (!sentCompanionsData?.pages) return undefined
+    for (const page of sentCompanionsData.pages) {
+      const found = page.content.find(
+        (item) => String(item.postResponse.id) === postId,
+      )
+      if (found) {
+        return found.myGuestCompanionResponse.companionId
+      }
+    }
+
+    return undefined
+  }, [data, sentCompanionsData, postId])
   const { handleApplyCompanion } = useApply(postId)
   const { openModal, closeModal } = useModalActions()
-
+  const { mutate, isPending } = useCancelCompanion()
+  const handleCancelCompanion = async (companionId: string) => {
+    mutate(companionId, {
+      onSuccess: () => {
+        toast.success('동행 요청이 취소 되었습니다')
+      },
+    })
+  }
   const handleOpenApplyModal = () => {
     openModal(
       <ApplyModal
@@ -50,6 +89,12 @@ export default function PostDetail({ postId }: { postId: string }) {
             <PostHeader
               postId={postId}
               onOpenApplyModal={handleOpenApplyModal}
+              onCancel={
+                companionId
+                  ? () => handleCancelCompanion(companionId)
+                  : undefined
+              }
+              isCanceling={isPending}
             />
             <div className="flex md:flex-row lg:gap-6 md:gap-4 md:my-8 my-4 flex-col  ">
               <div className="flex-1 min-w-0 ">
@@ -64,7 +109,17 @@ export default function PostDetail({ postId }: { postId: string }) {
         </div>
         {postDetail.isOwner === false && (
           <div className="md:hidden flex-1 px-6 py-4 border-t border-gray-200">
-            <PostActions onApply={handleOpenApplyModal} postId={postId} />
+            <PostActions
+              onApply={handleOpenApplyModal}
+              postId={postId}
+              hasApplied={postDetail.isApplied}
+              onCancel={
+                companionId
+                  ? () => handleCancelCompanion(companionId)
+                  : undefined
+              }
+              isCanceling={isPending}
+            />
           </div>
         )}
       </div>

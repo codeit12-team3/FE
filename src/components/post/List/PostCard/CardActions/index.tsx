@@ -10,6 +10,8 @@ interface PostCardActionsProps {
   onEditClick: () => void
   onDeleteClick: () => void
   onApplyClick: () => void
+  onCancel?: () => void
+  isCanceling?: boolean
 }
 
 export default function PostCardActions({
@@ -21,6 +23,8 @@ export default function PostCardActions({
   onEditClick,
   onDeleteClick,
   onApplyClick,
+  onCancel,
+  isCanceling,
 }: PostCardActionsProps) {
   return (
     <div className="flex md:flex-col md:items-end md:p-0 md:justify-between flex-row items-center px-4 pb-4 gap-2">
@@ -60,6 +64,8 @@ export default function PostCardActions({
           size="md"
           variant="secondary"
           className="lg:w-34 flex-1 md:flex-none w-28"
+          onClick={onCancel}
+          disabled={isCanceling}
         >
           신청 취소
         </Button>
