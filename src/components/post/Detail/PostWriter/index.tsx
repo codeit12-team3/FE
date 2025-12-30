@@ -12,14 +12,15 @@ export default function PostWriter({ postId }: { postId: string }) {
 
   return (
     <>
-      <div className="flex md:px-8 px-6 border md:pt-10 md:pb-12 py-8 bg-white border-slate-100 rounded-3xl md:h-auto">
-        <div className="flex md:flex-col gap-5 items-center justify-center ">
-          <div className="flex md:gap-5 md:mb-10 gap-3">
-            <div className="md:w-20 md:h-20 relative rounded-full overflow-hidden border border-gray-100 shrink-0 size-10">
+      <div className="flex md:px-8 px-6 border md:pt-10 md:pb-12 py-8 bg-white border-slate-100 rounded-3xl h-35 md:h-71 lg:w-75 md:w-59.5">
+        <div className="flex md:flex-col gap-5 items-start md:justify-center w-full">
+          <div className="flex md:gap-5 gap-3">
+            <div className="md:size-10 relative rounded-full overflow-hidden border border-gray-100 shrink-0 size-10">
               <Image
                 src={getImageUrl(profileImage)}
                 alt="user profile"
                 fill
+                sizes="(max-width: 768px) 40px, 80px"
                 className="object-cover"
               />
             </div>
@@ -33,6 +34,7 @@ export default function PostWriter({ postId }: { postId: string }) {
               </span>
             </div>
           </div>
+          <div className="border border-gray-200 h-px w-full hidden md:flex" />
           <div>
             <div className="flex flex-col gap-2  text-sm">
               <div className="flex gap-1.5">

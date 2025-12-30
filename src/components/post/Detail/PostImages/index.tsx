@@ -10,15 +10,24 @@ interface PostImagesProps {
 }
 const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
-function PostImageItem({ src, idx }: { src: string; idx: number }) {
+function PostImageItem({
+  src,
+  idx,
+  priority = false,
+}: {
+  src: string
+  idx: number
+  priority?: boolean
+}) {
   return (
-    <div className="relative w-full lg:h-100 md:h-71 h-57 rounded-3xl overflow-hidden shrink-0">
+    <div className="relative  md:h-71 h-57 rounded-3xl overflow-hidden shrink-0 w-full">
       <Image
         src={src.startsWith('/') ? src : getImageUrl(src)}
         alt={`post-image-${idx}`}
         fill
-        quality={100}
-        className=" transition-opacity duration-300 rounded-3xl "
+        sizes="(max-width: 768px) 100vw, 800px"
+        priority={priority}
+        className="object-cover transition-opacity duration-300 rounded-3xl "
       />
       <div className="absolute inset-0 rounded-3xl pointer-events-none" />
     </div>
@@ -36,7 +45,7 @@ export default function PostImages({ images }: PostImagesProps) {
   if (imageList.length === 1) {
     return (
       <div>
-        <PostImageItem src={imageList[0]} idx={0} />
+        <PostImageItem src={imageList[0]} idx={0} priority />
       </div>
     )
   }
@@ -50,7 +59,7 @@ export default function PostImages({ images }: PostImagesProps) {
         >
           {imageList.map((img, idx) => (
             <div key={idx} className="min-w-full">
-              <PostImageItem src={img} idx={idx} />
+              <PostImageItem src={img} idx={idx} priority={idx === 0} />
             </div>
           ))}
         </div>

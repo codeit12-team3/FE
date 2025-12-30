@@ -51,8 +51,8 @@ export default function PostDetail({ postId }: { postId: string }) {
               postId={postId}
               onOpenApplyModal={handleOpenApplyModal}
             />
-            <div className="flex md:flex-row gap-6 md:my-8 my-4 flex-col  ">
-              <div className="flex-1 min-w-0">
+            <div className="flex md:flex-row lg:gap-6 md:gap-4 md:my-8 my-4 flex-col  ">
+              <div className="flex-1 min-w-0 ">
                 <PostImages images={postDetail.images} />
               </div>
               <PostWriter postId={postId} />
