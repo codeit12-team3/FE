@@ -26,7 +26,7 @@ export default function PostCardActions({
     <div className="flex md:flex-col md:items-end md:p-0 md:justify-between flex-row items-center px-4 pb-4 gap-2">
       <button
         onClick={onBookmarkClick}
-        className="w-10 h-10 md:flex items-center justify-center transition-colors hover:bg-gray-100 cursor-pointer hidden"
+        className=" md:flex items-center justify-center transition-colors hover:scale-90  cursor-pointer hidden"
       >
         {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
       </button>

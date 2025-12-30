@@ -1,17 +1,6 @@
-import { useRouter } from 'next/navigation'
-
-import {
-  useAddBookmark,
-  useDeletePost,
-  usePostDetail,
-  useRemoveBookmark,
-} from '@/api/posts'
-import {
-  IconHeart,
-  IconHeartSolid,
-  IconPencil,
-  IconTrashLight,
-} from '@/assets/svgr'
+import { usePostDetail } from '@/api/posts'
+import { IconHeart, IconHeartSolid } from '@/assets/svgr'
+import { useBookmarkToggle } from '@/hooks/posts'
 import { formatDay } from '@/lib/common'
 
 import PostActions from '../PostActions'
@@ -19,7 +8,6 @@ import PostManage from '../PostManage'
 
 interface PostHeaderProps {
   postId: string
-
   onOpenApplyModal: () => void
 }
 
@@ -28,10 +16,10 @@ export default function PostHeader({
   onOpenApplyModal,
 }: PostHeaderProps) {
   const { data: post } = usePostDetail({ postId })
-  const addBookmark = useAddBookmark()
-  const removeBookmark = useRemoveBookmark()
-  const deletePost = useDeletePost()
-  const router = useRouter()
+  const { toggleBookmark: handleToggleBookmark } = useBookmarkToggle(
+    postId,
+    post?.success ? post.data.isBookmarked : false,
+  )
 
   if (!post || !post.success) return null
 
@@ -42,30 +30,9 @@ export default function PostHeader({
     isApplied,
     isBookmarked,
     createdAt,
-
     stats,
     commentCount,
   } = post.data
-  const handleToggleBookmark = () => {
-    if (isBookmarked) {
-      removeBookmark.mutate(postId)
-    } else {
-      addBookmark.mutate(postId)
-    }
-  }
-
-  const handleEdit = () => {
-    router.push(`/posts/${postId}/edit`)
-  }
-
-  const handleDelete = () => {
-    if (!confirm('정말 삭제하시겠어요?')) return
-    deletePost.mutate(postId, {
-      onSuccess: () => {
-        router.push('/')
-      },
-    })
-  }
 
   return (
     <div className="flex flex-col items-start gap-4 pl-2">
@@ -124,35 +91,9 @@ export default function PostHeader({
           </p>
         </div>
 
-        {isOwner && (
-          <div className="flex md:hidden gap-5 w-full justify-between items-center">
-            <PostManage postId={postId} />
-            <div className="flex gap-5 items-center">
-              <button
-                onClick={handleEdit}
-                className="cursor-pointer"
-                aria-label="게시글 수정"
-              >
-                <IconPencil className="text-gray-400 size-6" />
-              </button>
-
-              <button
-                onClick={handleDelete}
-                className="cursor-pointer"
-                aria-label="게시글 삭제"
-              >
-                <IconTrashLight className="text-gray-400 size-6" />
-              </button>
-              <button
-                onClick={handleToggleBookmark}
-                className="hover:scale-90 transition-transform cursor-pointer hidden md:flex"
-                aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
-              >
-                {isBookmarked ? <IconHeartSolid /> : <IconHeart />}
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="flex md:hidden gap-5 w-full justify-between items-center">
+          {isOwner && <PostManage postId={postId} />}
+        </div>
       </div>
     </div>
   )

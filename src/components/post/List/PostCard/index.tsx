@@ -1,15 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 
-import { useApplyCompanion } from '@/api/companions'
-import {
-  useAddBookmark,
-  useDeletePost,
-  useRemoveBookmark,
-} from '@/api/posts/posts.mutations'
 import { OtherProfile } from '@/components/member'
+import { useApply, useBookmarkToggle, usePostManage } from '@/hooks/posts'
 import { useModalActions } from '@/stores'
 import { PostListItem } from '@/types/posts'
 
@@ -20,36 +14,17 @@ import PostCardInfo from './CardInfo'
 
 export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
-  const addBookmark = useAddBookmark()
-  const removeBookmark = useRemoveBookmark()
-  const applyCompanion = useApplyCompanion()
-  const deletePost = useDeletePost()
   const { openModal, closeModal } = useModalActions()
+  const { applyMessage, setApplyMessage, handleApplyCompanion } = useApply(
+    post.postId,
+  )
 
-  const [applyMessage, setApplyMessage] = useState('')
+  const { toggleBookmark: handleToggleBookmark } = useBookmarkToggle(
+    post.postId,
+    post.isBookmarked,
+  )
 
-  const handleToggleBookmark = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (post.isBookmarked) {
-      await removeBookmark.mutateAsync(post.postId)
-    } else {
-      await addBookmark.mutateAsync(post.postId)
-    }
-  }
-
-  const handleApplyCompanion = () => {
-    applyCompanion.mutate(
-      {
-        postId: post.postId,
-        applyMessage,
-      },
-      {
-        onSuccess: () => {
-          closeModal()
-        },
-      },
-    )
-  }
+  const { handleEdit, handleDelete } = usePostManage(post.postId)
 
   const handleOpenApplyModal = () => {
     openModal(
@@ -60,19 +35,6 @@ export default function PostCard({ post }: { post: PostListItem }) {
         onSubmit={handleApplyCompanion}
       />,
     )
-  }
-
-  const handleEdit = () => {
-    router.push(`/posts/${post.postId}/edit`)
-  }
-
-  const handleDelete = () => {
-    if (!confirm('정말 삭제하시겠어요?')) return
-    deletePost.mutate(String(post.postId), {
-      onSuccess: () => {
-        router.push('/')
-      },
-    })
   }
 
   const handleTitleClick = () => {

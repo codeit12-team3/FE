@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-import { useInfinitePosts } from '@/hooks/posts/useInfinitePosts'
+import { useInfinitePosts } from '@/hooks/posts'
 import { PostFilterParams } from '@/types/posts'
 
 import { PostListSkeleton } from '../..'

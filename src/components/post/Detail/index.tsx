@@ -1,10 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-
-import { useApplyCompanion } from '@/api/companions'
 import { usePostDetail } from '@/api/posts'
 import Comment from '@/components/comment'
+import { useApply } from '@/hooks/posts'
 import { useModalActions } from '@/stores'
 
 import { PostDetailSkeleton } from '..'
@@ -18,25 +16,9 @@ import PostWriter from './PostWriter'
 
 export default function PostDetail({ postId }: { postId: string }) {
   const { data: response, isLoading, refetch } = usePostDetail({ postId })
-
-  const applyCompanion = useApplyCompanion()
+  const { applyMessage, setApplyMessage, handleApplyCompanion } =
+    useApply(postId)
   const { openModal, closeModal } = useModalActions()
-
-  const [applyMessage, setApplyMessage] = useState('')
-
-  const handleApplyCompanion = () => {
-    applyCompanion.mutate(
-      {
-        postId,
-        applyMessage,
-      },
-      {
-        onSuccess: () => {
-          closeModal()
-        },
-      },
-    )
-  }
 
   const handleOpenApplyModal = () => {
     openModal(
@@ -44,7 +26,7 @@ export default function PostDetail({ postId }: { postId: string }) {
         message={applyMessage}
         onChangeMessage={setApplyMessage}
         onClose={closeModal}
-        onSubmit={handleApplyCompanion}
+        onSubmit={() => handleApplyCompanion(closeModal)}
       />,
     )
   }
@@ -81,9 +63,11 @@ export default function PostDetail({ postId }: { postId: string }) {
             <Comment commentCount={postDetail.commentCount} />
           </div>
         </div>
-        <div className="md:hidden flex-1 px-6 py-4 border-t border-gray-200">
-          <PostActions onApply={handleOpenApplyModal} postId={postId} />
-        </div>
+        {postDetail.isOwner === false && (
+          <div className="md:hidden flex-1 px-6 py-4 border-t border-gray-200">
+            <PostActions onApply={handleOpenApplyModal} postId={postId} />
+          </div>
+        )}
       </div>
     </div>
   )
