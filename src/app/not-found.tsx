@@ -28,9 +28,7 @@ export default function NotFound() {
         <Button variant="secondary" onClick={() => router.back()}>
           이전 페이지
         </Button>
-        <Button>
-          <Link href="/">메인 페이지</Link>
-        </Button>
+        <Button onClick={() => router.push('/')}>메인 페이지</Button>
       </div>
     </div>
   )
