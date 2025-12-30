@@ -1,6 +1,4 @@
-import { useRouter } from 'next/navigation'
-
-import { useDeletePost, usePatchPost, usePostDetail } from '@/api/posts'
+import { usePatchPost, usePostDetail } from '@/api/posts'
 import { IconPencil, IconTrashLight } from '@/assets/svgr'
 import {
   Select,
@@ -9,13 +7,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
+import { usePostManage } from '@/hooks/posts'
 import { RecruitStatus } from '@/types/posts'
 
 export default function PostManage({ postId }: { postId: string }) {
   const { data: post } = usePostDetail({ postId })
-  const deletePost = useDeletePost()
   const patchPost = usePatchPost()
-  const router = useRouter()
+  const { handleEdit, handleDelete } = usePostManage(postId)
 
   if (!post || !post.success) return null
 
@@ -27,19 +25,6 @@ export default function PostManage({ postId }: { postId: string }) {
     patchPost.mutate({
       postId,
       recruitStatus: newStatus as RecruitStatus,
-    })
-  }
-
-  const handleEdit = () => {
-    router.push(`/posts/${postId}/edit`)
-  }
-
-  const handleDelete = () => {
-    if (!confirm('정말 삭제하시겠어요?')) return
-    deletePost.mutate(postId, {
-      onSuccess: () => {
-        router.push('/')
-      },
     })
   }
 
@@ -62,7 +47,7 @@ export default function PostManage({ postId }: { postId: string }) {
         </SelectContent>
       </Select>
 
-      <div className="hidden sm:flex gap-4">
+      <div className="flex gap-4">
         <button
           onClick={handleEdit}
           className="cursor-pointer"

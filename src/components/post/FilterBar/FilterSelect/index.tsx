@@ -33,7 +33,7 @@ export default function FilterSelect({
   return (
     <Select value={value || 'ALL'} onValueChange={onChange}>
       <SelectTrigger className={className} size="sm">
-        <span className="text-xs sm:text-sm">
+        <span className="text-xs md:text-sm">
           {getSelectLabel(value, options, placeholder)}
         </span>
       </SelectTrigger>
