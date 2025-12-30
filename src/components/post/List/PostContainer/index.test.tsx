@@ -23,9 +23,16 @@ jest.mock('@/api/posts/posts.mutations', () => ({
 }))
 
 jest.mock('@/api/companions', () => ({
-  useApplyCompanion: () => ({
+  useApplyCompanion: jest.fn(() => ({
     mutate: jest.fn(),
-  }),
+  })),
+  useCancelCompanion: jest.fn(() => ({
+    mutate: jest.fn(),
+    isPending: false,
+  })),
+  useInfiniteGetSentCompanions: jest.fn(() => ({
+    data: { pages: [] },
+  })),
 }))
 
 jest.mock('@/lib/common', () => ({

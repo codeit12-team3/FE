@@ -41,8 +41,16 @@ jest.mock('../Detail/PostManage', () => {
 
 jest.mock('../Detail/PostActions', () => ({
   __esModule: true,
-  default: ({ onApply }: { onApply: () => void }) => (
-    <button onClick={onApply}>동행 신청하기</button>
+  default: ({
+    onApply,
+    isCanceling,
+  }: {
+    onApply: () => void
+    isCanceling?: boolean
+  }) => (
+    <button onClick={onApply} disabled={isCanceling}>
+      {isCanceling ? '취소 중...' : '동행 신청하기'}
+    </button>
   ),
 }))
 
@@ -73,6 +81,8 @@ jest.mock('@/api/posts', () => ({
 
 jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(),
+  useCancelCompanion: jest.fn(),
+  useInfiniteGetSentCompanions: jest.fn(),
 }))
 
 jest.mock('@/hooks/posts', () => ({
@@ -115,6 +125,16 @@ beforeEach(() => {
   usePatchPost.mockReturnValue({
     mutate: jest.fn(),
     isPending: false,
+  })
+
+  const { useCancelCompanion, useInfiniteGetSentCompanions } =
+    jest.requireMock('@/api/companions')
+  useCancelCompanion.mockReturnValue({
+    mutate: jest.fn(),
+    isPending: false,
+  })
+  useInfiniteGetSentCompanions.mockReturnValue({
+    data: { pages: [] },
   })
 
   const { useBookmarkToggle, useApply, usePostManage } =

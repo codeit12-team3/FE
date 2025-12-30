@@ -4,6 +4,19 @@ import { ReactElement, ReactNode } from 'react'
 
 import { GenderType, PostContent, PostListItem } from '@/types/posts'
 
+jest.mock('@/api/companions', () => ({
+  useApplyCompanion: jest.fn(() => ({
+    mutate: jest.fn(),
+  })),
+  useCancelCompanion: jest.fn(() => ({
+    mutate: jest.fn(),
+    isPending: false,
+  })),
+  useInfiniteGetSentCompanions: jest.fn(() => ({
+    data: { pages: [] },
+  })),
+}))
+
 export const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
