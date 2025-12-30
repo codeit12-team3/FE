@@ -32,7 +32,7 @@ export default function PostCardSkeleton() {
               <Skeleton className="h-5 w-20 bg-blue-50" />
             </div>
 
-            <div className="flex flex-col gap-2.5 xl:mt-8 mt-6.5">
+            <div className="flex flex-col gap-2.5 lg:mt-8 mt-6.5">
               <Skeleton className="h-5 w-16 bg-blue-50" />
 
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -48,7 +48,7 @@ export default function PostCardSkeleton() {
         <div className="flex md:flex-col md:items-end md:p-0 md:justify-between flex-row items-center px-4 pb-4 gap-2">
           <Skeleton className="size-10 rounded-full bg-blue-50 md:flex hidden" />
 
-          <Skeleton className="xl:w-34 h-10 flex-1 md:flex-none w-28 rounded-md bg-blue-50" />
+          <Skeleton className="lg:w-34 h-10 flex-1 md:flex-none w-28 rounded-md bg-blue-50" />
         </div>
       </div>
     </div>

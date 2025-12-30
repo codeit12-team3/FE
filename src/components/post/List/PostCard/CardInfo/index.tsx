@@ -17,6 +17,7 @@ interface PostCardInfoProps {
   period: { startDate: string; endDate: string }
   conditions: { ageType: string; genderCondition: string }
   onTitleClick: () => void
+  onWriterClick: () => void
   onBookmarkClick: (e: React.MouseEvent) => void
   isBookmarked: boolean
 }
@@ -31,6 +32,7 @@ export default function PostCardInfo({
   period,
   conditions,
   onTitleClick,
+  onWriterClick,
   onBookmarkClick,
   isBookmarked,
 }: PostCardInfoProps) {
@@ -67,7 +69,10 @@ export default function PostCardInfo({
         </div>
         <div className="flex gap-1.5 text-sm px-1">
           <p className="text-gray-400">작성자</p>
-          <p className="text-gray-600 cursor-pointer hover:underline">
+          <p
+            className="text-gray-600 cursor-pointer hover:underline"
+            onClick={onWriterClick}
+          >
             {nickname}
           </p>
         </div>
@@ -80,7 +85,7 @@ export default function PostCardInfo({
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 xl:text-sm flex-wrap text-xs px-1">
+        <div className="flex items-center gap-1.5 lg:text-sm flex-wrap text-xs px-1">
           <span className="text-gray-400">위치</span>
           <span className="text-gray-600">{NATION_CODE_TO_LABEL[nation]}</span>
 

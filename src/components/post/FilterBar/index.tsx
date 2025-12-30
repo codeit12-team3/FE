@@ -62,7 +62,7 @@ export default function FilterBar({
 
   return (
     <div className=" py-4">
-      <div className="hidden xl:flex gap-2 justify-between">
+      <div className="hidden lg:flex gap-2 justify-between">
         <div className="flex gap-2">
           <FilterSelect
             value={filters.nation}
@@ -125,7 +125,7 @@ export default function FilterBar({
         </div>
       </div>
 
-      <div className="flex xl:hidden flex-col gap-3">
+      <div className="flex lg:hidden flex-col gap-3">
         <div className="flex gap-2 justify-between">
           <div className="flex-1 relative max-w-[332px]">
             <InputGroup className="h-10">

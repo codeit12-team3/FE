@@ -31,14 +31,14 @@ export default function PostList() {
           <>
             <Button
               size="md"
-              className="gap-2 w-36 hidden xl:block"
+              className="gap-2 w-36 hidden lg:block"
               onClick={() => router.push('/posts/add')}
             >
               동행 구하기
             </Button>
             <Button
               size="md"
-              className="gap-2 whitespace-nowrap xl:hidden"
+              className="gap-2 whitespace-nowrap lg:hidden"
               onClick={() => router.push('/posts/add')}
             >
               동행 구하기

@@ -73,6 +73,7 @@ export interface PostListItem {
     ageType: string
     genderCondition: string
   }
+  writer: Writer
   isOwner: boolean
   isBookmarked: boolean
   isApplied: boolean

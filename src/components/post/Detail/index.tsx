@@ -61,7 +61,7 @@ export default function PostDetail({ postId }: { postId: string }) {
   const postDetail = response.data
 
   return (
-    <div className="min-h-screen bg-gray-50  flex items-center justify-center xl:pt-14 md:pt-7.5 pt-6 px-4">
+    <div className="min-h-screen bg-gray-50  flex items-center justify-center lg:pt-14 md:pt-7.5 pt-6 px-4">
       <div className="max-w-7xl w-full  md:px-6">
         <div className="flex gap-6 items-start justify-center">
           <div className="w-full max-w-7xl rounded-lg ">

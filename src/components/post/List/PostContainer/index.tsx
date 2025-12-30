@@ -74,8 +74,8 @@ export default function PostContainer({
         </div>
       ) : (
         <div className="space-y-4 my-5">
-          {posts.map((post, index) => (
-            <PostCard key={post.postId} post={post} priority={index === 0} />
+          {posts.map((post) => (
+            <PostCard key={post.postId} post={post} />
           ))}
         </div>
       )}

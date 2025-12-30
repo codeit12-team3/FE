@@ -9,6 +9,7 @@ import {
   useDeletePost,
   useRemoveBookmark,
 } from '@/api/posts/posts.mutations'
+import { OtherProfile } from '@/components/member'
 import { useModalActions } from '@/stores'
 import { PostListItem } from '@/types/posts'
 
@@ -17,13 +18,7 @@ import PostCardActions from './CardActions'
 import PostCardImage from './CardImage'
 import PostCardInfo from './CardInfo'
 
-export default function PostCard({
-  post,
-  priority = false,
-}: {
-  post: PostListItem
-  priority?: boolean
-}) {
+export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
   const addBookmark = useAddBookmark()
   const removeBookmark = useRemoveBookmark()
@@ -83,6 +78,9 @@ export default function PostCard({
   const handleTitleClick = () => {
     router.push(`/posts/${post.postId}`)
   }
+  const handleWriterClick = () => {
+    openModal(<OtherProfile memberId={String(post.writer.memberId)} />)
+  }
 
   return (
     <div className="bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -90,7 +88,6 @@ export default function PostCard({
         <PostCardImage
           thumbnail={post.thumbnail}
           title={post.title}
-          priority={priority}
           recruitStatus={post.recruitStatus}
         />
 
@@ -105,6 +102,7 @@ export default function PostCard({
           period={post.period}
           conditions={post.conditions}
           onTitleClick={handleTitleClick}
+          onWriterClick={handleWriterClick}
           onBookmarkClick={handleToggleBookmark}
           isBookmarked={post.isBookmarked}
         />

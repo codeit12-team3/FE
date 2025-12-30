@@ -36,7 +36,7 @@ export default function PostCardActions({
           <Button
             size="md"
             variant="secondary"
-            className="xl:w-34 flex-1 w-28"
+            className="lg:w-34 flex-1 w-28"
             onClick={onEditClick}
           >
             수정하기
@@ -45,28 +45,28 @@ export default function PostCardActions({
           <Button
             size="md"
             variant="tertiary"
-            className="xl:w-34 flex-1 w-28"
+            className="lg:w-34 flex-1 w-28"
             onClick={onDeleteClick}
           >
             삭제하기
           </Button>
         </div>
       ) : recruitStatus === 'COMPLETED' ? (
-        <Button size="md" disabled className="xl:w-34 flex-1 md:flex-none w-28">
+        <Button size="md" disabled className="lg:w-34 flex-1 md:flex-none w-28">
           모집종료
         </Button>
       ) : isApplied ? (
         <Button
           size="md"
           variant="secondary"
-          className="xl:w-34 flex-1 md:flex-none w-28"
+          className="lg:w-34 flex-1 md:flex-none w-28"
         >
           신청 취소
         </Button>
       ) : (
         <Button
           size="md"
-          className="xl:w-34 flex-1 md:flex-none w-28"
+          className="lg:w-34 flex-1 md:flex-none w-28"
           onClick={onApplyClick}
         >
           신청하기

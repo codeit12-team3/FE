@@ -4,8 +4,8 @@ import { Skeleton } from '@/components/ui'
 
 export default function PostDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center xl:pt-14 sm:pt-7.5 px-4">
-      <div className="max-w-7xl w-full xl:px-34 sm:px-6">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center lg:pt-14 sm:pt-7.5 px-4">
+      <div className="max-w-7xl w-full lg:px-34 sm:px-6">
         <div className="flex gap-6 items-start justify-center">
           <div className="w-full max-w-7xl rounded-lg">
             <div className="flex flex-col items-start sm:mb-6 mb-4 gap-4">
