@@ -25,22 +25,12 @@ export default function useNotificationSSE() {
     const token = session.user.accessToken
     const url = `${BASE_URL}/v1/notifications/subscribe`
 
-    console.log('📡 SSE 연결 시도...')
-
     const eventSource = new EventSourcePolyfill(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       heartbeatTimeout: 120000,
     })
-
-    eventSource.onopen = () => {
-      console.log('✅ SSE 연결 성공!')
-    }
-
-    eventSource.onmessage = (e) => {
-      console.log('💓 [SSE] 일반 메시지/핑 수신:', e.data)
-    }
 
     const handleNotification = (e: MessageEvent) => {
       try {
@@ -76,10 +66,7 @@ export default function useNotificationSSE() {
     const handleError = (e: Event) => {
       const errorEvent = e as SSEErrorEvent
 
-      console.error('❌ SSE Error:', errorEvent)
-
       if (errorEvent.status === 401) {
-        console.error('인증 만료로 SSE 연결을 종료합니다.')
         eventSource.close()
       }
     }
