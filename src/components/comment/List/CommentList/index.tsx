@@ -60,6 +60,7 @@ export default function CommentList({
     <Virtuoso
       useWindowScroll
       data={comments}
+      increaseViewportBy={{ top: 200, bottom: 200 }}
       endReached={handleEndReached}
       itemContent={(index, comment) => (
         <div className="pb-6">
