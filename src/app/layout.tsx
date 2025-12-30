@@ -7,6 +7,7 @@ import './globals.css'
 import { SessionProvider } from 'next-auth/react'
 
 import { Header, Modal, Toaster } from '@/components/common'
+import { NotificationListener } from '@/components/notificaton'
 import {
   ClientProvider,
   LazyMotionProvider,
@@ -46,6 +47,7 @@ export default function RootLayout({
                   <Modal />
                 </LazyMotionProvider>
               </ClientProvider>
+              <NotificationListener />
             </SessionProvider>
           </QueryProvider>
         </MSWProvider>
