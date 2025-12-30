@@ -74,7 +74,9 @@ describe('게시글 컨테이너 테스트', () => {
     })
 
     renderWithClient(<PostContainer filters={mockFilters} />)
-    expect(screen.getByText('에러가 발생했습니다.')).toBeInTheDocument()
+    expect(
+      screen.getByText('게시글 불러오는데 실패했습니다.'),
+    ).toBeInTheDocument()
   })
 
   test('게시글이 없을 때 "게시글이 없습니다" 메시지가 표시된다', () => {

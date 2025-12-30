@@ -8,6 +8,7 @@ import Comment from '@/components/comment'
 import { useModalActions } from '@/stores'
 
 import { PostDetailSkeleton } from '..'
+import ErrorFallback from '../Error/ErrorFallback'
 import ApplyModal from './ApplyModal'
 import PostHeader from './PostHeader'
 import PostImages from './PostImages'
@@ -15,7 +16,7 @@ import PostInfo from './PostInfo'
 import PostWriter from './PostWriter'
 
 export default function PostDetail({ postId }: { postId: string }) {
-  const { data: response, isLoading } = usePostDetail({ postId })
+  const { data: response, isLoading, refetch } = usePostDetail({ postId })
 
   const applyCompanion = useApplyCompanion()
   const { openModal, closeModal } = useModalActions()
@@ -53,9 +54,7 @@ export default function PostDetail({ postId }: { postId: string }) {
 
   if (!response || !response.success || !response.data) {
     return (
-      <div className="text-center py-20 text-gray-500">
-        게시글을 불러올 수 없습니다.
-      </div>
+      <ErrorFallback message="게시글을 불러올 수 없습니다." onRetry={refetch} />
     )
   }
 

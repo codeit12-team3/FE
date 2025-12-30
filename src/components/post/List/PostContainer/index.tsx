@@ -6,6 +6,7 @@ import { useInfinitePosts } from '@/hooks/posts/useInfinitePosts'
 import { PostFilterParams } from '@/types/posts'
 
 import { PostListSkeleton } from '../..'
+import ErrorFallback from '../../Error/ErrorFallback'
 import PostCard from '../PostCard'
 
 export default function PostContainer({
@@ -13,8 +14,14 @@ export default function PostContainer({
 }: {
   filters: PostFilterParams
 }) {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinitePosts(filters)
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfinitePosts(filters)
   const observerRef = useRef<HTMLDivElement>(null)
   const fetchingRef = useRef(false)
 
@@ -38,7 +45,13 @@ export default function PostContainer({
   }, [hasNextPage, fetchNextPage])
 
   if (isLoading) return <PostListSkeleton />
-  if (!data) return <div>에러가 발생했습니다.</div>
+  if (!data)
+    return (
+      <ErrorFallback
+        message="게시글 불러오는데 실패했습니다."
+        onRetry={refetch}
+      />
+    )
 
   const allPosts = data.pages.flatMap((page) =>
     page.success ? page.data.content : [],

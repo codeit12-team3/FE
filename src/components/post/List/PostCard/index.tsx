@@ -84,11 +84,8 @@ export default function PostCard({
     router.push(`/posts/${post.postId}`)
   }
 
-  const CARD_BASE =
-    'bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow'
-
   return (
-    <div className={CARD_BASE}>
+    <div className="bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex md:gap-6 md:flex-row flex-col gap-0">
         <PostCardImage
           thumbnail={post.thumbnail}
