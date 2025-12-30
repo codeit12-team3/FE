@@ -1,9 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { Button } from '@/components/ui'
+import { IconSearch } from '@/assets/svgr'
+import { Button, InputGroup, InputGroupInput } from '@/components/ui'
 import { PostFilterParams } from '@/types/posts'
 
 import FilterBar from '../FilterBar'
@@ -18,15 +19,50 @@ export default function PostList() {
     gender: undefined,
     keyword: '',
   })
+  const [keyword, setKeyword] = useState('')
 
-  const handleApplyFilters = useCallback((filters: PostFilterParams) => {
-    setAppliedFilters(filters)
-  }, [])
+  const handleApplyFilters = useCallback(
+    (filters: Omit<PostFilterParams, 'keyword'>) => {
+      setAppliedFilters((prev) => ({ ...prev, ...filters }))
+    },
+    [],
+  )
+
+  const handleSearchImmediately = useCallback(() => {
+    setAppliedFilters((prev) => ({ ...prev, keyword }))
+  }, [keyword])
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearchImmediately()
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppliedFilters((prev) => ({ ...prev, keyword }))
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [keyword])
 
   return (
     <div className="max-w-7xl  mx-auto flex  flex-col  md:px-6 px-4">
       <FilterBar
         onApply={handleApplyFilters}
+        searchInput={
+          <InputGroup className="h-10 flex-1 lg:w-full">
+            <InputGroupInput
+              placeholder="검색어를 입력해주세요"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <IconSearch
+              className="absolute right-3 w-6 h-6 text-gray-500 cursor-pointer"
+              onClick={handleSearchImmediately}
+            />
+          </InputGroup>
+        }
         actionButton={
           <>
             <Button

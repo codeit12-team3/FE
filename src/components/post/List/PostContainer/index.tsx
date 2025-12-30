@@ -73,7 +73,7 @@ export default function PostContainer({
           </span>
         </div>
       ) : (
-        <div className="space-y-4 my-5">
+        <div className="space-y-4">
           {posts.map((post) => (
             <PostCard key={post.postId} post={post} />
           ))}

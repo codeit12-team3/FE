@@ -25,7 +25,6 @@ export default function PostDetail({ postId }: { postId: string }) {
       <ApplyModal
         message={applyMessage}
         onChangeMessage={setApplyMessage}
-        onClose={closeModal}
         onSubmit={() => handleApplyCompanion(closeModal)}
       />,
     )

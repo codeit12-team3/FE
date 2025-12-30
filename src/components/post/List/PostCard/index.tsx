@@ -14,7 +14,7 @@ import PostCardInfo from './CardInfo'
 
 export default function PostCard({ post }: { post: PostListItem }) {
   const router = useRouter()
-  const { openModal, closeModal } = useModalActions()
+  const { openModal } = useModalActions()
   const { applyMessage, setApplyMessage, handleApplyCompanion } = useApply(
     post.postId,
   )
@@ -31,7 +31,6 @@ export default function PostCard({ post }: { post: PostListItem }) {
       <ApplyModal
         message={applyMessage}
         onChangeMessage={setApplyMessage}
-        onClose={closeModal}
         onSubmit={handleApplyCompanion}
       />,
     )
