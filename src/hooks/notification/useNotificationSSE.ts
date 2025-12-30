@@ -2,7 +2,7 @@
 
 import { InfiniteData, useQueryClient } from '@tanstack/react-query'
 import { EventListener, EventSourcePolyfill } from 'event-source-polyfill'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 
 import { toast } from '@/components/common'
@@ -68,6 +68,7 @@ export default function useNotificationSSE() {
 
       if (errorEvent.status === 401) {
         eventSource.close()
+        signOut({ callbackUrl: '/signin' })
       }
     }
 
