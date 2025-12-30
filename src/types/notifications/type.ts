@@ -2,12 +2,13 @@ export interface Notification {
   notificationId: string
   postId: string
   type: NotificationType
+  applyMessage: string
   sender: {
     id: string
     nickname: string
     image: string
   }
-  timestamp: string
+  timestamp: number
 }
 
 export interface NotificationReq {
