@@ -1,5 +1,16 @@
-import React from 'react'
+'use client'
 
-export default function index() {
-  return <div>index</div>
+import { Book, Loader } from 'lucide-react'
+
+import { EmptyCard } from '@/components/common'
+
+import BookmarkCard from '../BookmarkCard'
+import BookmarkSkeleton from '../BookmarkSkeleton'
+
+export default function BookmarkList() {
+  return (
+    <div className="flex flex-col gap-4">
+      <BookmarkSkeleton />
+    </div>
+  )
 }
