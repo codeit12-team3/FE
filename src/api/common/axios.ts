@@ -13,6 +13,8 @@ const client: AxiosInstance = axios.create({
   withCredentials: true,
 })
 
+let isSignout = false
+
 // 응답 인터셉터
 client.interceptors.response.use(
   (res: AxiosResponse) => {
@@ -24,14 +26,21 @@ client.interceptors.response.use(
     if (res && res.status === 401) {
       const apiRes = res.data
 
-      if (apiRes.success === false) {
-        const errCode = apiRes.data.code
+      const shouldLogout =
+        !apiRes || (apiRes.success === false && apiRes.data.code !== 'AUTH_011')
 
-        if (errCode !== 'AUTH_011' && typeof window !== 'undefined') {
-          await signOut({ callbackUrl: '/signin' })
+      if (shouldLogout && typeof window !== 'undefined') {
+        if (!isSignout) {
+          isSignout = true
 
-          return new Promise(() => {})
+          try {
+            await signOut({ callbackUrl: '/signin' })
+          } finally {
+            isSignout = false
+          }
         }
+
+        return Promise.reject(new Error('로그인 시간이 만료되었습니다'))
       }
     }
 
