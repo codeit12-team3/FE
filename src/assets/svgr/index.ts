@@ -17,6 +17,8 @@ export { default as IconSearch } from './search.svg'
 export { default as IconTrashLight } from './trash-light.svg'
 export { default as IconUser } from './user.svg'
 export { default as IconX } from './x.svg'
+export { default as IconNotificationRead } from './notification-read.svg'
+export { default as IconNotificationUnread } from './notification-unread.svg'
 
 export { default as IconReload } from './reload.svg'
 
