@@ -66,6 +66,7 @@ export interface GetBookmarkedPostsReq {
   gender?: 'MALE' | 'FEMALE' | 'ALL'
 }
 
+// 내가 북마크한 게시글
 export interface BookmarkedPost {
   postId: number
   title: string
@@ -92,5 +93,34 @@ export interface BookmarkedPost {
 
 export interface GetBookmarkedPostsRes {
   content: BookmarkedPost[]
+  isLast: boolean
+}
+
+// 내 게시글
+export interface GetMyPostsReq {
+  lastPostId?: string
+  size?: number
+  status?: MyPostsState // 'RECRUITING' | 'COMPLETED' | 'FINISHED'
+}
+
+export interface MyPost {
+  postId: number
+  title: string
+  nation: string
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  createdAt: string
+  recruitStatus: string
+  tags: string[]
+  currentMembers: number
+  maxMembers: number
+  thumbnail: string
+}
+
+export interface GetMyPostsRes {
+  content: MyPost[]
   isLast: boolean
 }

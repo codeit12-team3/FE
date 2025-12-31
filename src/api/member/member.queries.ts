@@ -1,10 +1,11 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { STALE_TIME } from '@/constants/common'
-import { GetBookmarkedPostsReq } from '@/types/member'
+import { GetBookmarkedPostsReq, GetMyPostsReq } from '@/types/member'
 
 import {
   getBookmarkedPosts,
+  getMyPosts,
   getMyProfile,
   getOtherProfile,
 } from './member.clients'
@@ -47,5 +48,29 @@ export const useInfiniteGetBookmarkedPosts = (
       const lastPost = lastPage.content[lastPage.content.length - 1]
       return lastPost?.postId.toString()
     },
+  })
+}
+
+export const useInfiniteGetMyPosts = (
+  filters: Omit<GetMyPostsReq, 'lastPostId' | 'size'>,
+) => {
+  return useInfiniteQuery({
+    queryKey: ['myPosts', filters],
+    queryFn: ({ pageParam }) =>
+      getMyPosts({
+        ...filters,
+        lastPostId: pageParam,
+        size: 5,
+      }),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.isLast) {
+        return undefined
+      }
+      const lastPost = lastPage.content[lastPage.content.length - 1]
+      return lastPost?.postId.toString()
+    },
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   })
 }

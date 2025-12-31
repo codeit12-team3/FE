@@ -2,6 +2,8 @@ import { ApiResponse } from '@/types/common'
 import {
   GetBookmarkedPostsReq,
   GetBookmarkedPostsRes,
+  GetMyPostsReq,
+  GetMyPostsRes,
   Profile,
   UpdateMyProfileReq,
 } from '@/types/member'
@@ -66,6 +68,22 @@ export const getBookmarkedPosts = async (params: GetBookmarkedPostsReq) => {
       },
     },
   )
+
+  if (!data.success) {
+    throw new Error(data.data.message)
+  }
+
+  return data.data
+}
+
+export const getMyPosts = async (params: GetMyPostsReq) => {
+  const { data } = await axios.get<ApiResponse<GetMyPostsRes>>('/v1/posts/me', {
+    params: {
+      lastPostId: params.lastPostId,
+      size: params.size ?? 5,
+      status: params.status,
+    },
+  })
 
   if (!data.success) {
     throw new Error(data.data.message)
