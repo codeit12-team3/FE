@@ -144,6 +144,7 @@ export const useAddBookmark = () => {
     onSuccess: (_, postId) => {
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
+      queryClient.invalidateQueries({ queryKey: ['bookmarkedPosts'] })
     },
     onError: () => {
       toast.error('북마크 추가에 실패했습니다.')

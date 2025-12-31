@@ -62,7 +62,7 @@ export interface GetBookmarkedPostsReq {
   nation?: string
   from?: string
   to?: string
-  ageType?: 'TWENTY' | 'THIRTY' | 'FOURTY' | 'FIFTY' | 'ETC'
+  ageType?: 'TWENTY' | 'THIRTY' | 'FORTY' | 'FIFTY' | 'ETC'
   gender?: 'MALE' | 'FEMALE' | 'ALL'
 }
 
