@@ -174,7 +174,7 @@ export default function ImageUpload() {
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10"
+                    className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10 cursor-pointer"
                     aria-label="이미지 삭제"
                   >
                     <IconX className="text-white size-4" />
