@@ -5,8 +5,8 @@ import {
 } from '@/constants/posts'
 import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
 
-import FilterDate from './FilterDate'
-import FilterSelect from './FilterSelect'
+import FilterDate from '../FilterDate'
+import FilterSelect from '../FilterSelect'
 
 interface FilterControlsProps {
   filters: Omit<PostFilterParams, 'keyword'>
