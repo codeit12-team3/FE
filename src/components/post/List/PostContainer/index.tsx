@@ -2,19 +2,26 @@
 
 import { useEffect, useRef } from 'react'
 
-import { useInfinitePosts } from '@/hooks/posts/useInfinitePosts'
+import { useInfinitePosts } from '@/hooks/posts'
 import { PostFilterParams } from '@/types/posts'
 
 import { PostListSkeleton } from '../..'
-import PostListSection from '../PostListSection'
+import ErrorFallback from '../../Error/ErrorFallback'
+import PostCard from '../PostCard'
 
 export default function PostContainer({
   filters,
 }: {
   filters: PostFilterParams
 }) {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinitePosts(filters)
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfinitePosts(filters)
   const observerRef = useRef<HTMLDivElement>(null)
   const fetchingRef = useRef(false)
 
@@ -38,7 +45,13 @@ export default function PostContainer({
   }, [hasNextPage, fetchNextPage])
 
   if (isLoading) return <PostListSkeleton />
-  if (!data) return <div>에러가 발생했습니다.</div>
+  if (!data)
+    return (
+      <ErrorFallback
+        message="게시글 불러오는데 실패했습니다."
+        onRetry={refetch}
+      />
+    )
 
   const allPosts = data.pages.flatMap((page) =>
     page.success ? page.data.content : [],
@@ -48,9 +61,24 @@ export default function PostContainer({
       index === self.findIndex((p) => p.postId === post.postId),
   )
 
+  const isEmpty = posts.length === 0
+
   return (
     <>
-      <PostListSection posts={posts} />
+      {isEmpty ? (
+        <div className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2">
+          <span className="text-lg font-medium">게시글이 없습니다</span>
+          <span className="text-sm text-gray-500">
+            새로운 동행 게시글을 작성해보세요!
+          </span>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {posts.map((post, index) => (
+            <PostCard key={post.postId} post={post} priority={index === 0} />
+          ))}
+        </div>
+      )}
 
       {hasNextPage && (
         <div

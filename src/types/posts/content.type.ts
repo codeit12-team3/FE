@@ -56,7 +56,7 @@ interface Writer {
   mbti: MBTIType
 }
 export interface PostListItem {
-  postId: number
+  postId: string
   title: string
   nation: NationCode
   region: string
@@ -73,6 +73,7 @@ export interface PostListItem {
     ageType: string
     genderCondition: string
   }
+  writer: Writer
   isOwner: boolean
   isBookmarked: boolean
   isApplied: boolean

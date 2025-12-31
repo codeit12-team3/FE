@@ -17,21 +17,16 @@ jest.mock('uuid', () => ({
 
 jest.mock('../Detail/PostManage', () => {
   const MockPostManage = ({ postId }: { postId: string }) => {
-    const { useRouter } = jest.requireMock('next/navigation')
-    const router = useRouter()
-    const { useDeletePost } = jest.requireMock('@/api/posts')
-    const deletePost = useDeletePost()
+    const { usePostManage } = jest.requireMock('@/hooks/posts')
+    const { handleEdit, handleDelete } = usePostManage(postId)
 
     return (
       <div>
         <div>게시글 관리</div>
-        <button
-          onClick={() => router.push(`/posts/${postId}/edit`)}
-          aria-label="게시글 수정"
-        >
+        <button onClick={handleEdit} aria-label="게시글 수정">
           게시글 수정
         </button>
-        <button onClick={() => deletePost.mutate()} aria-label="게시글 삭제">
+        <button onClick={handleDelete} aria-label="게시글 삭제">
           게시글 삭제
         </button>
       </div>
@@ -46,8 +41,16 @@ jest.mock('../Detail/PostManage', () => {
 
 jest.mock('../Detail/PostActions', () => ({
   __esModule: true,
-  default: ({ onApply }: { onApply: () => void }) => (
-    <button onClick={onApply}>동행 신청하기</button>
+  default: ({
+    onApply,
+    isCanceling,
+  }: {
+    onApply: () => void
+    isCanceling?: boolean
+  }) => (
+    <button onClick={onApply} disabled={isCanceling}>
+      {isCanceling ? '취소 중...' : '동행 신청하기'}
+    </button>
   ),
 }))
 
@@ -78,11 +81,29 @@ jest.mock('@/api/posts', () => ({
 
 jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(),
+  useCancelCompanion: jest.fn(),
+  useInfiniteGetSentCompanions: jest.fn(),
+}))
+
+jest.mock('@/hooks/posts', () => ({
+  useBookmarkToggle: jest.fn(),
+  useApply: jest.fn(),
+  usePostManage: jest.fn(),
 }))
 
 jest.mock('@/components/comment', () => ({
   __esModule: true,
   default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
+}))
+
+const mockOpenModal = jest.fn()
+const mockCloseModal = jest.fn()
+
+jest.mock('@/stores', () => ({
+  useModalActions: () => ({
+    openModal: mockOpenModal,
+    closeModal: mockCloseModal,
+  }),
 }))
 
 const mockPush = jest.fn()
@@ -104,6 +125,33 @@ beforeEach(() => {
   usePatchPost.mockReturnValue({
     mutate: jest.fn(),
     isPending: false,
+  })
+
+  const { useCancelCompanion, useInfiniteGetSentCompanions } =
+    jest.requireMock('@/api/companions')
+  useCancelCompanion.mockReturnValue({
+    mutate: jest.fn(),
+    isPending: false,
+  })
+  useInfiniteGetSentCompanions.mockReturnValue({
+    data: { pages: [] },
+  })
+
+  const { useBookmarkToggle, useApply, usePostManage } =
+    jest.requireMock('@/hooks/posts')
+  useBookmarkToggle.mockReturnValue({
+    toggleBookmark: jest.fn(),
+    isBookmarked: false,
+  })
+  useApply.mockReturnValue({
+    applyMessage: '',
+    setApplyMessage: jest.fn(),
+    handleApplyCompanion: jest.fn(),
+  })
+  usePostManage.mockReturnValue({
+    handleEdit: jest.fn(),
+    handleDelete: jest.fn(),
+    isDeleting: false,
   })
 })
 
@@ -148,12 +196,13 @@ describe('게시글 상세 조회 테스트', () => {
   })
 })
 describe('북마크 토글 테스트', () => {
-  test('북마크 버튼 클릭시 북마크가 추가 된다', async () => {
-    const mockAddBookmark = jest.fn()
-    const { useAddBookmark } = jest.requireMock('@/api/posts')
+  test('북마크 버튼 클릭시 북마크가 토글 된다', async () => {
+    const mockToggleBookmark = jest.fn()
+    const { useBookmarkToggle } = jest.requireMock('@/hooks/posts')
 
-    useAddBookmark.mockReturnValue({
-      mutate: mockAddBookmark,
+    useBookmarkToggle.mockReturnValue({
+      toggleBookmark: mockToggleBookmark,
+      isBookmarked: false,
     })
 
     usePostDetail.mockReturnValue({
@@ -171,15 +220,16 @@ describe('북마크 토글 테스트', () => {
     })
     await userEvent.click(bookmarkButtons[0])
 
-    expect(mockAddBookmark).toHaveBeenCalledWith('1')
+    expect(mockToggleBookmark).toHaveBeenCalled()
   })
 
-  test('북마크 버튼 클릭시 북마크가 삭제 된다', async () => {
-    const mockRemoveBookmark = jest.fn()
-    const { useRemoveBookmark } = jest.requireMock('@/api/posts')
+  test('북마크된 상태에서 버튼 클릭시 북마크가 토글 된다', async () => {
+    const mockToggleBookmark = jest.fn()
+    const { useBookmarkToggle } = jest.requireMock('@/hooks/posts')
 
-    useRemoveBookmark.mockReturnValue({
-      mutate: mockRemoveBookmark,
+    useBookmarkToggle.mockReturnValue({
+      toggleBookmark: mockToggleBookmark,
+      isBookmarked: true,
     })
 
     usePostDetail.mockReturnValue({
@@ -197,7 +247,7 @@ describe('북마크 토글 테스트', () => {
     })
     await userEvent.click(bookmarkButtons[0])
 
-    expect(mockRemoveBookmark).toHaveBeenCalledWith('1')
+    expect(mockToggleBookmark).toHaveBeenCalled()
   })
 })
 describe('게시글 권한 테스트', () => {
@@ -214,12 +264,13 @@ describe('게시글 권한 테스트', () => {
       expect(screen.getAllByText('게시글 관리')[0]).toBeInTheDocument()
     })
     test('게시글 삭제 버튼을 누르면 게시글이 삭제된다', async () => {
-      const mockDeletePost = jest.fn()
-      const { useDeletePost } = jest.requireMock('@/api/posts')
+      const mockHandleDelete = jest.fn()
+      const { usePostManage } = jest.requireMock('@/hooks/posts')
 
-      useDeletePost.mockReturnValue({
-        mutate: mockDeletePost,
-        isPending: false,
+      usePostManage.mockReturnValue({
+        handleEdit: jest.fn(),
+        handleDelete: mockHandleDelete,
+        isDeleting: false,
       })
 
       usePostDetail.mockReturnValue({
@@ -236,9 +287,18 @@ describe('게시글 권한 테스트', () => {
       })
       await userEvent.click(deleteButtons[0])
 
-      expect(mockDeletePost).toHaveBeenCalled()
+      expect(mockHandleDelete).toHaveBeenCalled()
     })
     test('게시글 수정 버튼을 누르면 posts/postId/edit으로 이동된다', async () => {
+      const mockHandleEdit = jest.fn()
+      const { usePostManage } = jest.requireMock('@/hooks/posts')
+
+      usePostManage.mockReturnValue({
+        handleEdit: mockHandleEdit,
+        handleDelete: jest.fn(),
+        isDeleting: false,
+      })
+
       usePostDetail.mockReturnValue({
         data: {
           success: true,
@@ -251,7 +311,7 @@ describe('게시글 권한 테스트', () => {
       const editButtons = screen.getAllByRole('button', { name: '게시글 수정' })
       await userEvent.click(editButtons[0])
 
-      expect(mockPush).toHaveBeenCalledWith('/posts/1/edit')
+      expect(mockHandleEdit).toHaveBeenCalled()
     })
   })
   describe('내가 작성자가 아닐 경우', () => {
@@ -266,7 +326,7 @@ describe('게시글 권한 테스트', () => {
       renderPostDetail()
       expect(screen.getAllByText('동행 신청하기')[0]).toBeInTheDocument()
     })
-    test('동행신청 버튼을 누르면 동행 신청 모달이 보인다', async () => {
+    test('동행신청 버튼을 누르면 동행 신청 모달이 열린다', async () => {
       usePostDetail.mockReturnValue({
         data: {
           success: true,
@@ -280,17 +340,18 @@ describe('게시글 권한 테스트', () => {
       })
       await userEvent.click(applyButtons[0])
 
-      expect(screen.getByTestId('apply-modal')).toBeInTheDocument()
-      expect(screen.getByText('동행 신청 모달')).toBeInTheDocument()
+      expect(mockOpenModal).toHaveBeenCalled()
     })
     test('신청하기 버튼을 누르면 동행이 신청된다.', async () => {
-      const mockApply = jest.fn()
-      const { useApplyCompanion } = jest.requireMock('@/api/companions')
+      const mockHandleApply = jest.fn()
+      const { useApply } = jest.requireMock('@/hooks/posts')
 
-      useApplyCompanion.mockReturnValue({
-        mutate: mockApply,
-        isPending: false,
+      useApply.mockReturnValue({
+        applyMessage: '',
+        setApplyMessage: jest.fn(),
+        handleApplyCompanion: mockHandleApply,
       })
+
       usePostDetail.mockReturnValue({
         data: {
           success: true,
@@ -305,9 +366,12 @@ describe('게시글 권한 테스트', () => {
       })
       await userEvent.click(openModalButtons[0])
 
-      const applyButton = screen.getByRole('button', { name: '신청하기' })
-      await userEvent.click(applyButton)
-      expect(mockApply).toHaveBeenCalled()
+      expect(mockOpenModal).toHaveBeenCalled()
+
+      const modalProps = mockOpenModal.mock.calls[0][0].props
+      modalProps.onSubmit()
+
+      expect(mockHandleApply).toHaveBeenCalled()
     })
   })
 })

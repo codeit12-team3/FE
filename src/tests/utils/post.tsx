@@ -4,6 +4,19 @@ import { ReactElement, ReactNode } from 'react'
 
 import { GenderType, PostContent, PostListItem } from '@/types/posts'
 
+jest.mock('@/api/companions', () => ({
+  useApplyCompanion: jest.fn(() => ({
+    mutate: jest.fn(),
+  })),
+  useCancelCompanion: jest.fn(() => ({
+    mutate: jest.fn(),
+    isPending: false,
+  })),
+  useInfiniteGetSentCompanions: jest.fn(() => ({
+    data: { pages: [] },
+  })),
+}))
+
 export const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
@@ -87,7 +100,7 @@ export const mockPostFormData: PostContent = {
 }
 
 export const mockPostListItem: PostListItem = {
-  postId: 1,
+  postId: '1',
   title: '함께 일본 여행 가실 분 구합니다',
   nation: 'JP',
   region: '도쿄',
@@ -103,6 +116,15 @@ export const mockPostListItem: PostListItem = {
   conditions: {
     ageType: '20대',
     genderCondition: '모두',
+  },
+  writer: {
+    memberId: 1,
+    nickname: '여행러버',
+    profileImage: null,
+    birth: 1998,
+    age: 27,
+    gender: GenderType.MALE,
+    mbti: 'ENFP',
   },
   isBookmarked: false,
   thumbnail: 'https://example.com/thumbnail.jpg',

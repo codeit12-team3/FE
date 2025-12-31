@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 import { useInfiniteGetReceivedCompanions } from '@/api/companions'
+import { EmptyCard } from '@/components/common'
 import { CompanionState } from '@/types/companions'
 
-import EmptyCard from '../../EmptyCard'
 import { useTabs } from '../../Tabs'
 import RecievedCard from '../ReceivedCard'
 import RecievedCardSkeleton from '../ReceivedCardSkeleton'

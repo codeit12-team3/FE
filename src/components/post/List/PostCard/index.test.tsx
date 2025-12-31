@@ -201,7 +201,7 @@ describe('클릭 시 이동 테스트', () => {
   test('다른 게시글의 제목 클릭 시 해당 게시글 상세 페이지로 이동한다', () => {
     const differentPost = {
       ...mockPost,
-      postId: 42,
+      postId: '42',
       title: '새로운 여행 게시글',
     }
     renderPostCard(differentPost)
