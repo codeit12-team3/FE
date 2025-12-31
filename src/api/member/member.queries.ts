@@ -9,7 +9,7 @@ export const useMyProfileQuery = () => {
     queryKey: ['member', 'me'],
     queryFn: getMyProfile,
     staleTime: STALE_TIME.MINUTE * 5,
-    retry: 1,
+    retry: false,
   })
 }
 
@@ -18,7 +18,7 @@ export const useGetOtherProfile = (memberId: string | undefined) => {
     queryKey: ['member', memberId],
     queryFn: () => getOtherProfile(memberId!),
     staleTime: STALE_TIME.MINUTE * 5,
-    retry: 1,
+    retry: false,
     enabled: !!memberId,
   })
 }
