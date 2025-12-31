@@ -1,8 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { STALE_TIME } from '@/constants/common'
+import { GetBookmarkedPostsReq } from '@/types/member'
 
-import { getMyProfile, getOtherProfile } from './member.clients'
+import {
+  getBookmarkedPosts,
+  getMyProfile,
+  getOtherProfile,
+} from './member.clients'
 
 export const useMyProfileQuery = () => {
   return useQuery({
@@ -20,5 +25,27 @@ export const useGetOtherProfile = (memberId: string | undefined) => {
     staleTime: STALE_TIME.MINUTE * 5,
     retry: 1,
     enabled: !!memberId,
+  })
+}
+
+export const useInfiniteGetBookmarkedPosts = (
+  filters: Omit<GetBookmarkedPostsReq, 'lastPostId' | 'size'>,
+) => {
+  return useInfiniteQuery({
+    queryKey: ['bookmarkedPosts', filters],
+    queryFn: ({ pageParam }) =>
+      getBookmarkedPosts({
+        ...filters,
+        lastPostId: pageParam,
+        size: 5,
+      }),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.isLast) {
+        return undefined
+      }
+      const lastPost = lastPage.content[lastPage.content.length - 1]
+      return lastPost?.postId.toString()
+    },
   })
 }

@@ -55,3 +55,42 @@ export type PresignedUrlResponse = Array<{
 }>
 
 export type MyPostsState = 'RECRUITING' | 'COMPLETED' | 'FINISHED'
+
+export interface GetBookmarkedPostsReq {
+  lastPostId?: string
+  size?: number
+  nation?: string
+  from?: string
+  to?: string
+  ageType?: 'TWENTY' | 'THIRTY' | 'FOURTY' | 'FIFTY' | 'ETC'
+  gender?: 'MALE' | 'FEMALE' | 'ALL'
+}
+
+export interface BookmarkedPost {
+  postId: number
+  title: string
+  nation: string
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  recruitStatus: string
+  tags: string[]
+  nickname: string
+  currentMembers: number
+  maxMembers: number
+  conditions: {
+    ageType: string
+    genderCondition: string
+  }
+  isOwner: boolean
+  isBookmarked: boolean
+  isApplied: boolean
+  thumbnail: string
+}
+
+export interface GetBookmarkedPostsRes {
+  content: BookmarkedPost[]
+  isLast: boolean
+}

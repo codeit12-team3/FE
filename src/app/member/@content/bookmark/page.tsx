@@ -1,5 +1,5 @@
 import { MyPageTitle } from '@/components/member'
-import BookmarkPosts from '@/components/member/bookmarkPosts'
+import BookmarkPosts from '@/components/member/BookmarkPosts'
 
 export default function Page() {
   return (
