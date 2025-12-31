@@ -82,7 +82,7 @@ export default function PostDetail({
   const postDetail = response.data
 
   return (
-    <div className="min-h-screen bg-gray-50  flex items-center justify-center lg:pt-14 md:pt-7.5 pt-6 px-4">
+    <div className="min-h-screen bg-gray-50  flex items-center justify-center lg:pt-14 md:pt-7.5 pt-6 px-4 relative">
       <div className="max-w-7xl w-full  md:px-6">
         <div className="flex gap-6 items-start justify-center">
           <div className="w-full max-w-7xl rounded-lg ">
@@ -104,11 +104,13 @@ export default function PostDetail({
             </div>
             <PostInfo postId={postId} />
             <div className="bg-gray-300 w-full h-px mt-12" />
-            <Comment commentCount={postDetail.commentCount} />
+            <div className="md:pb-0 pb-16">
+              <Comment commentCount={postDetail.commentCount} />
+            </div>
           </div>
         </div>
         {postDetail.isOwner === false && (
-          <div className="md:hidden flex-1 px-6 py-4 border-t border-gray-200">
+          <div className="md:hidden left-0 bg-gray-50 fixed w-full bottom-0 px-6 py-4 border-t border-gray-200">
             <PostActions
               onApply={handleOpenApplyModal}
               postId={postId}
