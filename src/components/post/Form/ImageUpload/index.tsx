@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { uploadPostImages } from '@/api/images/images.client'
+import { uploadPostImages } from '@/api/images/'
 import { IconImagePlus, IconX } from '@/assets/svgr'
 import { toast } from '@/components/common/Toast'
 import { Label } from '@/components/ui'
