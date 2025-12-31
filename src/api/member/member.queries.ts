@@ -1,12 +1,24 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getMyProfile } from './member.clients'
+import { STALE_TIME } from '@/constants/common'
+
+import { getMyProfile, getOtherProfile } from './member.clients'
 
 export const useMyProfileQuery = () => {
   return useQuery({
     queryKey: ['member', 'me'],
     queryFn: getMyProfile,
-    staleTime: 5 * 60 * 1000,
+    staleTime: STALE_TIME.MINUTE * 5,
     retry: 1,
+  })
+}
+
+export const useGetOtherProfile = (memberId: string | undefined) => {
+  return useQuery({
+    queryKey: ['member', memberId],
+    queryFn: () => getOtherProfile(memberId!),
+    staleTime: STALE_TIME.MINUTE * 5,
+    retry: 1,
+    enabled: !!memberId,
   })
 }

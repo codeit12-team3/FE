@@ -42,6 +42,10 @@
   --color-gray-900: #0f141b;
 
   --color-red: #ff3e34;
+
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 744px;
+  --breakpoint-lg: 1280px;
 }
 
 @layer base {

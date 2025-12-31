@@ -3,9 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useSigninEmail, useSignupEmail } from '@/api/auth'
+import { toast } from '@/components/common'
 import {
   useEmailVerification,
   useFormStep,

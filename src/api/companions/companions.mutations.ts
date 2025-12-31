@@ -42,6 +42,7 @@ export const useCancelCompanion = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companions'] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
+      queryClient.invalidateQueries({ queryKey: ['postDetail'] })
     },
   })
 }

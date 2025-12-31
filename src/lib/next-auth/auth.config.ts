@@ -1,4 +1,5 @@
 import { NextAuthConfig } from 'next-auth'
+import { NextResponse } from 'next/server'
 
 import { AUTH_PATH, PUBLIC_PATH } from '@/constants/auth'
 
@@ -16,6 +17,22 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const curPath = nextUrl.pathname
       const isLoggedIn = !!auth?.user
+
+      // 토큰 갱신 실패 마킹시 강제로 로그아웃 처리
+      if (auth?.error === 'RefreshTokenError') {
+        const signInUrl = new URL('/signin', nextUrl)
+        signInUrl.searchParams.set('callbackUrl', curPath)
+
+        const response = NextResponse.redirect(signInUrl)
+
+        response.cookies.delete('next-auth.session-token')
+        response.cookies.delete('__Secure-next-auth.session-token')
+        response.cookies.delete('next-auth.csrf-token')
+        response.cookies.delete('__Secure-next-auth.csrf-token')
+
+        return response
+      }
+
       const isPublicPath = isMatchedPath(curPath, PUBLIC_PATH)
       const isAuthPath = isMatchedPath(curPath, AUTH_PATH)
       // 로그인 상태에서 인증 페이지 접근 시 홈으로 리다이렉트

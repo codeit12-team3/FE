@@ -40,5 +40,8 @@ export const useSigninEmail = () => {
       }
     },
     retry: false,
+    meta: {
+      ignoreGlobalError: true,
+    },
   })
 }

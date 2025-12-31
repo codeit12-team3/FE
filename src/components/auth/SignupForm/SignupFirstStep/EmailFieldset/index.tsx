@@ -94,6 +94,7 @@ export default function EmailFieldset({
         rightElement={
           <Button
             onClick={handleSendEmailCode}
+            variant={'secondary'}
             className="w-24"
             type="button"
             size={'md'}
@@ -117,6 +118,7 @@ export default function EmailFieldset({
         rightElement={
           <Button
             onClick={handleCheckEmailCode}
+            variant={'secondary'}
             className="w-24"
             type="button"
             size={'md'}

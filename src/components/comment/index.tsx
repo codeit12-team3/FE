@@ -1,35 +1,64 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useParams } from 'next/navigation'
 
-import { createComment, useComments } from '@/api/comments'
-import { CommentContent } from '@/types/comments/comments.type'
+import { useCommentMutations, useComments } from '@/api/comments'
 
-import CommentWriteForm from './Form'
-import CommentList from './List'
+import CommentForm from './CommentForm'
+import ErrorFallback from './Error/ErrorFallback'
+import CommentList from './List/CommentList'
 
 interface CommentContainerProps {
-  postId: string
+  commentCount: number
 }
 
-export default function CommentContainer({ postId }: CommentContainerProps) {
-  const handleSubmit = (text: string, parentId?: number | null) => {
-    const finalParentId =
-      parentId && typeof parentId === 'number' && parentId > 0 ? parentId : null
-    createComment({
+export default function CommentContainer({
+  commentCount,
+}: CommentContainerProps) {
+  const params = useParams<{ postId: string }>()
+  const postId = Number(params.postId)
+
+  const { create } = useCommentMutations(postId)
+  const {
+    comments,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    refetch,
+  } = useComments(postId)
+
+  const handleSubmit = (text: string) => {
+    create.mutate({
       postId,
-      parentId: finalParentId,
       content: text,
     })
   }
 
   return (
-    <div className="max-w-4xl mr-auto p-4">
-      <h2 className="text-xl font-bold text-gray-900 mb-6 mt-8">댓글</h2>
-
-      <CommentWriteForm onSubmit={handleSubmit} />
-
-      <CommentList postId={postId} />
+    <div className="w-full  flex flex-col">
+      <h2 className="text-xl font-bold text-gray-900 py-4">
+        댓글 <span className="text-blue-500">{commentCount}</span>
+      </h2>
+      <div className="pb-[34px]">
+        <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
+      </div>
+      {isError ? (
+        <ErrorFallback
+          message="댓글을 불러오는데 실패했습니다."
+          onRetry={refetch}
+        />
+      ) : (
+        <CommentList
+          comments={comments}
+          isLoading={isLoading}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          isError={isError}
+        />
+      )}
     </div>
   )
 }

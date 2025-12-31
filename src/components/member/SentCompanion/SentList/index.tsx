@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 import { useInfiniteGetSentCompanions } from '@/api/companions'
+import { EmptyCard } from '@/components/common'
 import { CompanionState } from '@/types/companions'
 
-import EmptyCard from '../../EmptyCard'
 import { useTabs } from '../../Tabs'
 import SentCard from '../SentCard'
 import SentCardSkeleton from '../SentCardSkeleton'
@@ -37,7 +37,7 @@ export default function SentList() {
         ))}
 
       {!isInitialLoading && companions.length === 0 && (
-        <EmptyCard comment="아직 받은 동행 정보가 없어요." />
+        <EmptyCard comment="신청한 동행 정보가 없어요" />
       )}
 
       {companions.map((item, idx) => (

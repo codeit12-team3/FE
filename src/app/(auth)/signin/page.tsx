@@ -5,7 +5,7 @@ import { OAuthButton } from '@/components/auth/form'
 
 export default function Page() {
   return (
-    <section className="px-10 py-8 rounded-4xl bg-white flex-1 w-full space-y-6 border border-gray-200">
+    <section className="max-w-[440px] px-4 md:px-10 py-8 rounded-4xl bg-white flex-1 w-full space-y-6 border border-gray-200">
       <h2 className="text-xl font-semibold text-center">로그인</h2>
       <div className="space-y-3">
         <SigninForm />

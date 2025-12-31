@@ -6,8 +6,8 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 import axios from 'axios'
-import { toast } from 'sonner'
 
+import { toast } from '@/components/common'
 import { STALE_TIME } from '@/constants/common'
 import { ApiResponse } from '@/types/common'
 
