@@ -5,9 +5,6 @@ import { useState } from 'react'
 
 import { cn, getImageUrl } from '@/lib/common'
 
-interface PostImagesProps {
-  images: string[]
-}
 const DEFAULT_IMAGE = '/images/thumbnail-default.png'
 
 function PostImageItem({
@@ -34,7 +31,12 @@ function PostImageItem({
   )
 }
 
-export default function PostImages({ images }: PostImagesProps) {
+interface ImagesProps {
+  images: string[]
+  onClick: (index: number) => void
+}
+
+export default function PostImages({ images, onClick }: ImagesProps) {
   const imageList = images && images.length > 0 ? images : [DEFAULT_IMAGE]
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -44,7 +46,7 @@ export default function PostImages({ images }: PostImagesProps) {
 
   if (imageList.length === 1) {
     return (
-      <div>
+      <div onClick={() => onClick(0)} className="cursor-pointer">
         <PostImageItem src={imageList[0]} idx={0} priority />
       </div>
     )
@@ -52,7 +54,10 @@ export default function PostImages({ images }: PostImagesProps) {
 
   return (
     <div className="mb-6 relative group ">
-      <div className="relative w-full  rounded-3xl overflow-hidden ">
+      <div
+        className="relative w-full  rounded-3xl overflow-hidden pointer-events-none md:pointer-events-auto"
+        onClick={() => onClick(currentIndex)}
+      >
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}

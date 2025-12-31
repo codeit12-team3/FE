@@ -169,7 +169,7 @@ export default function ImageUpload() {
                     src={getImageSrc(image.previewUrl)}
                     alt={`${index === 0 ? '대표 이미지' : `preview-${index + 1}`}`}
                     fill
-                    className="object-cover rounded-xl"
+                    className="object-cover rounded-xl "
                   />
                   <button
                     type="button"
