@@ -21,10 +21,9 @@ export default function PostCardImage({
         key={thumbnail}
         src={getImageUrl(thumbnail)}
         alt={title}
-        width={188}
-        height={188}
+        fill
+        sizes="(max-width: 768px) 100vw, 188px"
         priority={priority}
-        style={{ width: '100%', height: '100%' }}
         className="object-cover flex items-center justify-center"
       />
       {recruitStatus === 'COMPLETED' && (
