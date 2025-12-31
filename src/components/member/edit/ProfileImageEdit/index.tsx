@@ -90,7 +90,7 @@ export default function ProfileImageEdit() {
       setValue('image', imagePath, { shouldDirty: true })
 
       toast.success('프로필 사진이 변경되었습니다!', { duration: 2000 })
-    } catch (err) {
+    } catch {
       setProfileImg(imageValue || null)
       toast.error('이미지 업로드 중 오류가 발생했습니다')
     } finally {
