@@ -22,7 +22,7 @@ export default function ChatRoomContainer() {
     keyword: filters.keyword === '' ? '' : debouncedKeyword,
   }
   return (
-    <div className="max-w-7xl w-full flex flex-col gap-6 mx-auto pt-12 px-4 sm:px-6 xl:px-0">
+    <div className="max-w-7xl w-full flex flex-col gap-6 mx-auto pt-12 px-4 md:px-6 xl:px-0">
       <ChatRoomFilterBar filters={filters} setFilters={setFilters} />
       <ChatList filters={finalFilters} />
     </div>

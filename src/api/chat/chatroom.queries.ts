@@ -3,11 +3,10 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { ChatRoomFilters } from '@/types/chat/chats.types'
 
 import { fetchChatRooms } from './chatroom.clients'
-import { chatroomKeys } from './chatroom.key'
 
 export const useChatRooms = (filters: ChatRoomFilters) => {
   const query = useInfiniteQuery({
-    queryKey: [...chatroomKeys.list(), filters],
+    queryKey: ['chatroom', filters],
 
     queryFn: ({ pageParam = 0 }) =>
       fetchChatRooms({

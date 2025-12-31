@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { getImageUrl } from '@/lib/common'
+import { cn, getImageUrl } from '@/lib/common'
 
 const DEFAULT_THUMBNAIL = '/images/thumbnail-default.png'
 
@@ -20,11 +20,18 @@ export default function CardThumbnail({
   const imageSrc = imageUrl ? getImageUrl(imageUrl) : DEFAULT_THUMBNAIL
 
   return (
-    <div className="relative w-full h-47 sm:w-47 sm:aspect-square rounded-t-3xl sm:rounded-3xl overflow-hidden">
+    <div
+      className={cn(
+        'relative overflow-hidden shrink-0',
+        variant === 'post' &&
+          'w-full md:h-47 md:w-47 md:aspect-square rounded-t-3xl md:rounded-full',
+        variant === 'chat' && 'w-12 h-12 md:w-25 md:h-25 rounded-full',
+      )}
+    >
       <Image
         fill
         src={imageSrc}
-        alt={imageUrl ? '게시글 썸네일' : '기본 썸네일'}
+        alt={imageUrl ? '게시글 썸네일' : '채팅방 썸네일'}
         className="object-cover"
         onError={(e) => {
           const target = e.target as HTMLImageElement

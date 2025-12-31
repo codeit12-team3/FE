@@ -17,7 +17,7 @@ export default function ChatRoomSearchBar({
   onChange,
 }: ChatRoomSearchBarProps) {
   return (
-    <InputGroup className="sm:max-w-[332px] w-full h-10 rounded-full bg-gray-200 border-none shadow-none transition-all ring-blue-600">
+    <InputGroup className="md:max-w-[332px] w-full h-10 rounded-full bg-gray-200 border-none shadow-none transition-all ring-blue-600">
       <InputGroupInput
         placeholder="검색어를 입력해 주세요"
         value={value}

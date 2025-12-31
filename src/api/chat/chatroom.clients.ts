@@ -10,9 +10,13 @@ export const fetchChatRooms = async (
   } & ChatRoomFilters,
 ): Promise<ApiResponse<ChatRoomType>> => {
   const { page = 0, size = 20, ...filters } = params
+
   const activeFilters = Object.fromEntries(
-    Object.entries(filters).filter(([value]) => value !== ''),
+    Object.entries(filters).filter(
+      ([, value]) => value !== '' && value !== null && value !== undefined,
+    ),
   )
+
   const { data } = await axios.get<ApiResponse<ChatRoomType>>('/v1/chats', {
     params: {
       page,
