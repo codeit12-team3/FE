@@ -18,24 +18,17 @@ export default function ChatCard({ chat }: ChatCardProps) {
     lastMessage,
     lastMessageAt,
   } = chat
+
   return (
-    <li className="w-full md:p-6 p-4 flex  md:items-center md:gap-7 gap-3 bg-white rounded-3xl border overflow-hidden border-gray-200 content-auto [contain-intrinsic-size:auto_220px]">
+    <li className="w-full md:p-6 p-4 flex md:gap-7 gap-3 bg-white rounded-4xl border overflow-hidden border-gray-200 content-auto [contain-intrinsic-size:auto_220px]">
       <CardThumbnail imageUrl={thumbnail} variant="chat" />
-      <div className="w-full flex flex-col justify-between">
-        <div className="flex flex-col justify-between md:pt-4">
-          <CardHeader
-            title={title}
-            recruitStatus={recruitStatus}
-            unreadCount={unreadCount}
-          />
-          <LastMessage
-            lastMessage={lastMessage}
-            lastMessageAt={lastMessageAt}
-          />
-        </div>
-        <Button className="bg-blue-500 md:mt-auto ml-auto rounded-xl w-[128px] md:w-[136px]">
-          채팅 참가하기
-        </Button>
+      <div className="flex-1 flex flex-col justify-between min-w-0 py-3">
+        <CardHeader
+          title={title}
+          recruitStatus={recruitStatus}
+          unreadCount={unreadCount}
+        />
+        <LastMessage lastMessage={lastMessage} lastMessageAt={lastMessageAt} />
       </div>
     </li>
   )

@@ -25,7 +25,7 @@ export default function CardThumbnail({
         'relative overflow-hidden shrink-0',
         variant === 'post' &&
           'w-full md:h-47 md:w-47 md:aspect-square rounded-t-3xl md:rounded-full',
-        variant === 'chat' && 'w-12 h-12 md:w-25 md:h-25 rounded-full',
+        variant === 'chat' && 'w-22 h-22 md:w-25 md:h-25 rounded-full',
       )}
     >
       <Image

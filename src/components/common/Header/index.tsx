@@ -41,10 +41,10 @@ export default function Header() {
                 </span>
               </Link>
               <Link
-                href="/"
+                href="chat/"
                 className={cn(
                   'shrink-0 transition-colors text-xs font-semibold md:text-sm',
-                  pathname === '/chatting'
+                  pathname === '/chat'
                     ? 'text-blue-500'
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
                 )}

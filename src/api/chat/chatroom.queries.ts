@@ -1,18 +1,16 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { ChatRoomFilters } from '@/types/chat/chats.types'
-
 import { fetchChatRooms } from './chatroom.clients'
 
-export const useChatRooms = (filters: ChatRoomFilters) => {
+export const useChatRooms = ({ keyword }: { keyword: string }) => {
   const query = useInfiniteQuery({
-    queryKey: ['chatroom', filters],
+    queryKey: ['chatroom', keyword],
 
     queryFn: ({ pageParam = 0 }) =>
       fetchChatRooms({
         page: pageParam,
         size: 10,
-        ...filters,
+        keyword,
       }),
 
     initialPageParam: 0,

@@ -25,10 +25,3 @@ export interface ChatRoomType {
   content: ChatRoomContent[]
   page: ChatRoomPage
 }
-export interface ChatRoomFilters {
-  nation?: string
-  age?: string
-  gender?: string
-  date?: string
-  keyword?: string
-}

@@ -1,18 +1,22 @@
 import { useChatRooms } from '@/api/chat/chatroom.queries'
 import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
-import { ChatRoomFilters } from '@/types/chat/chats.types'
 
 import ChatCard from './ChatCard'
+import { ChatCardSkeleton } from './ChatCardSkeleton'
 
-export default function ChatList({ filters }: { filters: ChatRoomFilters }) {
+interface ChatListProps {
+  searchKeyword: string
+}
+
+export default function ChatList({ searchKeyword }: ChatListProps) {
   const {
     chatRooms,
     fetchNextPage,
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-  } = useChatRooms(filters)
+  } = useChatRooms({ keyword: searchKeyword })
 
   const triggerRef = useInfiniteScroll({
     hasNextPage,
@@ -22,8 +26,10 @@ export default function ChatList({ filters }: { filters: ChatRoomFilters }) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <Spinner />
+      <div className="flex flex-col gap-4">
+        <ChatCardSkeleton />
+        <ChatCardSkeleton />
+        <ChatCardSkeleton />
       </div>
     )
   }
@@ -41,7 +47,6 @@ export default function ChatList({ filters }: { filters: ChatRoomFilters }) {
       {chatRooms.map((room) => (
         <ChatCard key={room.chatRoomId} chat={room} />
       ))}
-
       <div
         ref={hasNextPage ? triggerRef : null}
         className="flex min-h-[100px] items-center justify-center py-8"
