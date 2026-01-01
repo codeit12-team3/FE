@@ -66,7 +66,6 @@ export default function BasicInfo() {
             type="button"
             onClick={handleCheckDuplicate}
             disabled={isPending || !nickname}
-            variant="secondary"
             size="md"
             className="whitespace-nowrap"
           >

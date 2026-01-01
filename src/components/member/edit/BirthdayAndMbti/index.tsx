@@ -24,7 +24,7 @@ export default function BirthdayAndMbti() {
   })
 
   return (
-    <div className="flex mt-6 gap-4">
+    <div className="flex flex-col md:flex-row mt-6 gap-4">
       <div className="flex-1">
         <FormDatePicker<ProfileEditFormData>
           name="birth"

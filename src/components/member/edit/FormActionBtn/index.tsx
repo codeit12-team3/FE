@@ -48,7 +48,7 @@ export default function FormActionBtn() {
   }
 
   return (
-    <div className="flex justify-center gap-4 mb-10">
+    <div className="flex justify-center gap-4 mb-10 mt-3">
       <Button
         type="button"
         variant="secondary"
