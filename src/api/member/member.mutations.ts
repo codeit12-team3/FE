@@ -23,7 +23,7 @@ export const useRemoveBookmarkInMyPage = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (postId: string) => removeBookmark(postId), // 👈 그대로 사용
+    mutationFn: (postId: string) => removeBookmark(postId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmarkedPosts'] })
     },
