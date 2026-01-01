@@ -31,6 +31,8 @@ export default function BookmarkPosts() {
     setFilters(newFilters)
   }
 
+  console.log('1')
+
   return (
     <div>
       <FilterBar onApply={handleFilterApply} />
