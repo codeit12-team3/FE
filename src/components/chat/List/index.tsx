@@ -3,7 +3,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
 import ChatCard from './ChatCard'
-import { ChatCardSkeleton } from './ChatCardSkeleton'
+import { ChatCardSkeleton } from './ChatCard/ChatCardSkeleton'
 
 interface ChatListProps {
   searchKeyword: string

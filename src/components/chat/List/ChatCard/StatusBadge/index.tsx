@@ -9,12 +9,12 @@ interface StatusBadgeProps {
 const RECRUIT_STATUS = [
   {
     key: 'RECRUITING',
-    label: '동행 모집중',
+    label: '모집 중',
     color: 'bg-blue-50 text-blue-500',
   },
   {
     key: 'COMPLETED',
-    label: '동행 모집마감',
+    label: '모집 마감',
     color: 'bg-gray-200 text-gray-600',
   },
   {
@@ -29,7 +29,7 @@ export default function StatusBadge({ recruitStatus }: StatusBadgeProps) {
   return (
     <>
       {status && (
-        <Badge className={cn(`${status.color}`, 'border-none text-xs md:m-0')}>
+        <Badge className={cn(`${status.color}`, 'border-none m-0')}>
           {status.label}
         </Badge>
       )}

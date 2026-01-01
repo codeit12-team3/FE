@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@utility content-auto {
+  content-visibility: auto;
+}
 @theme inline {
   --font-sans: var(--font-pretendard), ui-sans-serif, system-ui, sans-serif;
   /* Font Scale */

@@ -90,13 +90,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-virtuoso:
-<<<<<<< HEAD
         specifier: ^4.18.0
         version: 4.18.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-=======
-        specifier: ^4.17.0
-        version: 4.17.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
->>>>>>> origin
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -5133,13 +5128,8 @@ packages:
       '@types/react':
         optional: true
 
-<<<<<<< HEAD
   react-virtuoso@4.18.0:
     resolution: {integrity: sha512-bpbbqHQ/EhP4LLD+UAakmxdr+3V0A7v7s76/N51O5Jllaf68srzgSdgjji2U/7Ozbn/KKI/a+VzfnbUeQgLemQ==}
-=======
-  react-virtuoso@4.17.0:
-    resolution: {integrity: sha512-od3pi2v13v31uzn5zPXC2u3ouISFCVhjFVFch2VvS2Cx7pWA2F1aJa3XhNTN2F07M3lhfnMnsmGeH+7wZICr7w==}
->>>>>>> origin
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -11456,11 +11446,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
-<<<<<<< HEAD
   react-virtuoso@4.18.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
-=======
-  react-virtuoso@4.17.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
->>>>>>> origin
     dependencies:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
