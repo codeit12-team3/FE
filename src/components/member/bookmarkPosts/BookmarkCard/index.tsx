@@ -30,8 +30,6 @@ export default function BookmarkCard({ post, idx = 0 }: Props) {
     })
   }
 
-  const formattedDate = `${formatDateToKorean(post.period.startDate)} - ${formatDateToKorean(post.period.endDate)}`
-
   return (
     <div className="w-full flex flex-col md:flex-row md:p-6 rounded-3xl md:rounded-[40px] gap-6 bg-white border border-gray-200">
       {/* 사진부분 */}
@@ -99,7 +97,9 @@ export default function BookmarkCard({ post, idx = 0 }: Props) {
               <div className="border-l border-gray-300 self-stretch h-auto my-[4.5px]" />
               <div className="flex items-center gap-1.5 text-sm font-medium">
                 <span className="text-gray-400">날짜</span>
-                <span className="text-gray-600">{formattedDate}</span>
+                <span className="text-gray-600">
+                  {formatDateToKorean(post.period.startDate)}
+                </span>
               </div>
               <div className="border-l border-gray-300 self-stretch h-auto my-[4.5px]" />
               <div className="flex items-center gap-1.5 text-sm font-medium">

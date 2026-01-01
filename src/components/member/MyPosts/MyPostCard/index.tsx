@@ -47,8 +47,6 @@ export default function MyPostCard({ post, idx = 0 }: MyPostCardProps) {
   const deletePost = useDeletePost()
   const { openModal, closeModal } = useModalActions()
 
-  const formattedDate = `${formatDateToKorean(post.period.startDate)} - ${formatDateToKorean(post.period.endDate)}`
-
   const getRecruitStatusInfo = () => {
     switch (post.recruitStatus) {
       case 'RECRUITING':
@@ -77,7 +75,7 @@ export default function MyPostCard({ post, idx = 0 }: MyPostCardProps) {
   }
 
   return (
-    <div className="w-full flex flex-col md:flex-row md:p-6 rounded-3xl md:rounded-[40px] gap-6 bg-white border border-gray-200 h-59">
+    <div className="w-full flex flex-col md:flex-row md:p-6 rounded-3xl md:rounded-[40px] gap-6 bg-white border border-gray-200 md:min-h-59">
       {/* Thumbnail */}
       <Image
         width={744}
@@ -139,7 +137,9 @@ export default function MyPostCard({ post, idx = 0 }: MyPostCardProps) {
               <div className="border-l border-gray-300 self-stretch h-auto my-[4.5px]" />
               <div className="flex items-center gap-1.5 text-sm font-medium">
                 <span className="text-gray-400">날짜</span>
-                <span className="text-gray-600">{formattedDate}</span>
+                <span className="text-gray-600">
+                  {formatDateToKorean(post.period.startDate)}
+                </span>
               </div>
             </div>
           </div>
