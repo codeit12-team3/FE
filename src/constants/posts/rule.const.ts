@@ -81,6 +81,7 @@ export const AGE_ENUM_TO_LABEL: Record<AgeType, string> = {
   THIRTY: '30대',
   FORTY: '40대',
   FIFTY: '50대',
+  ETC: '기타',
 }
 export const AGE_LABEL_TO_ENUM: Record<string, AgeType> = {
   '20대': AgeType.TWENTY,

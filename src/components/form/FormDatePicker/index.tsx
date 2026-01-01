@@ -27,7 +27,10 @@ interface CalendarPopupProps {
   showAbove?: boolean
 }
 
-const CalendarPopup = React.forwardRef<HTMLDivElement, CalendarPopupProps>(
+export const CalendarPopup = React.forwardRef<
+  HTMLDivElement,
+  CalendarPopupProps
+>(
   (
     {
       currentMonth,
