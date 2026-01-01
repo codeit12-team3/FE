@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { useRemoveBookmarkInMyPage } from '@/api/member'
-import { IconHeartSolid } from '@/assets/svgr'
+import { IconHeartSolid, IconUser } from '@/assets/svgr'
 import { toast } from '@/components/common'
 import { Button } from '@/components/ui'
 import { formatDateToKorean, getImageUrl } from '@/lib/common'
@@ -86,7 +86,8 @@ export default function BookmarkCard({ post, idx = 0 }: Props) {
         {/* 하단 컨텐츠 */}
         <div className="flex flex-col gap-5 md:gap-0 md:flex-row md:justify-between w-full">
           <div className="flex flex-col gap-2.5">
-            <span className="text-sm font-medium">
+            <span className="flex text-sm font-medium">
+              <IconUser className="size-4 mr-1" />
               <span className="text-blue-600">{post.currentMembers}</span> 명
               신청
             </span>

@@ -76,6 +76,7 @@ export const getBookmarkedPosts = async (params: GetBookmarkedPostsReq) => {
   return data.data
 }
 
+//내 게시글
 export const getMyPosts = async (params: GetMyPostsReq) => {
   const { data } = await axios.get<ApiResponse<GetMyPostsRes>>('/v1/posts/me', {
     params: {

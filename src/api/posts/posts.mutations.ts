@@ -127,6 +127,7 @@ export const useDeletePost = () => {
       queryClient.invalidateQueries({
         queryKey: ['posts'],
       })
+      queryClient.invalidateQueries({ queryKey: ['myPosts'] })
       toast.success('게시글이 삭제 되었습니다.')
     },
     onError: () => {
@@ -160,6 +161,7 @@ export const useRemoveBookmark = () => {
     onSuccess: (_, postId) => {
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
       queryClient.invalidateQueries({ queryKey: ['posts'] })
+      queryClient.invalidateQueries({ queryKey: ['bookmarkedPosts'] })
     },
     onError: () => {
       toast.error('북마크 제거에 실패했습니다.')

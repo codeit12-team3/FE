@@ -2,7 +2,7 @@ import { MYPOSTS_STATUS } from '@/constants/member'
 import { MyPostsState } from '@/types/member'
 
 import { Tabs, TabsProvider } from '../Tabs'
-import MyPostSkeleton from './MyPostSkeleton'
+import MyPostsList from './MyPostsList'
 
 export default function MyPosts() {
   return (
@@ -14,7 +14,7 @@ export default function MyPosts() {
       >
         <div className="flex flex-col gap-4">
           <Tabs<MyPostsState> />
-          <MyPostSkeleton />
+          <MyPostsList />
         </div>
       </TabsProvider>
     </div>

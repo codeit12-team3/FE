@@ -18,12 +18,6 @@ export default function MyPostSkeleton() {
         <div className="flex-1 space-y-3 pb-[22px]">
           {/* 게시글 타이틀 */}
           <Skeleton className="h-7 w-3/4 rounded-md" />
-
-          {/* 신청 메시지 (2줄 형태 흉내) */}
-          <div className="space-y-1.5">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-          </div>
         </div>
 
         {/* 하단 컨텐츠 (유저 정보 + 버튼) */}
