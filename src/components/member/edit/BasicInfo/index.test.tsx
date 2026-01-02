@@ -1,12 +1,12 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { toast } from 'sonner'
 
+import { toast } from '@/components/common'
 import { renderMember } from '@/tests/utils/member'
 
 import BasicInfo from './index'
 
-jest.mock('sonner')
+jest.mock('@/components/common')
 const mockToast = toast as jest.Mocked<typeof toast>
 
 jest.mock('@/api/member', () => ({

@@ -3,9 +3,9 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useRouter } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useUpdateMyProfile } from '@/api/member'
+import { toast } from '@/components/common'
 import { renderMember } from '@/tests/utils/member'
 import { ProfileEditFormData } from '@/types/member/schema'
 
@@ -15,7 +15,7 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
 
-jest.mock('sonner', () => ({
+jest.mock('@/components/common', () => ({
   toast: {
     success: jest.fn(),
     error: jest.fn(),

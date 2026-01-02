@@ -1,9 +1,9 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { uploadMemberImage } from '@/api/images/images.client'
+import { toast } from '@/components/common'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { renderMember } from '@/tests/utils/member'
 
@@ -29,7 +29,7 @@ jest.mock('next/image', () => ({
   ),
 }))
 
-jest.mock('sonner', () => ({
+jest.mock('@/components/common', () => ({
   toast: {
     success: jest.fn(),
     error: jest.fn(),
@@ -148,9 +148,6 @@ describe('ProfileImageEdit 단위 테스트', () => {
         )
         expect(toast.success).toHaveBeenCalledWith(
           '프로필 사진이 변경되었습니다!',
-          {
-            duration: 2000,
-          },
         )
       })
     })
