@@ -1,5 +1,4 @@
-export type RecruitStatus = 'RECRUITING' | 'CLOSED' | 'COMPLETED'
-
+export type RecruitStatus = 'RECRUITING' | 'COMPLETED' | 'FINISH'
 export interface ChatRoomContent {
   chatRoomId: number
   chatParticipantId: number

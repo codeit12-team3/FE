@@ -19,7 +19,7 @@ export default function LastMessage({
           </span>
         </>
       ) : (
-        <span>채팅이 시작됬습니다!</span>
+        <span>채팅이 시작됐습니다!</span>
       )}
     </div>
   )

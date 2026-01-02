@@ -18,8 +18,8 @@ export function CardHeader({
       <div className="flex items-center gap-2.5 min-w-0">
         <span className="md:text-xl text-base font-bold truncate">{title}</span>
         {unreadCount > 0 && (
-          <span className="text-sm font-semibold shrink-0 bg-red-500 text-white rounded-full flex items-center justify-center w-[21px] h-5">
-            {unreadCount}
+          <span className="text-sm font-semibold shrink-0 bg-red-500 text-white rounded-full flex items-center justify-center min-w-[21px] h-5">
+            {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </div>
