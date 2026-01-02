@@ -52,15 +52,14 @@ export default function ChatList({ searchKeyword }: ChatListProps) {
         className="flex min-h-[100px] items-center justify-center py-8"
       >
         {isFetchingNextPage ? (
-          <div className="flex items-center gap-2 text-gray-500">
+          <div className="py-4 text-center flex items-center justify-center gap-2">
             <Spinner />
-            <span className="text-sm">목록을 더 불러오는 중...</span>
+            <p className="text-sm text-gray-500">채팅방 불러오는 중...</p>
           </div>
         ) : (
           !hasNextPage && (
-            <div className="text-center">
-              <div className="mb-2 h-px w-12 bg-gray-200 mx-auto" />
-              <p className="text-xs text-gray-400">마지막 채팅방입니다</p>
+            <div className="py-4 text-center flex items-center justify-center gap-2">
+              <p className="text-sm text-gray-400">마지막 채팅방입니다</p>
             </div>
           )
         )}
