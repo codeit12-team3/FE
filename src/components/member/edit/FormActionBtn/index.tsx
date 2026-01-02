@@ -3,9 +3,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useUpdateMyProfile } from '@/api/member'
+import { toast } from '@/components/common'
 import { Button } from '@/components/ui/button'
 import { UpdateMyProfileReq } from '@/types/member'
 import { ProfileEditFormData } from '@/types/member/schema'
@@ -48,7 +48,7 @@ export default function FormActionBtn() {
   }
 
   return (
-    <div className="flex justify-center gap-4 mb-10">
+    <div className="flex justify-center gap-4 mb-10 mt-3">
       <Button
         type="button"
         variant="secondary"

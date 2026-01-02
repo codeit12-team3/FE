@@ -3,26 +3,26 @@
 import * as m from 'motion/react-m'
 
 import { FADE_IN, SLIDE_UP } from '@/constants/animation'
-import { COMPANION_STATUS } from '@/constants/companion'
-import { CompanionState } from '@/types/companions'
+import { MYPOSTS_STATUS } from '@/constants/member'
+import { MyPostsState } from '@/types/member'
 
 import { Tabs, TabsProvider } from '../Tabs'
-import RecievedList from './ReceivedList'
+import MyPostsList from './MyPostsList'
 
-export default function ReceivedCompanion() {
+export default function MyPosts() {
   return (
     <div>
-      <TabsProvider<CompanionState>
-        options={COMPANION_STATUS}
-        defaultValue="PENDING"
+      <TabsProvider<MyPostsState>
+        options={MYPOSTS_STATUS}
+        defaultValue="RECRUITING"
         paramName="status"
       >
         <div className="flex flex-col gap-4">
           <m.div {...FADE_IN}>
-            <Tabs<CompanionState> />
+            <Tabs<MyPostsState> />
           </m.div>
           <m.div {...SLIDE_UP}>
-            <RecievedList />
+            <MyPostsList />
           </m.div>
         </div>
       </TabsProvider>

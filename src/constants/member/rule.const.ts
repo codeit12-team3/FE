@@ -1,3 +1,6 @@
+import { TabOption } from '@/components/member/Tabs'
+import { MyPostsState } from '@/types/member'
+
 export const NICKNAME_REGEX =
   /^[a-zA-Z0-9가-힣!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/
 
@@ -73,3 +76,15 @@ export const LODGING_STYLE_OPTIONS = [
 export type TripStyleValue = (typeof TRIP_STYLE_OPTIONS)[number]['value']
 
 export type LodgingStyleValue = (typeof LODGING_STYLE_OPTIONS)[number]['value']
+
+export const MYPOSTS_STATUS_LABEL: Record<MyPostsState, string> = {
+  RECRUITING: '모집중',
+  COMPLETED: '모집완료',
+  FINISHED: '여행 종료',
+} as const
+
+export const MYPOSTS_STATUS: TabOption<MyPostsState>[] = [
+  { value: 'RECRUITING', label: MYPOSTS_STATUS_LABEL.RECRUITING },
+  { value: 'COMPLETED', label: MYPOSTS_STATUS_LABEL.COMPLETED },
+  { value: 'FINISHED', label: MYPOSTS_STATUS_LABEL.FINISHED },
+] as const

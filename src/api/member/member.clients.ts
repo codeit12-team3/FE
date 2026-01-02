@@ -1,5 +1,12 @@
 import { ApiResponse } from '@/types/common'
-import { Profile, UpdateMyProfileReq } from '@/types/member'
+import {
+  GetBookmarkedPostsReq,
+  GetBookmarkedPostsRes,
+  GetMyPostsReq,
+  GetMyPostsRes,
+  Profile,
+  UpdateMyProfileReq,
+} from '@/types/member'
 
 import { axios } from '../common'
 
@@ -43,4 +50,45 @@ export const getOtherProfile = async (memberId: string) => {
 export const updateMyProfile = async (data: UpdateMyProfileReq) => {
   const res = await axios.patch<ApiResponse<null>>('/v1/members/me', data)
   return res.data
+}
+
+// 내가 찜한 게시글
+export const getBookmarkedPosts = async (params: GetBookmarkedPostsReq) => {
+  const { data } = await axios.get<ApiResponse<GetBookmarkedPostsRes>>(
+    '/v1/posts/bookmark',
+    {
+      params: {
+        lastPostId: params.lastPostId,
+        size: params.size ?? 5,
+        nation: params.nation,
+        from: params.from,
+        to: params.to,
+        ageType: params.ageType,
+        gender: params.gender,
+      },
+    },
+  )
+
+  if (!data.success) {
+    throw new Error(data.data.message)
+  }
+
+  return data.data
+}
+
+//내 게시글
+export const getMyPosts = async (params: GetMyPostsReq) => {
+  const { data } = await axios.get<ApiResponse<GetMyPostsRes>>('/v1/posts/me', {
+    params: {
+      lastPostId: params.lastPostId,
+      size: params.size ?? 5,
+      status: params.status,
+    },
+  })
+
+  if (!data.success) {
+    throw new Error(data.data.message)
+  }
+
+  return data.data
 }

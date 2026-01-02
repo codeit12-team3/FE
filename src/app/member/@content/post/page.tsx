@@ -1,3 +1,9 @@
+import MyPosts from '@/components/member/MyPosts'
+
 export default function Page() {
-  return <div>내 게시글</div>
+  return (
+    <section className="flex flex-col gap-4">
+      <MyPosts />
+    </section>
+  )
 }

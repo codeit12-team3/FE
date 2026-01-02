@@ -3,7 +3,7 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
-import { Controller, FieldValues, Path, useFormContext } from 'react-hook-form'
+import { Controller, FieldValues, useFormContext } from 'react-hook-form'
 
 import 'dayjs/locale/ko'
 
@@ -11,23 +11,14 @@ import { IconArrowLeft, IconArrowRight } from '@/assets/svgr'
 import { Button } from '@/components/ui'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/common/cn'
+import { CalendarPopupProps, FormDatePickerProps } from '@/types/form'
 
 dayjs.locale('ko')
 
-interface CalendarPopupProps {
-  currentMonth: Dayjs
-  setCurrentMonth: (month: Dayjs) => void
-  tempSelected: Dayjs | null
-  setTempSelected: (date: Dayjs | null) => void
-  onConfirm: () => void
-  onCancel: () => void
-  eventsOnDates: Date[]
-  minDate?: Date
-  maxDate?: Date
-  showAbove?: boolean
-}
-
-const CalendarPopup = React.forwardRef<HTMLDivElement, CalendarPopupProps>(
+export const CalendarPopup = React.forwardRef<
+  HTMLDivElement,
+  CalendarPopupProps
+>(
   (
     {
       currentMonth,
@@ -81,54 +72,184 @@ const CalendarPopup = React.forwardRef<HTMLDivElement, CalendarPopupProps>(
 
     if (viewMode === 'year') {
       return (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            onClick={onCancel}
+          />
+          <div
+            ref={ref}
+            className={cn(
+              'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-sm',
+              'md:absolute md:left-0 md:w-82 md:max-w-md md:translate-x-0 md:translate-y-0',
+              showAbove
+                ? 'md:bottom-full md:mb-2 md:top-auto'
+                : 'md:top-full md:mt-2 md:bottom-auto',
+              'bg-white rounded-lg shadow-lg px-6 pt-5 pb-4 z-50 border border-gray-200',
+            )}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <button
+                type="button"
+                onClick={() => setYearRangeStart(yearRangeStart - 12)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="이전 12년"
+              >
+                <IconArrowLeft width={20} height={20} />
+              </button>
+
+              <h2 className="text-lg font-semibold text-gray-900">
+                {yearRangeStart} - {yearRangeStart + 11}
+              </h2>
+
+              <button
+                type="button"
+                onClick={() => setYearRangeStart(yearRangeStart + 12)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="다음 12년"
+              >
+                <IconArrowRight width={20} height={20} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {years.map((year) => {
+                const isCurrentYear = year === currentMonth.year()
+                return (
+                  <button
+                    key={year}
+                    type="button"
+                    onClick={() => handleYearSelect(year)}
+                    className={cn(
+                      'py-4 rounded-lg text-sm font-medium transition-colors',
+                      {
+                        'bg-blue-500 text-white': isCurrentYear,
+                        'hover:bg-gray-100 text-gray-800': !isCurrentYear,
+                      },
+                    )}
+                  >
+                    {year}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={onCancel}
+                className="flex-1"
+              >
+                취소
+              </Button>
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    return (
+      <>
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onCancel}
+        />
         <div
           ref={ref}
           className={cn(
-            'absolute left-0 w-82 max-w-md bg-white rounded-lg shadow-lg px-6 pt-5 pb-4 z-50 border border-gray-200',
-            showAbove ? 'bottom-full mb-2' : 'top-full mt-2',
+            'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-sm',
+            'md:absolute md:left-0 md:w-82 md:max-w-md md:translate-x-0 md:translate-y-0',
+            showAbove
+              ? 'md:bottom-full md:mb-2 md:top-auto'
+              : 'md:top-full md:mt-2 md:bottom-auto',
+            'bg-white rounded-lg shadow-lg px-6 pt-5 pb-4 z-50 border border-gray-200',
           )}
         >
           <div className="flex items-center justify-between mb-6">
             <button
               type="button"
-              onClick={() => setYearRangeStart(yearRangeStart - 12)}
+              onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="이전 12년"
+              aria-label="이전 달"
             >
               <IconArrowLeft width={20} height={20} />
             </button>
 
-            <h2 className="text-lg font-semibold text-gray-900">
-              {yearRangeStart} - {yearRangeStart + 11}
-            </h2>
+            <button
+              type="button"
+              onClick={() => setViewMode('year')}
+              className="text-lg font-semibold text-gray-800 hover:bg-gray-100 px-3 py-1 rounded transition-colors cursor-pointer"
+            >
+              {currentMonth.format('YYYY년 M월')}
+            </button>
 
             <button
               type="button"
-              onClick={() => setYearRangeStart(yearRangeStart + 12)}
+              onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="다음 12년"
+              aria-label="다음 달"
             >
               <IconArrowRight width={20} height={20} />
             </button>
           </div>
+          <div className="grid grid-cols-7 mb-2">
+            {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
+              <div
+                key={day}
+                className={cn('text-center text-sm font-medium py-2', {
+                  'text-red-500': index === 0,
+                  'text-blue-500': index === 6,
+                  'text-gray-800': index !== 0 && index !== 6,
+                })}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
 
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {years.map((year) => {
-              const isCurrentYear = year === currentMonth.year()
+          <div className="grid grid-cols-7 gap-1">
+            {days.map((day) => {
+              const isCurrentMonth = day.month() === currentMonth.month()
+              const isSelected = tempSelected && day.isSame(tempSelected, 'day')
+              const isSunday = day.day() === 0
+              const isSaturday = day.day() === 6
+              const hasEventMarker = hasEvent(day)
+              const disabled = !isCurrentMonth || isDateDisabled(day)
+
               return (
                 <button
-                  key={year}
+                  key={day.format()}
                   type="button"
-                  onClick={() => handleYearSelect(year)}
+                  onClick={() => !disabled && setTempSelected(day)}
+                  disabled={disabled}
                   className={cn(
-                    'py-4 rounded-lg text-sm font-medium transition-colors',
+                    'relative w-10 h-10 rounded-full flex flex-col items-center justify-center transition-colors',
                     {
-                      'bg-blue-500 text-white': isCurrentYear,
-                      'hover:bg-gray-100 text-gray-800': !isCurrentYear,
+                      'text-gray-500 cursor-not-allowed': disabled,
+                      'hover:bg-gray-100': !disabled && !isSelected,
+                      'bg-blue-500 text-white': isSelected,
+                      'text-red-500':
+                        !isSelected && isCurrentMonth && !disabled && isSunday,
+                      'text-blue-500':
+                        !isSelected &&
+                        isCurrentMonth &&
+                        !disabled &&
+                        isSaturday,
+                      'text-gray-800':
+                        !isSelected &&
+                        isCurrentMonth &&
+                        !disabled &&
+                        !isSunday &&
+                        !isSaturday,
                     },
                   )}
                 >
-                  {year}
+                  <span className="text-sm">{day.date()}</span>
+                  {hasEventMarker && !isSelected && isCurrentMonth && (
+                    <div className="absolute bottom-1 w-1 h-1 bg-blue-500 rounded-full" />
+                  )}
                 </button>
               )
             })}
@@ -144,145 +265,23 @@ const CalendarPopup = React.forwardRef<HTMLDivElement, CalendarPopupProps>(
             >
               취소
             </Button>
+            <Button
+              type="button"
+              variant="default"
+              size="md"
+              onClick={onConfirm}
+              className="flex-1"
+            >
+              확인
+            </Button>
           </div>
         </div>
-      )
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'absolute left-0 w-82 px-6 pt-5 pb-4 max-w-md bg-white rounded-lg shadow-lg z-50 border border-gray-200',
-          showAbove ? 'bottom-full mb-2' : 'top-full mt-2',
-        )}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <button
-            type="button"
-            onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="이전 달"
-          >
-            <IconArrowLeft width={20} height={20} />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setViewMode('year')}
-            className="text-lg font-semibold text-gray-800 hover:bg-gray-100 px-3 py-1 rounded transition-colors cursor-pointer"
-          >
-            {currentMonth.format('YYYY년 M월')}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="다음 달"
-          >
-            <IconArrowRight width={20} height={20} />
-          </button>
-        </div>
-        <div className="grid grid-cols-7 mb-2">
-          {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
-            <div
-              key={day}
-              className={cn('text-center text-sm font-medium py-2', {
-                'text-red-500': index === 0,
-                'text-blue-500': index === 6,
-                'text-gray-800': index !== 0 && index !== 6,
-              })}
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-1">
-          {days.map((day) => {
-            const isCurrentMonth = day.month() === currentMonth.month()
-            const isSelected = tempSelected && day.isSame(tempSelected, 'day')
-            const isSunday = day.day() === 0
-            const isSaturday = day.day() === 6
-            const hasEventMarker = hasEvent(day)
-            const disabled = !isCurrentMonth || isDateDisabled(day)
-
-            return (
-              <button
-                key={day.format()}
-                type="button"
-                onClick={() => !disabled && setTempSelected(day)}
-                disabled={disabled}
-                className={cn(
-                  'relative w-10 h-10 rounded-full flex flex-col items-center justify-center transition-colors',
-                  {
-                    'text-gray-500 cursor-not-allowed': disabled,
-                    'hover:bg-gray-100': !disabled && !isSelected,
-                    'bg-blue-500 text-white': isSelected,
-                    'text-red-500':
-                      !isSelected && isCurrentMonth && !disabled && isSunday,
-                    'text-blue-500':
-                      !isSelected && isCurrentMonth && !disabled && isSaturday,
-                    'text-gray-800':
-                      !isSelected &&
-                      isCurrentMonth &&
-                      !disabled &&
-                      !isSunday &&
-                      !isSaturday,
-                  },
-                )}
-              >
-                <span className="text-sm">{day.date()}</span>
-                {hasEventMarker && !isSelected && isCurrentMonth && (
-                  <div className="absolute bottom-1 w-1 h-1 bg-blue-500 rounded-full" />
-                )}
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
-          <Button
-            type="button"
-            variant="secondary"
-            size="md"
-            onClick={onCancel}
-            className="flex-1"
-          >
-            취소
-          </Button>
-          <Button
-            type="button"
-            variant="default"
-            size="md"
-            onClick={onConfirm}
-            className="flex-1"
-          >
-            확인
-          </Button>
-        </div>
-      </div>
+      </>
     )
   },
 )
 
 CalendarPopup.displayName = 'CalendarPopup'
-
-interface FormDatePickerProps<T extends FieldValues> {
-  name: Path<T>
-  label?: string
-  placeholder?: string
-  maxDate?: Date
-  minDate?: Date
-  openToDate?: Date
-  dateFormat?: string
-  required?: boolean
-  className?: string
-  inputClassName?: string
-  iconClassName?: string
-  eventsOnDates?: Date[]
-}
 
 export default function FormDatePicker<T extends FieldValues>({
   name,
@@ -314,13 +313,14 @@ export default function FormDatePicker<T extends FieldValues>({
       )
       firstFocusable?.focus()
 
-      // Calculate if popup should show above or below
-      const inputRect = inputRef.current.getBoundingClientRect()
-      const popupHeight = 450 // Approximate popup height
-      const spaceBelow = window.innerHeight - inputRect.bottom
-      const spaceAbove = inputRect.top
+      if (window.innerWidth >= 768) {
+        const inputRect = inputRef.current.getBoundingClientRect()
+        const popupHeight = 450
+        const spaceBelow = window.innerHeight - inputRect.bottom
+        const spaceAbove = inputRect.top
 
-      setShowAbove(spaceBelow < popupHeight && spaceAbove > spaceBelow)
+        setShowAbove(spaceBelow < popupHeight && spaceAbove > spaceBelow)
+      }
     }
   }, [isOpen])
 
@@ -328,6 +328,12 @@ export default function FormDatePicker<T extends FieldValues>({
     if (!isOpen || !popupRef.current) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false)
+        inputRef.current?.focus()
+        return
+      }
+
       if (e.key === 'Tab') {
         const focusableElements =
           popupRef.current!.querySelectorAll<HTMLElement>(
@@ -360,7 +366,9 @@ export default function FormDatePicker<T extends FieldValues>({
     function handleClickOutside(event: MouseEvent) {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !containerRef.current.contains(event.target as Node) &&
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false)
         inputRef.current?.focus()
@@ -370,6 +378,18 @@ export default function FormDatePicker<T extends FieldValues>({
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (isOpen) {
+      const isMobile = window.innerWidth < 768
+      if (isMobile) {
+        document.body.style.overflow = 'hidden'
+        return () => {
+          document.body.style.overflow = ''
+        }
+      }
     }
   }, [isOpen])
 
@@ -430,7 +450,7 @@ export default function FormDatePicker<T extends FieldValues>({
                 placeholder={placeholder}
                 readOnly
                 className={cn(
-                  'w-full rounded-xl border border-gray-200 px-4 py-3 text-base outline-none cursor-pointer',
+                  'w-full rounded-xl border border-gray-200 px-4 py-3 text-base outline-none cursor-pointer min-h-14',
                   inputClassName,
                 )}
               />
