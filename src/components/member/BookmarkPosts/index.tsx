@@ -1,8 +1,10 @@
 'use client'
 
+import { motion } from 'motion/react'
 import { useState } from 'react'
 
 import FilterBar from '@/components/post/FilterBar'
+import { FADE_IN, SLIDE_UP } from '@/constants/animation'
 import { GetBookmarkedPostsReq } from '@/types/member'
 import { PostFilterParams } from '@/types/posts'
 
@@ -31,12 +33,14 @@ export default function BookmarkPosts() {
     setFilters(newFilters)
   }
 
-  console.log('1')
-
   return (
     <div>
-      <FilterBar onApply={handleFilterApply} />
-      <BookmarkList filters={convertToApiParams(filters)} />
+      <motion.div {...FADE_IN}>
+        <FilterBar onApply={handleFilterApply} />
+      </motion.div>
+      <motion.div {...SLIDE_UP}>
+        <BookmarkList filters={convertToApiParams(filters)} />
+      </motion.div>
     </div>
   )
 }
