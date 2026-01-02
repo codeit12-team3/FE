@@ -27,7 +27,10 @@ client.interceptors.response.use(
       const apiRes = res.data
 
       const shouldLogout =
-        !apiRes || (apiRes.success === false && apiRes.data.code !== 'AUTH_011')
+        !apiRes ||
+        (apiRes.success === false &&
+          apiRes.data.code !== 'AUTH_011' &&
+          apiRes.data.code !== 'AUTH_008')
 
       if (shouldLogout && typeof window !== 'undefined') {
         if (!isSignout) {

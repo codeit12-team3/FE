@@ -25,22 +25,17 @@ function handleGlobalError(
     const apiRes = error.response?.data
     const errCode = apiRes?.success === false ? apiRes.data?.code : null
 
-    if (errCode !== 'AUTH_011') {
+    if (errCode === 'AUTH_008') return null
+    if (errCode === 'AUTH_011') {
       queryClient.clear()
+      return toast.error('로그인이 필요합니다')
     }
-    return
   }
 
   let message = '알 수 없는 에러가 발생했습니다.'
-
   if (axios.isAxiosError<ApiResponse>(error)) {
     const res = error.response?.data
-
-    if (res && res.success === false) {
-      message = res.data.message
-    } else {
-      message = error.message
-    }
+    message = res?.success === false ? res.data.message : error.message
   } else if (error instanceof Error) {
     message = error.message
   }
