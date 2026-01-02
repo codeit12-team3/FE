@@ -16,6 +16,11 @@ export default function ImageModal({
   initialIndex = 0,
 }: ImageModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
+  const [loading, setLoading] = useState<Set<number>>(new Set())
+
+  const ImageLoad = (index: number) => {
+    setLoading((prev) => new Set(prev).add(index))
+  }
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
@@ -66,8 +71,13 @@ export default function ImageModal({
           {images.map((img, idx) => (
             <div
               key={img}
-              className="min-w-full h-[80vh] flex items-center justify-center"
+              className="min-w-full h-[80vh] flex items-center justify-center relative"
             >
+              {!loading.has(idx) && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                </div>
+              )}
               <Image
                 src={img.startsWith('/') ? img : getImageUrl(img)}
                 alt="이미지 확대"
@@ -75,6 +85,7 @@ export default function ImageModal({
                 height={800}
                 className="object-contain max-w-full max-h-full rounded-3xl"
                 priority={idx === 0}
+                onLoad={() => ImageLoad(idx)}
               />
             </div>
           ))}
