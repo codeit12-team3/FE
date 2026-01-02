@@ -2,9 +2,9 @@
 
 import { AxiosError } from 'axios'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useCheckNickname } from '@/api/member'
+import { toast } from '@/components/common'
 import FormInput from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import {
