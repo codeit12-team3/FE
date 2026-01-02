@@ -14,15 +14,17 @@ export function CardHeader({
   unreadCount,
 }: CardHeaderProps) {
   return (
-    <div className="w-full flex items-center gap-2.5">
-      <span className="md:text-xl text-base font-bold truncate min-w-0">
-        {title}
-      </span>
-      {unreadCount > 0 && (
-        <span className="text-sm font-semibold shrink-0 bg-red-500 text-white rounded-full flex items-center justify-center w-[21px] h-5">
-          {unreadCount}
+    <div className="flex justify-between items-center">
+      <div className="w-full flex items-center gap-2.5">
+        <span className="md:text-xl text-base font-bold truncate min-w-0">
+          {title}
         </span>
-      )}
+        {unreadCount > 0 && (
+          <span className="text-sm font-semibold shrink-0 bg-red-500 text-white rounded-full flex items-center justify-center w-[21px] h-5">
+            {unreadCount}
+          </span>
+        )}
+      </div>
       <StatusBadge recruitStatus={recruitStatus} />
     </div>
   )
