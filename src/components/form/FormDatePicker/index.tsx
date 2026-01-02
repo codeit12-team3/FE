@@ -98,9 +98,9 @@ export const CalendarPopup = React.forwardRef<
                 <IconArrowLeft width={20} height={20} />
               </button>
 
-              <h2 className="text-lg font-semibold text-gray-900">
+              <div className="text-lg font-semibold text-gray-900">
                 {yearRangeStart} - {yearRangeStart + 11}
-              </h2>
+              </div>
 
               <button
                 type="button"
