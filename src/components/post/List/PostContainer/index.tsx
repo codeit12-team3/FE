@@ -49,7 +49,11 @@ export default function PostContainer({
 
   if (posts.length === 0) {
     return (
-      <div className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2">
+      <div
+        className="w-full h-[300px] flex flex-col items-center justify-center text-center text-text-disabled gap-2"
+        role="status"
+        aria-live="polite"
+      >
         <span className="text-lg font-medium">게시글이 없습니다</span>
         <span className="text-sm text-gray-500">
           새로운 동행 게시글을 작성해보세요!
@@ -58,24 +62,31 @@ export default function PostContainer({
     )
   }
   return (
-    <Virtuoso
-      useWindowScroll
-      data={posts}
-      itemContent={(index, post) => (
-        <div className="space-y-4 mb-4">
-          <PostCard post={post} priority={index === 0} />
-        </div>
-      )}
-      endReached={handleReached}
-      components={{
-        Footer: () =>
-          isFetchingNextPage ? (
-            <div className="h-20 flex items-center justify-center">
-              <Spinner />
-              <p className="text-gray-500">로딩 중...</p>
-            </div>
-          ) : null,
-      }}
-    />
+    <section aria-label="게시글 목록">
+      <Virtuoso
+        useWindowScroll
+        data={posts}
+        itemContent={(index, post) => (
+          <article className="space-y-4 mb-4">
+            <PostCard post={post} priority={index === 0} />
+          </article>
+        )}
+        endReached={handleReached}
+        components={{
+          Footer: () =>
+            isFetchingNextPage ? (
+              <div
+                className="h-20 flex items-center justify-center"
+                role="status"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <Spinner />
+                <p className="text-gray-500">로딩 중...</p>
+              </div>
+            ) : null,
+        }}
+      />
+    </section>
   )
 }

@@ -35,28 +35,35 @@ export default function FilterBar({
   }
 
   return (
-    <div className="md:pt-12 md:pb-5 pt-5 pb-4">
+    <section
+      className="md:pt-12 md:pb-5 pt-5 pb-4"
+      aria-label="게시글 필터 및 검색"
+    >
       <div className="hidden lg:flex gap-2 justify-between">
-        <div className="flex gap-2">
+        <div className="flex gap-2" aria-label="필터 옵션">
           <FilterControls filters={filters} onApply={applyImmediately} />
         </div>
 
-        <div className="max-w-[536px] w-full relative flex gap-4">
+        <div
+          className="max-w-[536px] w-full relative flex gap-4"
+          role="group"
+          aria-label="검색 및 작성"
+        >
           {searchInput}
           {actionButton}
         </div>
       </div>
 
       <div className="flex lg:hidden flex-col gap-3">
-        <div className="flex gap-2 justify-between">
+        <div className="flex gap-2 justify-between" aria-label="검색 및 작성">
           {searchInput}
           {actionButton}
         </div>
 
-        <div className="flex gap-1 overflow-x-hidden">
+        <div className="flex gap-1 overflow-x-hidden" aria-label="필터 옵션">
           <FilterControls filters={filters} onApply={applyImmediately} />
         </div>
       </div>
-    </div>
+    </section>
   )
 }

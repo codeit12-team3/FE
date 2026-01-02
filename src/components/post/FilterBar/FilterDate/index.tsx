@@ -27,10 +27,7 @@ export default function FilterDate({
     const [isOpen, setIsOpen] = useState(false)
     const [tempSelected, setTempSelected] = useState<Dayjs | null>(null)
     const [currentMonth, setCurrentMonth] = useState(dayjs())
-    const [viewMode, setViewMode] = useState<'date' | 'year'>('date')
-    const [yearRangeStart, setYearRangeStart] = useState(
-      Math.floor(dayjs().year() / 12) * 12,
-    )
+    const [, setViewMode] = useState<'date' | 'year'>('date')
 
     const startOfMonth = currentMonth.startOf('month')
     const endOfMonth = currentMonth.endOf('month')
@@ -43,13 +40,6 @@ export default function FilterDate({
       days.push(day)
       day = day.add(1, 'day')
     }
-
-    const handleYearSelect = (year: number) => {
-      setCurrentMonth(currentMonth.year(year))
-      setViewMode('date')
-    }
-
-    const years = Array.from({ length: 12 }, (_, i) => yearRangeStart + i)
 
     return (
       <Popover
@@ -73,69 +63,9 @@ export default function FilterDate({
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          {viewMode === 'year' ? (
-            <div className="px-6 pt-5 pb-4">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  type="button"
-                  onClick={() => setYearRangeStart(yearRangeStart - 12)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  aria-label="이전 12년"
-                >
-                  <IconArrowLeft width={20} height={20} />
-                </button>
-
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {yearRangeStart} - {yearRangeStart + 11}
-                </h2>
-
-                <button
-                  type="button"
-                  onClick={() => setYearRangeStart(yearRangeStart + 12)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  aria-label="다음 12년"
-                >
-                  <IconArrowRight width={20} height={20} />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                {years.map((year) => {
-                  const isCurrentYear = year === currentMonth.year()
-                  return (
-                    <button
-                      key={year}
-                      type="button"
-                      onClick={() => handleYearSelect(year)}
-                      className={cn(
-                        'py-4 rounded-lg text-sm font-medium transition-colors',
-                        {
-                          'bg-blue-500 text-white': isCurrentYear,
-                          'hover:bg-gray-100 text-gray-800': !isCurrentYear,
-                        },
-                      )}
-                    >
-                      {year}
-                    </button>
-                  )
-                })}
-              </div>
-
-              <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="md"
-                  onClick={() => setViewMode('date')}
-                  className="flex-1"
-                >
-                  취소
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="px-6 pt-5 pb-4">
-              <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="py-5 px-6">
+              <div className="flex items-center justify-between mb-3">
                 <button
                   type="button"
                   onClick={() =>
@@ -165,16 +95,19 @@ export default function FilterDate({
                 </button>
               </div>
 
-              <div className="grid grid-cols-7 mb-2">
+              <div className="grid grid-cols-7 mb-1">
                 {['일', '월', '화', '수', '목', '금', '토'].map(
                   (day, index) => (
                     <div
                       key={day}
-                      className={cn('text-center text-sm font-medium py-2', {
-                        'text-red-500': index === 0,
-                        'text-blue-500': index === 6,
-                        'text-gray-800': index !== 0 && index !== 6,
-                      })}
+                      className={cn(
+                        'text-center text-sm font-medium py-2.5 px-2',
+                        {
+                          'text-red-500': index === 0,
+                          'text-blue-500': index === 6,
+                          'text-gray-800': index !== 0 && index !== 6,
+                        },
+                      )}
                     >
                       {day}
                     </div>
@@ -182,7 +115,7 @@ export default function FilterDate({
                 )}
               </div>
 
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 mb-1">
                 {days.map((day) => {
                   const isCurrentMonth = day.month() === currentMonth.month()
                   const isSelected =
@@ -227,38 +160,38 @@ export default function FilterDate({
                   )
                 })}
               </div>
-
-              <div className="flex gap-3 pt-4 mt-1 border-t border-gray-300">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="md"
-                  onClick={() => {
-                    onApply('')
-                    setTempSelected(null)
-                    setIsOpen(false)
-                  }}
-                  className="flex-1"
-                >
-                  초기화
-                </Button>
-                <Button
-                  type="button"
-                  variant="default"
-                  size="md"
-                  onClick={() => {
-                    if (tempSelected) {
-                      onApply(tempSelected.format('YYYY-MM-DD'))
-                    }
-                    setIsOpen(false)
-                  }}
-                  className="flex-1"
-                >
-                  확인
-                </Button>
-              </div>
             </div>
-          )}
+            {/* 버튼 */}
+            <div className="flex gap-3 p-4 border-t border-gray-200">
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={() => {
+                  onApply('')
+                  setTempSelected(null)
+                  setIsOpen(false)
+                }}
+                className="flex-1"
+              >
+                초기화
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                size="md"
+                onClick={() => {
+                  if (tempSelected) {
+                    onApply(tempSelected.format('YYYY-MM-DD'))
+                  }
+                  setIsOpen(false)
+                }}
+                className="flex-1"
+              >
+                확인
+              </Button>
+            </div>
+          </div>
         </PopoverContent>
       </Popover>
     )
