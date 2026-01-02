@@ -1,3 +1,8 @@
+'use client'
+
+import * as m from 'motion/react-m'
+
+import { FADE_IN, SLIDE_UP } from '@/constants/animation'
 import { COMPANION_STATUS } from '@/constants/companion'
 import { CompanionState } from '@/types/companions'
 
@@ -13,8 +18,12 @@ export default function SentCompanion() {
         paramName="status"
       >
         <div className="flex flex-col gap-4">
-          <Tabs<CompanionState> />
-          <SentList />
+          <m.div {...FADE_IN}>
+            <Tabs<CompanionState> />
+          </m.div>
+          <m.div {...SLIDE_UP}>
+            <SentList />
+          </m.div>
         </div>
       </TabsProvider>
     </div>
