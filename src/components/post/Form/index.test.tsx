@@ -34,16 +34,6 @@ jest.mock('./FormAction', () => ({
   ),
 }))
 
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(() => ({
-    push: jest.fn(),
-  })),
-}))
-
-jest.mock('uuid', () => ({
-  v4: jest.fn(() => 'test-uuid'),
-}))
-
 jest.mock('react-hook-form', () => {
   const actual = jest.requireActual('react-hook-form')
   return {

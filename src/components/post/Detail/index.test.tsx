@@ -11,10 +11,6 @@ import {
 import PostDetail from '.'
 import PostDetailSkeleton from '../Skeleton/PostDetailSkeleton'
 
-jest.mock('uuid', () => ({
-  v4: jest.fn(() => 'test-uuid'),
-}))
-
 jest.mock('../Detail/PostManage', () => {
   const MockPostManage = ({ postId }: { postId: string }) => {
     const { usePostManage } = jest.requireMock('@/hooks/posts')
@@ -39,20 +35,70 @@ jest.mock('../Detail/PostManage', () => {
   }
 })
 
-jest.mock('../Detail/PostActions', () => ({
-  __esModule: true,
-  default: ({
-    onApply,
+jest.mock('../Detail/PostHeader', () => {
+  const MockPostHeader = ({
+    postId,
+    onOpenApplyModal,
+    onCancel,
     isCanceling,
   }: {
-    onApply: () => void
+    postId: string
+    onOpenApplyModal: () => void
+    onCancel?: () => void
     isCanceling?: boolean
-  }) => (
-    <button onClick={onApply} disabled={isCanceling}>
-      {isCanceling ? '취소 중...' : '동행 신청하기'}
-    </button>
-  ),
-}))
+  }) => {
+    const { usePostDetail } = jest.requireMock('@/api/posts')
+    const { useBookmarkToggle } = jest.requireMock('@/hooks/posts')
+    const { data: post } = usePostDetail({ postId })
+    const { toggleBookmark } = useBookmarkToggle(
+      postId,
+      post?.success ? post.data.isBookmarked : false,
+    )
+
+    if (!post || !post.success) return null
+
+    const { tags, title, isApplied, isOwner, isBookmarked } = post.data
+
+    const PostManage = jest.requireMock('../Detail/PostManage').default
+
+    return (
+      <div>
+        <div>
+          {tags.map((tag: string) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
+        <h1>{title}</h1>
+        <div>
+          {isOwner ? (
+            <PostManage postId={postId} />
+          ) : (
+            <>
+              {isApplied && onCancel ? (
+                <button onClick={onCancel} disabled={isCanceling}>
+                  {isCanceling ? '취소 중...' : '신청 취소'}
+                </button>
+              ) : (
+                <button onClick={onOpenApplyModal}>동행 참여하기</button>
+              )}
+            </>
+          )}
+          <button
+            onClick={toggleBookmark}
+            aria-label={isBookmarked ? '북마크 취소' : '북마크 추가'}
+          >
+            북마크
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return {
+    __esModule: true,
+    default: MockPostHeader,
+  }
+})
 
 jest.mock('../Detail/ApplyModal', () => ({
   __esModule: true,
@@ -315,7 +361,7 @@ describe('게시글 권한 테스트', () => {
     })
   })
   describe('내가 작성자가 아닐 경우', () => {
-    test('작성자가 아닐 경우 동행신청 버튼이 보인다', () => {
+    test('작성자가 아닐 경우 동행 신청 버튼이 보인다', () => {
       usePostDetail.mockReturnValue({
         data: {
           success: true,
@@ -324,7 +370,7 @@ describe('게시글 권한 테스트', () => {
         isLoading: false,
       })
       renderPostDetail()
-      expect(screen.getAllByText('동행 신청하기')[0]).toBeInTheDocument()
+      expect(screen.getAllByText('동행 참여하기')[0]).toBeInTheDocument()
     })
     test('동행신청 버튼을 누르면 동행 신청 모달이 열린다', async () => {
       usePostDetail.mockReturnValue({
@@ -336,7 +382,7 @@ describe('게시글 권한 테스트', () => {
       })
       renderPostDetail()
       const applyButtons = screen.getAllByRole('button', {
-        name: '동행 신청하기',
+        name: '동행 참여하기',
       })
       await userEvent.click(applyButtons[0])
 
@@ -362,7 +408,7 @@ describe('게시글 권한 테스트', () => {
       renderPostDetail()
 
       const openModalButtons = screen.getAllByRole('button', {
-        name: '동행 신청하기',
+        name: '동행 참여하기',
       })
       await userEvent.click(openModalButtons[0])
 
@@ -372,6 +418,54 @@ describe('게시글 권한 테스트', () => {
       modalProps.onSubmit()
 
       expect(mockHandleApply).toHaveBeenCalled()
+    })
+    test('신청 후 신청 취소 버튼이 보인다', () => {
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isApplied: true },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+      expect(screen.getAllByText('신청 취소')[0]).toBeInTheDocument()
+    })
+    test('신청 취소 버튼을 누르면 동행 신청이 취소된다', async () => {
+      const mockHandleCancel = jest.fn()
+      const { useCancelCompanion, useInfiniteGetSentCompanions } =
+        jest.requireMock('@/api/companions')
+      useCancelCompanion.mockReturnValue({
+        mutate: mockHandleCancel,
+        isPending: false,
+      })
+      useInfiniteGetSentCompanions.mockReturnValue({
+        data: {
+          pages: [
+            {
+              content: [
+                {
+                  postResponse: { id: '1' },
+                  myGuestCompanionResponse: { companionId: '123' },
+                },
+              ],
+            },
+          ],
+        },
+      })
+      usePostDetail.mockReturnValue({
+        data: {
+          success: true,
+          data: { ...mockPostDetail, isApplied: true },
+        },
+        isLoading: false,
+      })
+      renderPostDetail()
+      const CancelButtons = screen.getAllByRole('button', {
+        name: '신청 취소',
+      })
+      await userEvent.click(CancelButtons[0])
+
+      expect(mockHandleCancel).toHaveBeenCalledWith('123', expect.any(Object))
     })
   })
 })
