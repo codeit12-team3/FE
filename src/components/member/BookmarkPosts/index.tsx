@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'motion/react'
+import * as m from 'motion/react-m'
 import { useState } from 'react'
 
 import FilterBar from '@/components/post/FilterBar'
@@ -35,12 +35,12 @@ export default function BookmarkPosts() {
 
   return (
     <div>
-      <motion.div {...FADE_IN}>
+      <m.div {...FADE_IN}>
         <FilterBar onApply={handleFilterApply} />
-      </motion.div>
-      <motion.div {...SLIDE_UP}>
+      </m.div>
+      <m.div {...SLIDE_UP}>
         <BookmarkList filters={convertToApiParams(filters)} />
-      </motion.div>
+      </m.div>
     </div>
   )
 }

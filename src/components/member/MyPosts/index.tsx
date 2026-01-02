@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'motion/react'
+import * as m from 'motion/react-m'
 
 import { FADE_IN, SLIDE_UP } from '@/constants/animation'
 import { MYPOSTS_STATUS } from '@/constants/member'
@@ -18,12 +18,12 @@ export default function MyPosts() {
         paramName="status"
       >
         <div className="flex flex-col gap-4">
-          <motion.div {...FADE_IN}>
+          <m.div {...FADE_IN}>
             <Tabs<MyPostsState> />
-          </motion.div>
-          <motion.div {...SLIDE_UP}>
+          </m.div>
+          <m.div {...SLIDE_UP}>
             <MyPostsList />
-          </motion.div>
+          </m.div>
         </div>
       </TabsProvider>
     </div>

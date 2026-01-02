@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { motion } from 'motion/react'
+import * as m from 'motion/react-m'
 import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -47,12 +47,12 @@ export default function ProfileEdit() {
 
   return (
     <FormProvider {...methods}>
-      <motion.div {...FADE_IN} className="flex justify-center mb-6">
+      <m.div {...FADE_IN} className="flex justify-center mb-6">
         <ProfileImageEdit />
-      </motion.div>
-      <motion.div {...SLIDE_UP} className="w-inherit">
+      </m.div>
+      <m.div {...SLIDE_UP} className="w-inherit">
         <ProfileEditForm />
-      </motion.div>
+      </m.div>
     </FormProvider>
   )
 }
