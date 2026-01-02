@@ -71,6 +71,7 @@ export default function NicknameFieldset({
             )}
           </Button>
         }
+        required
       />
     </AnimateFieldset>
   )

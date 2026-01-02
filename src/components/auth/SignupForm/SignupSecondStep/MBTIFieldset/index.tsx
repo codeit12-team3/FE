@@ -24,7 +24,10 @@ export default function MBTIFieldset(props: Props) {
     <AnimateFieldset {...props}>
       <legend className="sr-only">MBTI 선택</legend>
       <div className="space-y-2 w-full">
-        <Label htmlFor={'mbti'}>MBTI</Label>
+        <Label htmlFor={'mbti'}>
+          MBTI
+          <span className="text-blue-500">*</span>
+        </Label>
         <div className="space-y-1 w-full">
           <FormSelect
             className="w-full"

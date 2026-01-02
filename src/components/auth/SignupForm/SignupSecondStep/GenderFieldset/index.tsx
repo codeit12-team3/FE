@@ -24,6 +24,7 @@ export default function GenderFieldset(props: Props) {
       <div className="space-y-2 w-full">
         <Label asChild>
           <legend>성별</legend>
+          <span className="text-blue-500">*</span>
         </Label>
         <RadioGroup
           className="flex items-center gap-14 px-4"
