@@ -5,6 +5,7 @@ export enum AgeType {
   THIRTY = 'THIRTY',
   FORTY = 'FORTY',
   FIFTY = 'FIFTY',
+  ETC = 'ETC',
 }
 
 export enum GenderType {
@@ -56,7 +57,7 @@ interface Writer {
   mbti: MBTIType
 }
 export interface PostListItem {
-  postId: number
+  postId: string
   title: string
   nation: NationCode
   region: string
@@ -73,6 +74,7 @@ export interface PostListItem {
     ageType: string
     genderCondition: string
   }
+  writer: Writer
   isOwner: boolean
   isBookmarked: boolean
   isApplied: boolean

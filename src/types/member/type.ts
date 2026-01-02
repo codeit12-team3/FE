@@ -53,3 +53,74 @@ export type PresignedUrlResponse = Array<{
   presignedUrl: string
   image: string
 }>
+
+export type MyPostsState = 'RECRUITING' | 'COMPLETED' | 'FINISHED'
+
+export interface GetBookmarkedPostsReq {
+  lastPostId?: string
+  size?: number
+  nation?: string
+  from?: string
+  to?: string
+  ageType?: 'TWENTY' | 'THIRTY' | 'FORTY' | 'FIFTY' | 'ETC'
+  gender?: 'MALE' | 'FEMALE' | 'ALL'
+}
+
+// 내가 북마크한 게시글
+export interface BookmarkedPost {
+  postId: number
+  title: string
+  nation: string
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  recruitStatus: string
+  tags: string[]
+  nickname: string
+  currentMembers: number
+  maxMembers: number
+  conditions: {
+    ageType: string
+    genderCondition: string
+  }
+  isOwner: boolean
+  isBookmarked: boolean
+  isApplied: boolean
+  thumbnail: string
+}
+
+export interface GetBookmarkedPostsRes {
+  content: BookmarkedPost[]
+  isLast: boolean
+}
+
+// 내 게시글
+export interface GetMyPostsReq {
+  lastPostId?: string
+  size?: number
+  status?: MyPostsState // 'RECRUITING' | 'COMPLETED' | 'FINISHED'
+}
+
+export interface MyPost {
+  postId: number
+  title: string
+  nation: string
+  region: string
+  period: {
+    startDate: string
+    endDate: string
+  }
+  createdAt: string
+  recruitStatus: string
+  tags: string[]
+  currentMembers: number
+  maxMembers: number
+  thumbnail: string
+}
+
+export interface GetMyPostsRes {
+  content: MyPost[]
+  isLast: boolean
+}

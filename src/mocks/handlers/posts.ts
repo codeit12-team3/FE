@@ -1,7 +1,7 @@
 import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
-import { PostListItem } from '@/types/posts'
+import { GenderType, PostListItem } from '@/types/posts'
 
 const CURRENT_USER_ID = 999
 
@@ -52,17 +52,17 @@ export const postsHandlers = [
     const ageType = url.searchParams.get('ageType')
     const gender = url.searchParams.get('gender')
 
-    const startId = lastItemId ? Number(lastItemId) + 1 : 1
+    const startId = lastItemId ? String(lastItemId) + 1 : 1
 
     let mockData: PostListItem[] = Array.from({ length: size }).map(
       (_, idx) => {
-        const id = startId + idx
+        const id = String(Number(startId) + idx)
 
         return {
           postId: id,
           title: `Mock title ${id}`,
-          nation: id % 2 === 0 ? 'KR' : 'JP',
-          region: id % 2 === 0 ? '서울' : '도쿄',
+          nation: Number(id) % 2 === 0 ? 'KR' : 'JP',
+          region: Number(id) % 2 === 0 ? '서울' : '도쿄',
           period: {
             startDate: '2025-01-01',
             endDate: '2025-01-02',
@@ -73,12 +73,21 @@ export const postsHandlers = [
           currentMembers: 1,
           maxMembers: 3,
           conditions: {
-            ageType: id % 2 === 0 ? 'TWENTY' : 'THIRTY',
-            genderCondition: id % 2 === 0 ? 'MALE' : 'FEMALE',
+            ageType: Number(id) % 2 === 0 ? 'TWENTY' : 'THIRTY',
+            genderCondition: Number(id) % 2 === 0 ? 'MALE' : 'FEMALE',
           },
           isApplied: false,
           isOwner: false,
           isBookmarked: false,
+          writer: {
+            memberId: 1,
+            nickname: '여행러버',
+            profileImage: null,
+            birth: 1998,
+            age: 27,
+            gender: GenderType.MALE,
+            mbti: 'ENFP',
+          },
           thumbnail: '/mock.png',
         }
       },
@@ -254,7 +263,7 @@ export const postsHandlers = [
           profileImage: '/mock.png',
           birth: 1990,
           age: 35,
-          gender: id % 2 === 0 ? 'MALE' : 'FEMALE',
+          gender: id % 2 === 0 ? GenderType.MALE : GenderType.FEMALE,
           mbti: 'ENFP',
         },
         thumbnail: ['/mock.png'],

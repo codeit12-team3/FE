@@ -26,11 +26,11 @@ export default function Header() {
                 priority
               />
             </Link>
-            <nav className="flex gap-2">
+            <nav className="flex md:gap-2">
               <Link
                 href="/"
                 className={cn(
-                  'transition-colors text-xs font-semibold md:text-sm',
+                  'shrink-0 transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/'
                     ? 'text-blue-500'
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',
@@ -41,9 +41,9 @@ export default function Header() {
                 </span>
               </Link>
               <Link
-                href="/chat"
+                href="chat/"
                 className={cn(
-                  'transition-colors text-xs font-semibold md:text-sm',
+                  'shrink-0 transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/chat'
                     ? 'text-blue-500'
                     : 'text-gray-500 hover:text-gray-700 active:text-gray-700',

@@ -137,7 +137,7 @@ export default function PostForm({ mode, initialData, postId }: PostFormProps) {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="sm:max-w-[475px] max-w-[343px] sm:mt-10 mt-6 px-4"
+            className="md:max-w-[475px]  md:mt-10 mt-6 px-4"
           >
             <h1 className="text-lg font-semibold text-left mb-8">
               {isEdit ? '게시글 수정' : '게시글 작성'}
