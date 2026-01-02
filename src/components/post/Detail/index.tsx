@@ -87,7 +87,10 @@ export default function PostDetail({
   }
 
   const postDetail = response.data
-
+  const imageList =
+    postDetail.images && postDetail.images.length > 0
+      ? postDetail.images
+      : ['/images/thumbnail-default.png']
   return (
     <>
       <div className="min-h-screen bg-gray-50  flex items-center justify-center lg:pt-14 md:pt-7.5 pt-6 px-4 relative">
@@ -106,10 +109,7 @@ export default function PostDetail({
               />
               <div className="flex md:flex-row lg:gap-6 md:gap-4 md:my-8 my-4 flex-col  ">
                 <div className="flex-1 min-w-0 ">
-                  <PostImages
-                    images={postDetail.images}
-                    onClick={handleImageClick}
-                  />
+                  <PostImages images={imageList} onClick={handleImageClick} />
                 </div>
                 <PostWriter postId={postId} />
               </div>
@@ -139,11 +139,7 @@ export default function PostDetail({
       </div>
       {imageModalState.isOpen && (
         <ImageModal
-          images={
-            postDetail.images && postDetail.images.length > 0
-              ? postDetail.images
-              : ['/images/thumbnail-default.png']
-          }
+          images={imageList}
           onClose={() => setImageModalState({ isOpen: false, initialIndex: 0 })}
           initialIndex={imageModalState.initialIndex}
         />
