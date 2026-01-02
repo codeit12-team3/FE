@@ -17,7 +17,10 @@ export const useInfiniteGetReceivedCompanions = (status: CompanionState) => {
   })
 }
 
-export const useInfiniteGetSentCompanions = (status: CompanionState) => {
+export const useInfiniteGetSentCompanions = (
+  status: CompanionState,
+  enabled: boolean = true,
+) => {
   return useInfiniteQuery({
     queryKey: ['companions', 'sent', status],
     queryFn: ({ pageParam = 0 }) => getSentCompanion(status, pageParam),
@@ -27,5 +30,6 @@ export const useInfiniteGetSentCompanions = (status: CompanionState) => {
 
       return number + 1 < totalPages ? number + 1 : undefined
     },
+    enabled,
   })
 }
