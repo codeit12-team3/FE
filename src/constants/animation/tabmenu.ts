@@ -2,7 +2,7 @@ export const FADE_IN = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   transition: { duration: 0.4 },
-}
+} as const
 
 export const SLIDE_UP = {
   initial: { y: 10, opacity: 0 },

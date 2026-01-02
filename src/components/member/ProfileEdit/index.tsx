@@ -47,15 +47,11 @@ export default function ProfileEdit() {
 
   return (
     <FormProvider {...methods}>
-      <motion.div {...FADE_IN}>
-        <div className="flex justify-center mb-6">
-          <ProfileImageEdit />
-        </div>
+      <motion.div {...FADE_IN} className="flex justify-center mb-6">
+        <ProfileImageEdit />
       </motion.div>
-      <motion.div {...SLIDE_UP}>
-        <div className="w-inherit">
-          <ProfileEditForm />
-        </div>
+      <motion.div {...SLIDE_UP} className="w-inherit">
+        <ProfileEditForm />
       </motion.div>
     </FormProvider>
   )
