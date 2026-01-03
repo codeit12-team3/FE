@@ -59,7 +59,12 @@ export default function FilterDate({
             <span className="text-gray-800 text-xs md:text-sm">
               {date ? `${dayjs(date).format('YYYY.MM.DD')}` : '날짜'}
             </span>
-            <IconArrowDown />
+            <IconArrowDown
+              className={cn(
+                'size-5 transition-transform duration-200',
+                isOpen && 'rotate-180',
+              )}
+            />
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
