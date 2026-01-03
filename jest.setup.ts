@@ -18,6 +18,7 @@ jest.mock('next-auth/react', () => ({
         accessToken: 'mock-access-token',
       },
     },
+    update: jest.fn(() => Promise.resolve()),
     status: 'authenticated',
   })),
   signIn: jest.fn(),
