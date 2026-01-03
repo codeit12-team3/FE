@@ -1,6 +1,5 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
@@ -13,7 +12,6 @@ import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function FormActionBtn() {
   const router = useRouter()
-  const queryClient = useQueryClient()
   const {
     handleSubmit,
     formState: { isDirty, isSubmitting },
