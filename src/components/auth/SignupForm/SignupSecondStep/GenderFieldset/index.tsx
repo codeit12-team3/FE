@@ -22,7 +22,7 @@ export default function GenderFieldset(props: Props) {
   return (
     <AnimateFieldset {...props}>
       <div className="space-y-2 w-full">
-        <Label asChild>
+        <Label>
           <legend>성별</legend>
           <span className="text-blue-500">*</span>
         </Label>
