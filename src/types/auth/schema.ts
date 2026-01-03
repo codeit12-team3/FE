@@ -80,5 +80,46 @@ export const signinSchema = z.object({
   password: z.string().min(1, '비밀번호를 입력해주세요'),
 })
 
+export const additionalSchema = z
+  .object({
+    email: z
+      .string()
+      .email('올바른 이메일 형식이 아닙니다')
+      .nonempty('이메일을 입력해주세요'),
+    nickname: z
+      .string()
+      .min(1, { message: '닉네입을 입력해주세요' })
+      .max(NICKNAME_MAX_LENGTH, {
+        message: `닉네임은 최대 ${NICKNAME_MAX_LENGTH}자까지 허용됩니다`,
+      })
+      .regex(NICKNAME_REGEX, {
+        message: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
+      }),
+    birth: z
+      .string()
+      .nonempty('생년월일을 선택해주세요')
+      .regex(BIRTH_REGEX, '올바른 날짜 형식이 아닙니다'),
+    gender: z.enum(GENDER_LIST, '성별을 선택해주세요').optional(),
+    mbti: z.enum(MBTI_LIST, 'MBTI를 선택해주세요').optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.gender) {
+      ctx.addIssue({
+        code: 'custom',
+        message: '성별을 선택해주세요',
+        path: ['gender'],
+      })
+    }
+
+    if (!data.mbti) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'MBTI를 선택해주세요',
+        path: ['mbti'],
+      })
+    }
+  })
+
 export type SignupFormValues = z.infer<typeof signupSchema>
 export type SigninFormValues = z.infer<typeof signinSchema>
+export type AdditionalFormValues = z.infer<typeof additionalSchema>
