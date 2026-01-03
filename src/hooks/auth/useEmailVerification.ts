@@ -33,18 +33,6 @@ export default function useEmailVerification() {
         setIsChecked(false)
         toast.success('이메일 인증코드가 전송되었습니다')
       },
-      onError: (error) => {
-        if (axios.isAxiosError<ApiResponse>(error)) {
-          const apiRes = error.response?.data
-          const errCode = apiRes?.success === false ? apiRes.data?.code : null
-
-          if (errCode === 'AUTH_008') {
-            setTimer(0)
-            setIsChecked(true)
-            toast.success('이미 인증이 완료된 이메일입니다')
-          }
-        }
-      },
     })
   }
 
@@ -56,6 +44,18 @@ export default function useEmailVerification() {
           setTimer(0)
           setIsChecked(true)
           toast.success('이메일 인증이 완료되었습니다')
+        },
+        onError: (error) => {
+          if (axios.isAxiosError<ApiResponse>(error)) {
+            const apiRes = error.response?.data
+            const errCode = apiRes?.success === false ? apiRes.data?.code : null
+
+            if (errCode === 'AUTH_008') {
+              setTimer(0)
+              setIsChecked(true)
+              toast.success('이미 인증이 완료된 이메일입니다')
+            }
+          }
         },
       },
     )
