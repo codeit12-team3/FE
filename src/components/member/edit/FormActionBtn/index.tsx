@@ -39,7 +39,6 @@ export default function FormActionBtn() {
     updateProfile(payload, {
       onSuccess: async () => {
         toast.success('프로필이 저장되었습니다!')
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] })
 
         await update({
           user: {
