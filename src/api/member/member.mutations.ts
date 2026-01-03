@@ -21,6 +21,9 @@ export const useUpdateMyProfile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['member', 'me'] })
     },
+    meta: {
+      ignoreGlobalError: true,
+    },
   })
 }
 
