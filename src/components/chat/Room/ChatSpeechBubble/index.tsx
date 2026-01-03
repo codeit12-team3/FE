@@ -1,4 +1,6 @@
-import { useSession } from 'next-auth/react'
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 
 import { cn } from '@/lib/common'
 
@@ -9,16 +11,18 @@ export default function ChatSpeechBubble({
   senderId: number
   message: string
 }) {
-  const { data: session } = useSession()
-  const currentUserId = session?.user.id
-  const isMyMessage = senderId === currentUserId
+  const searchParams = useSearchParams()
+  const chatParticipantId = Number(searchParams.get('chatParticipantId'))
+
+  const isMyMessage = senderId === chatParticipantId
+
   return (
     <div
       className={cn(
-        'rounded-xl p-4 max-w-[456px] whitespace-pre-wrap wrap-break-word',
+        'rounded-2xl p-3 max-w-[280px] md:max-w-[456px] whitespace-pre-wrap wrap-break-word text-sm leading-relaxed shadow-sm',
         isMyMessage
           ? 'bg-blue-500 text-white rounded-tr-none'
-          : 'bg-gray-200 text-gray-800 rounded-tl-none',
+          : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none',
       )}
     >
       {message}

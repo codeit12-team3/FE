@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { ChatRoomContent } from '@/types/chat/chats.types'
+import { ChatRoomContent } from '@/types/chat/chatRoom.types'
 
 import CardThumbnail from '../../../common/CardThumbnail'
 import { CardHeader } from './CardHeader'
@@ -8,33 +8,47 @@ import LastMessage from './LastMessage'
 
 interface ChatCardProps {
   chat: ChatRoomContent
+  isPriority?: boolean
 }
 
-export default function ChatCard({ chat }: ChatCardProps) {
+export default function ChatCard({ chat, isPriority = false }: ChatCardProps) {
   const {
     chatRoomId,
     thumbnail,
     recruitStatus,
+    chatParticipantId,
     title,
     unreadCount,
     lastMessage,
     lastMessageAt,
     nation,
     region,
+    startDate,
+    endDate,
   } = chat
+
   const params = new URLSearchParams({
+    chatParticipantId: String(chatParticipantId),
     title: title,
     thumbnail: thumbnail ?? '',
     recruitStatus: recruitStatus,
     nation: nation,
     region: region,
+    startDate: startDate,
+    endDate: endDate,
   })
+
   return (
     <Link
       href={`/chat/${chatRoomId}?${params.toString()}`}
-      className="w-full md:p-6 p-4 flex md:gap-7 gap-3 bg-white rounded-3xl md:rounded-4xl border overflow-hidden border-gray-200 content-auto [contain-intrinsic-size:auto_220px] cursor-pointer hover:shadow-xs"
+      className="w-full p-4 flex gap-3 bg-white rounded-3xl border overflow-hidden border-gray-200 content-auto [contain-intrinsic-size:auto_220px] cursor-pointer hover:shadow-xs"
     >
-      <CardThumbnail imageUrl={thumbnail} variant="chat" />
+      <CardThumbnail
+        imageUrl={thumbnail}
+        variant="chat"
+        isPriority={isPriority}
+      />
+
       <div className="flex-1 flex flex-col gap-1 min-w-0">
         <CardHeader
           title={title}

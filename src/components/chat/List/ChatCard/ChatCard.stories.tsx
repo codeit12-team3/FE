@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { ChatRoomContent } from '@/types/chat/chats.types'
+import { ChatRoomContent } from '@/types/chat/chatRoom.types'
 
 import ChatCard from '.'
 

@@ -32,3 +32,5 @@ export { default as IconKakao } from './kakao.svg'
 export { default as IconNaver } from './naver.svg'
 export { default as IconArrowRight } from './Icon-date-right.svg'
 export { default as IconArrowLeft } from './Icon-date-left.svg'
+
+export { default as IconSendSolid } from './send-solid.svg'

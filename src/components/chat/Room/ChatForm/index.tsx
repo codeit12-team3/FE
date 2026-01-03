@@ -1,23 +1,53 @@
 'use client'
 
+import { useParams, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+
+import { IconSendSolid } from '@/assets/svgr'
 import { Button } from '@/components/common'
 import { Input } from '@/components/ui'
+import { useWS } from '@/providers/WebSocketContext'
 
 export default function ChatForm() {
+  const params = useParams()
+  const searchParams = useSearchParams()
+
+  const chatRoomId = Number(params.roomId)
+  const chatParticipantId = Number(searchParams.get('chatParticipantId'))
+
+  const { sendMessage } = useWS()
+  const [text, setText] = useState('')
+
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!text.trim()) return
+
+    sendMessage({
+      chatRoomId,
+      chatParticipantId,
+      message: text,
+      messageType: 'CHAT',
+    })
+    setText('')
+  }
   return (
-    <form className="fixed bottom-0 left-0 w-full h-20 py-3 bg-gray-200 border-t border-gray-300">
-      <div className="max-w-7xl w-full h-full mx-auto flex items-center gap-4 px-4">
-        <Input
-          placeholder="메시지를 입력해주세요"
-          className="rounded-2xl flex-1 p-4 text-base font-normal bg-white"
-        />
-        <Button
-          width="fit"
-          className="w-[118px] h-14 bg-blue-500 text-white rounded-2xl text-base font-semibold shrink-0"
-        >
-          보내기
-        </Button>
-      </div>
+    <form
+      onSubmit={handleSend}
+      className="w-full md:sticky fixed bottom-0 left-0 items-center gap-2 px-4 py-2 flex"
+    >
+      <Input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="메시지를 입력해주세요"
+        className="rounded-full flex-1 text-sm font-normal h-10 md:h-12 bg-white"
+      />
+      <Button
+        width="fit"
+        type="submit"
+        className="bg-blue-500 text-white w-10 h-10 md:w-12 md:h-12 p-0 rounded-full font-semibold shrink-0"
+      >
+        <IconSendSolid className="text-white w-4 h-4 md:w-6 md:h-6 mt-px pr-px" />
+      </Button>
     </form>
   )
 }

@@ -16,7 +16,7 @@ function Input({
       placeholder={disabled ? undefined : placeholder}
       disabled={disabled}
       className={cn(
-        'h-14 w-full min-w-0 font-normal border border-gray-200 rounded-2xl bg-white text-gray-800 p-4 text-base transition-[color,box-shadow] outline-none',
+        'h-14 w-full min-w-0 font-normal ring ring-gray-200 rounded-2xl bg-white text-gray-800 p-4 text-base transition-[color,box-shadow] outline-none',
         'placeholder:font-normal placeholder:text-gray-500',
         'file:text-gray-800 file:inline-flex file:h-7 file:bg-transparent file:text-base file:font-normal',
         'selection:bg-blue-500 selection:text-gray-800',
