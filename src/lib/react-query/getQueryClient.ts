@@ -25,11 +25,13 @@ function handleGlobalError(
     const apiRes = error.response?.data
     const errCode = apiRes?.success === false ? apiRes.data?.code : null
 
-    if (errCode === 'AUTH_008') return null
-    if (errCode === 'AUTH_011') {
-      queryClient.clear()
-      return toast.error('로그인이 필요합니다')
+    if (errCode === 'AUTH_008') return
+    if (!apiRes.success && errCode === 'AUTH_011') {
+      return toast.error(apiRes.data.message)
     }
+
+    queryClient.clear()
+    return toast.error('로그인이 필요합니다')
   }
 
   let message = '알 수 없는 에러가 발생했습니다.'
