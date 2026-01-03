@@ -36,3 +36,18 @@ export interface SigninEmailRes extends Member {
 export interface UserSession extends Member {
   accessToken: string
 }
+
+export type OAuthGoogleRes =
+  | SigninEmailRes
+  | {
+      email: string
+      isRegister: false
+    }
+
+export interface OAuthGoogleSignupReq {
+  email: string
+  nickname: string
+  birth: string
+  gender: Gender
+  mbti: MBTI
+}
