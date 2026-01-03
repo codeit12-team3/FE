@@ -64,6 +64,7 @@ export default function BasicInfo() {
         rightElement={
           <Button
             type="button"
+            variant={'secondary'}
             onClick={handleCheckDuplicate}
             disabled={isPending || !nickname}
             size="md"
