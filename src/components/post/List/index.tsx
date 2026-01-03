@@ -56,10 +56,14 @@ export default function PostList() {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={handleKeyDown}
+              aria-label="게시글 검색"
             />
             <IconSearch
               className="absolute right-3 w-6 h-6 text-gray-500 cursor-pointer"
               onClick={handleSearchImmediately}
+              aria-label="검색 버튼"
+              role="button"
+              tabIndex={0}
             />
           </InputGroup>
         }
@@ -69,6 +73,7 @@ export default function PostList() {
               size="md"
               className="gap-2 w-36 hidden lg:block"
               onClick={() => router.push('/posts/add')}
+              aria-label="동행 구하기 게시글 작성"
             >
               동행 구하기
             </Button>
@@ -76,6 +81,7 @@ export default function PostList() {
               size="md"
               className="gap-2 whitespace-nowrap lg:hidden"
               onClick={() => router.push('/posts/add')}
+              aria-label="동행 구하기 게시글 작성"
             >
               동행 구하기
             </Button>

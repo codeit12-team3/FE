@@ -5,11 +5,6 @@ import { useState } from 'react'
 
 import { cn, getImageUrl } from '@/lib/common'
 
-interface PostImagesProps {
-  images: string[]
-}
-const DEFAULT_IMAGE = '/images/thumbnail-default.png'
-
 function PostImageItem({
   src,
   idx,
@@ -34,39 +29,45 @@ function PostImageItem({
   )
 }
 
-export default function PostImages({ images }: PostImagesProps) {
-  const imageList = images && images.length > 0 ? images : [DEFAULT_IMAGE]
+interface ImagesProps {
+  images: string[]
+  onClick: (index: number) => void
+}
+
+export default function PostImages({ images, onClick }: ImagesProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index)
   }
 
-  if (imageList.length === 1) {
+  if (images.length === 1) {
     return (
-      <div>
-        <PostImageItem src={imageList[0]} idx={0} priority />
+      <div onClick={() => onClick(0)} className="cursor-pointer">
+        <PostImageItem src={images[0]} idx={0} priority />
       </div>
     )
   }
 
   return (
     <div className="mb-6 relative group ">
-      <div className="relative w-full  rounded-3xl overflow-hidden ">
+      <div
+        className="relative w-full  rounded-3xl overflow-hidden pointer-events-none md:pointer-events-auto"
+        onClick={() => onClick(currentIndex)}
+      >
         <div
           className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {imageList.map((img, idx) => (
-            <div key={idx} className="min-w-full">
+          {images.map((img, idx) => (
+            <div key={img} className="min-w-full">
               <PostImageItem src={img} idx={idx} priority={idx === 0} />
             </div>
           ))}
         </div>
       </div>
-
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-        {imageList.map((_, index) => (
+        {images.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}

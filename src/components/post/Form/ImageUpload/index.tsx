@@ -8,67 +8,50 @@ import { uploadPostImages } from '@/api/images/images.client'
 import { IconImagePlus, IconX } from '@/assets/svgr'
 import { toast } from '@/components/common/Toast'
 import { Label } from '@/components/ui'
+import useImageCompress from '@/hooks/member/useImageCompress'
 import { getImageUrl } from '@/lib/common'
 import type { PostFormValues } from '@/types/posts/schema'
 
 const MAX_IMAGES = 3
-const MAX_FILE_SIZE = 5 * 1024 * 1024
 
 type ImageItem = {
-  kind: 'existing' | 'new'
-  url: string
+  previewUrl: string
+  uploadedUrl: string | null
 }
 
 export default function ImageUpload() {
-  const { setValue, register, control } = useFormContext<PostFormValues>()
+  const { setValue, control } = useFormContext<PostFormValues>()
   const formImages = useWatch({ control, name: 'images' })
-
+  const { compress } = useImageCompress('post')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const initializedRef = useRef(false)
-
-  const [existingUrls, setExistingUrls] = useState<string[]>([])
-  const [newPreviews, setNewPreviews] = useState<string[]>([])
-  const [newUploadedUrls, setNewUploadedUrls] = useState<string[]>([])
+  const [images, setImages] = useState<ImageItem[]>([])
   const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
-    register('images')
-  }, [register])
-
-  useEffect(() => {
-    if (initializedRef.current) return
-    if (!formImages?.length) return
-
-    if (newPreviews.length > 0 || newUploadedUrls.length > 0) return
-
-    setExistingUrls(formImages)
+    if (initializedRef.current || !formImages?.length || images.length > 0) {
+      return
+    }
+    setImages(
+      formImages.map((url) => ({
+        previewUrl: url,
+        uploadedUrl: url,
+      })),
+    )
     initializedRef.current = true
-  }, [formImages, newPreviews.length, newUploadedUrls.length])
-
-  const totalImages = existingUrls.length + newUploadedUrls.length
-  const canAddMore = totalImages < MAX_IMAGES
+  }, [formImages, images.length])
 
   const openPicker = () => {
-    if (!isUploading && canAddMore) {
+    if (!isUploading) {
       fileInputRef.current?.click()
     }
   }
 
-  const validateFile = (file: File): boolean => {
-    if (file.size > MAX_FILE_SIZE) {
-      toast.error(`${file.name}은(는) 5MB를 초과합니다.`)
-      return false
-    }
-    if (!file.type.startsWith('image/')) {
-      toast.error(`${file.name}은(는) 이미지 파일이 아닙니다.`)
-      return false
-    }
-    return true
-  }
-
-  const syncFormImages = (existing: string[], newUploaded: string[]) => {
-    const allImages = [...existing, ...newUploaded]
-    setValue('images', allImages, { shouldValidate: true, shouldDirty: true })
+  const syncFormImages = (imageList: ImageItem[]) => {
+    const urls = imageList
+      .map((img) => img.uploadedUrl)
+      .filter((url): url is string => url !== null)
+    setValue('images', urls, { shouldValidate: true, shouldDirty: true })
   }
 
   const getImageSrc = (src: string): string => {
@@ -79,7 +62,7 @@ export default function ImageUpload() {
     const fileList = e.target.files
     if (!fileList) return
 
-    const remaining = MAX_IMAGES - totalImages
+    const remaining = MAX_IMAGES - images.length
 
     if (remaining <= 0) {
       toast.error(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있습니다.`)
@@ -87,29 +70,39 @@ export default function ImageUpload() {
       return
     }
 
-    const validFiles = Array.from(fileList)
-      .filter(validateFile)
-      .slice(0, remaining)
-
-    if (validFiles.length === 0) {
-      e.target.value = ''
-      return
-    }
-
+    const files = Array.from(fileList).slice(0, remaining)
     setIsUploading(true)
 
     try {
-      const uploadedPaths = await uploadPostImages(validFiles, 'POST')
-      const blobUrls = validFiles.map((file) => URL.createObjectURL(file))
+      const compressedFiles: File[] = []
+      const tempPreviews: ImageItem[] = []
 
-      const updatedNewUploaded = [...newUploadedUrls, ...uploadedPaths]
+      for (const file of files) {
+        const { file: compressedFile, previewUrl } = await compress(file)
+        compressedFiles.push(compressedFile)
+        tempPreviews.push({
+          previewUrl,
+          uploadedUrl: null,
+        })
+      }
 
-      setNewPreviews((prev) => [...prev, ...blobUrls])
-      setNewUploadedUrls(updatedNewUploaded)
+      const updatedImages = [...images, ...tempPreviews]
+      setImages(updatedImages)
 
-      syncFormImages(existingUrls, updatedNewUploaded)
+      const uploadedPaths = await uploadPostImages(compressedFiles, 'POST')
 
-      toast.success(`${uploadedPaths.length}개 업로드 완료`)
+      const finalImages = updatedImages.map((img, idx) => {
+        const uploadIndex = idx - images.length
+        if (uploadIndex >= 0 && uploadIndex < uploadedPaths.length) {
+          return { ...img, uploadedUrl: uploadedPaths[uploadIndex] }
+        }
+        return img
+      })
+
+      setImages(finalImages)
+      syncFormImages(finalImages)
+
+      toast.success(`이미지 업로드 완료`)
     } catch {
       toast.error('이미지 업로드에 실패했습니다.')
     } finally {
@@ -118,78 +111,26 @@ export default function ImageUpload() {
     }
   }
 
-  const removeExisting = (index: number) => {
-    const updated = existingUrls.filter((_, i) => i !== index)
-    setExistingUrls(updated)
-    syncFormImages(updated, newUploadedUrls)
-  }
-
-  const removeNew = (index: number) => {
-    const blobUrl = newPreviews[index]
-    if (blobUrl?.startsWith('blob:')) {
-      URL.revokeObjectURL(blobUrl)
+  const removeImage = (index: number) => {
+    const imageToRemove = images[index]
+    if (imageToRemove.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imageToRemove.previewUrl)
     }
 
-    setNewPreviews((prev) => prev.filter((_, i) => i !== index))
-    setNewUploadedUrls((prev) => {
-      const updated = prev.filter((_, i) => i !== index)
-      syncFormImages(existingUrls, updated)
-      return updated
-    })
+    const updated = images.filter((_, i) => i !== index)
+    setImages(updated)
+    syncFormImages(updated)
   }
 
   useEffect(() => {
     return () => {
-      newPreviews.forEach((url) => {
-        if (url.startsWith('blob:')) {
-          URL.revokeObjectURL(url)
+      images.forEach((img) => {
+        if (img.previewUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(img.previewUrl)
         }
       })
     }
-  }, [newPreviews])
-
-  const combinedImages: ImageItem[] = [
-    ...existingUrls.map((url) => ({ kind: 'existing' as const, url })),
-    ...newPreviews.map((url) => ({ kind: 'new' as const, url })),
-  ]
-
-  const renderImageSlot = (index: number) => {
-    const image = combinedImages[index]
-
-    if (image) {
-      return (
-        <>
-          <Image
-            src={getImageSrc(image.url)}
-            alt={`${index === 0 ? '대표 이미지' : `preview-${index + 1}`}`}
-            fill
-            className="object-cover rounded-xl"
-          />
-          <button
-            type="button"
-            onClick={() => {
-              if (image.kind === 'existing') {
-                removeExisting(index)
-              } else {
-                removeNew(index - existingUrls.length)
-              }
-            }}
-            className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10"
-            aria-label="이미지 삭제"
-          >
-            <IconX className="text-white size-4" />
-          </button>
-        </>
-      )
-    }
-
-    return (
-      <div
-        className="w-full h-full  disabled:opacity-50 transition-colors flex items-center justify-center"
-        aria-label="이미지 추가"
-      ></div>
-    )
-  }
+  }, [images])
 
   return (
     <div className="mb-6">
@@ -201,12 +142,12 @@ export default function ImageUpload() {
         <button
           type="button"
           onClick={openPicker}
-          disabled={isUploading || !canAddMore}
+          disabled={isUploading}
           className="bg-gray-200 rounded-xl md:size-27.5 size-20 flex items-center justify-center disabled:opacity-50 transition-colors relative cursor-pointer"
           aria-label="이미지 업로드"
         >
           {isUploading ? (
-            <div className="flex flex-col items-center gap-1 ">
+            <div className="flex flex-col items-center gap-1">
               <div className="size-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
@@ -214,14 +155,35 @@ export default function ImageUpload() {
           )}
         </button>
 
-        {Array.from({ length: MAX_IMAGES }).map((_, index) => (
-          <div
-            key={index}
-            className="relative  md:size-27.5 size-20 flex items-center justify-center overflow-hidden"
-          >
-            {renderImageSlot(index)}
-          </div>
-        ))}
+        {Array.from({ length: MAX_IMAGES }).map((_, index) => {
+          const image = images[index]
+
+          return (
+            <div
+              key={index}
+              className="relative md:size-27.5 size-20 flex items-center justify-center overflow-hidden"
+            >
+              {image ? (
+                <>
+                  <Image
+                    src={getImageSrc(image.previewUrl)}
+                    alt={`${index === 0 ? '대표 이미지' : `preview-${index + 1}`}`}
+                    fill
+                    className="object-cover rounded-xl "
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-0.5 right-0.5 bg-black/70 size-5 rounded-full flex items-center justify-center hover:bg-black/90 transition-colors z-10 cursor-pointer"
+                    aria-label="이미지 삭제"
+                  >
+                    <IconX className="text-white size-4" />
+                  </button>
+                </>
+              ) : null}
+            </div>
+          )
+        })}
       </div>
 
       <input
