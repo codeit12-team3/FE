@@ -99,22 +99,21 @@ const SelectTrigger = ({
   'aria-invalid': invalid,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
-  const { open, setOpen, value } = useSelect()
+  const { open, setOpen } = useSelect()
   return (
     <div
       onClick={() => setOpen(!open)}
       className={cn(
-        'flex h-12 w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3',
-        open ? 'border-main border shadow-sm' : '',
-        String(invalid) === 'true' && 'border-danger',
-        value ? 'bg-main text-white' : 'bg-bg-input text-text-base',
+        'flex h-12 w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 bg-white text-gray-900',
+        open && 'border-blue-500 border shadow-sm',
+        String(invalid) === 'true' && 'border-red-600',
         className,
       )}
       {...props}
     >
       {children}
       <IconArrowDown
-        className={cn('size-6 transition-transform', open && 'rotate-180')}
+        className={cn('size-5 transition-transform', open && 'rotate-180')}
       />
     </div>
   )
@@ -129,8 +128,8 @@ const SelectValue = ({
 }) => {
   const { value } = useSelect()
   return (
-    <span className={cn('block truncate', !value && 'text-text-input')}>
-      {value ? `${value}${suffix || ''}` : placeholder}
+    <span className={cn('block truncate text-gray-900')}>
+      {value ? `${suffix || ''}` : placeholder}
     </span>
   )
 }
@@ -146,12 +145,12 @@ const SelectContent = ({
   return (
     <div
       className={cn(
-        ' absolute shadow-xl top-full z-50 mt-1 bg-white max-h-60 w-full overflow-auto rounded-xl animate-in fade-in-80 zoom-in-95 no-scrollbar',
+        'absolute shadow-xl top-full z-50 mt-1 bg-white max-h-60 w-full overflow-auto rounded-xl animate-in fade-in-80 zoom-in-95 no-scrollbar',
         className,
       )}
       {...props}
     >
-      <div className="p-1 divide-y-2 divide-bg-input">{children}</div>
+      <div className="p-1">{children}</div>
     </div>
   )
 }
@@ -176,7 +175,7 @@ const SelectItem = ({
       }}
       className={cn(
         'relative flex w-full cursor-pointer select-none items-center px-4 py-3 outline-none',
-        isSelected && 'bg-bg-input',
+        isSelected && 'bg-blue-50 text-blue-600',
         className,
       )}
       {...props}

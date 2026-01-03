@@ -4,15 +4,9 @@ import { useState } from 'react'
 
 import 'dayjs/locale/ko'
 
-import {
-  AGE_OPTIONS,
-  GENDER_OPTIONS,
-  NATION_ENUM_OPTIONS,
-} from '@/constants/posts'
-import { AgeType, GenderType, PostFilterParams } from '@/types/posts'
+import { PostFilterParams } from '@/types/posts'
 
-import FilterDate from './FilterDate'
-import FilterSelect from './FilterSelect'
+import FilterControls from './FilterControls'
 
 interface FilterBarProps {
   onApply: (filters: Omit<PostFilterParams, 'keyword'>) => void
@@ -40,113 +34,36 @@ export default function FilterBar({
     onApply(updated)
   }
 
-  const TRIGGER = 'w-22 text-sm text-gray-800 font-medium'
-
   return (
-    <div className="md:pt-12 md:pb-5 pt-5 pb-4">
+    <section
+      className="md:pt-12 md:pb-5 pt-5 pb-4"
+      aria-label="게시글 필터 및 검색"
+    >
       <div className="hidden lg:flex gap-2 justify-between">
-        <div className="flex gap-2 ">
-          <FilterSelect
-            value={filters.nation}
-            options={NATION_ENUM_OPTIONS}
-            placeholder="국가"
-            onChange={(value) =>
-              applyImmediately({
-                nation: value === 'ALL' ? '' : value,
-              })
-            }
-            className={TRIGGER}
-          />
-
-          <FilterSelect
-            value={filters.ageType}
-            options={AGE_OPTIONS}
-            placeholder="나이"
-            onChange={(value) =>
-              applyImmediately({
-                ageType: value === 'ALL' ? undefined : (value as AgeType),
-              })
-            }
-            className={TRIGGER}
-          />
-
-          <FilterSelect
-            value={filters.gender}
-            options={GENDER_OPTIONS}
-            placeholder="성별"
-            onChange={(value) =>
-              applyImmediately({
-                gender: value === 'ALL' ? undefined : (value as GenderType),
-              })
-            }
-            className={TRIGGER}
-            includeAllOption={false}
-          />
-
-          <FilterDate
-            date={filters.date}
-            onApply={(date) => applyImmediately({ date })}
-            triggerClassName="w-auto min-w-22 text-sm text-gray-800 font-medium"
-          />
+        <div className="flex gap-2" aria-label="필터 옵션">
+          <FilterControls filters={filters} onApply={applyImmediately} />
         </div>
 
-        <div className="max-w-[536px] w-full relative flex gap-4">
+        <div
+          className="max-w-[536px] w-full relative flex gap-4"
+          role="group"
+          aria-label="검색 및 작성"
+        >
           {searchInput}
           {actionButton}
         </div>
       </div>
 
       <div className="flex lg:hidden flex-col gap-3">
-        <div className="flex gap-2 justify-between">
+        <div className="flex gap-2 justify-between" aria-label="검색 및 작성">
           {searchInput}
           {actionButton}
         </div>
 
-        <div className="flex gap-1 overflow-x-hidden">
-          <FilterSelect
-            value={filters.nation}
-            options={NATION_ENUM_OPTIONS}
-            placeholder="국가"
-            onChange={(value) =>
-              applyImmediately({
-                nation: value === 'ALL' ? '' : value,
-              })
-            }
-            className={TRIGGER}
-          />
-
-          <FilterSelect
-            value={filters.ageType}
-            options={AGE_OPTIONS}
-            placeholder="나이"
-            onChange={(value) =>
-              applyImmediately({
-                ageType: value === 'ALL' ? undefined : (value as AgeType),
-              })
-            }
-            className={TRIGGER}
-          />
-
-          <FilterSelect
-            value={filters.gender}
-            options={GENDER_OPTIONS}
-            placeholder="성별"
-            onChange={(value) =>
-              applyImmediately({
-                gender: value === 'ALL' ? undefined : (value as GenderType),
-              })
-            }
-            className={TRIGGER}
-            includeAllOption={false}
-          />
-
-          <FilterDate
-            date={filters.date}
-            onApply={(date) => applyImmediately({ date })}
-            triggerClassName="w-auto min-w-22 text-sm text-gray-800 font-medium"
-          />
+        <div className="flex gap-1 overflow-x-hidden" aria-label="필터 옵션">
+          <FilterControls filters={filters} onApply={applyImmediately} />
         </div>
       </div>
-    </div>
+    </section>
   )
 }

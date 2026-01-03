@@ -4,9 +4,9 @@ import { Loader2, Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { uploadMemberImage } from '@/api/images/images.client'
+import { toast } from '@/components/common'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { getImageUrl } from '@/lib/common'
 import { ProfileEditFormData } from '@/types/member/schema'
@@ -89,7 +89,7 @@ export default function ProfileImageEdit() {
       const imagePath = await uploadMemberImage(uploadFile, imageType, 'MEMBER')
       setValue('image', imagePath, { shouldDirty: true })
 
-      toast.success('프로필 사진이 변경되었습니다!', { duration: 2000 })
+      toast.success('프로필 사진이 변경되었습니다!')
     } catch (err) {
       setProfileImg(imageValue || null)
       toast.error('이미지 업로드 중 오류가 발생했습니다')

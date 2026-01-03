@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
+
+import { toast } from '@/components/common'
 
 import { createComment, deleteComment, updateComment } from './comments.clients'
 import { commentKeys } from './key/comments.keys'

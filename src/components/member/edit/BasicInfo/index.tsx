@@ -2,9 +2,9 @@
 
 import { AxiosError } from 'axios'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { useCheckNickname } from '@/api/member'
+import { toast } from '@/components/common'
 import FormInput from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import {
@@ -66,7 +66,6 @@ export default function BasicInfo() {
             type="button"
             onClick={handleCheckDuplicate}
             disabled={isPending || !nickname}
-            variant="secondary"
             size="md"
             className="whitespace-nowrap"
           >

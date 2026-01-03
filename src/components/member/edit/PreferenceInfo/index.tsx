@@ -24,7 +24,7 @@ export default function PreferenceInfo() {
   })
 
   return (
-    <div className="flex mt-6 gap-6 w-inherit">
+    <div className="flex flex-col md:flex-row mt-6 gap-6 w-inherit">
       <div className="flex flex-col gap-3 flex-1">
         <Label htmlFor="tripStyle">여행 스타일</Label>
         <FormSelect

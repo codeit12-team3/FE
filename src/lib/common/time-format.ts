@@ -1,11 +1,16 @@
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 import 'dayjs/locale/ko'
 
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 dayjs.locale('ko')
 
 /*
@@ -77,4 +82,45 @@ export const formatDateToKorean = (dateStr: string | undefined | null) => {
   // 'M월 D일'은 5월 5일 (한자리 허용)
   // 'MM월 DD일'은 05월 05일 (두자리 고정)
   return dayjs(dateStr).format('M월 D일')
+}
+
+/**
+ * 날짜에 9시간을 더한 뒤 → '오전/오후 h:mm' 형식 반환
+ */
+export const formatChatTime = (
+  date?: string | number | Date | null,
+): string => {
+  if (!date) return ''
+  const d = dayjs.utc(date).tz('Asia/Seoul')
+  return d.isValid() ? d.format('A h:mm') : ''
+}
+/**
+ * 날짜를 'YYYY년 M월 D일 dddd' 형식으로 변환 (KST 기준)
+ * 예: 2024년 5월 20일 월요일
+ */
+export const formatFullKoreanDate = (
+  date?: string | number | Date | null,
+): string => {
+  if (!date) return ''
+
+  const d = dayjs(date)
+  if (!d.isValid()) return ''
+
+  // UTC 기준으로 변환 후 서울 타임존 적용
+  return dayjs.utc(date).tz('Asia/Seoul').format('YYYY년 M월 D일 dddd')
+}
+/**
+ * UTC 날짜를 한국 타임존(Asia/Seoul)으로 변환하여 YYYY-MM-DD 형식으로 반환
+ * @param date - UTC 기준 날짜 데이터
+ */
+export const formatKstDate = (
+  date?: string | number | Date | null,
+  format: string = 'YYYY-MM-DD',
+): string => {
+  if (!date) return ''
+
+  const d = dayjs.utc(date)
+  if (!d.isValid()) return ''
+
+  return d.tz('Asia/Seoul').format(format)
 }

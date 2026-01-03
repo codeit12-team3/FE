@@ -12,7 +12,7 @@ const COMPRESSION_PRESETS: Record<PresetType, Options> = {
     alwaysKeepResolution: false,
   },
   post: {
-    maxSizeMB: 3,
+    maxSizeMB: 5,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
     initialQuality: 0.9,
