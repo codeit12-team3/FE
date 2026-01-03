@@ -41,7 +41,7 @@ export default function Header() {
                 </span>
               </Link>
               <Link
-                href="chat/"
+                href="/chat"
                 className={cn(
                   'shrink-0 transition-colors text-xs font-semibold md:text-sm',
                   pathname === '/chat'

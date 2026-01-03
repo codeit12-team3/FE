@@ -1,4 +1,4 @@
-import { ChatRoomType } from '@/types/chat/chats.types'
+import { ChatRoomType } from '@/types/chat/chatRoom.types'
 import { ApiResponse } from '@/types/common'
 
 import { axios } from '../common'
@@ -15,9 +15,16 @@ export const fetchChatRooms = async (params: {
       page,
       size,
       sort: 'createdAt,desc',
-      keyword,
+      ...(keyword && { keyword }),
     },
   })
 
   return data
+}
+export const leaveChatroom = async ({
+  chatParticipantId,
+}: {
+  chatParticipantId: number
+}): Promise<void> => {
+  await axios.patch(`/v1/chats/${chatParticipantId}/out`, {})
 }

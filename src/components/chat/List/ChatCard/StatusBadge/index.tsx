@@ -1,6 +1,6 @@
 import { Badge } from '@/components/common/Badge'
 import { cn } from '@/lib/common'
-import { RecruitStatus } from '@/types/chat/chats.types'
+import { RecruitStatus } from '@/types/chat/chatRoom.types'
 
 interface StatusBadgeProps {
   recruitStatus: RecruitStatus
