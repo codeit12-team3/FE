@@ -17,7 +17,7 @@ export default function BirthFieldset(props: Props) {
 
   return (
     <AnimateFieldset {...props}>
-      <FormDatePicker label="생년월일 선택" name="birth" required />
+      <FormDatePicker label="생년월일" name="birth" required />
       <p className="h-6 flex text-xs text-red items-center gap-1 px-4">
         {errors.birth && <CircleAlert className="size-4" />}
         <span>{errors.birth?.message}</span>
