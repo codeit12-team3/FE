@@ -61,35 +61,27 @@ export default function ImageModal({
       </button>
       {/* 이미지 */}
       <div
-        className="max-w-7xl w-full relative overflow-hidden"
+        className="relative w-[90vw] h-[70vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className="flex transition-transform duration-200 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((img, idx) => (
-            <div
-              key={img}
-              className="min-w-full h-[80vh] flex items-center justify-center relative"
-            >
-              {!loading.has(idx) && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                </div>
-              )}
-              <Image
-                src={img.startsWith('/') ? img : getImageUrl(img)}
-                alt="이미지 확대"
-                width={1200}
-                height={800}
-                className="object-contain max-w-full max-h-full rounded-3xl"
-                priority={idx === 0}
-                onLoad={() => ImageLoad(idx)}
-              />
-            </div>
-          ))}
-        </div>
+        {!loading.has(currentIndex) && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+          </div>
+        )}
+        <Image
+          key={images[currentIndex]}
+          src={
+            images[currentIndex].startsWith('/')
+              ? images[currentIndex]
+              : getImageUrl(images[currentIndex])
+          }
+          alt={`이미지 ${currentIndex + 1}`}
+          fill
+          className="object-contain"
+          priority
+          onLoad={() => ImageLoad(currentIndex)}
+        />
         {/* 버튼 */}
         {images.length > 1 && (
           <>
