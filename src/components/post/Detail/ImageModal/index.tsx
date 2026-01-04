@@ -61,27 +61,35 @@ export default function ImageModal({
       </button>
       {/* 이미지 */}
       <div
-        className="relative w-[90vw] h-[70vh]"
+        className="relative max-w-[90vw] max-h-[70vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {!loading.has(currentIndex) && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
-        <Image
-          key={images[currentIndex]}
-          src={
-            images[currentIndex].startsWith('/')
-              ? images[currentIndex]
-              : getImageUrl(images[currentIndex])
-          }
-          alt={`이미지 ${currentIndex + 1}`}
-          fill
-          className="object-contain"
-          priority
-          onLoad={() => ImageLoad(currentIndex)}
-        />
+        <div
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {images.map((img, idx) => (
+            <div
+              key={img}
+              className="shrink-0 w-full flex items-center justify-center"
+            >
+              <Image
+                src={img.startsWith('/') ? img : getImageUrl(img)}
+                alt={`이미지 ${idx + 1}`}
+                width={1200}
+                height={800}
+                className="object-contain max-w-[90vw] max-h-[70vh] w-auto h-auto"
+                priority={idx === 0}
+                onLoad={() => ImageLoad(idx)}
+              />
+            </div>
+          ))}
+        </div>
         {/* 버튼 */}
         {images.length > 1 && (
           <>

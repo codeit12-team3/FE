@@ -56,7 +56,7 @@ export default function PostImages({ images, onClick }: ImagesProps) {
         onClick={() => onClick(currentIndex)}
       >
         <div
-          className="flex transition-transform duration-200 ease-in-out text-red-500"
+          className="flex transition-transform duration-200 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {images.map((img, idx) => (
