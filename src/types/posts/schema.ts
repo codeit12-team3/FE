@@ -13,7 +13,8 @@ export const postSchema = z
 
     maxMembers: z
       .number('숫자만 입력 가능합니다')
-      .min(1, '모집 정원을 1명 이상 입력해주세요'),
+      .min(1, '1명 이상 입력해주세요')
+      .max(10, '최대 10명까지 가능합니다'),
 
     ageType: z.nativeEnum(AgeType).refine((v) => v !== undefined, {
       message: '나이를 선택해주세요',
