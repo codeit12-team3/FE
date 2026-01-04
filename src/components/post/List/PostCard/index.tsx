@@ -4,13 +4,15 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
-import {
-  useCancelCompanion,
-  useInfiniteGetSentCompanions,
-} from '@/api/companions'
+import { useCancelCompanion } from '@/api/companions'
 import { toast } from '@/components/common'
 import { OtherProfile } from '@/components/member'
-import { useApply, useBookmarkToggle, usePostManage } from '@/hooks/posts'
+import {
+  useApply,
+  useBookmarkToggle,
+  useCompanionId,
+  usePostManage,
+} from '@/hooks/posts'
 import { isDatePassed } from '@/lib/common/time-format'
 import { useModalActions } from '@/stores'
 import { SentCompanionContent } from '@/types/companions'
@@ -40,26 +42,9 @@ export default function PostCard({
   )
   const { handleEdit, handleDelete } = usePostManage(post.postId)
   const { data: session } = useSession()
-  const { data: sentCompanionsData } = useInfiniteGetSentCompanions(
-    'PENDING',
-    !!session?.user,
-  )
 
-  const companionId = useMemo(() => {
-    if (data?.myGuestCompanionResponse?.companionId) {
-      return data.myGuestCompanionResponse.companionId
-    }
-    if (!sentCompanionsData?.pages) return undefined
-    for (const page of sentCompanionsData.pages) {
-      const found = page.content.find(
-        (item) => String(item.postResponse.id) === String(post.postId),
-      )
-      if (found) {
-        return found.myGuestCompanionResponse.companionId
-      }
-    }
-    return undefined
-  }, [data, sentCompanionsData, post.postId])
+  // 커스텀 훅으로 companionId 조회 (O(1) 성능 최적화)
+  const companionId = useCompanionId(post.postId, data, !!session?.user)
 
   const handleCancelCompanion = async (companionId: string) => {
     mutate(companionId, {
