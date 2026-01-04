@@ -15,7 +15,11 @@ import { AnimateFieldset } from '../form'
 
 export default function SigninForm() {
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const unsafeCallbackUrl = searchParams.get('callbackUrl')
+  const callbackUrl =
+    unsafeCallbackUrl && unsafeCallbackUrl.startsWith('/')
+      ? unsafeCallbackUrl
+      : '/'
 
   const { mutate, isPending } = useSigninEmail()
   const methods = useForm<SigninFormValues>({
