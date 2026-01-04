@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useSigninEmail } from '@/api/auth'
@@ -14,7 +14,6 @@ import { SigninFormValues, signinSchema } from '@/types/auth'
 import { AnimateFieldset } from '../form'
 
 export default function SigninForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/'
 
@@ -36,7 +35,7 @@ export default function SigninForm() {
       onSuccess: () => {
         toast.success('로그인 되었습니다')
 
-        router.push(callbackUrl)
+        window.location.href = callbackUrl
       },
       onError: () => {
         toast.error('이메일 또는 비밀번호를 확인해주세요')
