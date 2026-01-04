@@ -4,13 +4,16 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
-import {
-  useCancelCompanion,
-  useInfiniteGetSentCompanions,
-} from '@/api/companions'
+import { useCancelCompanion } from '@/api/companions'
 import { toast } from '@/components/common'
 import { OtherProfile } from '@/components/member'
-import { useApply, useBookmarkToggle, usePostManage } from '@/hooks/posts'
+import {
+  useApply,
+  useBookmarkToggle,
+  useCompanionId,
+  usePostManage,
+} from '@/hooks/posts'
+import { isDatePassed } from '@/lib/common/time-format'
 import { useModalActions } from '@/stores'
 import { SentCompanionContent } from '@/types/companions'
 import { PostListItem } from '@/types/posts'
@@ -39,26 +42,10 @@ export default function PostCard({
   )
   const { handleEdit, handleDelete } = usePostManage(post.postId)
   const { data: session } = useSession()
-  const { data: sentCompanionsData } = useInfiniteGetSentCompanions(
-    'PENDING',
-    !!session?.user,
-  )
 
-  const companionId = useMemo(() => {
-    if (data?.myGuestCompanionResponse?.companionId) {
-      return data.myGuestCompanionResponse.companionId
-    }
-    if (!sentCompanionsData?.pages) return undefined
-    for (const page of sentCompanionsData.pages) {
-      const found = page.content.find(
-        (item) => String(item.postResponse.id) === String(post.postId),
-      )
-      if (found) {
-        return found.myGuestCompanionResponse.companionId
-      }
-    }
-    return undefined
-  }, [data, sentCompanionsData, post.postId])
+  // 커스텀 훅으로 companionId 조회 (O(1) 성능 최적화)
+  const companionId = useCompanionId(post.postId, data, !!session?.user)
+
   const handleCancelCompanion = async (companionId: string) => {
     mutate(companionId, {
       onSuccess: () => {
@@ -70,6 +57,11 @@ export default function PostCard({
     })
   }
   const handleOpenApplyModal = () => {
+    if (!session?.user) {
+      toast.error('로그인이 필요한 서비스입니다.')
+      router.push('/auth/signin')
+      return
+    }
     openModal(
       <ApplyModal
         onClose={closeModal}
@@ -86,14 +78,19 @@ export default function PostCard({
   const handleWriterClick = () => {
     openModal(<OtherProfile memberId={String(post.writer.memberId)} />)
   }
-
+  const actualRecruitStatus = useMemo(() => {
+    if (post.recruitStatus === 'COMPLETED' || post.recruitStatus === 'FINISH') {
+      return post.recruitStatus
+    }
+    return isDatePassed(post.period.endDate) ? 'COMPLETED' : post.recruitStatus
+  }, [post.recruitStatus, post.period.endDate])
   return (
     <div className="bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex md:gap-6 md:flex-row flex-col gap-0">
         <PostCardImage
           thumbnail={post.thumbnail}
           title={post.title}
-          recruitStatus={post.recruitStatus}
+          recruitStatus={actualRecruitStatus}
           priority={priority}
         />
 
@@ -103,7 +100,7 @@ export default function PostCard({
           nickname={post.nickname}
           tags={post.tags}
           isOwner={post.isOwner}
-          currentMembers={post.currentMembers}
+          currentMembers={post.currentMembers + (post.isApplied ? 1 : 0)}
           nation={post.nation}
           period={post.period}
           conditions={post.conditions}
@@ -116,7 +113,7 @@ export default function PostCard({
         <PostCardActions
           isOwner={post.isOwner}
           isBookmarked={post.isBookmarked}
-          recruitStatus={post.recruitStatus}
+          recruitStatus={actualRecruitStatus}
           isApplied={post.isApplied}
           onBookmarkClick={handleToggleBookmark}
           onEditClick={handleEdit}

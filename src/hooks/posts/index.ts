@@ -1,4 +1,5 @@
 export * from './useApply'
 export * from './useBookmarkToggle'
+export * from './useCompanionId'
 export * from './useInfinitePosts'
 export * from './usePostManage'
