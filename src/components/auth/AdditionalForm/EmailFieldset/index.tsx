@@ -9,7 +9,7 @@ type Props = ComponentProps<typeof AnimateFieldset>
 export default function EmailFieldset(props: Props) {
   return (
     <AnimateFieldset {...props} disabled>
-      <legend className="sr-only">비밀번호 입력 및 확인</legend>
+      <legend className="sr-only">이메일 입력</legend>
       <FormInput
         label="이메일"
         type="email"
