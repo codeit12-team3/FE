@@ -11,6 +11,7 @@ import {
 import { toast } from '@/components/common'
 import { OtherProfile } from '@/components/member'
 import { useApply, useBookmarkToggle, usePostManage } from '@/hooks/posts'
+import { isDatePassed } from '@/lib/common/time-format'
 import { useModalActions } from '@/stores'
 import { SentCompanionContent } from '@/types/companions'
 import { PostListItem } from '@/types/posts'
@@ -92,14 +93,19 @@ export default function PostCard({
   const handleWriterClick = () => {
     openModal(<OtherProfile memberId={String(post.writer.memberId)} />)
   }
-
+  const actualRecruitStatus = useMemo(() => {
+    if (post.recruitStatus === 'COMPLETED' || post.recruitStatus === 'FINISH') {
+      return post.recruitStatus
+    }
+    return isDatePassed(post.period.endDate) ? 'COMPLETED' : post.recruitStatus
+  }, [post.recruitStatus, post.period.endDate])
   return (
     <div className="bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex md:gap-6 md:flex-row flex-col gap-0">
         <PostCardImage
           thumbnail={post.thumbnail}
           title={post.title}
-          recruitStatus={post.recruitStatus}
+          recruitStatus={actualRecruitStatus}
           priority={priority}
         />
 
@@ -122,7 +128,7 @@ export default function PostCard({
         <PostCardActions
           isOwner={post.isOwner}
           isBookmarked={post.isBookmarked}
-          recruitStatus={post.recruitStatus}
+          recruitStatus={actualRecruitStatus}
           isApplied={post.isApplied}
           onBookmarkClick={handleToggleBookmark}
           onEditClick={handleEdit}

@@ -124,3 +124,18 @@ export const formatKstDate = (
 
   return d.tz('Asia/Seoul').format(format)
 }
+
+/**
+ * 주어진 날짜가 현재 날짜보다 이전인지 확인
+ * @param endDate - 확인할 종료 날짜 (YYYY-MM-DD 형식)
+ * @returns 날짜가 지났으면 true, 아니면 false
+ */
+export const isDatePassed = (endDate?: string | null): boolean => {
+  if (!endDate) return false
+
+  const end = dayjs(endDate)
+  if (!end.isValid()) return false
+
+  // 현재 날짜의 시작 시간 (00:00:00)과 비교
+  return end.isBefore(dayjs().startOf('day'))
+}
