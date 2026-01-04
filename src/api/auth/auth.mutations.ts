@@ -1,9 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
 import { signIn } from 'next-auth/react'
 
-import { SigninEmailReq, SignupEmailReq } from '@/types/auth'
+import {
+  OAuthGoogleSignupReq,
+  SigninEmailReq,
+  SignupEmailReq,
+} from '@/types/auth'
 
-import { checkEmailCode, sendEmailCode, signupEmail } from './auth.clients'
+import {
+  checkEmailCode,
+  oAuthGoogleSignup,
+  sendEmailCode,
+  signupEmail,
+} from './auth.clients'
 
 export const useSendEmailCode = () => {
   return useMutation({
@@ -43,5 +52,12 @@ export const useSigninEmail = () => {
     meta: {
       ignoreGlobalError: true,
     },
+  })
+}
+
+export const useOAuthGoogleSignup = () => {
+  return useMutation({
+    mutationFn: (body: OAuthGoogleSignupReq) => oAuthGoogleSignup(body),
+    retry: false,
   })
 }

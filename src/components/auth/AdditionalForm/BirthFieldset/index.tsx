@@ -6,14 +6,14 @@ import { useFormContext } from 'react-hook-form'
 
 import { AnimateFieldset } from '@/components/auth/form'
 import FormDatePicker from '@/components/form/FormDatePicker'
-import { SignupFormValues } from '@/types/auth'
+import { AdditionalFormValues } from '@/types/auth'
 
 type Props = ComponentProps<typeof AnimateFieldset>
 
 export default function BirthFieldset(props: Props) {
   const {
     formState: { errors },
-  } = useFormContext<SignupFormValues>()
+  } = useFormContext<AdditionalFormValues>()
 
   return (
     <AnimateFieldset {...props}>

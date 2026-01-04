@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
@@ -37,7 +38,11 @@ export default function PostCard({
     post.isBookmarked,
   )
   const { handleEdit, handleDelete } = usePostManage(post.postId)
-  const { data: sentCompanionsData } = useInfiniteGetSentCompanions('PENDING')
+  const { data: session } = useSession()
+  const { data: sentCompanionsData } = useInfiniteGetSentCompanions(
+    'PENDING',
+    !!session?.user,
+  )
 
   const companionId = useMemo(() => {
     if (data?.myGuestCompanionResponse?.companionId) {

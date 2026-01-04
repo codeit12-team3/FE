@@ -1,11 +1,12 @@
 'use client'
 
-import { Loader2, Pencil } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { uploadMemberImage } from '@/api/images/images.client'
+import { IconPencil } from '@/assets/svgr'
 import { toast } from '@/components/common'
 import useImageCompress from '@/hooks/member/useImageCompress'
 import { getImageUrl } from '@/lib/common'
@@ -101,13 +102,13 @@ export default function ProfileImageEdit() {
 
   return (
     <div className="relative group">
-      <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#DDDDDD] bg-gray-50">
+      <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200 bg-white">
         <Image
           fill
           src={
             profileImg?.startsWith('blob:')
               ? profileImg
-              : getImageUrl(profileImg) // 서버 이미지 경로
+              : getImageUrl(profileImg, true) // 서버 이미지 경로
           }
           className="object-cover"
           alt="프로필 이미지"
@@ -124,9 +125,9 @@ export default function ProfileImageEdit() {
         type="button"
         onClick={handleEditClick}
         disabled={isUploading}
-        className="absolute bottom-0 -right-2.5 w-8 h-8 bg-white rounded-full border-2 border-[#dddddd] flex items-center justify-center shadow-lg cursor-pointer transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute bottom-2 -right-0.5 size-6 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-full flex items-center justify-center cursor-pointer transition-all"
       >
-        <Pencil size={18} className="text-gray-700" />
+        <IconPencil className="size-4" />
       </button>
 
       <input

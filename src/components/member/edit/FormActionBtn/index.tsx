@@ -1,24 +1,24 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 
 import { useUpdateMyProfile } from '@/api/member'
 import { toast } from '@/components/common'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui'
 import { UpdateMyProfileReq } from '@/types/member'
 import { ProfileEditFormData } from '@/types/member/schema'
 
 export default function FormActionBtn() {
   const router = useRouter()
-  const queryClient = useQueryClient()
   const {
     handleSubmit,
     formState: { isDirty, isSubmitting },
   } = useFormContext<ProfileEditFormData>()
 
   const { mutate: updateProfile, isPending } = useUpdateMyProfile()
+  const { data: session, update } = useSession()
 
   const isLoading = isPending || isSubmitting
 
@@ -35,9 +35,20 @@ export default function FormActionBtn() {
     }
 
     updateProfile(payload, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('프로필이 저장되었습니다!')
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] })
+
+        await update({
+          user: {
+            ...session?.user,
+            nickname: payload.nickname,
+            birth: payload.birth,
+            gender: payload.gender,
+            mbti: payload.mbti,
+            image: payload.image,
+          },
+        })
+
         router.back()
       },
       onError: (error) => {
@@ -48,12 +59,12 @@ export default function FormActionBtn() {
   }
 
   return (
-    <div className="flex justify-center gap-4 mb-10 mt-3">
+    <div className="flex justify-center gap-4 mt-3">
       <Button
         type="button"
-        variant="secondary"
+        variant="tertiary"
         size="md"
-        className="flex-1 text-lg font-extrabold"
+        className="flex-1"
         onClick={() => {
           router.back()
         }}
@@ -63,7 +74,7 @@ export default function FormActionBtn() {
       <Button
         type="button"
         size="md"
-        className="flex-1 text-lg font-extrabold"
+        className="flex-1"
         onClick={handleSubmit(onSubmit)}
         disabled={!isDirty || isLoading}
       >

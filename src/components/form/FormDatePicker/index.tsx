@@ -403,7 +403,7 @@ export default function FormDatePicker<T extends FieldValues>({
       {label && (
         <Label>
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-blue-500 ml-1">*</span>}
         </Label>
       )}
       <Controller
@@ -441,7 +441,7 @@ export default function FormDatePicker<T extends FieldValues>({
           }
 
           return (
-            <div className="relative">
+            <div className="relative bg-white">
               <input
                 ref={inputRef}
                 type="text"

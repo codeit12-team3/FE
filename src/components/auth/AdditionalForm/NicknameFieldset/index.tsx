@@ -9,7 +9,7 @@ import { FormInput } from '@/components/form'
 import { Button } from '@/components/ui'
 import { useNicknameVerification } from '@/hooks/auth'
 import { cn } from '@/lib/common'
-import { SignupFormValues } from '@/types/auth'
+import { AdditionalFormValues } from '@/types/auth'
 
 interface Props extends ComponentProps<typeof AnimateFieldset> {
   verification: ReturnType<typeof useNicknameVerification>
@@ -24,7 +24,7 @@ export default function NicknameFieldset({
     control,
     trigger,
     formState: { errors },
-  } = useFormContext<SignupFormValues>()
+  } = useFormContext<AdditionalFormValues>()
   const nickname = useWatch({ control, name: 'nickname' })
 
   const { isChecked, isChecking, checkNickname } = verification

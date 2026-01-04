@@ -1,9 +1,10 @@
 import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import Credentials from 'next-auth/providers/credentials'
+import Google from 'next-auth/providers/google'
 import z from 'zod'
 
-import { renewalToken, signinEmail } from '@/api/auth'
+import { oAuthGoogle, renewalToken, signinEmail } from '@/api/auth'
 import { TOKEN_REFRESH_BUFFER_MS } from '@/constants/auth'
 
 import { authConfig } from './auth.config'
@@ -59,12 +60,21 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     Credentials({
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
+        userJson: { type: 'text' },
       },
       async authorize(credentials) {
+        if (credentials?.userJson) {
+          return JSON.parse(credentials.userJson as string)
+        }
+
         const parsed = z
           .object({ email: z.string().email(), password: z.string().min(1) })
           .safeParse(credentials)
@@ -88,6 +98,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ account, user }) {
+      if (account?.provider === 'google') {
+        try {
+          const idToken = account.id_token as string
+          const res = await oAuthGoogle(idToken)
+          if (res.success && res.data) {
+            if ('isRegister' in res.data) {
+              return `/additional?email=${res.data.email}`
+            }
+
+            Object.assign(user, res.data)
+
+            return true
+          }
+          return false
+        } catch (error) {
+          console.error('Google Login Backend Verify Error:', error)
+          return false
+        }
+      }
+      return true
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.memberId = user.memberId

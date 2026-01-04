@@ -34,9 +34,9 @@ export default function BookmarkPosts() {
   }
 
   return (
-    <div>
+    <div className="space-y-4">
       <m.div {...FADE_IN}>
-        <FilterBar onApply={handleFilterApply} />
+        <FilterBar className="md:p-0 p-0" onApply={handleFilterApply} />
       </m.div>
       <m.div {...SLIDE_UP}>
         <BookmarkList filters={convertToApiParams(filters)} />

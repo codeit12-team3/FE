@@ -8,12 +8,12 @@ import { AnimateFieldset } from '@/components/auth/form'
 import { FormSelect } from '@/components/form'
 import { Label } from '@/components/ui'
 import { MBTI_LIST } from '@/constants/member'
-import { SignupFormValues } from '@/types/auth'
+import { AdditionalFormValues } from '@/types/auth'
 
 type Props = ComponentProps<typeof AnimateFieldset>
 
 export default function MBTIFieldset(props: Props) {
-  const { control } = useFormContext<SignupFormValues>()
+  const { control } = useFormContext<AdditionalFormValues>()
 
   const {
     field,

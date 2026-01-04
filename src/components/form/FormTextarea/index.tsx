@@ -41,7 +41,7 @@ export default function FormTextarea<T extends FieldValues>({
     <div className={cn('space-y-2 w-full')}>
       <Label htmlFor={name} className="gap-1">
         {label}
-        {required && <span className="text-destructive">*</span>}
+        {required && <span className="text-blue-500">*</span>}
       </Label>
       <div className="space-y-1 w-full">
         <Textarea
@@ -57,7 +57,11 @@ export default function FormTextarea<T extends FieldValues>({
             {isError && <CircleAlert className="size-4" />}
             {error?.message}
           </p>
-          {rightContent && <p className="text-main px-4">{rightContent}</p>}
+          {rightContent && (
+            <p className="text-gray-500 px-4 text-sm font-medium">
+              {rightContent}
+            </p>
+          )}
         </div>
       </div>
     </div>
