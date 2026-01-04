@@ -60,58 +60,57 @@ export default function ImageModal({
         <IconX className="size-8" />
       </button>
       {/* 이미지 */}
-      <div
-        className="relative max-w-[90vw] max-h-[70vh] overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative inline-block">
         {!loading.has(currentIndex) && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
-        <div
-          className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((img, idx) => (
-            <div
-              key={img}
-              className="shrink-0 w-full flex items-center justify-center"
-            >
-              <Image
-                src={img.startsWith('/') ? img : getImageUrl(img)}
-                alt={`이미지 ${idx + 1}`}
-                width={1200}
-                height={800}
-                className="object-contain max-w-[90vw] max-h-[70vh] w-auto h-auto"
-                priority={idx === 0}
-                onLoad={() => ImageLoad(idx)}
-              />
-            </div>
-          ))}
-        </div>
+        <Image
+          src={
+            images[currentIndex].startsWith('/')
+              ? images[currentIndex]
+              : getImageUrl(images[currentIndex])
+          }
+          alt={`이미지 ${currentIndex + 1}`}
+          width={1200}
+          height={800}
+          className="object-contain max-w-[90vw] max-h-[70vh] w-auto h-auto"
+          priority
+          onLoad={() => ImageLoad(currentIndex)}
+          onClick={(e) => e.stopPropagation()}
+        />
         {/* 버튼 */}
         {images.length > 1 && (
           <>
             <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/30 rounded-full p-2 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation()
+                goToPrevious()
+              }}
+              className="absolute left-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/30 rounded-full p-2 cursor-pointer"
               aria-label="이전 이미지"
             >
               <IconChevronLeft className="size-8" />
             </button>
             <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/30 rounded-full p-2 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation()
+                goToNext()
+              }}
+              className="absolute right-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/30 rounded-full p-2 cursor-pointer"
               aria-label="다음 이미지"
             >
               <IconChevronRight className="size-8" />
             </button>
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2 ">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 ">
               {images.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentIndex(index)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCurrentIndex(index)
+                  }}
                   className={cn(
                     'w-2 h-2 rounded-full transition-colors',
                     currentIndex === index ? 'bg-white' : 'bg-white/50',

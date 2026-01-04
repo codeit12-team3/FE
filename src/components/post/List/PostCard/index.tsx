@@ -59,6 +59,7 @@ export default function PostCard({
     }
     return undefined
   }, [data, sentCompanionsData, post.postId])
+
   const handleCancelCompanion = async (companionId: string) => {
     mutate(companionId, {
       onSuccess: () => {
@@ -70,6 +71,11 @@ export default function PostCard({
     })
   }
   const handleOpenApplyModal = () => {
+    if (!session?.user) {
+      toast.error('로그인이 필요한 서비스입니다.')
+      router.push('/auth/signin')
+      return
+    }
     openModal(
       <ApplyModal
         onClose={closeModal}
@@ -103,7 +109,7 @@ export default function PostCard({
           nickname={post.nickname}
           tags={post.tags}
           isOwner={post.isOwner}
-          currentMembers={post.currentMembers}
+          currentMembers={post.currentMembers + (post.isApplied ? 1 : 0)}
           nation={post.nation}
           period={post.period}
           conditions={post.conditions}
