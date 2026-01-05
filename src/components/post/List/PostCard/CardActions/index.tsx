@@ -12,6 +12,7 @@ interface PostCardActionsProps {
   onApplyClick: () => void
   onCancel?: () => void
   isCanceling?: boolean
+  meetsConditions: boolean
 }
 
 export default function PostCardActions({
@@ -25,6 +26,7 @@ export default function PostCardActions({
   onApplyClick,
   onCancel,
   isCanceling,
+  meetsConditions,
 }: PostCardActionsProps) {
   return (
     <div className="flex md:flex-col md:items-end md:p-0 md:justify-between flex-row items-center px-4 pb-4 gap-2">
@@ -56,7 +58,11 @@ export default function PostCardActions({
           </Button>
         </div>
       ) : recruitStatus === 'COMPLETED' ? (
-        <Button size="md" disabled className="lg:w-34 flex-1 md:flex-none w-28">
+        <Button
+          size="md"
+          disabled
+          className="lg:w-34 flex-1 md:flex-none w-28 cursor-not-allowed"
+        >
           모집종료
         </Button>
       ) : isApplied ? (
@@ -68,6 +74,14 @@ export default function PostCardActions({
           disabled={isCanceling}
         >
           신청 취소
+        </Button>
+      ) : !meetsConditions ? (
+        <Button
+          size="md"
+          disabled
+          className="lg:w-34 flex-1 md:flex-none w-28 pointer-events-auto! cursor-not-allowed!"
+        >
+          신청 불가
         </Button>
       ) : (
         <Button

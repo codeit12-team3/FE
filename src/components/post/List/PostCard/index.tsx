@@ -13,10 +13,11 @@ import {
   useCompanionId,
   usePostManage,
 } from '@/hooks/posts'
+import { checkConditionsMatch } from '@/lib/common'
 import { isDatePassed } from '@/lib/common/time-format'
 import { useModalActions } from '@/stores'
 import { SentCompanionContent } from '@/types/companions'
-import { PostListItem } from '@/types/posts'
+import { GenderType, PostListItem } from '@/types/posts'
 
 import ApplyModal from '../../Detail/ApplyModal'
 import PostCardActions from './CardActions'
@@ -84,6 +85,16 @@ export default function PostCard({
     }
     return isDatePassed(post.period.endDate) ? 'COMPLETED' : post.recruitStatus
   }, [post.recruitStatus, post.period.endDate])
+
+  const meetsConditions = useMemo(() => {
+    if (!session?.user) return true
+    return checkConditionsMatch(
+      session.user.birth,
+      session.user.gender as GenderType,
+      post.conditions,
+    )
+  }, [session, post.conditions])
+
   return (
     <div className="bg-white rounded-2xl md:p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex md:gap-6 md:flex-row flex-col gap-0">
@@ -123,6 +134,7 @@ export default function PostCard({
             companionId ? () => handleCancelCompanion(companionId) : undefined
           }
           isCanceling={isPending}
+          meetsConditions={meetsConditions}
         />
       </div>
     </div>
