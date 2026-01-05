@@ -9,7 +9,7 @@ export const useChatRooms = ({ keyword }: { keyword: string }) => {
     queryFn: ({ pageParam = 0 }) =>
       fetchChatRooms({
         page: pageParam,
-        size: 10,
+        size: 50,
         keyword,
       }),
 

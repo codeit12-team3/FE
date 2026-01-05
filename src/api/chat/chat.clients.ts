@@ -10,7 +10,7 @@ export const fetchChat = async (
   },
   chatRoomId: number,
 ): Promise<ApiResponse<ChatType>> => {
-  const { page = 0, size = 10 } = params
+  const { page = 0, size = 30 } = params
 
   const { data } = await axios.get<ApiResponse<ChatType>>(
     `/v1/chats/${chatRoomId}/messages`,

@@ -3,7 +3,6 @@ import { useParams } from 'next/navigation'
 import { useChat } from '@/api/chat/chat.queries'
 import { Spinner } from '@/components/ui/spinner'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
-import { formatKstDate } from '@/lib/common'
 
 import ChatMessageItem from '../ChatMessageItem'
 import DateSeparator from '../DateSeparator'
@@ -20,15 +19,6 @@ export default function ChatMessageList() {
     isFetchingNextPage,
   })
 
-  const shouldShowDateSeparator = (index: number) => {
-    if (index === 0) return true
-
-    const currentDate = formatKstDate(chat[index].createdAt)
-    const previousDate = formatKstDate(chat[index - 1].createdAt)
-
-    return currentDate !== previousDate
-  }
-
   if (isLoading) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -40,9 +30,9 @@ export default function ChatMessageList() {
   return (
     <div className="flex-1 overflow-y-auto flex flex-col-reverse min-h-0 scrollbar-hide">
       <div className="flex flex-col gap-2 px-4 pb-4">
-        {chat.map((message, index) => (
+        {chat.map((message) => (
           <div key={message.messageId}>
-            {shouldShowDateSeparator(index) && (
+            {message.shouldShowDate && (
               <DateSeparator date={message.createdAt} />
             )}
             <ChatMessageItem messageItem={message} />

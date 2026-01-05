@@ -8,7 +8,7 @@ export const fetchChatRooms = async (params: {
   size?: number
   keyword?: string
 }): Promise<ApiResponse<ChatRoomType>> => {
-  const { page = 0, size = 20, keyword } = params
+  const { page = 0, size = 50, keyword } = params
 
   const { data } = await axios.get<ApiResponse<ChatRoomType>>('/v1/chats', {
     params: {
