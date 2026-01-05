@@ -1,5 +1,19 @@
 import { AgeType, GenderType } from '@/types/posts'
 
+const AGE_LABEL_TO_ENUM: Record<string, AgeType> = {
+  '20대': AgeType.TWENTY,
+  '30대': AgeType.THIRTY,
+  '40대': AgeType.FORTY,
+  '50대': AgeType.FIFTY,
+  '기타': AgeType.ETC,
+}
+
+const GENDER_LABEL_TO_ENUM: Record<string, GenderType> = {
+  모두: GenderType.ALL,
+  남성만: GenderType.MALE,
+  여성만: GenderType.FEMALE,
+}
+
 export function getAgeTypeFromBirth(birth: string): AgeType {
   const birthYear = parseInt(birth.split('-')[0])
   const currentYear = new Date().getFullYear()
@@ -26,19 +40,28 @@ export function checkConditionsMatch(
 
   // 연령대 체크
   const userAgeType = getAgeTypeFromBirth(userBirth)
-  const ageCondition = conditions.ageType
+  let ageCondition = conditions.ageType
+
+  if (AGE_LABEL_TO_ENUM[ageCondition]) {
+    ageCondition = AGE_LABEL_TO_ENUM[ageCondition]
+  }
 
   if (ageCondition && ageCondition !== 'ALL' && ageCondition !== userAgeType) {
     return false
   }
 
   // 성별 체크
-  const genderCondition = conditions.genderCondition
-  if (
-    genderCondition &&
-    genderCondition !== 'ALL' &&
-    genderCondition !== userGender
-  ) {
+  let genderCondition = conditions.genderCondition
+
+  if (GENDER_LABEL_TO_ENUM[genderCondition]) {
+    genderCondition = GENDER_LABEL_TO_ENUM[genderCondition]
+  }
+
+  if (genderCondition === 'ALL' || genderCondition === GenderType.ALL) {
+    return true
+  }
+
+  if (genderCondition && genderCondition !== userGender) {
     return false
   }
 
