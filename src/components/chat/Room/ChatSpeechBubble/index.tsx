@@ -22,7 +22,7 @@ export default function ChatSpeechBubble({
         'rounded-2xl p-3 max-w-[280px] md:max-w-[456px] whitespace-pre-wrap wrap-break-word text-sm leading-relaxed shadow-sm',
         isMyMessage
           ? 'bg-blue-500 text-white rounded-tr-none'
-          : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none',
+          : 'bg-white text-gray-800 rounded-tl-none',
       )}
     >
       {message}

@@ -20,7 +20,7 @@ export default function ChatMessageItem({
   return (
     <div
       className={cn(
-        'w-full flex items-start gap-2 mb-4',
+        'w-full flex items-start gap-2 mb-4 border',
         isMyMessage ? 'justify-end' : 'justify-start',
       )}
     >

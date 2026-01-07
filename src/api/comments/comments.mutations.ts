@@ -14,20 +14,12 @@ export const useCommentMutations = (postId: number) => {
       queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
       toast.success('댓글이 작성되었습니다')
     },
-    onError: (error) => {
-      const message = error?.message || '댓글 작성에 실패했습니다'
-      toast.error(message)
-    },
   })
 
   const update = useMutation({
     mutationFn: updateComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
-    },
-    onError: (error) => {
-      const message = error?.message || '댓글 수정에 실패했습니다'
-      toast.error(message)
     },
   })
 
@@ -36,10 +28,6 @@ export const useCommentMutations = (postId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
       toast.success('댓글이 삭제되었습니다')
-    },
-    onError: (error) => {
-      const message = error?.message || '댓글 삭제에 실패했습니다'
-      toast.error(message)
     },
   })
 
