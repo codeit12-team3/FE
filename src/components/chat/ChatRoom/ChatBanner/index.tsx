@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import CardThumbnail from '@/components/common/CardThumbnail'
 import { RecruitStatus } from '@/types/posts'
 
-import StatusBadge from '../../List/ChatCard/StatusBadge'
+import StatusBadge from '../../ChatList/RoomItem/StatusBadge'
 
 export default function ChatInfoBanner() {
   const searchParams = useSearchParams()

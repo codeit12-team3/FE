@@ -8,8 +8,10 @@ import ChatSpeechBubble from '../ChatSpeechBubble'
 
 export default function ChatMessageItem({
   messageItem,
+  nextMessage,
 }: {
   messageItem: ChatMessage
+  nextMessage?: ChatMessage
 }) {
   const searchParams = useSearchParams()
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
@@ -17,10 +19,29 @@ export default function ChatMessageItem({
   const { senderId, senderImage, senderNickname, message, createdAt } =
     messageItem
   const isMyMessage = senderId === chatParticipantId
+
+  // 시간을 표시할지 결정하는 로직
+  const shouldShowTime = () => {
+    // 다음 메시지가 없으면 (마지막 메시지) 시간 표시
+    if (!nextMessage) return true
+
+    // 다음 메시지 발신자가 다르면 시간 표시
+    if (senderId !== nextMessage.senderId) return true
+
+    const currentTime = new Date(createdAt)
+    const nextTime = new Date(nextMessage.createdAt)
+
+    // 시간이나 분이 다르면 시간 표시
+    return (
+      currentTime.getHours() !== nextTime.getHours() ||
+      currentTime.getMinutes() !== nextTime.getMinutes()
+    )
+  }
+
   return (
     <div
       className={cn(
-        'w-full flex items-start gap-2 mb-4 border',
+        'w-full flex items-start gap-2 mb-4',
         isMyMessage ? 'justify-end' : 'justify-start',
       )}
     >
@@ -55,9 +76,11 @@ export default function ChatMessageItem({
         >
           <ChatSpeechBubble senderId={senderId} message={message} />
 
-          <span className="text-[10px] text-gray-400 shrink-0 mb-1">
-            {formatChatTime(createdAt)}
-          </span>
+          {shouldShowTime() && (
+            <span className="text-[10px] text-gray-400 shrink-0 mb-1">
+              {formatChatTime(createdAt)}
+            </span>
+          )}
         </div>
       </div>
     </div>

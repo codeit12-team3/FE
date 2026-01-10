@@ -1,12 +1,22 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query'
+import { useCallback } from 'react'
 
-import { getMessageWithDateFlags } from '@/lib/chat/getMessageWithDateFlags'
+import { insertDateHeaders } from '@/lib/chat/insertDateHeaders'
+import { ChatListItem, ChatType } from '@/types/chat/chat.type'
+import { ApiResponse } from '@/types/common'
 
 import { fetchChat } from './chat.clients'
 
+type ChatApiResponse = ApiResponse<ChatType>
+
 export const useChat = ({ chatRoomId }: { chatRoomId: number }) => {
-  const query = useInfiniteQuery({
+  return useInfiniteQuery<
+    ChatApiResponse,
+    Error,
+    ChatListItem[],
+    (string | number)[],
+    number
+  >({
     queryKey: ['chat', chatRoomId],
     queryFn: async ({ pageParam }) => {
       const result = await fetchChat({ page: pageParam, size: 30 }, chatRoomId)
@@ -18,25 +28,14 @@ export const useChat = ({ chatRoomId }: { chatRoomId: number }) => {
       const { number, totalPages } = lastPage.data.page
       return number + 1 < totalPages ? number + 1 : undefined
     },
-    staleTime: 5 * 60 * 1000,
-  })
-
-  const messagesWithDateFlags = useMemo(() => {
-    const allPagesContent =
-      query.data?.pages.flatMap((page) =>
+    select: useCallback((data: InfiniteData<ChatApiResponse>) => {
+      const allMessages = data.pages.flatMap((page) =>
         page.success ? page.data.content : [],
-      ) ?? []
+      )
 
-    const sorted = [...allPagesContent].sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    )
+      const reversedMessages = [...allMessages].reverse()
 
-    return getMessageWithDateFlags(sorted)
-  }, [query.data?.pages])
-
-  return {
-    ...query,
-    data: messagesWithDateFlags,
-  }
+      return insertDateHeaders(reversedMessages)
+    }, []),
+  })
 }

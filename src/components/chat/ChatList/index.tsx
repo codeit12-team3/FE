@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { useDebounce } from '@/hooks/chat/useDebounce'
 
-import ChatList from './List'
+import RoomList from './RoomList'
 import SearchBar from './SearchBar'
 
 export default function ChatListContainer() {
@@ -21,7 +21,7 @@ export default function ChatListContainer() {
   return (
     <div className="max-w-7xl w-full flex flex-col gap-3 mx-auto px-0 md:px-1 relative">
       <SearchBar value={keyword} onChange={onChangeKeyword} />
-      <ChatList searchKeyword={finalSearchKeyword} />
+      <RoomList searchKeyword={finalSearchKeyword} />
     </div>
   )
 }

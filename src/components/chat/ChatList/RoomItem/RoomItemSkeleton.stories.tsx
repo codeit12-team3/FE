@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import { ChatCardSkeleton } from './ChatCardSkeleton'
+import { RoomItemSkeleton } from './RoomItemSkeleton'
 
-const meta: Meta<typeof ChatCardSkeleton> = {
+const meta: Meta<typeof RoomItemSkeleton> = {
   title: 'Components/Chat/ChatCardSkeleton',
-  component: ChatCardSkeleton,
+  component: RoomItemSkeleton,
   decorators: [
     (Story) => (
       <div className="max-w-[800px] bg-gray-50 p-4">
@@ -15,16 +15,16 @@ const meta: Meta<typeof ChatCardSkeleton> = {
 }
 
 export default meta
-type Story = StoryObj<typeof ChatCardSkeleton>
+type Story = StoryObj<typeof RoomItemSkeleton>
 
 export const Default: Story = {}
 
 export const List: Story = {
   render: () => (
     <ul className="flex flex-col gap-4">
-      <ChatCardSkeleton />
-      <ChatCardSkeleton />
-      <ChatCardSkeleton />
+      <RoomItemSkeleton />
+      <RoomItemSkeleton />
+      <RoomItemSkeleton />
     </ul>
   ),
 }

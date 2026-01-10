@@ -6,12 +6,12 @@ import CardThumbnail from '../../../common/CardThumbnail'
 import { CardHeader } from './CardHeader'
 import LastMessage from './LastMessage'
 
-interface ChatCardProps {
+interface RoomItemProps {
   chat: ChatRoomContent
   isPriority?: boolean
 }
 
-export default function ChatCard({ chat, isPriority = false }: ChatCardProps) {
+export default function RoomItem({ chat, isPriority = false }: RoomItemProps) {
   const {
     chatRoomId,
     thumbnail,

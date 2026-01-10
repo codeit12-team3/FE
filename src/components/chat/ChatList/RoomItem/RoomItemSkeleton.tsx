@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export function ChatCardSkeleton() {
+export function RoomItemSkeleton() {
   return (
     <li className="w-full md:p-6 p-4 flex md:gap-7 gap-3 bg-white rounded-4xl border border-gray-200">
       <div className="self-center">
