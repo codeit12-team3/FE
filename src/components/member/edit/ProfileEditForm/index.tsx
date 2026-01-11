@@ -8,7 +8,7 @@ import PreferenceInfo from '../PreferenceInfo'
 
 export default function ProfileEditForm() {
   return (
-    <form action="" className="w-inherit">
+    <form action="" className="w-full">
       <EmailField />
       <BasicInfo />
       <GenderField />

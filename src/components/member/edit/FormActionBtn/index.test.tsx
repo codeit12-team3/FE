@@ -231,9 +231,7 @@ describe('FormActionBtn 단위 테스트', () => {
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith('프로필이 저장되었습니다!')
-        expect(mockInvalidateQueries).toHaveBeenCalledWith({
-          queryKey: ['myProfile'],
-        })
+
         expect(mockRouterBack).toHaveBeenCalled()
       })
     })

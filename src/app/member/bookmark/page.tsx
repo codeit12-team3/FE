@@ -3,7 +3,7 @@ import BookmarkPosts from '@/components/member/BookmarkPosts'
 
 export default function Page() {
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4 w-full">
       <MyPageTitle title="찜한 게시글" back />
       <BookmarkPosts />
     </section>

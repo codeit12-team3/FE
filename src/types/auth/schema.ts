@@ -6,6 +6,7 @@ import {
   PASSWORD_REGEX,
 } from '@/constants/auth'
 import {
+  BIRTH_REGEX,
   GENDER_LIST,
   MBTI_LIST,
   NICKNAME_MAX_LENGTH,
@@ -25,16 +26,13 @@ export const signupSchema = z
     password: z
       .string()
       .refine((val) => !val.includes(' '), {
-        message: '비밀번호에는 공백을 사용할 수 없습니다',
+        message: '공백을 사용할 수 없습니다',
       })
       .min(
         PASSWORD_MIN_LENGTH,
-        `비밀번호는 최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다`,
+        `최소 ${PASSWORD_MIN_LENGTH}자 이상이어야 합니다`,
       )
-      .regex(
-        PASSWORD_REGEX,
-        '비밀번호는 영문, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다',
-      ),
+      .regex(PASSWORD_REGEX, '영문, 숫자, 특수문자를 모두 포함해야 합니다'),
     passwordConfirm: z.string().nonempty('비밀번호 확인을 진행해주세요'),
     nickname: z
       .string()
@@ -45,9 +43,10 @@ export const signupSchema = z
       .regex(NICKNAME_REGEX, {
         message: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
       }),
-    year: z.string().min(1, '년도를 선택해주세요'),
-    month: z.string().min(1, '월을 선택해주세요'),
-    day: z.string().min(1, '일을 선택해주세요'),
+    birth: z
+      .string()
+      .nonempty('생년월일을 선택해주세요')
+      .regex(BIRTH_REGEX, '올바른 날짜 형식이 아닙니다'),
     gender: z.enum(GENDER_LIST, '성별을 선택해주세요').optional(),
     mbti: z.enum(MBTI_LIST, 'MBTI를 선택해주세요').optional(),
   })
@@ -56,26 +55,6 @@ export const signupSchema = z
     message: '비밀번호가 일치하지 않습니다',
   })
   .superRefine((data, ctx) => {
-    const { year, month, day } = data
-
-    if (!year || !month || !day) return
-
-    const dateStr = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    const date = new Date(dateStr)
-
-    const isValidDate =
-      !isNaN(date.getTime()) &&
-      date.getMonth() + 1 === parseInt(month) &&
-      date.getDate() === parseInt(day)
-
-    if (!isValidDate) {
-      ctx.addIssue({
-        code: 'custom',
-        message: '유효하지 않은 날짜입니다',
-        path: ['day'],
-      })
-    }
-
     if (!data.gender) {
       ctx.addIssue({
         code: 'custom',
@@ -101,5 +80,46 @@ export const signinSchema = z.object({
   password: z.string().min(1, '비밀번호를 입력해주세요'),
 })
 
+export const additionalSchema = z
+  .object({
+    email: z
+      .string()
+      .email('올바른 이메일 형식이 아닙니다')
+      .nonempty('이메일을 입력해주세요'),
+    nickname: z
+      .string()
+      .min(1, { message: '닉네입을 입력해주세요' })
+      .max(NICKNAME_MAX_LENGTH, {
+        message: `닉네임은 최대 ${NICKNAME_MAX_LENGTH}자까지 허용됩니다`,
+      })
+      .regex(NICKNAME_REGEX, {
+        message: '닉네임은 한/영, 숫자, 특수문자만 사용 가능합니다',
+      }),
+    birth: z
+      .string()
+      .nonempty('생년월일을 선택해주세요')
+      .regex(BIRTH_REGEX, '올바른 날짜 형식이 아닙니다'),
+    gender: z.enum(GENDER_LIST, '성별을 선택해주세요').optional(),
+    mbti: z.enum(MBTI_LIST, 'MBTI를 선택해주세요').optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.gender) {
+      ctx.addIssue({
+        code: 'custom',
+        message: '성별을 선택해주세요',
+        path: ['gender'],
+      })
+    }
+
+    if (!data.mbti) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'MBTI를 선택해주세요',
+        path: ['mbti'],
+      })
+    }
+  })
+
 export type SignupFormValues = z.infer<typeof signupSchema>
 export type SigninFormValues = z.infer<typeof signinSchema>
+export type AdditionalFormValues = z.infer<typeof additionalSchema>

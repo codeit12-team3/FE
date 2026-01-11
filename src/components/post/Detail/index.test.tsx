@@ -135,6 +135,7 @@ jest.mock('@/hooks/posts', () => ({
   useBookmarkToggle: jest.fn(),
   useApply: jest.fn(),
   usePostManage: jest.fn(),
+  useCompanionId: jest.fn(),
 }))
 
 jest.mock('@/components/comment', () => ({
@@ -183,7 +184,7 @@ beforeEach(() => {
     data: { pages: [] },
   })
 
-  const { useBookmarkToggle, useApply, usePostManage } =
+  const { useBookmarkToggle, useApply, usePostManage, useCompanionId } =
     jest.requireMock('@/hooks/posts')
   useBookmarkToggle.mockReturnValue({
     toggleBookmark: jest.fn(),
@@ -199,6 +200,7 @@ beforeEach(() => {
     handleDelete: jest.fn(),
     isDeleting: false,
   })
+  useCompanionId.mockReturnValue(undefined)
 })
 
 const { usePostDetail } = jest.requireMock('@/api/posts')
@@ -432,26 +434,17 @@ describe('게시글 권한 테스트', () => {
     })
     test('신청 취소 버튼을 누르면 동행 신청이 취소된다', async () => {
       const mockHandleCancel = jest.fn()
-      const { useCancelCompanion, useInfiniteGetSentCompanions } =
-        jest.requireMock('@/api/companions')
+      const { useCancelCompanion } = jest.requireMock('@/api/companions')
+      const { useCompanionId } = jest.requireMock('@/hooks/posts')
+
       useCancelCompanion.mockReturnValue({
         mutate: mockHandleCancel,
         isPending: false,
       })
-      useInfiniteGetSentCompanions.mockReturnValue({
-        data: {
-          pages: [
-            {
-              content: [
-                {
-                  postResponse: { id: '1' },
-                  myGuestCompanionResponse: { companionId: '123' },
-                },
-              ],
-            },
-          ],
-        },
-      })
+
+      // useCompanionId가 '123'을 반환하도록 mock 설정
+      useCompanionId.mockReturnValue('123')
+
       usePostDetail.mockReturnValue({
         data: {
           success: true,

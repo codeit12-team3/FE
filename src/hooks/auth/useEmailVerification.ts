@@ -1,10 +1,12 @@
 'use client'
 
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import { useCheckEmailCode, useSendEmailCode } from '@/api/auth'
 import { toast } from '@/components/common'
 import { formatTimer } from '@/lib/common'
+import { ApiResponse } from '@/types/common'
 
 export default function useEmailVerification() {
   const [timer, setTimer] = useState(0)
@@ -42,6 +44,18 @@ export default function useEmailVerification() {
           setTimer(0)
           setIsChecked(true)
           toast.success('이메일 인증이 완료되었습니다')
+        },
+        onError: (error) => {
+          if (axios.isAxiosError<ApiResponse>(error)) {
+            const apiRes = error.response?.data
+            const errCode = apiRes?.success === false ? apiRes.data?.code : null
+
+            if (errCode === 'AUTH_008') {
+              setTimer(0)
+              setIsChecked(true)
+              toast.success('이미 인증이 완료된 이메일입니다')
+            }
+          }
         },
       },
     )

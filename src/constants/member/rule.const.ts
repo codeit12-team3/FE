@@ -1,6 +1,8 @@
 import { TabOption } from '@/components/member/Tabs'
 import { MyPostsState } from '@/types/member'
 
+export const BIRTH_REGEX = /^\d{4}-\d{2}-\d{2}$/
+
 export const NICKNAME_REGEX =
   /^[a-zA-Z0-9가-힣!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/
 

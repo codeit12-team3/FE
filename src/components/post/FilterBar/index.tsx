@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import 'dayjs/locale/ko'
 
+import { cn } from '@/lib/common'
 import { PostFilterParams } from '@/types/posts'
 
 import FilterControls from './FilterControls'
@@ -12,12 +13,14 @@ interface FilterBarProps {
   onApply: (filters: Omit<PostFilterParams, 'keyword'>) => void
   actionButton?: React.ReactNode
   searchInput?: React.ReactNode
+  className?: string
 }
 
 export default function FilterBar({
   onApply,
   actionButton,
   searchInput,
+  className,
 }: FilterBarProps) {
   const [filters, setFilters] = useState<Omit<PostFilterParams, 'keyword'>>({
     nation: '',
@@ -36,7 +39,7 @@ export default function FilterBar({
 
   return (
     <section
-      className="md:pt-12 md:pb-5 pt-5 pb-4"
+      className={cn('md:pt-12 md:pb-5 pt-5 pb-4', className)}
       aria-label="게시글 필터 및 검색"
     >
       <div className="hidden lg:flex gap-2 justify-between">

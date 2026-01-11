@@ -7,12 +7,12 @@ import { useController, useFormContext } from 'react-hook-form'
 import { AnimateFieldset } from '@/components/auth/form'
 import { Label, RadioGroup, RadioGroupItem } from '@/components/ui'
 import { GENDER_LIST, GENDER_MAP } from '@/constants/member'
-import { SignupFormValues } from '@/types/auth'
+import { AdditionalFormValues } from '@/types/auth'
 
 type Props = ComponentProps<typeof AnimateFieldset>
 
 export default function GenderFieldset(props: Props) {
-  const { control } = useFormContext<SignupFormValues>()
+  const { control } = useFormContext<AdditionalFormValues>()
 
   const {
     field: { ref, ...field },

@@ -52,7 +52,7 @@ export default function PostImages({ images, onClick }: ImagesProps) {
   return (
     <div className="mb-6 relative group ">
       <div
-        className="relative w-full  rounded-3xl overflow-hidden pointer-events-none md:pointer-events-auto"
+        className="relative w-full  rounded-3xl overflow-hidden pointer-events-none md:pointer-events-auto cursor-pointer"
         onClick={() => onClick(currentIndex)}
       >
         <div
@@ -66,19 +66,26 @@ export default function PostImages({ images, onClick }: ImagesProps) {
           ))}
         </div>
       </div>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex ">
         {images.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToSlide(index)}
-            className={cn(
-              'w-2 h-2 rounded-full transition-all cursor-pointer',
-              currentIndex === index
-                ? 'bg-white w-2'
-                : 'bg-white/50 hover:bg-white/75',
-            )}
+            onClick={(e) => {
+              e.stopPropagation()
+              goToSlide(index)
+            }}
+            className="p-2 cursor-pointer"
             aria-label={`${index + 1}번째 이미지로 이동`}
-          />
+          >
+            <div
+              className={cn(
+                'w-2 h-2 rounded-full transition-all',
+                currentIndex === index
+                  ? 'bg-white'
+                  : 'bg-white/50 hover:bg-white/75',
+              )}
+            />
+          </button>
         ))}
       </div>
     </div>

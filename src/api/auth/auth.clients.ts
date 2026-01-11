@@ -2,6 +2,8 @@ import { default as originAxios } from 'axios'
 
 import { BASE_URL, TIMEOUT_LIMIT } from '@/constants/common'
 import {
+  OAuthGoogleRes,
+  OAuthGoogleSignupReq,
   SigninEmailReq,
   SigninEmailRes,
   SignupEmailReq,
@@ -96,4 +98,30 @@ export const renewalToken = async (token: string) => {
   )
 
   return res.data
+}
+
+export const oAuthGoogle = async (idToken: string) => {
+  const res = await originAxios.post<ApiResponse<OAuthGoogleRes>>(
+    `${BASE_URL}/v1/oauth2/google`,
+    { idToken },
+    {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: TIMEOUT_LIMIT,
+    },
+  )
+
+  return res.data
+}
+
+export const oAuthGoogleSignup = async (body: OAuthGoogleSignupReq) => {
+  const { data } = await axios.post<ApiResponse<SignupEmailRes>>(
+    '/v1/oauth2/signup',
+    body,
+  )
+
+  if (!data.success) {
+    throw new Error(data.data.message)
+  }
+
+  return data.data
 }
