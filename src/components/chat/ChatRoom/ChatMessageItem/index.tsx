@@ -20,7 +20,7 @@ export default function ChatMessageItem({
     messageItem
   const isMyMessage = senderId === chatParticipantId
 
-  // 시간을 표시할지 결정하는 로직
+  // 시간을 표시할지 결정 로직
   const shouldShowTime = () => {
     // 다음 메시지가 없으면 (마지막 메시지) 시간 표시
     if (!nextMessage) return true

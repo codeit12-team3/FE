@@ -1,45 +1,118 @@
 'use client'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
-import { useChat } from '@/api/chat/chat.queries'
 import { Spinner } from '@/components/ui/spinner'
-import { ChatMessage } from '@/types/chat/chat.type'
+import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
+import { ChatListItem, ChatMessage } from '@/types/chat/chat.type'
 
 import ChatMessageItem from '../ChatMessageItem'
 import DateSeparator from '../DateSeparator'
 
-export default function ChatMessageList() {
-  'use no memo'
+interface ChatMessageListProps {
+  messages: ChatListItem[]
+  isFetchingNextPage: boolean
+  hasNextPage: boolean
+  onScrollToTop: () => void
+}
 
+export default function ChatMessageList({
+  messages,
+  isFetchingNextPage,
+  hasNextPage,
+  onScrollToTop,
+}: ChatMessageListProps) {
   const searchParams = useSearchParams()
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
 
   const listRef = useRef<HTMLDivElement>(null)
-  const params = useParams()
-  const chatRoomId = Number(params.roomId)
 
-  const previousScrollHeightRef = useRef<number>(0)
+  // 새 메시지 추가 감지용
+  const prevLastMessageRef = useRef<ChatListItem | null>(
+    messages[messages.length - 1] || null,
+  )
 
-  const {
-    data: messages = [],
-    fetchNextPage,
+  // 무한 스크롤 보정용
+  const prevFirstMessageRef = useRef<ChatListItem | null>(messages[0] || null)
+  const prevMessagesLengthRef = useRef(messages.length)
+
+  // Infinite scroll sentinel
+  const topSentinelRef = useInfiniteScroll({
     hasNextPage,
-    isLoading,
+    fetchNextPage: onScrollToTop,
     isFetchingNextPage,
-  } = useChat({ chatRoomId })
+    direction: 'top',
+    threshold: 0.1,
+  })
 
+  // Virtualizer
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => listRef.current,
     estimateSize: () => 66,
-    overscan: 10,
+    overscan: 1,
+    initialOffset: 5000,
     gap: 4,
     useFlushSync: false,
-    initialOffset: 6100,
   })
+
+  // 1. 무한 스크롤 시 스크롤 위치 보정 (첫 번째 메시지 변경 감지)
+  useEffect(() => {
+    const currentFirstMessage = messages[0]
+    const prevFirstMessage = prevFirstMessageRef.current
+
+    // 첫 번째 메시지가 바뀌었다 = 위쪽에 새 데이터 추가됨
+    if (
+      currentFirstMessage &&
+      prevFirstMessage &&
+      currentFirstMessage !== prevFirstMessage &&
+      messages.length > prevMessagesLengthRef.current
+    ) {
+      const newItemsCount = messages.length - prevMessagesLengthRef.current
+      const virtualItems = virtualizer.getVirtualItems()
+
+      if (virtualItems.length > 0) {
+        const firstVisibleIndex = virtualItems[0].index
+        const adjustedIndex = firstVisibleIndex + newItemsCount
+
+        virtualizer.scrollToIndex(adjustedIndex, {
+          align: 'start',
+          behavior: 'auto',
+        })
+      }
+    }
+
+    prevFirstMessageRef.current = currentFirstMessage
+    prevMessagesLengthRef.current = messages.length
+  }, [messages, virtualizer])
+
+  // 2. 새 메시지 자동 스크롤 (마지막 메시지 변경 감지 + 내가 보낸 메시지)
+  useEffect(() => {
+    const currentLastMessage = messages[messages.length - 1]
+    const prevLastMessage = prevLastMessageRef.current
+
+    // 마지막 메시지가 바뀌었다 = 새 메시지 추가됨
+    if (currentLastMessage && currentLastMessage !== prevLastMessage) {
+      const isMyMessage =
+        isChatMessage(currentLastMessage) &&
+        currentLastMessage.senderId === chatParticipantId
+
+      if (isMyMessage) {
+        virtualizer.scrollToIndex(messages.length - 1, {
+          align: 'end',
+          behavior: 'auto',
+        })
+      }
+    }
+
+    prevLastMessageRef.current = currentLastMessage
+  }, [messages, chatParticipantId, virtualizer])
+
+  const isChatMessage = (item: ChatListItem): item is ChatMessage => {
+    return item.messageType === 'CHAT'
+  }
 
   const getNextChatMessage = (currentIndex: number) => {
     for (let i = currentIndex + 1; i < messages.length; i++) {
@@ -50,57 +123,16 @@ export default function ChatMessageList() {
     return undefined
   }
 
-  // 데이터 로드 전 스크롤 높이 저장
-  useEffect(() => {
-    if (isFetchingNextPage && listRef.current) {
-      previousScrollHeightRef.current = listRef.current.scrollHeight
-    }
-  }, [isFetchingNextPage])
-
-  // 데이터 로드 후 스크롤 위치 조정
-  useEffect(() => {
-    if (
-      !isFetchingNextPage &&
-      previousScrollHeightRef.current > 0 &&
-      listRef.current
-    ) {
-      const newScrollHeight = listRef.current.scrollHeight
-      const scrollDiff = newScrollHeight - previousScrollHeightRef.current
-      listRef.current.scrollTop = listRef.current.scrollTop + scrollDiff
-      previousScrollHeightRef.current = 0
-    }
-  }, [isFetchingNextPage, messages.length])
-
-  // 상단 도달 시 데이터 로드
-  useEffect(() => {
-    const element = listRef.current
-    if (!element) return
-
-    const handleScroll = () => {
-      if (element.scrollTop === 0 && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage()
-      }
-    }
-
-    element.addEventListener('scroll', handleScroll)
-    return () => element.removeEventListener('scroll', handleScroll)
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  if (isLoading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <Spinner />
-      </div>
-    )
-  }
-
   return (
     <div ref={listRef} className="overflow-y-auto flex-1 w-full h-full min-h-0">
+      {hasNextPage && <div ref={topSentinelRef} style={{ height: '1px' }} />}
+
       {isFetchingNextPage && (
         <div className="flex justify-center py-2">
           <Spinner />
         </div>
       )}
+
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,
@@ -130,7 +162,7 @@ export default function ChatMessageList() {
               )}
               {message.messageType === 'CHAT' && (
                 <ChatMessageItem
-                  messageItem={message}
+                  messageItem={message as ChatMessage}
                   nextMessage={getNextChatMessage(virtualItem.index)}
                 />
               )}

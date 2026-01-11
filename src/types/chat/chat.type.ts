@@ -1,12 +1,10 @@
-export type MessageType = 'CHAT' | 'SYSTEM'
-
 export interface ChatMessage {
   messageId: number
   chatRoomId: number
   senderId: number
   senderNickname: string
   senderImage: string | null
-  messageType: MessageType
+  messageType: 'CHAT'
   message: string
   createdAt: string
 }
