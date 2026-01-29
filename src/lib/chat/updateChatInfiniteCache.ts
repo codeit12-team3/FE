@@ -1,6 +1,6 @@
 import { InfiniteData } from '@tanstack/react-query'
 
-import { ChatMessage, ChatType } from '@/types/chat/chat.type'
+import { ChatMessage, ChatType } from '@/features/chat/types/chat.type'
 import { ApiResponse } from '@/types/common'
 
 export const updateChatInfiniteCache = (

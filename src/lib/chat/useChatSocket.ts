@@ -1,7 +1,7 @@
 import { InfiniteData, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 
-import { ChatMessage, ChatType } from '@/types/chat/chat.type'
+import { ChatMessage, ChatType } from '@/features/chat/types/chat.type'
 import { ApiResponse } from '@/types/common'
 
 import { updateChatInfiniteCache } from './updateChatInfiniteCache'

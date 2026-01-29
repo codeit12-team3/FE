@@ -1,4 +1,8 @@
-import { ChatListItem, ChatMessage, DateHeader } from '@/types/chat/chat.type'
+import {
+  ChatListItem,
+  ChatMessage,
+  DateHeader,
+} from '@/features/chat/types/chat.type'
 
 import { formatKstDate } from '../common'
 
