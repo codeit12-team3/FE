@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface VirtualRenderProps<T> {
   items: T[]
@@ -30,7 +30,7 @@ export function VirtualRender<T>({
   const pendingHeightsRef = useRef<ItemHeightMap>({})
 
   // 누적 높이를 계산
-  const { offsets, totalHeight } = useMemo(() => {
+  const { offsets, totalHeight } = (() => {
     let currentOffset = 0
     const offsets = items.map((_, i) => {
       const height = itemHeight[i] || estimatedItemHeight
@@ -39,8 +39,7 @@ export function VirtualRender<T>({
       return response
     })
     return { offsets, totalHeight: currentOffset }
-  }, [items, itemHeight, estimatedItemHeight])
-
+  })()
   // 역방향일 때 초기 스크롤을 맨 아래로
   useEffect(() => {
     if (
@@ -59,10 +58,20 @@ export function VirtualRender<T>({
   }, [direction, totalHeight])
 
   // 현재 스크롤 위치에서 보여줘야 할 아이템 범위 찾기
-  const startIndex = Math.max(
-    0,
-    offsets.findIndex((offset) => offset > scrollTop) - 1,
-  )
+  const startIndex = (() => {
+    let low = 0
+    let high = offsets.length - 1
+
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2)
+      if (offsets[mid] === scrollTop) return mid
+      if (offsets[mid] < scrollTop)
+        low = mid + 1 // 아래쪽 절반 버림
+      else high = mid - 1 // 위쪽 절반 버림
+    }
+
+    return Math.max(0, low - 1) // 정확한 위치가 없으면 바로 위 아이템 반환
+  })()
   const visibleCount =
     Math.ceil(containerHeight / estimatedItemHeight) + overscan
   const visibleItems = items.slice(startIndex, startIndex + visibleCount)
@@ -98,9 +107,9 @@ export function VirtualRender<T>({
     }
   }, [scrollTop])
 
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setScrollTop(e.currentTarget.scrollTop)
-  }, [])
+  }
 
   const startOffset = offsets[startIndex] || 0
 
