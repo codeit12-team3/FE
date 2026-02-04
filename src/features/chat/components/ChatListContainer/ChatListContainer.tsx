@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useDebounce } from '@/hooks/chat/useDebounce'
+import { useDebounce } from '@/hooks/useDebounce'
 
 import RoomList from '../RoomList/RoomList'
 import SearchBar from '../SearchBar/SearchBar'

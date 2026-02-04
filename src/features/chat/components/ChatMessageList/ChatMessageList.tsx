@@ -7,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { ChatListItem, ChatMessage } from '@/features/chat/types/chat.type'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
-import { useVirtualScroll } from '../../utils/useVirtualScroll'
+import { useVirtualScroll } from '../../utils/useVirtualScroll' // 경로 확인
 import ChatMessageItem from '../ChatMessageItem/ChatMessageItem'
 
 interface ChatMessageListProps {
@@ -33,17 +33,15 @@ export default function ChatMessageList({
 
   const {
     containerRef,
-    observerRef,
     visibleItems,
     totalHeight,
     startOffset,
     handleScroll,
-    startIndex,
+    measureElement,
     offsets,
-  } = useVirtualScroll({
+  } = useVirtualScroll<ChatMessage>({
     items: chatMessages,
     estimatedItemHeight: 66,
-    containerHeight: 800,
     overscan: 10,
     direction: 'reverse',
   })
@@ -75,7 +73,7 @@ export default function ChatMessageList({
         (m) => getItemId(m) === prevFirstMessageId,
       )
 
-      if (anchorIndex !== -1 && offsets[anchorIndex]) {
+      if (anchorIndex !== -1 && offsets[anchorIndex] !== undefined) {
         const newScrollTop = offsets[anchorIndex]
         containerRef.current.scrollTop = newScrollTop
       }
@@ -116,6 +114,7 @@ export default function ChatMessageList({
         overscrollBehaviorY: 'none',
       }}
     >
+      {/* 무한 스크롤 트리거 */}
       {hasNextPage && <div ref={topSentinelRef} className="h-px" />}
 
       {isFetchingNextPage && (
@@ -140,24 +139,19 @@ export default function ChatMessageList({
             transform: `translateY(${startOffset}px)`,
           }}
         >
-          {visibleItems.map((message, index) => {
-            const actualIndex = startIndex + index
-            return (
-              <div
-                key={getItemId(message)}
-                data-index={actualIndex}
-                ref={(el) => {
-                  if (el) observerRef.current?.observe(el)
-                }}
-                className="pb-1"
-              >
-                <ChatMessageItem
-                  messageItem={message}
-                  nextMessage={getNextChatMessage(actualIndex)}
-                />
-              </div>
-            )
-          })}
+          {visibleItems.map(({ item, index }) => (
+            <div
+              key={getItemId(item)}
+              data-index={index}
+              ref={measureElement}
+              className="pb-1"
+            >
+              <ChatMessageItem
+                messageItem={item}
+                nextMessage={getNextChatMessage(index)}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
