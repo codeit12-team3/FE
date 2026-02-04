@@ -7,7 +7,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { ChatListItem, ChatMessage } from '@/features/chat/types/chat.type'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
-import { VirtualRender } from '../../utils/VirtualRender'
+import { useVirtualScroll } from '../../utils/useVirtualScroll'
 import ChatMessageItem from '../ChatMessageItem/ChatMessageItem'
 
 interface ChatMessageListProps {
@@ -40,7 +40,7 @@ export default function ChatMessageList({
     handleScroll,
     startIndex,
     offsets,
-  } = VirtualRender({
+  } = useVirtualScroll({
     items: chatMessages,
     estimatedItemHeight: 66,
     containerHeight: 800,
@@ -147,7 +147,7 @@ export default function ChatMessageList({
                 key={getItemId(message)}
                 data-index={actualIndex}
                 ref={(el) => {
-                  if (el) observerRef.current.observe(el)
+                  if (el) observerRef.current?.observe(el)
                 }}
                 className="pb-1"
               >

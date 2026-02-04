@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-interface VirtualRenderProps<T> {
+interface UseVirtualScrollProps<T> {
   items: T[]
   estimatedItemHeight: number
   containerHeight: number
@@ -12,13 +12,13 @@ interface ItemHeightMap {
   [index: number]: number
 }
 
-export function VirtualRender<T>({
+export function useVirtualScroll<T>({
   items,
   estimatedItemHeight,
   containerHeight,
   overscan = 5,
   direction = 'forward',
-}: VirtualRenderProps<T>) {
+}: UseVirtualScrollProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [scrollTop, setScrollTop] = useState(0)
   const [itemHeight, setItemHeight] = useState<ItemHeightMap>({})
@@ -30,16 +30,15 @@ export function VirtualRender<T>({
   const pendingHeightsRef = useRef<ItemHeightMap>({})
 
   // 누적 높이를 계산
-  const { offsets, totalHeight } = (() => {
-    let currentOffset = 0
-    const offsets = items.map((_, i) => {
-      const height = itemHeight[i] || estimatedItemHeight
-      const response = currentOffset
-      currentOffset += height
-      return response
-    })
-    return { offsets, totalHeight: currentOffset }
-  })()
+  const { offsets, totalHeight } = items.reduce(
+    (acc, _, i) => {
+      acc.offsets[i] = acc.totalHeight
+      acc.totalHeight += itemHeight[i] || estimatedItemHeight
+      return acc
+    },
+    { offsets: [] as number[], totalHeight: 0 },
+  )
+
   // 역방향일 때 초기 스크롤을 맨 아래로
   useEffect(() => {
     if (
@@ -75,9 +74,10 @@ export function VirtualRender<T>({
   const visibleCount =
     Math.ceil(containerHeight / estimatedItemHeight) + overscan
   const visibleItems = items.slice(startIndex, startIndex + visibleCount)
+  const observerRef = useRef<ResizeObserver | null>(null)
 
-  const observerRef = useRef(
-    new ResizeObserver((entries) => {
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
       isMeasuringRef.current = true
 
       entries.forEach((entry) => {
@@ -85,7 +85,7 @@ export function VirtualRender<T>({
           (entry.target as HTMLElement).dataset.index || '',
         )
         if (isNaN(index)) return
-        // 측정된 실제 아이템의 높이를 순차별로 임시 저장
+
         const realHeight = Math.round(entry.contentRect.height)
         pendingHeightsRef.current[index] = realHeight
       })
@@ -93,8 +93,15 @@ export function VirtualRender<T>({
       requestAnimationFrame(() => {
         isMeasuringRef.current = false
       })
-    }),
-  )
+    })
+
+    observerRef.current = observer
+
+    return () => {
+      observer.disconnect()
+      observerRef.current = null
+    }
+  }, [])
 
   useEffect(() => {
     if (isMeasuringRef.current) return
