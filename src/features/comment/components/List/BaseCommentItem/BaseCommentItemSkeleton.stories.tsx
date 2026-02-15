@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
-import BaseCommentItemSkeleton from './BaseCommentSkeleton'
+import BaseCommentItemSkeleton from './BaseCommentItemSkeleton'
 
 const meta = {
   title: 'Comment/BaseCommentItemSkeleton',

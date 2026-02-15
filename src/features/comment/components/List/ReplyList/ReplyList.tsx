@@ -1,9 +1,9 @@
-import { useReplies } from '@/api/comments'
 import { IconChevronDown } from '@/assets/svgr'
+import { useReplies } from '@/features/comment/api'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentSkeleton'
-import ReplyItem from '../ReplyItem'
+import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
+import ReplyItem from '../ReplyItem/ReplyItem'
 
 interface ReplyListProps {
   commentId: number

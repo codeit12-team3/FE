@@ -2,11 +2,11 @@
 
 import { useParams } from 'next/navigation'
 
-import { useCommentMutations, useComments } from '@/api/comments'
+import { useCommentMutations, useComments } from '@/features/comment/api'
 
-import CommentForm from './CommentForm'
+import CommentForm from './CommentForm/CommentForm'
 import ErrorFallback from './Error/ErrorFallback'
-import CommentList from './List/CommentList'
+import CommentList from './List/CommentList/CommentList'
 
 interface CommentContainerProps {
   commentCount: number
@@ -17,7 +17,6 @@ export default function CommentContainer({
 }: CommentContainerProps) {
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
-
   const { create } = useCommentMutations(postId)
   const {
     comments,

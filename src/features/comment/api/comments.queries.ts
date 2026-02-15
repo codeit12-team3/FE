@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { CommentType } from '@/types/comments/comments.type'
 import { ApiResponse } from '@/types/common'
 
+import { CommentType } from '../types'
 import { fetchComments } from './comments.clients'
 import { commentKeys } from './key/comments.keys'
 

@@ -1,11 +1,11 @@
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
-import { CommentContent } from '@/types/comments/comments.type'
+import { CommentContent } from '@/features/comment/types'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentSkeleton'
-import CommentWithReplies from '../CommentWithReplies'
+import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
+import CommentWithReplies from '../CommentWithReplies/CommentWithReplies'
 
 interface CommentListProps {
   comments: CommentContent[]

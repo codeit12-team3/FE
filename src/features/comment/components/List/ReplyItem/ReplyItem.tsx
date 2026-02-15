@@ -1,9 +1,9 @@
 import { useParams } from 'next/navigation'
 
-import { useReplyActions } from '@/hooks/comment/useReplyActions'
-import { ReplyContent } from '@/types/comments'
+import { useReplyActions } from '@/features/comment/hooks/useReplyActions'
+import { ReplyContent } from '@/features/comment/types'
 
-import BaseCommentItem from '../BaseCommentItem'
+import BaseCommentItem from '../BaseCommentItem/BaseCommentItem'
 
 type ReplyItemProps = {
   reply: ReplyContent

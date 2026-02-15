@@ -1,14 +1,14 @@
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
-import { useReplies, useReplyMutations } from '@/api/comments'
 import { IconChevronDown } from '@/assets/svgr'
-import { useCommentInteractionStore } from '@/hooks/comment/useCommentInteractionStore'
-import { CommentContent } from '@/types/comments/comments.type'
+import { useReplies, useReplyMutations } from '@/features/comment/api'
+import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
+import { CommentContent } from '@/features/comment/types'
 
-import CommentWriteForm from '../../CommentForm'
-import CommentItem from '../CommentItem'
-import ReplyList from '../ReplyList'
+import CommentForm from '../../CommentForm/CommentForm'
+import CommentItem from '../CommentItem/CommentItem'
+import ReplyList from '../ReplyList/ReplyList'
 
 interface CommentThreadProps {
   comment: CommentContent
@@ -45,7 +45,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
 
       {isReplying && (
         <div className="pl-10 pt-6">
-          <CommentWriteForm
+          <CommentForm
             parentId={parentId}
             onCancel={closeInteraction}
             onSubmit={handleSubmit}

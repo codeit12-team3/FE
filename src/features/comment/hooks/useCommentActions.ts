@@ -1,5 +1,5 @@
-import { useCommentMutations } from '@/api/comments'
-import { CommentContent } from '@/types/comments/comments.type'
+import { useCommentMutations } from '../api'
+import { CommentContent } from '../types'
 
 export function useCommentActions(comment: CommentContent, postId: number) {
   const { update, remove } = useCommentMutations(postId)

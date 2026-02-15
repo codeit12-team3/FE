@@ -1,7 +1,7 @@
-import { ReplyType } from '@/types/comments'
+import { axios } from '@/api/common'
 import { ApiResponse } from '@/types/common'
 
-import { axios } from '../common'
+import { ReplyType } from '../types'
 
 export const fetchReplies = async (params: {
   commentId: number

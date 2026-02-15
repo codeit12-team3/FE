@@ -1,7 +1,7 @@
-import { CommentType } from '@/types/comments/comments.type'
+import { axios } from '@/api/common'
 import { ApiResponse } from '@/types/common'
 
-import { axios } from '../common'
+import { CommentType } from '../types'
 
 export const fetchComments = async (params: {
   postId: number

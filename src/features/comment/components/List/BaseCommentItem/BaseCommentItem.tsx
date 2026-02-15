@@ -1,11 +1,11 @@
 import Image from 'next/image'
 
-import { useCommentInteractionStore } from '@/hooks/comment/useCommentInteractionStore'
-import { useCurrentUser } from '@/hooks/comment/useCurrentUser'
+import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
+import { useCurrentUser } from '@/features/comment/hooks/useCurrentUser'
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
-import CommentEditForm from '../CommentEditForm'
-import CommentMenu from '../CommentMenu'
+import CommentEditForm from '../CommentEditForm/CommentEditForm'
+import CommentMenu from '../CommentMenu/CommentMenu'
 
 type BaseCommentItemProps = {
   commentId: number

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { fn } from '@storybook/test'
 import { SessionProvider } from 'next-auth/react'
 
-import BaseCommentItem from '../BaseCommentItem'
+import BaseCommentItem from '../BaseCommentItem/BaseCommentItem'
 
 const mockSession = {
   expires: '2099-01-01T00:00:00Z',
