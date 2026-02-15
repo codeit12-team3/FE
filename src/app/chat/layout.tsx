@@ -1,5 +1,4 @@
-// app/chat/layout.tsx
-import ChatLayoutClient from '@/components/chat/ChatLayoutClient'
+import ChatLayoutClient from '@/features/chat/components/ChatLayoutClient/ChatLayoutClient'
 
 export default function ChatLayout({
   children,
