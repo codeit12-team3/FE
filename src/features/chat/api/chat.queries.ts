@@ -32,7 +32,7 @@ export const useChat = ({ chatRoomId }: { chatRoomId: number }) => {
         page.success ? page.data.content : [],
       )
 
-      const reversedMessages = [...allMessages].reverse()
+      const reversedMessages = [...allMessages]
 
       return reversedMessages
     },

@@ -28,7 +28,6 @@ export function useVirtualScroll<T>({
   const [scrollTop, setScrollTop] = useState(0)
   const [itemHeightMap, setItemHeightMap] = useState<ItemHeightMap>({})
 
-  const isInitialized = useRef(false)
   const pendingHeightsRef = useRef<ItemHeightMap>({})
   const observerRef = useRef<ResizeObserver | null>(null)
 
@@ -61,14 +60,6 @@ export function useVirtualScroll<T>({
     return () => observerRef.current?.disconnect()
   }, [])
 
-  useEffect(() => {
-    const pending = pendingHeightsRef.current
-    if (Object.keys(pending).length > 0) {
-      setItemHeightMap((prev) => ({ ...prev, ...pending }))
-      pendingHeightsRef.current = {}
-    }
-  }, [scrollTop])
-
   const { offsets, totalHeight } = items.reduce(
     (acc, _, i) => {
       acc.offsets[i] = acc.totalHeight
@@ -77,22 +68,6 @@ export function useVirtualScroll<T>({
     },
     { offsets: [] as number[], totalHeight: 0 },
   )
-
-  useLayoutEffect(() => {
-    if (
-      direction === 'reverse' &&
-      !isInitialized.current &&
-      totalHeight > 0 &&
-      containerRef.current
-    ) {
-      requestAnimationFrame(() => {
-        if (containerRef.current) {
-          containerRef.current.scrollTop = containerRef.current.scrollHeight
-          isInitialized.current = true
-        }
-      })
-    }
-  }, [direction, totalHeight])
 
   const startIndex = (() => {
     let low = 0
@@ -115,12 +90,18 @@ export function useVirtualScroll<T>({
     index: startIndex + i,
     offset: offsets[startIndex + i],
   }))
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      if (direction === 'reverse') {
+        const distance = Math.abs(Math.min(0, e.currentTarget.scrollTop))
+        setScrollTop(distance)
+      } else {
+        setScrollTop(Math.max(0, e.currentTarget.scrollTop))
+      }
+    },
+    [direction],
+  )
 
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop)
-  }, [])
-
-  // 아이템 Ref 연결을 위한 헬퍼 함수
   const measureElement = useCallback((node: HTMLElement | null) => {
     if (node) observerRef.current?.observe(node)
   }, [])
@@ -133,5 +114,6 @@ export function useVirtualScroll<T>({
     measureElement,
     offsets,
     startOffset: offsets[startIndex] || 0,
+    endOffset: offsets[endIndex + 1] || totalHeight,
   }
 }

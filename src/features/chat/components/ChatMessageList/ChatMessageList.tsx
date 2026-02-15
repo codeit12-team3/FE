@@ -1,13 +1,13 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import { Spinner } from '@/components/ui/spinner'
 import { ChatListItem, ChatMessage } from '@/features/chat/types/chat.type'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
-import { useVirtualScroll } from '../../utils/useVirtualScroll' // 경로 확인
+import { useVirtualScroll } from '../../utils/useVirtualScroll'
 import ChatMessageItem from '../ChatMessageItem/ChatMessageItem'
 
 interface ChatMessageListProps {
@@ -26,7 +26,6 @@ export default function ChatMessageList({
   const searchParams = useSearchParams()
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
 
-  // 채팅 메시지만 필터링
   const chatMessages = messages.filter(
     (msg) => msg.messageType === 'CHAT',
   ) as ChatMessage[]
@@ -36,9 +35,9 @@ export default function ChatMessageList({
     visibleItems,
     totalHeight,
     startOffset,
+    endOffset,
     handleScroll,
     measureElement,
-    offsets,
   } = useVirtualScroll<ChatMessage>({
     items: chatMessages,
     estimatedItemHeight: 66,
@@ -46,11 +45,6 @@ export default function ChatMessageList({
     direction: 'reverse',
   })
 
-  const getItemId = useCallback((item: ChatMessage) => {
-    return `msg-${item.messageId}`
-  }, [])
-
-  const prevFirstMessageIdRef = useRef<string | number | null>(null)
   const prevLastMessageRef = useRef<ChatMessage | null>(null)
 
   const topSentinelRef = useInfiniteScroll({
@@ -61,30 +55,8 @@ export default function ChatMessageList({
     threshold: 0.1,
   })
 
-  // 상단 메시지 추가 시 스크롤 위치 보정
-  useLayoutEffect(() => {
-    if (chatMessages.length === 0 || !containerRef.current) return
-
-    const currentFirstMessageId = getItemId(chatMessages[0])
-    const prevFirstMessageId = prevFirstMessageIdRef.current
-
-    if (prevFirstMessageId && prevFirstMessageId !== currentFirstMessageId) {
-      const anchorIndex = chatMessages.findIndex(
-        (m) => getItemId(m) === prevFirstMessageId,
-      )
-
-      if (anchorIndex !== -1 && offsets[anchorIndex] !== undefined) {
-        const newScrollTop = offsets[anchorIndex]
-        containerRef.current.scrollTop = newScrollTop
-      }
-    }
-
-    prevFirstMessageIdRef.current = currentFirstMessageId
-  }, [chatMessages, getItemId, offsets, containerRef])
-
-  // 내 메시지 전송 시 하단 스크롤
   useEffect(() => {
-    const currentLastMessage = chatMessages[chatMessages.length - 1]
+    const currentLastMessage = chatMessages[0]
     const prevLastMessage = prevLastMessageRef.current
 
     if (currentLastMessage && currentLastMessage !== prevLastMessage) {
@@ -92,68 +64,38 @@ export default function ChatMessageList({
 
       if (isMyMessage && containerRef.current) {
         containerRef.current.scrollTo({
-          top: containerRef.current.scrollHeight,
+          top: 0,
           behavior: 'auto',
         })
       }
     }
     prevLastMessageRef.current = currentLastMessage
-  }, [chatMessages, chatParticipantId, containerRef])
-
-  const getNextChatMessage = (currentIndex: number) => {
-    return chatMessages[currentIndex + 1]
-  }
+  }, [chatMessages, chatParticipantId])
 
   return (
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="overflow-y-auto flex-1 w-full h-full min-h-0 relative"
-      style={{
-        overflowAnchor: 'none',
-        overscrollBehaviorY: 'none',
-      }}
+      className="overflow-y-auto flex-1 flex flex-col-reverse relative"
+      style={{ overflowAnchor: 'none' }}
     >
-      {/* 무한 스크롤 트리거 */}
-      {hasNextPage && <div ref={topSentinelRef} className="h-px" />}
+      <div style={{ height: `${startOffset}px`, flexShrink: 0 }} />
+
+      {visibleItems.map(({ item, index }) => (
+        <div key={item.messageId} data-index={index} ref={measureElement}>
+          <ChatMessageItem messageItem={item} />
+        </div>
+      ))}
+
+      <div style={{ height: `${totalHeight - endOffset}px`, flexShrink: 0 }} />
+
+      {hasNextPage && <div ref={topSentinelRef} className="h-px shrink-0" />}
 
       {isFetchingNextPage && (
-        <div className="flex justify-center py-2">
+        <div className="flex justify-center py-2 shrink-0">
           <Spinner />
         </div>
       )}
-
-      <div
-        style={{
-          height: `${totalHeight}px`,
-          width: '100%',
-          position: 'relative',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            transform: `translateY(${startOffset}px)`,
-          }}
-        >
-          {visibleItems.map(({ item, index }) => (
-            <div
-              key={getItemId(item)}
-              data-index={index}
-              ref={measureElement}
-              className="pb-1"
-            >
-              <ChatMessageItem
-                messageItem={item}
-                nextMessage={getNextChatMessage(index)}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
