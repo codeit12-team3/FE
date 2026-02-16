@@ -1,4 +1,5 @@
 import {
+  RefObject,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -11,6 +12,7 @@ interface UseVirtualScrollProps<T> {
   estimatedItemHeight: number
   overscan?: number
   direction?: 'forward' | 'reverse'
+  containerRef: RefObject<HTMLDivElement | null>
 }
 
 interface ItemHeightMap {
@@ -22,9 +24,9 @@ export function useVirtualScroll<T>({
   estimatedItemHeight,
   overscan = 5,
   direction = 'forward',
+  containerRef,
 }: UseVirtualScrollProps<T>) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [containerHeight, setContainerHeight] = useState(0) // 내부 자동 측정 상태
+  const [containerHeight, setContainerHeight] = useState(0)
   const [scrollTop, setScrollTop] = useState(0)
   const [itemHeightMap, setItemHeightMap] = useState<ItemHeightMap>({})
 
@@ -40,21 +42,34 @@ export function useVirtualScroll<T>({
     })
     resizeObserver.observe(containerRef.current)
     return () => resizeObserver.disconnect()
-  }, [])
+  }, [containerRef])
 
   useEffect(() => {
     if (!observerRef.current) {
       observerRef.current = new ResizeObserver((entries) => {
+        let hasChanges = false
+
         entries.forEach((entry) => {
           const index = parseInt(
             (entry.target as HTMLElement).dataset.index || '',
             10,
           )
           if (isNaN(index)) return
-          pendingHeightsRef.current[index] = Math.round(
-            entry.contentRect.height,
-          )
+
+          const newHeight = Math.round(entry.contentRect.height)
+
+          if (pendingHeightsRef.current[index] !== newHeight) {
+            pendingHeightsRef.current[index] = newHeight
+            hasChanges = true
+          }
         })
+
+        if (hasChanges) {
+          setItemHeightMap((prev) => ({
+            ...prev,
+            ...pendingHeightsRef.current,
+          }))
+        }
       })
     }
     return () => observerRef.current?.disconnect()
