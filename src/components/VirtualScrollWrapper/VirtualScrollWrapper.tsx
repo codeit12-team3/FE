@@ -1,6 +1,6 @@
 import { ReactNode, RefObject, UIEvent, useRef } from 'react'
 
-import { useVirtualScroll } from '../../utils/useVirtualScroll'
+import { useVirtualScroll } from '@/hooks/useVirtualScroll'
 
 interface VirtualScrollWrapperProps<T> {
   containerRef?: RefObject<HTMLDivElement | null>

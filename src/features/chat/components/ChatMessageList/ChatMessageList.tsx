@@ -7,8 +7,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { ChatListItem, ChatMessage } from '@/features/chat/types/chat.type'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
+import VirtualScrollWrapper from '../../../../components/VirtualScrollWrapper/VirtualScrollWrapper'
 import ChatMessageItem from '../ChatMessageItem/ChatMessageItem'
-import VirtualScrollWrapper from '../VirtualScrollWrapper/VirtualScrollWrapper'
 
 interface ChatMessageListProps {
   messages: ChatListItem[]
