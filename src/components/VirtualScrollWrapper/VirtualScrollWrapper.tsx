@@ -1,6 +1,11 @@
 import { ReactNode, RefObject, UIEvent, useRef } from 'react'
 
 import { useVirtualScroll } from '@/hooks/useVirtualScroll'
+import { cn } from '@/lib/common'
+
+function getKey<T>(item: T, keyField: keyof T): React.Key {
+  return item[keyField] as React.Key
+}
 
 interface VirtualScrollWrapperProps<T> {
   containerRef?: RefObject<HTMLDivElement | null>
@@ -9,29 +14,27 @@ interface VirtualScrollWrapperProps<T> {
   overscan?: number
   direction?: 'forward' | 'reverse'
   className?: string
+  keyField: keyof T
   onScroll?: (e: UIEvent<HTMLDivElement>) => void
-  renderItem: (
-    item: T,
-    index: number,
-    measureRef: (node: HTMLElement | null) => void,
-  ) => ReactNode
+  renderItem: (item: T) => ReactNode
   children?: ReactNode
 }
 
 export default function VirtualScrollWrapper<T>({
-  containerRef: externalRef,
+  containerRef,
   items,
   estimatedItemHeight,
   overscan = 5,
   direction = 'forward',
   className,
   onScroll,
+  keyField,
   renderItem,
   children,
 }: VirtualScrollWrapperProps<T>) {
-  const internalRef = useRef<HTMLDivElement>(null)
+  const initialContainerRef = useRef<HTMLDivElement>(null)
 
-  const resolvedRef = externalRef || internalRef
+  const resolvedRef = containerRef || initialContainerRef
 
   const {
     visibleItems,
@@ -57,14 +60,23 @@ export default function VirtualScrollWrapper<T>({
     <div
       ref={resolvedRef}
       onScroll={onCombinedScroll}
-      className={className}
+      className={cn(
+        className,
+        direction === 'reverse' ? 'flex-col-reverse' : 'flex-col',
+      )}
       style={{ overflowAnchor: 'none' }}
     >
       <div style={{ height: `${startOffset}px`, flexShrink: 0 }} />
 
-      {visibleItems.map(({ item, index }) =>
-        renderItem(item, index, measureElement),
-      )}
+      {visibleItems.map(({ item, index }) => (
+        <div
+          key={getKey(item, keyField)}
+          data-index={index}
+          ref={measureElement}
+        >
+          {renderItem(item)}
+        </div>
+      ))}
 
       <div style={{ height: `${totalHeight - endOffset}px`, flexShrink: 0 }} />
 

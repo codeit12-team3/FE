@@ -27,7 +27,6 @@ export default function ChatMessageList({
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const prevLastMessageRef = useRef<ChatMessage | null>(null)
 
   const chatMessages = messages.filter(
     (msg) => msg.messageType === 'CHAT',
@@ -41,36 +40,31 @@ export default function ChatMessageList({
     threshold: 0.1,
   })
 
+  const prevLastMessageIdRef = useRef<number | string | null>(null)
+
   useEffect(() => {
-    const currentLastMessage = chatMessages[0]
-    const prevLastMessage = prevLastMessageRef.current
+    const last = chatMessages[0]
+    const lastId = last?.messageId ?? null
 
-    if (currentLastMessage && currentLastMessage !== prevLastMessage) {
-      const isMyMessage = currentLastMessage.senderId === chatParticipantId
-
-      if (isMyMessage && containerRef.current) {
-        containerRef.current.scrollTo({
-          top: 0,
-          behavior: 'auto',
-        })
+    if (lastId && lastId !== prevLastMessageIdRef.current) {
+      if (last.senderId === chatParticipantId) {
+        containerRef.current?.scrollTo({ top: 0, behavior: 'auto' })
       }
     }
-    prevLastMessageRef.current = currentLastMessage
+
+    prevLastMessageIdRef.current = lastId
   }, [chatMessages, chatParticipantId])
 
   return (
-    <VirtualScrollWrapper<ChatMessage>
+    <VirtualScrollWrapper
       containerRef={containerRef}
       items={chatMessages}
       estimatedItemHeight={66}
       overscan={10}
       direction="reverse"
-      className="overflow-y-auto flex-1 flex flex-col-reverse relative"
-      renderItem={(item, index, measureRef) => (
-        <div key={item.messageId} data-index={index} ref={measureRef}>
-          <ChatMessageItem messageItem={item} />
-        </div>
-      )}
+      className="overflow-y-auto flex-1 flex"
+      keyField="messageId"
+      renderItem={(item) => <ChatMessageItem messageItem={item} />}
     >
       {hasNextPage && <div ref={topSentinelRef} className="h-px shrink-0" />}
       {isFetchingNextPage && (
