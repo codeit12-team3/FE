@@ -20,18 +20,14 @@ export default function ChatMessageItem({
     messageItem
   const isMyMessage = senderId === chatParticipantId
 
-  // 시간을 표시할지 결정 로직
   const shouldShowTime = () => {
-    // 다음 메시지가 없으면 (마지막 메시지) 시간 표시
     if (!nextMessage) return true
 
-    // 다음 메시지 발신자가 다르면 시간 표시
     if (senderId !== nextMessage.senderId) return true
 
     const currentTime = new Date(createdAt)
     const nextTime = new Date(nextMessage.createdAt)
 
-    // 시간이나 분이 다르면 시간 표시
     return (
       currentTime.getHours() !== nextTime.getHours() ||
       currentTime.getMinutes() !== nextTime.getMinutes()

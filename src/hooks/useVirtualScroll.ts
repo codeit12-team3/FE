@@ -44,7 +44,7 @@ export function useVirtualScroll<T>({
     return () => resizeObserver.disconnect()
   }, [containerRef])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!observerRef.current) {
       observerRef.current = new ResizeObserver((entries) => {
         let hasChanges = false
