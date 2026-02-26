@@ -1,4 +1,4 @@
-import { AgeType, GenderType } from '@/types/posts'
+import { AgeType, GenderType } from '@/features/posts/types'
 
 const AGE_LABEL_TO_ENUM: Record<string, AgeType> = {
   '20대': AgeType.TWENTY,

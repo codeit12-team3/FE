@@ -1,4 +1,4 @@
-import { NationCode } from '@/constants/posts'
+import { NationCode } from '@/features/posts/constants'
 
 export type CompanionState = 'PENDING' | 'APPROVED' | 'DENIED'
 

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { fetchPostsDetail } from '@/api/posts'
-import { PostForm } from '@/components/post'
+import { fetchPostsDetail } from '@/features/posts/api'
+import { PostForm } from '@/features/posts/components'
 
 export default async function EditPage({
   params,
