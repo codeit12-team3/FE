@@ -3,10 +3,10 @@
 import * as m from 'motion/react-m'
 import { useState } from 'react'
 
-import FilterBar from '@/components/post/FilterBar'
 import { FADE_IN, SLIDE_UP } from '@/constants/animation'
+import FilterBar from '@/features/posts/components/FilterBar'
+import { PostFilterParams } from '@/features/posts/types'
 import { GetBookmarkedPostsReq } from '@/types/member'
-import { PostFilterParams } from '@/types/posts'
 
 import BookmarkList from './BookmarkList'
 

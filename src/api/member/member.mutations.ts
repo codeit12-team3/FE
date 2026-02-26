@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { UpdateMyProfileReq } from '@/types/member'
 
-import { removeBookmark } from '../posts'
+import { removeBookmark } from '../../features/posts/api'
 import { checkNickname, updateMyProfile } from './member.clients'
 
 export const useCheckNickname = () => {
