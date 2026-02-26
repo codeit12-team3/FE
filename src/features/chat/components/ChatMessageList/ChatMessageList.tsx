@@ -1,13 +1,13 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 
+import ContainerScrollWrapper from '@/components/ContainerScrollWrapper/ContainerScrollWrapper'
 import { Spinner } from '@/components/ui/spinner'
 import { ChatListItem, ChatMessage } from '@/features/chat/types/chat.type'
 import { useInfiniteScroll } from '@/hooks/common/useInfiniteScroll'
 
-import VirtualScrollWrapper from '../../../../components/VirtualScrollWrapper/VirtualScrollWrapper'
 import ChatMessageItem from '../ChatMessageItem/ChatMessageItem'
 
 interface ChatMessageListProps {
@@ -28,9 +28,7 @@ export default function ChatMessageList({
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const chatMessages = messages.filter(
-    (msg) => msg.messageType === 'CHAT',
-  ) as ChatMessage[]
+  const chatMessages = messages as ChatMessage[]
 
   const topSentinelRef = useInfiniteScroll({
     hasNextPage,
@@ -42,7 +40,7 @@ export default function ChatMessageList({
 
   const prevLastMessageIdRef = useRef<number | string | null>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const last = chatMessages[0]
     const lastId = last?.messageId ?? null
 
@@ -56,22 +54,22 @@ export default function ChatMessageList({
   }, [chatMessages, chatParticipantId])
 
   return (
-    <VirtualScrollWrapper
-      containerRef={containerRef}
+    <ContainerScrollWrapper
       items={chatMessages}
       estimatedItemHeight={66}
-      overscan={10}
+      keyField="messageId"
       direction="reverse"
       className="overflow-y-auto flex-1 flex"
-      keyField="messageId"
       renderItem={(item) => <ChatMessageItem messageItem={item} />}
     >
-      {hasNextPage && <div ref={topSentinelRef} className="h-px shrink-0" />}
-      {isFetchingNextPage && (
-        <div className="flex justify-center py-2 shrink-0">
-          <Spinner />
-        </div>
-      )}
-    </VirtualScrollWrapper>
+      <div className="flex flex-col items-center shrink-0">
+        {isFetchingNextPage && (
+          <div className="py-2">
+            <Spinner />
+          </div>
+        )}
+        {hasNextPage && <div ref={topSentinelRef} className="h-px w-full" />}
+      </div>
+    </ContainerScrollWrapper>
   )
 }

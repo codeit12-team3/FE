@@ -1,4 +1,3 @@
-// components/chat/WebSocketProvider.tsx
 'use client'
 
 import { InfiniteData, useQueryClient } from '@tanstack/react-query'
@@ -34,6 +33,8 @@ export const WebSocketProvider = ({
   const socketRef = useRef<WebSocket | null>(null)
   const queryClient = useQueryClient()
   const [isConnected, setIsConnected] = useState(false)
+  const reconnectCountRef = useRef(0)
+  const maxReconnectDelay = 30000
 
   const handleMessage = useCallback(
     (event: MessageEvent) => {
@@ -44,31 +45,60 @@ export const WebSocketProvider = ({
           (oldData) => updateChatInfiniteCache(oldData, newMessage),
         )
       } catch (e) {
-        console.error('메시지 처리 에러:', e)
+        console.error(e)
       }
     },
     [chatRoomId, queryClient],
   )
 
+  const connect = useCallback(
+    function connect() {
+      if (!url || typeof window === 'undefined') return
+      if (socketRef.current?.readyState === WebSocket.CONNECTING) return
+
+      const ws = new WebSocket(url)
+      socketRef.current = ws
+
+      ws.onopen = () => {
+        setIsConnected(true)
+        reconnectCountRef.current = 0
+      }
+
+      ws.onmessage = handleMessage
+
+      ws.onclose = (event) => {
+        setIsConnected(false)
+
+        if (event.code !== 1000) {
+          const delay = Math.min(
+            1000 * Math.pow(2, reconnectCountRef.current),
+            maxReconnectDelay,
+          )
+
+          setTimeout(() => {
+            reconnectCountRef.current += 1
+            connect()
+          }, delay)
+        }
+      }
+
+      ws.onerror = () => {
+        ws.close()
+      }
+    },
+    [url, handleMessage],
+  )
+
   useEffect(() => {
-    if (!url) return
-
-    const ws = new WebSocket(url)
-    socketRef.current = ws
-
-    ws.onopen = () => {
-      console.log('WebSocket 연결됨')
-      setIsConnected(true)
-    }
-    ws.onclose = () => setIsConnected(false)
-    ws.onerror = () => setIsConnected(false)
-    ws.onmessage = handleMessage
+    connect()
 
     return () => {
-      ws.close()
-      socketRef.current = null
+      if (socketRef.current) {
+        socketRef.current.close(1000)
+        socketRef.current = null
+      }
     }
-  }, [url, handleMessage])
+  }, [connect])
 
   const sendMessage = useCallback((msg: object) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
@@ -85,6 +115,6 @@ export const WebSocketProvider = ({
 
 export const useWS = () => {
   const context = useContext(WebSocketContext)
-  if (!context) throw new Error('WebSocketProvider 내부에서 사용하세요.')
+  if (!context) throw new Error('WebWocketProvider를 사용해야 합니다.')
   return context
 }

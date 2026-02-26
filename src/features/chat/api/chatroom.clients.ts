@@ -1,4 +1,5 @@
 import { axios } from '@/api/common'
+import { BASE_URL } from '@/constants/common'
 import { ChatRoomType } from '@/features/chat/types/chatRoom.types'
 import { ApiResponse } from '@/types/common'
 
@@ -20,10 +21,19 @@ export const fetchChatRooms = async (params: {
 
   return data
 }
-export const leaveChatroom = async ({
+
+export const leaveChatroom = ({
   chatParticipantId,
 }: {
   chatParticipantId: number
-}): Promise<void> => {
-  await axios.patch(`/v1/chats/${chatParticipantId}/out`, {})
+}) => {
+  fetch(`${BASE_URL}/v1/chats/${chatParticipantId}/out`, {
+    method: 'PATCH',
+    keepalive: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  }).catch((err) => console.error('퇴장 처리 실패:', err))
 }

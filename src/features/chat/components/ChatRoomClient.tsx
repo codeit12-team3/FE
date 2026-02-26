@@ -2,12 +2,11 @@
 
 import { useSession } from 'next-auth/react'
 import { useParams, useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
 
 import { Spinner } from '@/components/ui/spinner'
 
 import { useChat } from '../api/chat.queries'
-import { leaveChatroom } from '../api/chatroom.clients'
+import { useChatRoomExit } from '../hook/useChatRoomExit'
 import { WebSocketProvider } from '../provider/WebSocketContext'
 import ChatInfoBanner from './ChatBanner/ChatBanner'
 import ChatForm from './ChatForm/ChatForm'
@@ -21,7 +20,7 @@ export default function ChatRoomClient() {
   const searchParams = useSearchParams()
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
 
-  const chatParticipantIdRef = useRef(chatParticipantId)
+  useChatRoomExit(chatParticipantId)
 
   const {
     data: messages = [],
@@ -30,20 +29,6 @@ export default function ChatRoomClient() {
     isLoading,
     isFetchingNextPage,
   } = useChat({ chatRoomId: roomId })
-
-  useEffect(() => {
-    chatParticipantIdRef.current = chatParticipantId
-  }, [chatParticipantId])
-
-  useEffect(() => {
-    return () => {
-      if (chatParticipantIdRef.current) {
-        leaveChatroom({
-          chatParticipantId: chatParticipantIdRef.current,
-        }).catch(console.error)
-      }
-    }
-  }, [])
 
   if (status === 'loading' || isLoading) {
     return (
@@ -65,7 +50,7 @@ export default function ChatRoomClient() {
         <ChatMessageList
           messages={messages}
           isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage} // 추가
+          hasNextPage={hasNextPage}
           onScrollToTop={() => {
             if (hasNextPage && !isFetchingNextPage) fetchNextPage()
           }}

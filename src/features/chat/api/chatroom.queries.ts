@@ -25,7 +25,7 @@ export const useChatRooms = ({ keyword }: { keyword: string }) => {
 
     staleTime: STALE_TIME.DEFAULT,
   })
-  // 모든 페이지의 배열을 평탄화하여 단일 배열로 만듬
+
   const chatRooms =
     query.data?.pages.flatMap((page) => {
       if (!page.success) return []
