@@ -1,23 +1,24 @@
-import { useCommentMutations } from '../api'
-import { CommentContent } from '../types'
+import { useCommentStore } from '@/stores/useCommentStore'
 
-export function useCommentActions(comment: CommentContent, postId: number) {
+import { useCommentMutations } from '../api'
+
+export function useCommentActions(id: number, postId: number) {
   const { update, remove } = useCommentMutations(postId)
+  const updateContent = useCommentStore((state) => state.updateContent)
+  const removeNode = useCommentStore((state) => state.removeNode)
 
   const handleDelete = () => {
-    remove.mutate({ commentId: comment.commentId })
+    removeNode(id)
+    remove.mutate({ commentId: id })
   }
 
   const handleSave = async (editText: string) => {
+    updateContent(id, editText)
     await update.mutateAsync({
-      commentId: comment.commentId,
+      commentId: id,
       content: editText,
     })
   }
 
-  return {
-    handleDelete,
-    handleSave,
-    isUpdating: update.isPending,
-  }
+  return { handleDelete, handleSave, isUpdating: update.isPending }
 }

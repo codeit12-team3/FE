@@ -138,7 +138,7 @@ jest.mock('@/hooks/posts', () => ({
   useCompanionId: jest.fn(),
 }))
 
-jest.mock('@/components/comment', () => ({
+jest.mock('@/features/comment/components', () => ({
   __esModule: true,
   default: () => <div data-testid="mock-comment">댓글 컴포넌트</div>,
 }))

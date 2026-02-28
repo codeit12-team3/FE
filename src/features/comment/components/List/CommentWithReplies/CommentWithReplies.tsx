@@ -4,21 +4,21 @@ import { useState } from 'react'
 import { IconChevronDown } from '@/assets/svgr'
 import { useReplies, useReplyMutations } from '@/features/comment/api'
 import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
-import { CommentContent } from '@/features/comment/types'
 
 import CommentForm from '../../CommentForm/CommentForm'
 import CommentItem from '../CommentItem/CommentItem'
 import ReplyList from '../ReplyList/ReplyList'
 
 interface CommentThreadProps {
-  comment: CommentContent
+  id: number
 }
 
-export default function CommentWithReplies({ comment }: CommentThreadProps) {
+export default function CommentWithReplies({ id }: CommentThreadProps) {
   const [showReplies, setShowReplies] = useState(false)
   const params = useParams<{ postId: string }>()
   const postId = Number(params.postId)
-  const parentId = comment.commentId
+
+  const parentId = id
 
   const isReplying = useCommentInteractionStore((state) =>
     state.isReplying(parentId),
@@ -27,21 +27,23 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
 
   const { create } = useReplyMutations(postId, parentId)
   const { replies } = useReplies({ commentId: parentId })
+
   const handleSubmit = (text: string) => {
     create.mutate({
       postId,
       parentId,
       content: text,
     })
-    closeInteraction() // 작성 완료 후 닫기
+    closeInteraction()
   }
 
   const onClickShowReplies = () => {
     setShowReplies(!showReplies)
   }
+
   return (
     <div>
-      <CommentItem comment={comment} onReply={onClickShowReplies} />
+      <CommentItem id={parentId} onReply={onClickShowReplies} />
 
       {isReplying && (
         <div className="pl-10 pt-6">
@@ -53,6 +55,7 @@ export default function CommentWithReplies({ comment }: CommentThreadProps) {
           />
         </div>
       )}
+
       {!showReplies && replies.length > 0 && (
         <button
           onClick={onClickShowReplies}

@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
 import { CommentContent } from '@/features/comment/types'
+import { useCommentStore } from '@/stores/useCommentStore'
 
 import ErrorFallback from '../../Error/ErrorFallback'
 import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
@@ -24,6 +26,11 @@ export default function CommentList({
   isFetchingNextPage,
   isError,
 }: CommentListProps) {
+  const setComments = useCommentStore((state) => state.setComments)
+  const rootIds = useCommentStore((state) => state.rootIds)
+  useEffect(() => {
+    setComments(comments)
+  }, [comments, setComments])
   const handleEndReached = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
@@ -59,12 +66,12 @@ export default function CommentList({
   return (
     <Virtuoso
       useWindowScroll
-      data={comments}
+      data={rootIds}
       increaseViewportBy={{ top: 200, bottom: 200 }}
       endReached={handleEndReached}
-      itemContent={(index, comment) => (
+      itemContent={(index, id) => (
         <div className="pb-6">
-          <CommentWithReplies key={comment.commentId} comment={comment} />
+          <CommentWithReplies key={id} id={id} />
         </div>
       )}
       components={{

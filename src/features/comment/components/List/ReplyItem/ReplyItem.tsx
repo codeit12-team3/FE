@@ -1,25 +1,31 @@
 import { useParams } from 'next/navigation'
 
 import { useReplyActions } from '@/features/comment/hooks/useReplyActions'
-import { ReplyContent } from '@/features/comment/types'
+import { useCommentStore } from '@/stores/useCommentStore'
 
 import BaseCommentItem from '../BaseCommentItem/BaseCommentItem'
 
 type ReplyItemProps = {
-  reply: ReplyContent
+  id: number
+  parentId: number
   showReplies: boolean
 }
 
-export default function ReplyItem({ reply, showReplies }: ReplyItemProps) {
+export default function ReplyItem({
+  id,
+  parentId,
+  showReplies,
+}: ReplyItemProps) {
+  const reply = useCommentStore((state) => state.entities[id])
   const params = useParams<{ postId: string }>()
-  const postId = Number(params.postId)
 
   const { handleDelete, handleSave, isUpdating } = useReplyActions(
-    reply,
-    postId,
-    reply.parentId,
+    id,
+    Number(params.postId),
+    parentId,
   )
 
+  if (!reply) return null
   return (
     <BaseCommentItem
       {...reply}

@@ -1,5 +1,8 @@
+import { useEffect } from 'react'
+
 import { IconChevronDown } from '@/assets/svgr'
 import { useReplies } from '@/features/comment/api'
+import { useCommentStore } from '@/stores/useCommentStore'
 
 import ErrorFallback from '../../Error/ErrorFallback'
 import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
@@ -21,6 +24,15 @@ export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
     isLoading,
   } = useReplies({ commentId })
 
+  const setReplies = useCommentStore((state) => state.setReplies)
+  const childrenIds = useCommentStore(
+    (state) => state.entities[commentId]?.childrenIds || [],
+  )
+  useEffect(() => {
+    if (replies.length > 0) {
+      setReplies(commentId, replies)
+    }
+  }, [replies, commentId, setReplies])
   if (isError && replies.length === 0) {
     return (
       <ErrorFallback
@@ -42,10 +54,11 @@ export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
   return (
     <div className="pl-[55px] pb-3 flex flex-col">
       <div className="pt-6 flex flex-col gap-6">
-        {replies.map((reply) => (
+        {childrenIds.map((id) => (
           <ReplyItem
-            key={reply.commentId}
-            reply={reply}
+            key={id}
+            id={id}
+            parentId={commentId}
             showReplies={showReplies}
           />
         ))}

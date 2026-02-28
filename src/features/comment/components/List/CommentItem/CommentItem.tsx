@@ -1,22 +1,22 @@
 import { useParams } from 'next/navigation'
 
 import { useCommentActions } from '@/features/comment/hooks/useCommentActions'
-import { CommentContent } from '@/features/comment/types'
+import { useCommentStore } from '@/stores/useCommentStore'
 
 import BaseCommentItem from '../BaseCommentItem/BaseCommentItem'
 
 type CommentItemProps = {
-  comment: CommentContent
+  id: number
   onReply: () => void
 }
 
-export default function CommentItem({ comment, onReply }: CommentItemProps) {
+export default function CommentItem({ id, onReply }: CommentItemProps) {
+  const comment = useCommentStore((state) => state.entities[id])
   const params = useParams<{ postId: string }>()
-  const postId = Number(params.postId)
 
   const { handleDelete, handleSave, isUpdating } = useCommentActions(
-    comment,
-    postId,
+    id,
+    Number(params.postId),
   )
 
   return (
