@@ -7,7 +7,7 @@ interface CommentEditFormProps {
   initialContent: string
   onCancel: () => void
   onSave: (text: string) => void
-  isUpdating: boolean
+  isUpdating?: boolean
 }
 
 export default function CommentEditForm({
