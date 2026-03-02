@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
 
 import { ChatMessage } from '@/features/chat/types/chat.type'
 import { cn, formatChatTime, getImageUrl } from '@/lib/common'
@@ -8,31 +7,17 @@ import ChatSpeechBubble from '../ChatSpeechBubble/ChatSpeechBubble'
 
 export default function ChatMessageItem({
   messageItem,
-  nextMessage,
+  isMyMessage,
+  showProfile,
+  showTime,
 }: {
   messageItem: ChatMessage
-  nextMessage?: ChatMessage
+  isMyMessage: boolean
+  showProfile: boolean
+  showTime: boolean
 }) {
-  const searchParams = useSearchParams()
-  const chatParticipantId = Number(searchParams.get('chatParticipantId'))
-
   const { senderId, senderImage, senderNickname, message, createdAt } =
     messageItem
-  const isMyMessage = senderId === chatParticipantId
-
-  const shouldShowTime = () => {
-    if (!nextMessage) return true
-
-    if (senderId !== nextMessage.senderId) return true
-
-    const currentTime = new Date(createdAt)
-    const nextTime = new Date(nextMessage.createdAt)
-
-    return (
-      currentTime.getHours() !== nextTime.getHours() ||
-      currentTime.getMinutes() !== nextTime.getMinutes()
-    )
-  }
 
   return (
     <div
@@ -43,12 +28,14 @@ export default function ChatMessageItem({
     >
       {!isMyMessage && (
         <div className="w-10 h-10 shrink-0 relative">
-          <Image
-            src={getImageUrl(senderImage) || '/default-profile.png'}
-            alt="유저 이미지"
-            fill
-            className="rounded-full border border-black/5 object-cover"
-          />
+          {showProfile && (
+            <Image
+              src={getImageUrl(senderImage) || '/default-profile.png'}
+              alt="유저 이미지"
+              fill
+              className="rounded-full border border-black/5 object-cover"
+            />
+          )}
         </div>
       )}
 
@@ -58,7 +45,7 @@ export default function ChatMessageItem({
           isMyMessage ? 'items-end' : 'items-start',
         )}
       >
-        {!isMyMessage && (
+        {!isMyMessage && showProfile && (
           <span className="font-medium text-gray-600 ml-1">
             {senderNickname}
           </span>
@@ -72,7 +59,7 @@ export default function ChatMessageItem({
         >
           <ChatSpeechBubble senderId={senderId} message={message} />
 
-          {shouldShowTime() && (
+          {showTime && (
             <span className="text-[10px] text-gray-400 shrink-0 mb-1">
               {formatChatTime(createdAt)}
             </span>

@@ -17,6 +17,12 @@ interface ChatMessageListProps {
   onScrollToTop: () => void
 }
 
+type ChatMessageVM = ChatMessage & {
+  isMyMessage: boolean
+  showProfile: boolean
+  showTime: boolean
+}
+
 export default function ChatMessageList({
   messages,
   isFetchingNextPage,
@@ -27,7 +33,6 @@ export default function ChatMessageList({
   const chatParticipantId = Number(searchParams.get('chatParticipantId'))
 
   const containerRef = useRef<HTMLDivElement>(null)
-
   const chatMessages = messages as ChatMessage[]
 
   const topSentinelRef = useInfiniteScroll({
@@ -41,26 +46,63 @@ export default function ChatMessageList({
   const prevLastMessageIdRef = useRef<number | string | null>(null)
 
   useLayoutEffect(() => {
-    const last = chatMessages[0]
+    const last = chatMessages[chatMessages.length - 1]
     const lastId = last?.messageId ?? null
 
     if (lastId && lastId !== prevLastMessageIdRef.current) {
       if (last.senderId === chatParticipantId) {
-        containerRef.current?.scrollTo({ top: 0, behavior: 'auto' })
+        containerRef.current?.scrollTo({
+          top: containerRef.current.scrollHeight,
+          behavior: 'auto',
+        })
       }
     }
 
     prevLastMessageIdRef.current = lastId
   }, [chatMessages, chatParticipantId])
 
+  const items: ChatMessageVM[] = chatMessages.map((msg, index) => {
+    const newer = chatMessages[index + 1]
+    const older = chatMessages[index - 1]
+
+    const isMyMessage = msg.senderId === chatParticipantId
+
+    const showProfile =
+      !isMyMessage && (!older || msg.senderId !== older.senderId)
+
+    const showTime = (() => {
+      if (!newer) return true
+      if (msg.senderId !== newer.senderId) return true
+
+      const a = new Date(msg.createdAt).getTime()
+      const b = new Date(newer.createdAt).getTime()
+      return Math.floor(a / 60000) !== Math.floor(b / 60000)
+    })()
+
+    return {
+      ...msg,
+      isMyMessage,
+      showProfile,
+      showTime,
+    }
+  })
+
   return (
     <ContainerScrollWrapper
-      items={chatMessages}
-      estimatedItemHeight={66}
+      items={items}
       keyField="messageId"
       direction="reverse"
+      estimatedItemHeight={66}
       className="overflow-y-auto flex-1 flex"
-      renderItem={(item) => <ChatMessageItem messageItem={item} />}
+      containerRef={containerRef}
+      renderItem={(item) => (
+        <ChatMessageItem
+          messageItem={item}
+          isMyMessage={item.isMyMessage}
+          showProfile={item.showProfile}
+          showTime={item.showTime}
+        />
+      )}
     >
       <div className="flex flex-col items-center shrink-0">
         {isFetchingNextPage && (
