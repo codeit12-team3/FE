@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation'
 
-import Default from '@/app/chat/@chatRoom/default'
 import { cn } from '@/lib/common'
 
 import { useIsMobile } from '../../hook/useIsMobile'
@@ -30,13 +29,14 @@ export default function ChatLayoutClient({
       >
         {sidebar}
       </aside>
+
       <main
         className={cn(
           'bg-gray-50 flex-1 flex flex-col min-h-0',
           isMobile && !isChatting ? 'hidden' : 'flex',
         )}
       >
-        {pathname === '/chat' ? <Default /> : chatRoom}
+        {chatRoom}
       </main>
     </div>
   )
