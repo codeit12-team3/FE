@@ -99,6 +99,14 @@
     </td>
   </tr>
 </table>
+<br/>
+
+## 프로젝트 구조
+### 1. 컨벤션
+### 2. 폴더 구조
+<br/>
+
+## Development Workflow
+<img width="1893" height="993" alt="image" src="https://github.com/user-attachments/assets/a7fda7a1-eed8-40d0-8d02-6ac90cb46c2b" />
 
 
-<br></br>
