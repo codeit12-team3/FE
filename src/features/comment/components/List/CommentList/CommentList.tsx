@@ -6,8 +6,8 @@ import { CommentContent } from '@/features/comment/types'
 import { useCommentStore } from '@/stores/useCommentStore'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
-import CommentWithReplies from '../CommentWithReplies/CommentWithReplies'
+import CommentCardSkeleton from '../CommentCard/CommentCardSkeleton'
+import CommentThread from '../CommentThread/CommentThread'
 
 interface CommentListProps {
   comments: CommentContent[]
@@ -40,7 +40,7 @@ export default function CommentList({
     return (
       <div className="flex flex-col gap-6">
         {Array.from({ length: 3 }).map((_, index) => (
-          <BaseCommentItemSkeleton key={index} showReplies={true} />
+          <CommentCardSkeleton key={index} showReplies={true} />
         ))}
       </div>
     )
@@ -71,7 +71,7 @@ export default function CommentList({
       endReached={handleEndReached}
       itemContent={(index, id) => (
         <div className="pb-6">
-          <CommentWithReplies key={id} id={id} />
+          <CommentThread key={id} id={id} />
         </div>
       )}
       components={{

@@ -5,25 +5,27 @@ import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 import CommentEditForm from '../CommentEditForm/CommentEditForm'
 import CommentMenu from '../CommentMenu/CommentMenu'
 
-type BaseCommentItemProps = {
+type CommentCardProps = {
   imageUrl: string
   nickname: string
   content: string
   createdAt: string
   updatedAt: string
+
   isOwner: boolean
   isEditing: boolean
   isUpdating?: boolean
-  onDelete: () => void
-  onEditClick: () => void
-  onSaveEdit: (text: string) => Promise<void>
-  onCancelEdit: () => void
+
+  onDelete?: () => void
+  onEditClick?: () => void
+  onCancelEdit?: () => void
+  onSaveEdit?: (text: string) => Promise<void>
   onReplyClick?: () => void
 }
 
 const DELETED_TEXT = '삭제된 댓글입니다'
 
-export default function BaseCommentItem({
+export default function CommentCard({
   imageUrl,
   nickname,
   content,
@@ -37,12 +39,15 @@ export default function BaseCommentItem({
   onSaveEdit,
   onCancelEdit,
   onReplyClick,
-}: BaseCommentItemProps) {
+}: CommentCardProps) {
   const isDeleted = content === DELETED_TEXT
   const displayTime =
     createdAt === updatedAt
       ? formatRelativeTime(createdAt)
       : `${formatRelativeTime(updatedAt)} • 수정됨`
+
+  const canShowMenu = isOwner && !isDeleted && onDelete && onEditClick
+  const canEdit = isEditing && onSaveEdit && onCancelEdit
 
   return (
     <div className={cn('flex items-start gap-4', isEditing ? 'p-0' : 'pb-4')}>
@@ -51,19 +56,21 @@ export default function BaseCommentItem({
           src={getImageUrl(imageUrl, true)}
           alt={nickname}
           fill
+          sizes="40px"
           className="object-cover"
+          loading="lazy"
         />
       </div>
 
       <div className="flex w-full flex-col gap-2">
         <div className="flex items-center justify-between">
           <span className="font-semibold">{nickname}</span>
-          {isOwner && !isDeleted && (
+          {canShowMenu && (
             <CommentMenu onConfirm={onDelete} startEdit={onEditClick} />
           )}
         </div>
 
-        {isEditing ? (
+        {canEdit ? (
           <CommentEditForm
             initialContent={content}
             onSave={onSaveEdit}

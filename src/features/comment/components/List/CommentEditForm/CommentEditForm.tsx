@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/common'
 import { Textarea } from '@/components/ui'
@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui'
 interface CommentEditFormProps {
   initialContent: string
   onCancel: () => void
-  onSave: (text: string) => void
+  onSave: (text: string) => Promise<void>
   isUpdating?: boolean
 }
 
@@ -17,6 +17,10 @@ export default function CommentEditForm({
   isUpdating,
 }: CommentEditFormProps) {
   const [text, setText] = useState(initialContent)
+
+  useEffect(() => {
+    setText(initialContent)
+  }, [initialContent])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -45,6 +49,7 @@ export default function CommentEditForm({
         <Button
           onClick={onCancel}
           disabled={isUpdating}
+          type="button"
           className="w-26 h-10 rounded-xl border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50"
         >
           취소

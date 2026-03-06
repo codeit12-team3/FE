@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 
 import { useCommentMutations, useComments } from '@/features/comment/api'
@@ -16,8 +17,10 @@ export default function CommentContainer({
   commentCount,
 }: CommentContainerProps) {
   const params = useParams<{ postId: string }>()
-  const postId = Number(params.postId)
-  const { create } = useCommentMutations(postId)
+  const { data: session } = useSession()
+  const rawPostId = params.postId
+  const postId = Number(rawPostId)
+  const { createCommentMutation } = useCommentMutations(postId)
   const {
     comments,
     isLoading,
@@ -28,8 +31,8 @@ export default function CommentContainer({
     refetch,
   } = useComments(postId)
 
-  const handleSubmit = (text: string) => {
-    create.mutate({
+  const handleSubmit = async (text: string) => {
+    await createCommentMutation.mutateAsync({
       postId,
       content: text,
     })
@@ -41,7 +44,12 @@ export default function CommentContainer({
         댓글 <span className="text-blue-500">{commentCount}</span>
       </h2>
       <div className="pb-[34px]">
-        <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
+        <CommentForm
+          mode="create"
+          onSubmit={handleSubmit}
+          isSubmitting={createCommentMutation.isPending}
+          userImage={session?.user.image}
+        />
       </div>
       {isError ? (
         <ErrorFallback

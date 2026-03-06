@@ -5,15 +5,14 @@ import { useReplies } from '@/features/comment/api'
 import { useCommentStore } from '@/stores/useCommentStore'
 
 import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
+import CommentCardSkeleton from '../CommentCard/CommentCardSkeleton'
 import ReplyItem from '../ReplyItem/ReplyItem'
 
 interface ReplyListProps {
   commentId: number
-  showReplies: boolean
 }
 
-export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
+export default function ReplyList({ commentId }: ReplyListProps) {
   const {
     replies,
     fetchNextPage,
@@ -45,7 +44,7 @@ export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
     return (
       <div className="flex flex-col gap-6">
         {Array.from({ length: 3 }).map((_, index) => (
-          <BaseCommentItemSkeleton key={index} showReplies={true} />
+          <CommentCardSkeleton key={index} showReplies={true} />
         ))}
       </div>
     )
@@ -55,12 +54,7 @@ export default function ReplyList({ commentId, showReplies }: ReplyListProps) {
     <div className="pl-[55px] pb-3 flex flex-col">
       <div className="pt-6 flex flex-col gap-6">
         {childrenIds.map((id) => (
-          <ReplyItem
-            key={id}
-            id={id}
-            parentId={commentId}
-            showReplies={showReplies}
-          />
+          <ReplyItem key={id} id={id} parentId={commentId} />
         ))}
       </div>
 
