@@ -1,6 +1,7 @@
-# <img width="166" height="59" alt="Group 33970 (1)" src="https://github.com/user-attachments/assets/85c4fd3f-ea05-41d1-a932-374bb8e1d91f" />
+# <img width="135" height="48" alt="Vector (1)" src="https://github.com/user-attachments/assets/13b6a536-4def-41ef-abac-6e523577a4ea" />
 ## Tech Stack
 <table>
+
   <tr>
     <th width="200px">분류</th>
     <th width="550px">기술 스택</th>
