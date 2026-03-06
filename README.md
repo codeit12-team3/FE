@@ -1,4 +1,4 @@
-# <img width="135" height="48" alt="Vector (1)" src="https://github.com/user-attachments/assets/13b6a536-4def-41ef-abac-6e523577a4ea" />
+# Tripus 
 ## Tech Stack
 <table>
 
