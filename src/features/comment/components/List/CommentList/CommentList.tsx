@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
@@ -10,6 +9,7 @@ import CommentCardSkeleton from '../CommentCard/CommentCardSkeleton'
 import CommentThread from '../CommentThread/CommentThread'
 
 interface CommentListProps {
+  postId: number
   comments: CommentContent[]
   isLoading: boolean
   fetchNextPage: () => void
@@ -19,6 +19,7 @@ interface CommentListProps {
 }
 
 export default function CommentList({
+  postId,
   comments,
   isLoading,
   fetchNextPage,
@@ -26,11 +27,8 @@ export default function CommentList({
   isFetchingNextPage,
   isError,
 }: CommentListProps) {
-  const setComments = useCommentStore((state) => state.setComments)
   const rootIds = useCommentStore((state) => state.rootIds)
-  useEffect(() => {
-    setComments(comments)
-  }, [comments, setComments])
+
   const handleEndReached = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
@@ -71,7 +69,7 @@ export default function CommentList({
       endReached={handleEndReached}
       itemContent={(index, id) => (
         <div className="pb-6">
-          <CommentThread key={id} id={id} />
+          <CommentThread key={id} id={id} postId={postId} />
         </div>
       )}
       components={{

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
-import { Button } from '@/components/common'
+import { Button, toast } from '@/components/common'
 import { Textarea } from '@/components/ui'
 import { getImageUrl } from '@/lib/common/image'
 
@@ -67,7 +67,9 @@ export default function CommentForm({
       if (onClose) {
         onClose()
       }
-    } catch {}
+    } catch {
+      toast.error('작업을 완료하지 못했습니다. 다시 시도해주세요.')
+    }
   }
 
   return (

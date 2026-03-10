@@ -5,7 +5,7 @@ import { getImageUrl } from '@/lib/common'
 
 export default function UserInfo() {
   const { data: session } = useSession()
-  // 임시 처리
+
   const user = session?.user
   if (!user) return null
 

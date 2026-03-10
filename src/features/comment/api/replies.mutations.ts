@@ -2,37 +2,85 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from '@/components/common'
 
+import {
+  removeReplyFromCache,
+  ReplyListCache,
+  updateReplyInCache,
+} from './cache/replies.cache'
 import { commentKeys } from './key/comments.keys'
 import { replyKeys } from './key/replies.keys'
 import { createReply, deleteReply, updateReply } from './replies.clients'
 
 export const useReplyMutations = (postId: number, parentId: number) => {
   const queryClient = useQueryClient()
+  const replyListKey = replyKeys.list(parentId)
+  const commentListKey = commentKeys.list(postId)
 
   const createReplyMutation = useMutation({
     mutationFn: createReply,
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
-      // 부모 댓글의 replyCount 업데이트를 위함
-      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
+      await queryClient.invalidateQueries({ queryKey: replyListKey })
+
+      await queryClient.invalidateQueries({ queryKey: commentListKey })
       toast.success('답글이 작성되었습니다')
     },
   })
 
   const updateReplyMutation = useMutation({
     mutationFn: updateReply,
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
-      toast.success('답글이 수정되었습니다')
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: replyListKey })
+      const previousReplies =
+        queryClient.getQueryData<ReplyListCache>(replyListKey)
+
+      if (previousReplies) {
+        queryClient.setQueryData<ReplyListCache>(replyListKey, (old) =>
+          updateReplyInCache(old, variables.commentId, variables.content),
+        )
+      }
+      return { previousReplies }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousReplies) {
+        queryClient.setQueryData<ReplyListCache>(
+          replyListKey,
+          context.previousReplies,
+        )
+      }
+      toast.error('답글 수정에 실패했습니다.')
+    },
+    onSettled: () => {
+      // 서버 최신 데이터와 동기화
+      queryClient.invalidateQueries({ queryKey: replyListKey })
     },
   })
 
   const removeReplyMutation = useMutation({
     mutationFn: deleteReply,
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: replyKeys.list(parentId) })
-      queryClient.invalidateQueries({ queryKey: commentKeys.list(postId) })
-      toast.success('답글이 삭제되었습니다')
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: replyListKey })
+      const previousReplies =
+        queryClient.getQueryData<ReplyListCache>(replyListKey)
+
+      if (previousReplies) {
+        queryClient.setQueryData<ReplyListCache>(replyListKey, (old) =>
+          removeReplyFromCache(old, variables.commentId),
+        )
+      }
+      return { previousReplies }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousReplies) {
+        queryClient.setQueryData<ReplyListCache>(
+          replyListKey,
+          context.previousReplies,
+        )
+      }
+      toast.error('답글 삭제에 실패했습니다.')
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: replyListKey })
+      queryClient.invalidateQueries({ queryKey: commentListKey })
     },
   })
 

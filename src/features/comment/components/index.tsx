@@ -58,6 +58,7 @@ export default function CommentContainer({
         />
       ) : (
         <CommentList
+          postId={postId}
           comments={comments}
           isLoading={isLoading}
           fetchNextPage={fetchNextPage}
