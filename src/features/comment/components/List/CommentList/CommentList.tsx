@@ -1,16 +1,15 @@
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
-import { CommentContent } from '@/features/comment/types'
-import { useCommentStore } from '@/stores/useCommentStore'
-
-import ErrorFallback from '../../Error/ErrorFallback'
-import CommentCardSkeleton from '../CommentCard/CommentCardSkeleton'
-import CommentThread from '../CommentThread/CommentThread'
+import ErrorFallback from '@/features/comment/components/Error/ErrorFallback'
+import CommentCardSkeleton from '@/features/comment/components/List/CommentCard/CommentCardSkeleton'
+import CommentThread from '@/features/comment/components/List/CommentThread/CommentThread'
+import { useCommentStore } from '@/features/comment/stores'
+import { Comment } from '@/features/comment/types'
 
 interface CommentListProps {
   postId: number
-  comments: CommentContent[]
+  comments: Comment[]
   isLoading: boolean
   fetchNextPage: () => void
   hasNextPage: boolean

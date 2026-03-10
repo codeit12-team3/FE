@@ -6,9 +6,8 @@ import {
   removeReplyFromCache,
   ReplyListCache,
   updateReplyInCache,
-} from './cache/replies.cache'
-import { commentKeys } from './key/comments.keys'
-import { replyKeys } from './key/replies.keys'
+} from './cache'
+import { commentKeys, replyKeys } from './key'
 import { createReply, deleteReply, updateReply } from './replies.clients'
 
 export const useReplyMutations = (postId: number, parentId: number) => {
@@ -50,7 +49,6 @@ export const useReplyMutations = (postId: number, parentId: number) => {
       toast.error('답글 수정에 실패했습니다.')
     },
     onSettled: () => {
-      // 서버 최신 데이터와 동기화
       queryClient.invalidateQueries({ queryKey: replyListKey })
     },
   })

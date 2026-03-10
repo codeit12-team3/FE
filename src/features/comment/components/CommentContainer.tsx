@@ -4,10 +4,9 @@ import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 
 import { useCommentMutations, useComments } from '@/features/comment/api'
-
-import CommentForm from './CommentForm/CommentForm'
-import ErrorFallback from './Error/ErrorFallback'
-import CommentList from './List/CommentList/CommentList'
+import CommentForm from '@/features/comment/components/CommentForm/CommentForm'
+import ErrorFallback from '@/features/comment/components/Error/ErrorFallback'
+import CommentList from '@/features/comment/components/List/CommentList/CommentList'
 
 interface CommentContainerProps {
   commentCount: number

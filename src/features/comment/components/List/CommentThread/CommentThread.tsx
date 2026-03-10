@@ -1,8 +1,8 @@
 'use client'
 
-import CommentItem from '../CommentItem/CommentItem'
-import ReplyComposer from './ReplyComposer'
-import ReplySection from './ReplySection'
+import CommentItem from '@/features/comment/components/List/CommentItem/CommentItem'
+import ReplyComposer from '@/features/comment/components/List/CommentThread/ReplyComposer'
+import ReplySection from '@/features/comment/components/List/CommentThread/ReplySection'
 
 interface CommentThreadProps {
   id: number

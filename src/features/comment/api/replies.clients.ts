@@ -1,14 +1,13 @@
 import { axios } from '@/api/common'
+import { GetRepliesResponse } from '@/features/comment/types'
 import { ApiResponse } from '@/types/common'
-
-import { ReplyType } from '../types'
 
 export const fetchReplies = async (params: {
   commentId: number
   lastReplyId?: number
   size?: number
-}): Promise<ApiResponse<ReplyType>> => {
-  const { data } = await axios.get<ApiResponse<ReplyType>>(
+}): Promise<ApiResponse<GetRepliesResponse>> => {
+  const { data } = await axios.get<ApiResponse<GetRepliesResponse>>(
     `/v1/comments/${params.commentId}/replies`,
     {
       params: {

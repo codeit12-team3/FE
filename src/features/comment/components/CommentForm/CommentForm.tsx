@@ -7,18 +7,19 @@ import { Button, toast } from '@/components/common'
 import { Textarea } from '@/components/ui'
 import { getImageUrl } from '@/lib/common/image'
 
-type CommentFormMode = 'create' | 'reply'
+export type CommentFormMode = 'create' | 'reply' | 'edit'
 
-interface CommentFormProps {
+export interface CommentFormProps {
   mode: CommentFormMode
   initialValue?: string
+  userImage: string | null
+  isSubmitting: boolean
   onSubmit: (value: string) => Promise<void>
   onClose?: () => void
-  isSubmitting: boolean
-  userImage: string | null
+  autoFocus?: boolean
 }
 
-const FORM_CONFIG: Record<
+export const COMMENT_FORM_CONFIG: Record<
   CommentFormMode,
   {
     placeholder: string
@@ -33,6 +34,10 @@ const FORM_CONFIG: Record<
     placeholder: '답글을 입력해주세요',
     submitText: '답글 작성',
   },
+  edit: {
+    placeholder: '수정할 내용을 입력해주세요',
+    submitText: '수정 완료',
+  },
 }
 
 export default function CommentForm({
@@ -46,7 +51,7 @@ export default function CommentForm({
   const [text, setText] = useState(initialValue)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-  const config = FORM_CONFIG[mode]
+  const config = COMMENT_FORM_CONFIG[mode]
   const trimmedText = text.trim()
   const isSubmitDisabled = isSubmitting || !trimmedText
   const showCancelButton = mode === 'reply'

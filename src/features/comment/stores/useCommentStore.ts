@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
-import { CommentContent, ReplyContent } from '@/features/comment/types'
+import { Comment, Reply } from '@/features/comment/types'
 
-export type Node = (CommentContent | ReplyContent) & {
+export type Node = (Comment | Reply) & {
   childrenIds: number[]
 }
 
@@ -10,8 +10,8 @@ interface useCommentStoreProps {
   entities: Record<number, Node>
   rootIds: number[]
 
-  setComments: (comments: CommentContent[]) => void
-  setReplies: (parentId: number, replies: ReplyContent[]) => void
+  setComments: (comments: Comment[]) => void
+  setReplies: (parentId: number, replies: Reply[]) => void
 
   updateContent: (id: number, content: string) => void
   removeNode: (id: number, parentId?: number) => void
@@ -49,11 +49,11 @@ export const useCommentStore = create<useCommentStoreProps>((set) => ({
         const prevNode = state.entities[id]
 
         const prevAsComment = prevNode as
-          | (CommentContent & { childrenIds: number[] })
+          | (Comment & { childrenIds: number[] })
           | undefined
         const childrenIds = prevNode?.childrenIds ?? []
 
-        if (sameIncoming<CommentContent>(prevAsComment, comment)) {
+        if (sameIncoming<Comment>(prevAsComment, comment)) {
           nextEntities[id] = prevNode
           continue
         }
@@ -84,11 +84,11 @@ export const useCommentStore = create<useCommentStoreProps>((set) => ({
         const prevNode = state.entities[id]
 
         const prevAsReply = prevNode as
-          | (ReplyContent & { childrenIds: number[] })
+          | (Reply & { childrenIds: number[] })
           | undefined
         const childrenIds = prevNode?.childrenIds ?? []
 
-        if (sameIncoming<ReplyContent>(prevAsReply, reply)) {
+        if (sameIncoming<Reply>(prevAsReply, reply)) {
           nextEntities[id] = prevNode
           continue
         }

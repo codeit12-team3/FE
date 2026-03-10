@@ -6,9 +6,9 @@ import {
   CommentListCache,
   removeCommentFromCache,
   updateCommentInCache,
-} from './cache/comments.cache'
+} from './cache'
 import { createComment, deleteComment, updateComment } from './comments.clients'
-import { commentKeys } from './key/comments.keys'
+import { commentKeys } from './key'
 
 export const useCommentMutations = (postId: number) => {
   const queryClient = useQueryClient()

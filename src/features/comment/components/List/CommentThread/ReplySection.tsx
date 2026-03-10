@@ -3,9 +3,8 @@
 import { useState } from 'react'
 
 import { useReplies } from '@/features/comment/api'
-
-import ReplyList from '../ReplyList/ReplyList'
-import ReplyToggleButton from './ReplyToggleButton'
+import ReplyToggleButton from '@/features/comment/components/List/CommentThread/ReplyToggleButton'
+import ReplyList from '@/features/comment/components/List/ReplyList/ReplyList'
 
 interface ReplySectionProps {
   parentId: number

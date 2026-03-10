@@ -1,10 +1,9 @@
 import { InfiniteData } from '@tanstack/react-query'
 
+import { GetCommentsResponse } from '@/features/comment/types'
 import { ApiResponse } from '@/types/common'
 
-import { CommentType } from '../../types'
-
-export type CommentListCache = InfiniteData<ApiResponse<CommentType>>
+export type CommentListCache = InfiniteData<ApiResponse<GetCommentsResponse>>
 
 export const updateCommentInCache = (
   oldData: CommentListCache | undefined,

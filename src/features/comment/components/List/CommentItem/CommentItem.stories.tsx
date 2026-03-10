@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { fn } from '@storybook/test'
 
-import CommentCard from '../CommentCard/CommentCard'
+import CommentCard from '@/features/comment/components/List/CommentCard/CommentCard'
 
 const meta = {
   title: 'Comment/CommentCard',
@@ -47,7 +47,6 @@ export const DeletedComment: Story = {
     nickname: '이민수',
     imageUrl: 'https://avatars.githubusercontent.com/u/4?v=4',
     content: '삭제된 댓글입니다',
-    // 삭제된 댓글이면 메뉴/답글 버튼이 안 나오게 하고 싶으면 액션 제거도 가능
     onDelete: undefined,
     onEditClick: undefined,
     onReplyClick: undefined,
@@ -68,7 +67,6 @@ export const LongComment: Story = {
   },
 }
 
-// “답글 UI”를 보여주고 싶으면 onReplyClick을 빼면 됨
 export const Reply: Story = {
   args: {
     nickname: '정수진',

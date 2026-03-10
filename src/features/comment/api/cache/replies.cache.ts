@@ -1,10 +1,9 @@
 import { InfiniteData } from '@tanstack/react-query'
 
+import { GetRepliesResponse } from '@/features/comment/types'
 import { ApiResponse } from '@/types/common'
 
-import { ReplyType } from '../../types'
-
-export type ReplyListCache = InfiniteData<ApiResponse<ReplyType>>
+export type ReplyListCache = InfiniteData<ApiResponse<GetRepliesResponse>>
 
 export const updateReplyInCache = (
   oldData: ReplyListCache | undefined,

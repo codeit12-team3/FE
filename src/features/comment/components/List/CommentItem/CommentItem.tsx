@@ -1,9 +1,8 @@
+import CommentCard from '@/features/comment/components/List/CommentCard/CommentCard'
 import { useCommentActions } from '@/features/comment/hooks/useCommentActions'
 import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
 import { useCurrentUser } from '@/features/comment/hooks/useCurrentUser'
-import { useCommentStore } from '@/stores/useCommentStore'
-
-import CommentCard from '../CommentCard/CommentCard'
+import { useCommentStore } from '@/features/comment/stores'
 
 type CommentItemProps = {
   id: number

@@ -2,11 +2,10 @@ import { useEffect } from 'react'
 
 import { IconChevronDown } from '@/assets/svgr'
 import { useReplies } from '@/features/comment/api'
-import { useCommentStore } from '@/stores/useCommentStore'
-
-import ErrorFallback from '../../Error/ErrorFallback'
-import CommentCardSkeleton from '../CommentCard/CommentCardSkeleton'
-import ReplyItem from '../ReplyItem/ReplyItem'
+import ErrorFallback from '@/features/comment/components/Error/ErrorFallback'
+import CommentCardSkeleton from '@/features/comment/components/List/CommentCard/CommentCardSkeleton'
+import ReplyItem from '@/features/comment/components/List/ReplyItem/ReplyItem'
+import { useCommentStore } from '@/features/comment/stores'
 
 interface ReplyListProps {
   commentId: number

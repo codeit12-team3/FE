@@ -1,4 +1,4 @@
-import { useCommentMutations } from '../api'
+import { useCommentMutations } from '@/features/comment/api'
 
 export function useCommentActions(id: number, postId: number) {
   const { updateCommentMutation, removeCommentMutation } =

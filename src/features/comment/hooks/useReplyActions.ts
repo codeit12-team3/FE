@@ -1,6 +1,5 @@
-import { useCommentStore } from '@/stores/useCommentStore'
-
-import { useReplyMutations } from '../api'
+import { useReplyMutations } from '@/features/comment/api'
+import { useCommentStore } from '@/features/comment/stores/useCommentStore'
 
 export function useReplyActions(id: number, postId: number, parentId: number) {
   const { updateReplyMutation, removeReplyMutation } = useReplyMutations(

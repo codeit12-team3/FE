@@ -1,17 +1,14 @@
 import Image from 'next/image'
 
+import CommentEditForm from '@/features/comment/components/List/CommentEditForm/CommentEditForm'
+import CommentMenu from '@/features/comment/components/List/CommentMenu/CommentMenu'
+import { Comment } from '@/features/comment/types'
 import { cn, formatRelativeTime, getImageUrl } from '@/lib/common'
 
-import CommentEditForm from '../CommentEditForm/CommentEditForm'
-import CommentMenu from '../CommentMenu/CommentMenu'
-
-type CommentCardProps = {
-  imageUrl: string
-  nickname: string
-  content: string
-  createdAt: string
-  updatedAt: string
-
+type CommentCardProps = Pick<
+  Comment,
+  'imageUrl' | 'nickname' | 'content' | 'createdAt' | 'updatedAt'
+> & {
   isOwner: boolean
   isEditing: boolean
   isUpdating?: boolean

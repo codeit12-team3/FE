@@ -3,9 +3,8 @@
 import { useSession } from 'next-auth/react'
 
 import { useReplyMutations } from '@/features/comment/api'
+import CommentForm from '@/features/comment/components/CommentForm/CommentForm'
 import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
-
-import CommentForm from '../../CommentForm/CommentForm'
 
 interface ReplyComposerProps {
   postId: number
