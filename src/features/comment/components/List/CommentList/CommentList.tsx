@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
@@ -26,7 +27,12 @@ export default function CommentList({
   isFetchingNextPage,
   isError,
 }: CommentListProps) {
+  const setComments = useCommentStore((state) => state.setComments)
   const rootIds = useCommentStore((state) => state.rootIds)
+
+  useEffect(() => {
+    setComments(comments)
+  }, [comments, setComments])
 
   const handleEndReached = () => {
     if (hasNextPage && !isFetchingNextPage) {

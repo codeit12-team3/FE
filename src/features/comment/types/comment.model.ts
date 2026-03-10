@@ -8,6 +8,7 @@ export interface Comment {
   updatedAt: string
   isUpdated: boolean
   depth: number
+  commentsCount: number
 }
 
 export interface Reply extends Comment {

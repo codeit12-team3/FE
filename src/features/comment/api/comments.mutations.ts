@@ -13,11 +13,13 @@ import { commentKeys } from './key'
 export const useCommentMutations = (postId: number) => {
   const queryClient = useQueryClient()
   const queryKey = commentKeys.list(postId)
+  const postDetailKey = ['postDetail', String(postId)] as const
 
   const createCommentMutation = useMutation({
     mutationFn: createComment,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey })
+      await queryClient.invalidateQueries({ queryKey: postDetailKey })
       toast.success('댓글이 작성되었습니다')
     },
   })
@@ -53,7 +55,8 @@ export const useCommentMutations = (postId: number) => {
 
   const removeCommentMutation = useMutation({
     mutationFn: deleteComment,
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: postDetailKey })
       toast.success('댓글이 삭제되었습니다.')
     },
     onMutate: async (variables) => {

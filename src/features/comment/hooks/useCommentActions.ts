@@ -5,9 +5,7 @@ export function useCommentActions(id: number, postId: number) {
     useCommentMutations(postId)
 
   const handleDelete = () => {
-    if (window.confirm('댓글을 삭제하시겠습니까?')) {
-      removeCommentMutation.mutate({ commentId: id })
-    }
+    removeCommentMutation.mutate({ commentId: id })
   }
 
   const handleSave = async (editText: string) => {

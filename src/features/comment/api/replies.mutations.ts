@@ -14,13 +14,14 @@ export const useReplyMutations = (postId: number, parentId: number) => {
   const queryClient = useQueryClient()
   const replyListKey = replyKeys.list(parentId)
   const commentListKey = commentKeys.list(postId)
+  const postDetailKey = ['postDetail', String(postId)] as const
 
   const createReplyMutation = useMutation({
     mutationFn: createReply,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: replyListKey })
-
       await queryClient.invalidateQueries({ queryKey: commentListKey })
+      await queryClient.invalidateQueries({ queryKey: postDetailKey })
       toast.success('답글이 작성되었습니다')
     },
   })
@@ -79,6 +80,7 @@ export const useReplyMutations = (postId: number, parentId: number) => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: replyListKey })
       queryClient.invalidateQueries({ queryKey: commentListKey })
+      queryClient.invalidateQueries({ queryKey: postDetailKey })
     },
   })
 

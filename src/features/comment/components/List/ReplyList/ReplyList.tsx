@@ -27,9 +27,7 @@ export default function ReplyList({ commentId }: ReplyListProps) {
     (state) => state.entities[commentId]?.childrenIds || [],
   )
   useEffect(() => {
-    if (replies.length > 0) {
-      setReplies(commentId, replies)
-    }
+    setReplies(commentId, replies)
   }, [replies, commentId, setReplies])
   if (isError && replies.length === 0) {
     return (
