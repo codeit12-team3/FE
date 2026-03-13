@@ -15,9 +15,19 @@ export const useCommentInteractionStore = create<CommentInteractionStore>(
   (set, get) => ({
     activeId: null,
     mode: null,
-    open: (id, mode) => set({ activeId: id, mode }),
+    open: (id, mode) =>
+      set((state) => {
+        if (state.activeId === id && state.mode === mode) return state
+        return { activeId: id, mode }
+      }),
     close: () => set({ activeId: null, mode: null }),
-    isEditing: (id) => get().activeId === id && get().mode === 'EDIT',
-    isReplying: (id) => get().activeId === id && get().mode === 'REPLY',
+    isEditing: (id) => {
+      const { activeId, mode } = get()
+      return activeId === id && mode === 'EDIT'
+    },
+    isReplying: (id) => {
+      const { activeId, mode } = get()
+      return activeId === id && mode === 'REPLY'
+    },
   }),
 )
