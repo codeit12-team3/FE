@@ -10,11 +10,11 @@ type CommentItemProps = {
 }
 
 export default function CommentItem({ id, postId }: CommentItemProps) {
-  const comment = useCommentStore((s) => s.entities[id])
+  const comment = useCommentStore((state) => state.entities[id])
 
-  const isEditing = useCommentInteractionStore((s) => s.isEditing(id))
-  const open = useCommentInteractionStore((s) => s.open)
-  const close = useCommentInteractionStore((s) => s.close)
+  const isEditing = useCommentInteractionStore((state) => state.isEditing(id))
+  const open = useCommentInteractionStore((state) => state.open)
+  const close = useCommentInteractionStore((state) => state.close)
 
   const { checkIsOwner } = useCurrentUser()
   const { handleDelete, handleSave, isUpdating } = useCommentActions(id, postId)
