@@ -37,6 +37,9 @@ export const useReplyMutations = (postId: number, parentId: number) => {
 
   const updateReplyMutation = useMutation({
     mutationFn: updateReply,
+    onSuccess: () => {
+      toast.success('답글이 수정되었습니다.')
+    },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: replyListKey })
       const previousReplies =
@@ -62,6 +65,11 @@ export const useReplyMutations = (postId: number, parentId: number) => {
 
   const removeReplyMutation = useMutation({
     mutationFn: deleteReply,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: commentListKey })
+      await queryClient.invalidateQueries({ queryKey: postDetailKey })
+      toast.success('답글이 삭제되었습니다.')
+    },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: replyListKey })
       const previousReplies =
@@ -82,8 +90,6 @@ export const useReplyMutations = (postId: number, parentId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: replyListKey })
-      queryClient.invalidateQueries({ queryKey: commentListKey })
-      queryClient.invalidateQueries({ queryKey: postDetailKey })
     },
   })
 

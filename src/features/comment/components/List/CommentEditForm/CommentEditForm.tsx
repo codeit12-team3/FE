@@ -27,7 +27,7 @@ export default function CommentEditForm({
     if (isSavingRef.current || !text.trim()) return
     isSavingRef.current = true
     try {
-      await onSave(text)
+      await onSave(text.trim())
     } finally {
       isSavingRef.current = false
     }

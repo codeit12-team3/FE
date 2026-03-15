@@ -21,7 +21,8 @@ export default function CommentItem({
 
   const activeCommentId = useCommentInteractionStore((s) => s.activeCommentId)
   const mode = useCommentInteractionStore((s) => s.mode)
-  const { activate, deactivate } = useCommentInteractionStore.getState()
+  const activate = useCommentInteractionStore((s) => s.activate)
+  const deactivate = useCommentInteractionStore((s) => s.deactivate)
 
   const isEditing = activeCommentId === id && mode === 'EDIT'
 
