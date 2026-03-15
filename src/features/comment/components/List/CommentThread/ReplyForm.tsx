@@ -4,42 +4,30 @@ import { useSession } from 'next-auth/react'
 
 import { useReplyMutations } from '@/features/comment/api'
 import CommentForm from '@/features/comment/components/CommentForm/CommentForm'
-import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
+import { useCommentInteractionStore } from '@/features/comment/stores'
 
-interface ReplyComposerProps {
+interface ReplyFormProps {
   postId: number
   parentId: number
 }
 
-export default function ReplyComposer({
-  postId,
-  parentId,
-}: ReplyComposerProps) {
+export default function ReplyForm({ postId, parentId }: ReplyFormProps) {
   const { data: session } = useSession()
-
-  const isReplying = useCommentInteractionStore((state) =>
-    state.isReplying(parentId),
+  const deactivateInteraction = useCommentInteractionStore(
+    (state) => state.deactivate,
   )
-  const closeInteraction = useCommentInteractionStore((state) => state.close)
-
   const { createReplyMutation } = useReplyMutations(postId, parentId)
 
   const handleSubmit = async (text: string) => {
-    await createReplyMutation.mutateAsync({
-      postId,
-      parentId,
-      content: text,
-    })
+    await createReplyMutation.mutateAsync({ postId, parentId, content: text })
   }
-
-  if (!isReplying) return null
 
   return (
     <div className="pl-10 pt-6">
       <CommentForm
         mode="reply"
         onSubmit={handleSubmit}
-        onClose={closeInteraction}
+        onDeActivate={deactivateInteraction}
         isSubmitting={createReplyMutation.isPending}
         userImage={session?.user.image ?? null}
       />

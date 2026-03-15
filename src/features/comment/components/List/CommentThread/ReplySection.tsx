@@ -13,7 +13,7 @@ interface ReplySectionProps {
 
 export default function ReplySection({ parentId }: ReplySectionProps) {
   const [showReplies, setShowReplies] = useState(false)
-  const commentsCount = useCommentStore(
+  const repliesCount = useCommentStore(
     (state) => state.entities[parentId]?.commentsCount ?? 0,
   )
 
@@ -22,7 +22,7 @@ export default function ReplySection({ parentId }: ReplySectionProps) {
     enabled: showReplies,
   })
 
-  const hasReplies = commentsCount > 0 || replies.length > 0
+  const hasReplies = repliesCount > 0 || replies.length > 0
 
   const handleToggleReplies = () => {
     setShowReplies((prev) => !prev)

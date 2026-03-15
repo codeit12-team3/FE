@@ -15,7 +15,7 @@ export interface CommentFormProps {
   userImage: string | null
   isSubmitting: boolean
   onSubmit: (value: string) => Promise<void>
-  onClose?: () => void
+  onDeActivate?: () => void
   autoFocus?: boolean
 }
 
@@ -44,13 +44,13 @@ export default function CommentForm({
   mode,
   initialValue = '',
   onSubmit,
-  onClose,
+  onDeActivate,
   isSubmitting,
   userImage,
 }: CommentFormProps) {
   const [text, setText] = useState(initialValue)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-
+  const isSubmittingRef = useRef(false)
   const config = COMMENT_FORM_CONFIG[mode]
   const trimmedText = text.trim()
   const isSubmitDisabled = isSubmitting || !trimmedText
@@ -63,17 +63,20 @@ export default function CommentForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (isSubmitDisabled) return
+    if (isSubmitDisabled || isSubmittingRef.current) return
+    isSubmittingRef.current = true
 
     try {
       await onSubmit(trimmedText)
       setText('')
 
-      if (onClose) {
-        onClose()
+      if (onDeActivate) {
+        onDeActivate()
       }
     } catch {
       toast.error('작업을 완료하지 못했습니다. 다시 시도해주세요.')
+    } finally {
+      isSubmittingRef.current = false
     }
   }
 
@@ -102,7 +105,7 @@ export default function CommentForm({
         {showCancelButton && (
           <Button
             type="button"
-            onClick={onClose}
+            onClick={onDeActivate}
             disabled={isSubmitting}
             variant="secondary"
             className="h-10 w-26 rounded-xl border border-gray-300 bg-white text-gray-600"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/components/common'
 import { Textarea } from '@/components/ui'
@@ -17,17 +17,26 @@ export default function CommentEditForm({
   isUpdating,
 }: CommentEditFormProps) {
   const [text, setText] = useState(initialContent)
+  const isSavingRef = useRef(false)
 
   useEffect(() => {
     setText(initialContent)
   }, [initialContent])
 
+  const handleSave = async () => {
+    if (isSavingRef.current || !text.trim()) return
+    isSavingRef.current = true
+    try {
+      await onSave(text)
+    } finally {
+      isSavingRef.current = false
+    }
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault()
-      if (text.trim() && !isUpdating) {
-        onSave(text)
-      }
+      handleSave()
     }
   }
 
@@ -55,7 +64,7 @@ export default function CommentEditForm({
           취소
         </Button>
         <Button
-          onClick={() => onSave(text)}
+          onClick={handleSave}
           disabled={isSaveDisabled}
           className="w-26 h-10 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500"
         >

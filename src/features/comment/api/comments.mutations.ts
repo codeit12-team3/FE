@@ -1,19 +1,28 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 import { toast } from '@/components/common'
+import { useCommentStore } from '@/features/comment/stores'
+import { GetCommentsResponse } from '@/features/comment/types'
+import { ApiResponse } from '@/types/common'
 
-import {
-  CommentListCache,
-  removeCommentFromCache,
-  updateCommentInCache,
-} from './cache'
-import { createComment, deleteComment, updateComment } from './comments.clients'
-import { commentKeys } from './key'
+import { createComment, deleteComment, updateComment } from './comments.http'
+import { commentKeys } from './queryKeys'
+
+type CommentListCache = InfiniteData<ApiResponse<GetCommentsResponse>>
 
 export const useCommentMutations = (postId: number) => {
   const queryClient = useQueryClient()
   const queryKey = commentKeys.list(postId)
   const postDetailKey = ['postDetail', String(postId)] as const
+
+  const updateContent = useCommentStore((state) => state.updateContent)
+  const removeCommentEntity = useCommentStore(
+    (state) => state.removeCommentEntity,
+  )
 
   const createCommentMutation = useMutation({
     mutationFn: createComment,
@@ -34,11 +43,8 @@ export const useCommentMutations = (postId: number) => {
       const previousComments =
         queryClient.getQueryData<CommentListCache>(queryKey)
 
-      if (previousComments) {
-        queryClient.setQueryData<CommentListCache>(queryKey, (old) =>
-          updateCommentInCache(old, variables.commentId, variables.content),
-        )
-      }
+      updateContent(variables.commentId, variables.content)
+
       return { previousComments }
     },
     onError: (err, variables, context) => {
@@ -54,21 +60,15 @@ export const useCommentMutations = (postId: number) => {
   })
 
   const removeCommentMutation = useMutation({
-    mutationFn: deleteComment,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: postDetailKey })
-      toast.success('댓글이 삭제되었습니다.')
-    },
-    onMutate: async (variables) => {
+    mutationFn: ({ commentId }: { commentId: number; parentId?: number }) =>
+      deleteComment({ commentId }),
+    onMutate: async ({ commentId, parentId }) => {
       await queryClient.cancelQueries({ queryKey })
       const previousComments =
         queryClient.getQueryData<CommentListCache>(queryKey)
 
-      if (previousComments) {
-        queryClient.setQueryData<CommentListCache>(queryKey, (old) =>
-          removeCommentFromCache(old, variables.commentId),
-        )
-      }
+      removeCommentEntity(commentId, parentId)
+
       return { previousComments }
     },
     onError: (err, variables, context) => {
@@ -79,6 +79,10 @@ export const useCommentMutations = (postId: number) => {
         )
       }
       toast.error('댓글 삭제에 실패했습니다.')
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: postDetailKey })
+      toast.success('댓글이 삭제되었습니다.')
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   })

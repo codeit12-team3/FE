@@ -2,17 +2,18 @@ import { create } from 'zustand'
 
 import { Comment, Reply } from '@/features/comment/types'
 
-export type CommentNode = (Comment | Reply) & {
+export type CommentEntity = (Comment | Reply) & {
   childrenIds: number[]
+  deleted?: boolean
 }
 
 interface CommentStoreState {
-  entities: Record<number, CommentNode>
+  entities: Record<number, CommentEntity>
   rootIds: number[]
   setComments: (comments: Comment[]) => void
   setReplies: (parentId: number, replies: Reply[]) => void
   updateContent: (id: number, content: string) => void
-  removeCommentNode: (id: number, parentId?: number) => void
+  removeCommentEntity: (id: number, parentId?: number) => void
 }
 
 function arrayEqual(a: readonly number[], b: readonly number[]) {
@@ -24,7 +25,7 @@ function arrayEqual(a: readonly number[], b: readonly number[]) {
   return true
 }
 
-function getStableArray(prev: readonly number[], next: readonly number[]) {
+function getStableArray(prev: number[], next: number[]): number[] {
   return arrayEqual(prev, next) ? prev : next
 }
 
@@ -41,10 +42,10 @@ function sameIncoming<T extends object>(
 }
 
 function mergeIncomingNodes<T extends Comment | Reply>(
-  prevEntities: Record<number, CommentNode>,
+  prevEntities: Record<number, CommentEntity>,
   items: T[],
 ) {
-  const nextEntities: Record<number, CommentNode> = { ...prevEntities }
+  const nextEntities: Record<number, CommentEntity> = { ...prevEntities }
   for (const item of items) {
     const id = item.commentId
     const prevNode = prevEntities[id]
@@ -67,7 +68,7 @@ function mergeIncomingNodes<T extends Comment | Reply>(
 }
 
 function replaceChildrenIds(
-  entities: Record<number, CommentNode>,
+  entities: Record<number, CommentEntity>,
   parentId: number,
   nextChildrenIds: number[],
 ) {
@@ -89,58 +90,54 @@ function replaceChildrenIds(
   }
 }
 
-function removeChildId(
-  entities: Record<number, CommentNode>,
-  parentId: number,
-  childId: number,
-) {
-  const parentPrev = entities[parentId]
-  if (!parentPrev) return entities
-  const nextChildrenIds = parentPrev.childrenIds.filter((id) => id !== childId)
-  if (arrayEqual(parentPrev.childrenIds, nextChildrenIds)) {
-    return entities
-  }
-  return {
-    ...entities,
-    [parentId]: {
-      ...parentPrev,
-      childrenIds: nextChildrenIds,
-    },
-  }
-}
-
-function collectSubtreeIds(
-  entities: Record<number, CommentNode>,
+function cascadeRemoveNode(
+  entities: Record<number, CommentEntity>,
+  rootIds: number[],
   id: number,
-  visited = new Set<number>(),
-): number[] {
+  parentId?: number,
+): { entities: Record<number, CommentEntity>; rootIds: number[] } {
   const node = entities[id]
-  if (!node) return []
-  if (visited.has(id)) {
-    return []
-  }
-  visited.add(id)
-  const ids = [id]
-  for (const childId of node.childrenIds) {
-    ids.push(...collectSubtreeIds(entities, childId, visited))
-  }
+  if (!node) return { entities, rootIds }
 
-  return ids
-}
+  const hasChildren = node.childrenIds.length > 0
 
-function removeNodesFromEntities(
-  entities: Record<number, CommentNode>,
-  idsToRemove: readonly number[],
-) {
-  if (idsToRemove.length === 0) return entities
-
-  const nextEntities: Record<number, CommentNode> = { ...entities }
-
-  for (const id of idsToRemove) {
-    delete nextEntities[id]
+  if (hasChildren) {
+    return {
+      entities: {
+        ...entities,
+        [id]: { ...node, deleted: true },
+      },
+      rootIds,
+    }
   }
 
-  return nextEntities
+  const nextEntities: Record<number, CommentEntity> = { ...entities }
+  delete nextEntities[id]
+
+  let nextRootIds = rootIds
+
+  if (parentId != null) {
+    const parent = nextEntities[parentId]
+    if (parent) {
+      const nextChildrenIds = parent.childrenIds.filter((cId) => cId !== id)
+      nextEntities[parentId] = { ...parent, childrenIds: nextChildrenIds }
+
+      if (nextEntities[parentId].deleted && nextChildrenIds.length === 0) {
+        const grandParentId =
+          'parentId' in parent ? (parent as Reply).parentId : undefined
+        return cascadeRemoveNode(
+          nextEntities,
+          nextRootIds,
+          parentId,
+          grandParentId as number | undefined,
+        )
+      }
+    }
+  } else {
+    nextRootIds = rootIds.filter((rId) => rId !== id)
+  }
+
+  return { entities: nextEntities, rootIds: nextRootIds }
 }
 
 export const useCommentStore = create<CommentStoreState>((set) => ({
@@ -154,7 +151,7 @@ export const useCommentStore = create<CommentStoreState>((set) => ({
       const rootIds = getStableArray(state.rootIds, nextRootIds)
       return {
         entities: nextEntities,
-        rootIds: [...rootIds],
+        rootIds,
       }
     }),
 
@@ -186,23 +183,18 @@ export const useCommentStore = create<CommentStoreState>((set) => ({
       }
     }),
 
-  removeCommentNode: (id, parentId) =>
+  removeCommentEntity: (id, parentId) =>
     set((state) => {
       const targetNode = state.entities[id]
       if (!targetNode) return state
-      const subtreeIds = collectSubtreeIds(state.entities, id)
-      let nextEntities = removeNodesFromEntities(state.entities, subtreeIds)
-      if (parentId != null) {
-        nextEntities = removeChildId(nextEntities, parentId, id)
-        return {
-          entities: nextEntities,
-        }
-      }
-      const nextRootIds = state.rootIds.filter((rootId) => rootId !== id)
-      const rootIds = getStableArray(state.rootIds, nextRootIds)
-      return {
-        entities: nextEntities,
-        rootIds: [...rootIds],
-      }
+
+      const { entities, rootIds } = cascadeRemoveNode(
+        state.entities,
+        state.rootIds,
+        id,
+        parentId,
+      )
+
+      return { entities, rootIds }
     }),
 }))

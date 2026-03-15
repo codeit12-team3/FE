@@ -49,20 +49,20 @@ export default function CommentList({
     )
   }
 
-  if (comments.length === 0) {
-    return (
-      <div className="py-12 text-center text-gray-500">
-        첫 댓글을 작성해보세요!
-      </div>
-    )
-  }
-
   if (isError) {
     return (
       <ErrorFallback
         message="댓글을 불러오는데 실패했습니다."
         onRetry={() => fetchNextPage()}
       />
+    )
+  }
+
+  if (comments.length === 0) {
+    return (
+      <div className="py-12 text-center text-gray-500">
+        첫 댓글을 작성해보세요!
+      </div>
     )
   }
 

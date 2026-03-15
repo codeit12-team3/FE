@@ -3,8 +3,8 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { GetRepliesResponse } from '@/features/comment/types'
 import { ApiResponse } from '@/types/common'
 
-import { replyKeys } from './key'
-import { fetchReplies } from './replies.clients'
+import { replyKeys } from './queryKeys'
+import { fetchReplies } from './replies.http'
 
 type UseRepliesParams = {
   commentId: number

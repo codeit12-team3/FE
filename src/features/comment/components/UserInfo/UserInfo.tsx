@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { getImageUrl } from '@/lib/common'
 
-export default function UserInfo() {
+export default function CurrentUserInfo() {
   const { data: session } = useSession()
 
   const user = session?.user

@@ -3,10 +3,12 @@
 import { useParams } from 'next/navigation'
 
 import CommentCard from '@/features/comment/components/List/CommentCard/CommentCard'
-import { useCommentInteractionStore } from '@/features/comment/hooks/useCommentInteractionStore'
 import { useCurrentUser } from '@/features/comment/hooks/useCurrentUser'
 import { useReplyActions } from '@/features/comment/hooks/useReplyActions'
-import { useCommentStore } from '@/features/comment/stores'
+import {
+  useCommentInteractionStore,
+  useCommentStore,
+} from '@/features/comment/stores'
 
 type ReplyItemProps = {
   id: number
@@ -21,8 +23,8 @@ export default function ReplyItem({ id, parentId }: ReplyItemProps) {
   const { checkIsOwner } = useCurrentUser()
 
   const isEditing = useCommentInteractionStore((state) => state.isEditing(id))
-  const open = useCommentInteractionStore((state) => state.open)
-  const close = useCommentInteractionStore((state) => state.close)
+  const activate = useCommentInteractionStore((state) => state.activate)
+  const deactivate = useCommentInteractionStore((state) => state.deactivate)
 
   const { handleDelete, handleSave, isUpdating } = useReplyActions(
     id,
@@ -43,11 +45,11 @@ export default function ReplyItem({ id, parentId }: ReplyItemProps) {
       isEditing={isEditing}
       isUpdating={Boolean(isUpdating)}
       onDelete={handleDelete}
-      onEditClick={() => open(id, 'EDIT')}
-      onCancelEdit={close}
+      onEditClick={() => activate(id, 'EDIT')}
+      onCancelEdit={deactivate}
       onSaveEdit={async (text: string) => {
         await handleSave(text)
-        close()
+        deactivate()
       }}
     />
   )

@@ -1,20 +1,29 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 import { toast } from '@/components/common'
+import { useCommentStore } from '@/features/comment/stores'
+import { GetRepliesResponse } from '@/features/comment/types'
+import { ApiResponse } from '@/types/common'
 
-import {
-  removeReplyFromCache,
-  ReplyListCache,
-  updateReplyInCache,
-} from './cache'
-import { commentKeys, replyKeys } from './key'
-import { createReply, deleteReply, updateReply } from './replies.clients'
+import { commentKeys, replyKeys } from './queryKeys'
+import { createReply, deleteReply, updateReply } from './replies.http'
+
+type ReplyListCache = InfiniteData<ApiResponse<GetRepliesResponse>>
 
 export const useReplyMutations = (postId: number, parentId: number) => {
   const queryClient = useQueryClient()
   const replyListKey = replyKeys.list(parentId)
   const commentListKey = commentKeys.list(postId)
   const postDetailKey = ['postDetail', String(postId)] as const
+
+  const updateContent = useCommentStore((state) => state.updateContent)
+  const removeCommentEntity = useCommentStore(
+    (state) => state.removeCommentEntity,
+  )
 
   const createReplyMutation = useMutation({
     mutationFn: createReply,
@@ -33,11 +42,8 @@ export const useReplyMutations = (postId: number, parentId: number) => {
       const previousReplies =
         queryClient.getQueryData<ReplyListCache>(replyListKey)
 
-      if (previousReplies) {
-        queryClient.setQueryData<ReplyListCache>(replyListKey, (old) =>
-          updateReplyInCache(old, variables.commentId, variables.content),
-        )
-      }
+      updateContent(variables.commentId, variables.content)
+
       return { previousReplies }
     },
     onError: (err, variables, context) => {
@@ -61,11 +67,8 @@ export const useReplyMutations = (postId: number, parentId: number) => {
       const previousReplies =
         queryClient.getQueryData<ReplyListCache>(replyListKey)
 
-      if (previousReplies) {
-        queryClient.setQueryData<ReplyListCache>(replyListKey, (old) =>
-          removeReplyFromCache(old, variables.commentId),
-        )
-      }
+      removeCommentEntity(variables.commentId, parentId)
+
       return { previousReplies }
     },
     onError: (err, variables, context) => {
