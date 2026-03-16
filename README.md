@@ -68,10 +68,7 @@
     </td>
   </tr>
 </table>
-
-
 <br/>
-
 <h2 align="center">👥 Members</h2>
 
 <table align="center">
@@ -134,6 +131,27 @@
 <div align="center">
   <img width="800" height="1079" alt="워크플로우" src="https://github.com/user-attachments/assets/447a92d5-fa73-487e-93fb-fd03f22929ad" />
 </div>
+<br/>
+<h2 align="center">🐙 Git branch</h2>
+
+```mermaid
+gitGraph
+   commit id: "init"
+
+   branch develop
+   checkout develop
+   commit id: "작업"
+
+   branch feat/feature-branch
+   checkout feat/feature-branch
+   commit id: "기능 개발"
+
+   checkout develop
+   merge feat/feature-branch
+
+   checkout main
+   merge develop id: "release"
+```
 <br/>
 <h2 align="center">📐 프로젝트 구조</h2>
 ### 1. 컨벤션
