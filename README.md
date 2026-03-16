@@ -1,7 +1,7 @@
-# Tripus 
-## Tech Stack
-<table>
-
+<h1 align="center">✈️ TripUs FrontEnd</h1> 
+<br/>
+<h2 align="center">🛠️ Tech Stack</h2> 
+<table align="center">
   <tr>
     <th width="200px">분류</th>
     <th width="550px">기술 스택</th>
@@ -13,6 +13,8 @@
       <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js">
       <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
       <img src="https://img.shields.io/badge/pnpm-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm">
+      <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=axios&logoColor=white" alt="Axios">
+      <img src="https://img.shields.io/badge/NextAuth.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="NextAuth.js">
     </td>
   </tr>
   <tr>
@@ -22,9 +24,23 @@
     </td>
   </tr>
   <tr>
+    <td align="center"><strong>UI Components</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/Radix_UI-161618?style=flat-square&logo=radixui&logoColor=white" alt="Radix UI">
+    </td>
+  </tr>
+  <tr>
     <td align="center"><strong>State Management</strong></td>
     <td>
       <img src="https://img.shields.io/badge/Tanstack_Query-FF4154?style=flat-square&logo=reactquery&logoColor=white" alt="Tanstack Query">
+      <img src="https://img.shields.io/badge/Zustand-443E38?style=flat-square&logo=react&logoColor=white" alt="Zustand">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Forms</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/React_Hook_Form-EC5990?style=flat-square&logo=reacthookform&logoColor=white" alt="React Hook Form">
+      <img src="https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=zod&logoColor=white" alt="Zod">
     </td>
   </tr>
   <tr>
@@ -53,30 +69,30 @@
   </tr>
 </table>
 
+
 <br/>
 
-## Members
+<h2 align="center">👥 Members</h2>
 
-<table>
+<table align="center">
   <tr>
-    <td align="center" width="150px">
-      Member
-    </td>
-    <td align="center" width="600px">
-      Role
-    </td>
+    <th align="center" width="150px">
+      멤버
+    </th>
+    <th align="center" width="600px">
+      역할
+    </th>
   </tr>
   <tr>
     <td align="center" width="150px">
       유상협
     </td>
     <td>
-      <h3>기능 개발</h3>
+      <h3>💻 기능 개발</h3>
       <ul>
         <li>댓글 및 대댓글 기능 구현</li>
+        <li>채팅 목록 UI/UX 구현</li>
         <li>Socket IO 기반 채팅 기능 구현</li>
-        <li>가상 스크롤 커스텀 훅 구현</li>
-        <li>무한 스크롤 커스텀 훅 구현</li>
       </ul>
     </td>
   </tr>
@@ -85,8 +101,17 @@
       김현석
     </td>
     <td>
-      <h3>프로젝트 초기 세팅</h3>
+      <h3>🔧 인프라 & 개발 환경</h3>
       <ul>
+        <li>프로젝트 초기 세팅 및 저장소 구성</li>
+        <li>테스트 환경 구성 (Storybook, Jest, Playwright)</li>
+        <li>MSW 기반 API 모킹 환경 구축</li>
+      </ul>
+       <h3>💻 기능 개발</h3>
+      <ul>
+        <li>프로필 페이지 / 마이페이지 UI/UX 구현</li>
+        <li>SSE 기반 실시간 알림 시스템 적용</li>
+        <li>로그인 / 회원가입 구현</li>
       </ul>
     </td>
   </tr>
@@ -95,18 +120,25 @@
       김수환
     </td>
     <td>
-      <h3>게시판</h3>
+      <h3>💻 기능 개발</h3>
+      <ul>
+        <li>게시글 목록 UI / UX 구현</li>
+        <li>게시글 상세 UI / UX 구현</li>
+      </ul>
     </td>
   </tr>
 </table>
 <br/>
-
-## 프로젝트 구조
+<h2 align="center">🔄 Development Workflow</h2> 
+<div align="center">
+  <img width="800" height="1079" alt="워크플로우" src="https://github.com/user-attachments/assets/447a92d5-fa73-487e-93fb-fd03f22929ad" />
+</div>
+<br/>
+<h2 align="center">📐 프로젝트 구조</h2>
 ### 1. 컨벤션
 ### 2. 폴더 구조
 <br/>
 
-## Development Workflow
-<img width="1893" height="993" alt="image" src="https://github.com/user-attachments/assets/a7fda7a1-eed8-40d0-8d02-6ac90cb46c2b" />
+
 
 
