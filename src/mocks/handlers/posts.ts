@@ -1,7 +1,7 @@
 import { delay, http, HttpResponse } from 'msw'
 
 import { MOCK_URL } from '@/constants/common'
-import { GenderType, PostListItem } from '@/types/posts'
+import { GenderType, PostListItem } from '@/features/posts/types'
 
 const CURRENT_USER_ID = 999
 

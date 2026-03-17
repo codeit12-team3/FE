@@ -1,4 +1,4 @@
-import { PostForm } from '@/components/post'
+import { PostForm } from '@/features/posts/components'
 
 export default function AddPage() {
   return <PostForm mode="add" />
