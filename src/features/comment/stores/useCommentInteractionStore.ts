@@ -17,6 +17,7 @@ export const useCommentInteractionStore = create<CommentInteractionStore>(
     mode: null,
     activate: (id, mode) =>
       set((state) => {
+        // 동일한 id와 mode로 재호출 시 동일 참조를 반환해 불필요한 리렌더 방지
         if (state.activeCommentId === id && state.mode === mode) return state
         return { activeCommentId: id, mode }
       }),

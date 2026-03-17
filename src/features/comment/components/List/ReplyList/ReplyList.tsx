@@ -23,9 +23,11 @@ export default function ReplyList({ commentId }: ReplyListProps) {
   } = useReplies({ commentId })
 
   const setReplies = useCommentStore((state) => state.setReplies)
+  // 부모 엔티티의 childrenIds만 구독해 다른 댓글 변경 시 리렌더를 방지
   const childrenIds = useCommentStore(
     (state) => state.entities[commentId]?.childrenIds || [],
   )
+  // React Query가 무한 스크롤로 쌓아온 replies를 Zustand 트리 구조와 동기화
   useEffect(() => {
     setReplies(commentId, replies)
   }, [replies, commentId, setReplies])
@@ -60,10 +62,11 @@ export default function ReplyList({ commentId }: ReplyListProps) {
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
+            aria-label="답글 더보기"
             className="w-fit text-base font-semibold text-blue-500 flex items-center gap-1 disabled:opacity-50 hover:bg-gray-200 py-2.5 px-4 rounded-full ml-[38px]"
           >
             {isFetchingNextPage ? (
-              <span>불러오는 중...</span>
+              <span aria-live="polite">불러오는 중...</span>
             ) : (
               <>
                 <span>답글 더보기</span>

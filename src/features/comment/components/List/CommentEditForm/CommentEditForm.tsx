@@ -17,6 +17,7 @@ export default function CommentEditForm({
   isUpdating,
 }: CommentEditFormProps) {
   const [text, setText] = useState(initialContent)
+  // 저장 요청 중 중복 호출을 막기 위한 flag
   const isSavingRef = useRef(false)
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function CommentEditForm({
   }, [initialContent])
 
   const handleSave = async () => {
+    // 저장 요청 중 중복 호출 방지
     if (isSavingRef.current || !text.trim()) return
     isSavingRef.current = true
     try {
@@ -50,6 +52,7 @@ export default function CommentEditForm({
         onKeyDown={handleKeyDown}
         disabled={isUpdating}
         placeholder="댓글을 입력해주세요"
+        aria-label="댓글 수정"
         className="w-full h-[106px] ring-gray-200 resize-none ring-1 focus-visible:ring-1 focus-visible:ring-blue-500 p-4 bg-white text-base disabled:opacity-50 disabled:cursor-not-allowed"
         autoFocus
       />

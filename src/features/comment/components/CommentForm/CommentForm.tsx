@@ -63,6 +63,8 @@ export default function CommentForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // isSubmitDisabled는 버튼을 비활성화
+    // 빠른 연속 클릭 시 React 리렌더 전에 이벤트가 중복 발생할 수 있으므로 ref로 추가 차단
     if (isSubmitDisabled || isSubmittingRef.current) return
     isSubmittingRef.current = true
 
@@ -97,6 +99,7 @@ export default function CommentForm({
           onChange={(e) => setText(e.target.value)}
           placeholder={config.placeholder}
           disabled={isSubmitting}
+          aria-label={config.placeholder}
           className="h-[106px] flex-1 resize-none bg-white p-4 text-base ring-1 ring-gray-200 placeholder:text-gray-500 focus-visible:ring-1 focus-visible:ring-blue-500"
         />
       </div>

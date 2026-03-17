@@ -30,6 +30,7 @@ export default function CommentList({
   const setComments = useCommentStore((state) => state.setComments)
   const rootIds = useCommentStore((state) => state.rootIds)
 
+  // React Query 캐시가 갱신될 때마다 Zustand 스토어 동기화
   useEffect(() => {
     setComments(comments)
   }, [comments, setComments])
@@ -80,7 +81,11 @@ export default function CommentList({
       components={{
         Footer: () => {
           return isFetchingNextPage ? (
-            <div className="py-4 text-center flex items-center justify-center gap-2">
+            <div
+              role="status"
+              aria-live="polite"
+              className="py-4 text-center flex items-center justify-center gap-2"
+            >
               <Spinner />
               <p className="text-sm text-gray-500">댓글 불러오는 중...</p>
             </div>

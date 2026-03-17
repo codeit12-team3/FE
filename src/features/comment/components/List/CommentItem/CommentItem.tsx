@@ -17,8 +17,10 @@ export default function CommentItem({
   postId,
   parentId,
 }: CommentItemProps) {
+  // 자신의 엔티티만 구독해 다른 댓글이 업데이트될 때 이 컴포넌트는 리렌더되지 않음
   const comment = useCommentStore((state) => state.entities[id])
 
+  // 인터랙션 스토어를 개별 셀렉터로 구독: 하나의 값만 바뀌어도 전체가 리렌더되는 것을 방지
   const activeCommentId = useCommentInteractionStore((s) => s.activeCommentId)
   const mode = useCommentInteractionStore((s) => s.mode)
   const activate = useCommentInteractionStore((s) => s.activate)

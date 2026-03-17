@@ -16,6 +16,7 @@ interface CommentStoreState {
   removeCommentEntity: (id: number, parentId?: number) => void
 }
 
+// 같은 내용의 배열이 다른 참조로 들어와도 리렌더를 막기 위한 동등 비교
 function arrayEqual(a: readonly number[], b: readonly number[]) {
   if (a === b) return true
   if (a.length !== b.length) return false
@@ -25,10 +26,13 @@ function arrayEqual(a: readonly number[], b: readonly number[]) {
   return true
 }
 
+// 배열 내용이 같으면 이전 참조를 그대로 반환해 Zustand 셀렉터의 불필요한 리렌더를 방지
 function getStableArray(prev: number[], next: number[]): number[] {
   return arrayEqual(prev, next) ? prev : next
 }
 
+// childrenIds를 제외한 나머지 필드가 동일한지 얕은 비교
+// 서버에서 동일한 데이터가 다시 오더라도 엔티티 객체를 재생성하지 않기 위해 사용
 function sameIncoming<T extends object>(
   prev: (T & { childrenIds: number[] }) | undefined,
   incoming: T,
@@ -41,7 +45,9 @@ function sameIncoming<T extends object>(
   return true
 }
 
-function mergeIncomingNodes<T extends Comment | Reply>(
+// 서버에서 받은 댓글, 답글 목록을 기존 엔티티에 병합
+// 변경이 없는 노드는 이전 참조를 유지
+function mergeIncomingEntities<T extends Comment | Reply>(
   prevEntities: Record<number, CommentEntity>,
   items: T[],
 ) {
@@ -67,6 +73,8 @@ function mergeIncomingNodes<T extends Comment | Reply>(
   return nextEntities
 }
 
+// 댓글 엔티티의 childrenIds만 업데이트
+// 내용이 같으면 entities 객체 자체도 동일 참조를 반환해 불필요한 리렌더 방지
 function replaceChildrenIds(
   entities: Record<number, CommentEntity>,
   parentId: number,
@@ -78,6 +86,7 @@ function replaceChildrenIds(
     parentPrev.childrenIds,
     nextChildrenIds,
   )
+  // childrenIds가 실제로 변경되지 않았으면 entities 참조 자체를 유지
   if (stableChildrenIds === parentPrev.childrenIds) {
     return entities
   }
@@ -90,6 +99,7 @@ function replaceChildrenIds(
   }
 }
 
+// 댓글/답글 삭제 시 트리 구조를 유지하며 노드를 제거하는 함수
 function cascadeRemoveNode(
   entities: Record<number, CommentEntity>,
   rootIds: number[],
@@ -101,6 +111,7 @@ function cascadeRemoveNode(
 
   const hasChildren = node.childrenIds.length > 0
 
+  // 댓글 삭제 시, 답글이 있으면 "삭제된 댓글"로 표시, 트리 구조는 유지
   if (hasChildren) {
     return {
       entities: {
@@ -119,22 +130,18 @@ function cascadeRemoveNode(
   if (parentId != null) {
     const parent = nextEntities[parentId]
     if (parent) {
-      const nextChildrenIds = parent.childrenIds.filter((cId) => cId !== id)
+      const nextChildrenIds = parent.childrenIds.filter(
+        (childrenId) => childrenId !== id,
+      )
       nextEntities[parentId] = { ...parent, childrenIds: nextChildrenIds }
 
+      // 마지막 답글이 삭제되고 댓글도 이미 삭제된 상태("삭제된 댓글"로 표시된 상태)면 댓글까지 제거
       if (nextEntities[parentId].deleted && nextChildrenIds.length === 0) {
-        const grandParentId =
-          'parentId' in parent ? (parent as Reply).parentId : undefined
-        return cascadeRemoveNode(
-          nextEntities,
-          nextRootIds,
-          parentId,
-          grandParentId as number | undefined,
-        )
+        return cascadeRemoveNode(nextEntities, nextRootIds, parentId, undefined)
       }
     }
   } else {
-    nextRootIds = rootIds.filter((rId) => rId !== id)
+    nextRootIds = rootIds.filter((rootId) => rootId !== id)
   }
 
   return { entities: nextEntities, rootIds: nextRootIds }
@@ -146,7 +153,10 @@ export const useCommentStore = create<CommentStoreState>((set) => ({
 
   setComments: (comments) =>
     set((state) => {
-      const nextEntities = mergeIncomingNodes<Comment>(state.entities, comments)
+      const nextEntities = mergeIncomingEntities<Comment>(
+        state.entities,
+        comments,
+      )
       const nextRootIds = comments.map((comment) => comment.commentId)
       const rootIds = getStableArray(state.rootIds, nextRootIds)
       return {
@@ -157,7 +167,10 @@ export const useCommentStore = create<CommentStoreState>((set) => ({
 
   setReplies: (parentId, replies) =>
     set((state) => {
-      const mergedEntities = mergeIncomingNodes<Reply>(state.entities, replies)
+      const mergedEntities = mergeIncomingEntities<Reply>(
+        state.entities,
+        replies,
+      )
       const nextChildrenIds = replies.map((reply) => reply.commentId)
       const nextEntities = replaceChildrenIds(
         mergedEntities,
