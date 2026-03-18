@@ -16,10 +16,10 @@ export default function ReplyForm({ postId, parentId }: ReplyFormProps) {
   const deactivateInteraction = useCommentInteractionStore(
     (state) => state.deactivate,
   )
-  const { create } = useReplyMutations(postId, parentId)
+  const { createReplyMutation } = useReplyMutations(postId, parentId)
 
   const handleSubmit = async (text: string) => {
-    await create.mutateAsync({ postId, parentId, content: text })
+    await createReplyMutation.mutateAsync({ postId, parentId, content: text })
   }
 
   return (
@@ -28,7 +28,7 @@ export default function ReplyForm({ postId, parentId }: ReplyFormProps) {
         mode="reply"
         onSubmit={handleSubmit}
         onDeActivate={deactivateInteraction}
-        isSubmitting={create.isPending}
+        isSubmitting={createReplyMutation.isPending}
         userImage={session?.user.image ?? null}
       />
     </div>

@@ -5,14 +5,15 @@ export function useCommentActions(
   postId: number,
   parentId?: number,
 ) {
-  const { update, remove } = useCommentMutations(postId)
+  const { updateCommentMutation, removeCommentMutation } =
+    useCommentMutations(postId)
 
   const handleDelete = () => {
-    remove.mutate({ commentId: id })
+    removeCommentMutation.mutate({ commentId: id, parentId })
   }
 
   const handleSave = async (editText: string) => {
-    await update.mutateAsync({
+    await updateCommentMutation.mutateAsync({
       commentId: id,
       content: editText,
     })
@@ -21,6 +22,6 @@ export function useCommentActions(
   return {
     handleDelete,
     handleSave,
-    isUpdating: update.isPending,
+    isUpdating: updateCommentMutation.isPending,
   }
 }

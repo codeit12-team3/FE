@@ -19,7 +19,7 @@ export default function CommentContainer({
   const { data: session } = useSession()
   const rawPostId = params.postId
   const postId = Number(rawPostId)
-  const { create } = useCommentMutations(postId)
+  const { createCommentMutation } = useCommentMutations(postId)
   const {
     comments,
     isLoading,
@@ -31,7 +31,7 @@ export default function CommentContainer({
   } = useComments(postId)
 
   const handleSubmit = async (text: string) => {
-    await create.mutateAsync({
+    await createCommentMutation.mutateAsync({
       postId,
       content: text,
     })
@@ -46,7 +46,7 @@ export default function CommentContainer({
         <CommentForm
           mode="create"
           onSubmit={handleSubmit}
-          isSubmitting={create.isPending}
+          isSubmitting={createCommentMutation.isPending}
           userImage={session?.user.image}
         />
       </div>

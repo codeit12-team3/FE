@@ -1,14 +1,20 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { GetRepliesResponse } from '@/features/comment/types'
 import { ApiResponse } from '@/types/common'
 
-import { GetRepliesResponse } from '../types'
-import { replyKeys } from './key/replies.keys'
-import { fetchReplies } from './replies.clients'
+import { replyKeys } from './queryKeys'
+import { fetchReplies } from './replies.http'
 
-export const useReplies = ({ commentId }: { commentId: number }) => {
+type UseRepliesParams = {
+  commentId: number
+  enabled?: boolean
+}
+
+export const useReplies = ({ commentId, enabled = true }: UseRepliesParams) => {
   const query = useInfiniteQuery<ApiResponse<GetRepliesResponse>>({
     queryKey: replyKeys.list(commentId),
+    enabled,
     queryFn: ({ pageParam }) =>
       fetchReplies({
         commentId,
@@ -25,11 +31,9 @@ export const useReplies = ({ commentId }: { commentId: number }) => {
     },
     staleTime: 5 * 60 * 1000,
   })
+
   const replies =
     query.data?.pages.flatMap((p) => (p.success ? p.data.content : [])) ?? []
 
-  return {
-    ...query,
-    replies,
-  }
+  return { ...query, replies }
 }
