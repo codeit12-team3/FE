@@ -94,7 +94,7 @@ function replaceChildrenIds(
     ...entities,
     [parentId]: {
       ...parentPrev,
-      childrenIds: [...stableChildrenIds],
+      childrenIds: stableChildrenIds,
     },
   }
 }
