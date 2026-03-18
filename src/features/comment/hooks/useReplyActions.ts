@@ -1,14 +1,17 @@
 import { useReplyMutations } from '../api'
 
 export function useReplyActions(id: number, postId: number, parentId: number) {
-  const { update, remove } = useReplyMutations(postId, parentId)
+  const { updateReplyMutation, removeReplyMutation } = useReplyMutations(
+    postId,
+    parentId,
+  )
 
   const handleDelete = () => {
-    remove.mutate({ commentId: id })
+    removeReplyMutation.mutate({ commentId: id })
   }
 
   const handleSave = async (editText: string) => {
-    await update.mutateAsync({
+    await updateReplyMutation.mutateAsync({
       commentId: id,
       content: editText,
     })
@@ -17,6 +20,6 @@ export function useReplyActions(id: number, postId: number, parentId: number) {
   return {
     handleDelete,
     handleSave,
-    isUpdating: update.isPending,
+    isUpdating: updateReplyMutation.isPending,
   }
 }
