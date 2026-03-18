@@ -1,14 +1,17 @@
+import { useEffect } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Spinner } from '@/components/ui/spinner'
-import { CommentContent } from '@/features/comment/types'
+import ErrorFallback from '@/features/comment/components/Error/ErrorFallback'
+import CommentCardSkeleton from '@/features/comment/components/List/CommentCard/CommentCardSkeleton'
+import { useCommentStore } from '@/features/comment/stores'
+import { Comment } from '@/features/comment/types'
 
-import ErrorFallback from '../../Error/ErrorFallback'
-import BaseCommentItemSkeleton from '../BaseCommentItem/BaseCommentItemSkeleton'
-import CommentWithReplies from '../CommentWithReplies/CommentWithReplies'
+import CommentThread from '../CommentThread/CommentThread'
 
 interface CommentListProps {
-  comments: CommentContent[]
+  postId: number
+  comments: Comment[]
   isLoading: boolean
   fetchNextPage: () => void
   hasNextPage: boolean
@@ -17,6 +20,7 @@ interface CommentListProps {
 }
 
 export default function CommentList({
+  postId,
   comments,
   isLoading,
   fetchNextPage,
@@ -24,6 +28,14 @@ export default function CommentList({
   isFetchingNextPage,
   isError,
 }: CommentListProps) {
+  const setComments = useCommentStore((state) => state.setComments)
+  const rootIds = useCommentStore((state) => state.rootIds)
+
+  // React Query 캐시가 갱신될 때마다 Zustand 스토어 동기화
+  useEffect(() => {
+    setComments(comments)
+  }, [comments, setComments])
+
   const handleEndReached = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
@@ -33,16 +45,8 @@ export default function CommentList({
     return (
       <div className="flex flex-col gap-6">
         {Array.from({ length: 3 }).map((_, index) => (
-          <BaseCommentItemSkeleton key={index} showReplies={true} />
+          <CommentCardSkeleton key={index} showReplies={true} />
         ))}
-      </div>
-    )
-  }
-
-  if (comments.length === 0) {
-    return (
-      <div className="py-12 text-center text-gray-500">
-        첫 댓글을 작성해보세요!
       </div>
     )
   }
@@ -56,21 +60,33 @@ export default function CommentList({
     )
   }
 
+  if (comments.length === 0) {
+    return (
+      <div className="py-12 text-center text-gray-500">
+        첫 댓글을 작성해보세요!
+      </div>
+    )
+  }
+
   return (
     <Virtuoso
       useWindowScroll
-      data={comments}
+      data={rootIds}
       increaseViewportBy={{ top: 200, bottom: 200 }}
       endReached={handleEndReached}
-      itemContent={(index, comment) => (
+      itemContent={(index, id) => (
         <div className="pb-6">
-          <CommentWithReplies key={comment.commentId} comment={comment} />
+          <CommentThread key={id} id={id} postId={postId} />
         </div>
       )}
       components={{
         Footer: () => {
           return isFetchingNextPage ? (
-            <div className="py-4 text-center flex items-center justify-center gap-2">
+            <div
+              role="status"
+              aria-live="polite"
+              className="py-4 text-center flex items-center justify-center gap-2"
+            >
               <Spinner />
               <p className="text-sm text-gray-500">댓글 불러오는 중...</p>
             </div>

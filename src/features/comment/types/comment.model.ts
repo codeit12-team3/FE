@@ -1,4 +1,4 @@
-export interface CommentContent {
+export interface Comment {
   commentId: number
   memberId: number
   imageUrl: string
@@ -8,9 +8,9 @@ export interface CommentContent {
   updatedAt: string
   isUpdated: boolean
   depth: number
+  commentsCount: number
 }
 
-export interface CommentType {
-  content: CommentContent[]
-  isLast: boolean
+export interface Reply extends Comment {
+  parentId: number
 }

@@ -1,12 +1,12 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 
 import { useCommentMutations, useComments } from '@/features/comment/api'
-
-import CommentForm from './CommentForm/CommentForm'
-import ErrorFallback from './Error/ErrorFallback'
-import CommentList from './List/CommentList/CommentList'
+import CommentForm from '@/features/comment/components/CommentForm/CommentForm'
+import ErrorFallback from '@/features/comment/components/Error/ErrorFallback'
+import CommentList from '@/features/comment/components/List/CommentList/CommentList'
 
 interface CommentContainerProps {
   commentCount: number
@@ -16,7 +16,9 @@ export default function CommentContainer({
   commentCount,
 }: CommentContainerProps) {
   const params = useParams<{ postId: string }>()
-  const postId = Number(params.postId)
+  const { data: session } = useSession()
+  const rawPostId = params.postId
+  const postId = Number(rawPostId)
   const { create } = useCommentMutations(postId)
   const {
     comments,
@@ -28,8 +30,8 @@ export default function CommentContainer({
     refetch,
   } = useComments(postId)
 
-  const handleSubmit = (text: string) => {
-    create.mutate({
+  const handleSubmit = async (text: string) => {
+    await create.mutateAsync({
       postId,
       content: text,
     })
@@ -41,7 +43,12 @@ export default function CommentContainer({
         댓글 <span className="text-blue-500">{commentCount}</span>
       </h2>
       <div className="pb-[34px]">
-        <CommentForm onSubmit={handleSubmit} isSubmitting={create.isPending} />
+        <CommentForm
+          mode="create"
+          onSubmit={handleSubmit}
+          isSubmitting={create.isPending}
+          userImage={session?.user.image}
+        />
       </div>
       {isError ? (
         <ErrorFallback
@@ -50,6 +57,7 @@ export default function CommentContainer({
         />
       ) : (
         <CommentList
+          postId={postId}
           comments={comments}
           isLoading={isLoading}
           fetchNextPage={fetchNextPage}

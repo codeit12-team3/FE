@@ -1,2 +1,2 @@
-export * from './comments.type'
-export * from './reply.type'
+export * from './comment.dto'
+export * from './comment.model'

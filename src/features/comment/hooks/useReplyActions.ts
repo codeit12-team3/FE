@@ -1,20 +1,15 @@
 import { useReplyMutations } from '../api'
-import { ReplyContent } from '../types'
 
-export function useReplyActions(
-  reply: ReplyContent,
-  postId: number,
-  parentId: number,
-) {
+export function useReplyActions(id: number, postId: number, parentId: number) {
   const { update, remove } = useReplyMutations(postId, parentId)
 
   const handleDelete = () => {
-    remove.mutate({ commentId: reply.commentId })
+    remove.mutate({ commentId: id })
   }
 
   const handleSave = async (editText: string) => {
     await update.mutateAsync({
-      commentId: reply.commentId,
+      commentId: id,
       content: editText,
     })
   }

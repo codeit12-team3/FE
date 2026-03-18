@@ -61,17 +61,22 @@ export default function CommentMenu({
   return (
     <>
       <Popover>
-        <PopoverTrigger>
+        <PopoverTrigger aria-label="댓글 옵션 메뉴">
           <IconDotsVertical className="w-6 h-6" />
         </PopoverTrigger>
-        <PopoverContent className="p-1 w-22 flex flex-col rounded-xl">
+        <PopoverContent
+          role="menu"
+          className="p-1 w-22 flex flex-col rounded-xl"
+        >
           <button
+            role="menuitem"
             onClick={startEdit}
             className="p-2.5 text-xs text-left hover:bg-blue-50 rounded-lg"
           >
             댓글 수정
           </button>
           <button
+            role="menuitem"
             onClick={() => setOpen(true)}
             className="p-2.5 text-xs text-left text-red-500 hover:bg-red-50 rounded-lg"
           >
