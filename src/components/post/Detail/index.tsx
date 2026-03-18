@@ -4,8 +4,8 @@ import { useState } from 'react'
 
 import { useCancelCompanion } from '@/api/companions'
 import { usePostDetail } from '@/api/posts'
-import Comment from '@/components/comment'
 import { toast } from '@/components/common'
+import CommentContainer from '@/features/comment/components/CommentContainer'
 import { useApply, useCompanionId } from '@/hooks/posts'
 import { useModalActions } from '@/stores'
 import { SentCompanionContent } from '@/types/companions'
@@ -98,7 +98,7 @@ export default function PostDetail({
               <PostInfo postId={postId} />
               <div className="bg-gray-300 w-full h-px mt-12" />
               <div className="md:pb-0 pb-16">
-                <Comment commentCount={postDetail.commentCount} />
+                <CommentContainer commentCount={postDetail.commentCount} />
               </div>
             </div>
           </div>
