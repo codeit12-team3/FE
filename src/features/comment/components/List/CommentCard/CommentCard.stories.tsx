@@ -92,7 +92,7 @@ export const MixedView: Story = {
         onDelete={() => {}}
         onEditClick={() => {}}
       />
-      <div className="pl-[55px] space-y-6">
+      <div className="pl-14 space-y-6">
         <CommentCard {...baseArgs} onReplyClick={undefined} />
         <CommentCard
           {...baseArgs}
