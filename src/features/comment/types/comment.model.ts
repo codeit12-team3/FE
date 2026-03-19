@@ -7,7 +7,6 @@ export interface Comment {
   createdAt: string
   updatedAt: string
   isUpdated: boolean
-  depth: number
   commentsCount: number
 }
 
