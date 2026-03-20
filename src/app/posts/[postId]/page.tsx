@@ -1,4 +1,4 @@
-import PostDetail from '@/components/post/Detail'
+import PostDetail from '@/features/post/components/Detail/PostDetail'
 
 export default async function PostDetailPage({
   params,

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, RenderOptions } from '@testing-library/react'
 import { ReactElement, ReactNode } from 'react'
 
-import { GenderType, PostContent, PostListItem } from '@/types/posts'
+import { GenderType, PostContent, PostListItem } from '@/features/post/types'
 
 jest.mock('@/api/companions', () => ({
   useApplyCompanion: jest.fn(() => ({
