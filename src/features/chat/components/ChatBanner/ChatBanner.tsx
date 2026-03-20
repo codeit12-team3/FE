@@ -1,7 +1,7 @@
 import { useSearchParams } from 'next/navigation'
 
 import CardThumbnail from '@/components/common/CardThumbnail'
-import { RecruitStatus } from '@/types/posts'
+import { RecruitStatus } from '@/features/post/types'
 
 import StatusBadge from '../StatusBadge/StatusBadge'
 

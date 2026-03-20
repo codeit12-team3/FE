@@ -3,9 +3,9 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-import { useDeletePost } from '@/api/posts'
 import { IconUser } from '@/assets/svgr'
 import { Button } from '@/components/ui'
+import { useDeletePost } from '@/features/post/api'
 import { cn, formatDateToKorean, getImageUrl } from '@/lib/common'
 import { useModalActions } from '@/stores'
 import { MyPost } from '@/types/member'
