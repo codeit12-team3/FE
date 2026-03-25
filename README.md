@@ -148,3 +148,38 @@ Role
 ## 🎬 시연 영상 링크
 
 <a href="https://youtu.be/lNPxqNL8djA">Trip Us 시연 영상 Youtube 링크</a>
+
+<br></br>
+
+## 🌿 Git Workflow
+```mermaid
+gitGraph
+    commit id: "init"
+    branch develop
+    checkout develop
+    commit id: "setup"
+
+    branch feat/issue-1
+    checkout feat/issue-1
+    commit id: "feat: 기능 구현"
+
+    checkout develop
+    merge feat/issue-1
+
+    branch fix/issue-2
+    checkout fix/issue-2
+    commit id: "fix: 버그 수정"
+
+    checkout develop
+    merge fix/issue-2
+
+    branch refactor/issue-3
+    checkout refactor/issue-3
+    commit id: "refactor: 리팩토링"
+
+    checkout develop
+    merge refactor/issue-3
+
+    checkout main
+    merge develop tag: "v1.0.0"
+```
