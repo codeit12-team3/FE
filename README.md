@@ -1,4 +1,12 @@
-# Trip Us
+
+## ✈️ Trip Us 소개
+<table>
+  <tr>
+    개인화 · 취향 중심 여행 트렌드에 맞춰, 일정 중심 동행 매칭의 한계를 취향 데이터 기반 매칭과 소통 지원으로 해결하는 플랫폼입니다.
+  </tr>
+</table>
+
+<br></br>
 ## 🛠️ Tech Stacks
 <table>
   <tr>
@@ -134,3 +142,9 @@ Role
 </td>
 </tr>
 </table>
+
+<br></br>
+
+## 🎬 시연 영상 링크
+
+<a href="https://youtu.be/lNPxqNL8djA">Trip Us 시연 영상 Youtube 링크</a>
